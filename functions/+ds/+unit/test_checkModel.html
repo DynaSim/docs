@@ -45,13 +45,13 @@ This function is called by:
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="fragment"><pre>0001 classdef <a href="test_checkModel.html" class="code" title="">test_checkModel</a> &lt; matlab.unittest.TestCase
 0002   properties
-0003     testDataPath = ds.getConfig(<span class="string">'ds_testData_path'</span>);
+0003     unitTestDataPath = ds.getConfig(<span class="string">'ds_unitTestData_path'</span>);
 0004   <span class="keyword">end</span>
 0005   
 0006   methods (Test,  TestTags = {<span class="string">'core'</span>})
 0007     <a name="_sub0" href="#_subfunctions" class="code">function testCellIn(testCase)</a>
 0008       argin = {{<span class="string">'s=10; r=27; b=2.666'</span>;<span class="string">'dx/dt=s*(y-x)'</span>;<span class="string">'dy/dt=r*x-y-x*z'</span>;<span class="string">'dz/dt=-b*z+x*y'</span>}};
-0009       expectedOut = load(fullfile(testCase.testDataPath,<span class="string">'checkModel_testCellIn'</span>));
+0009       expectedOut = load(fullfile(testCase.unitTestDataPath,<span class="string">'checkModel_testCellIn'</span>));
 0010       expectedOut = expectedOut.model;
 0011       
 0012       testCase.verifyEqual(expectedOut, ds.checkModel(argin{:}) );
@@ -59,6 +59,6 @@ This function is called by:
 0014   <span class="keyword">end</span>
 0015   
 0016 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 28-Apr-2017 18:39:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Fri 28-Apr-2017 19:07:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

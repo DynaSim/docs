@@ -44,14 +44,14 @@ This function is called by:
 <div class="fragment"><pre>0001 <span class="comment">%% Run autogen dirs tests</span>
 0002 
 0003 <span class="comment">%% Rename autogenDirs_newSave to autogenDirs</span>
-0004 finalDir = fullfile(ds.getConfig(<span class="string">'ds_testData_path'</span>), <span class="string">'autogenDirs'</span>);
+0004 finalDir = fullfile(ds.getConfig(<span class="string">'ds_unitTestData_path'</span>), <span class="string">'autogenDirs'</span>);
 0005 <span class="keyword">if</span> ~exist(finalDir, <span class="string">'dir'</span>)
-0006   newDir = fullfile(ds.getConfig(<span class="string">'ds_testData_path'</span>), <span class="string">'autogenDirs_newSave'</span>);
+0006   newDir = fullfile(ds.getConfig(<span class="string">'ds_unitTestData_path'</span>), <span class="string">'autogenDirs_newSave'</span>);
 0007   movefile(newDir, finalDir);
 0008 <span class="keyword">end</span>
 0009 
 0010 <span class="comment">%% Run tests</span>
 0011 result = runtests(<span class="string">'ds.unit.test_autogenDirs_all'</span>);</pre></div>
-<hr><address>Generated on Fri 28-Apr-2017 18:39:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Fri 28-Apr-2017 19:07:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

@@ -45,7 +45,7 @@ This function is called by:
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="fragment"><pre>0001 classdef <a href="test_autogen_all.html" class="code" title="">test_autogen_all</a> &lt; matlab.unittest.TestCase
 0002   properties
-0003     testDataPath = ds.getConfig(<span class="string">'ds_testData_path'</span>);
+0003     unitTestDataPath = ds.getConfig(<span class="string">'ds_unitTestData_path'</span>);
 0004   <span class="keyword">end</span>
 0005   
 0006   properties (TestParameter)
@@ -54,7 +54,7 @@ This function is called by:
 0009   
 0010   methods (Test,  TestTags = {<span class="string">'autogen'</span>})
 0011     <a name="_sub0" href="#_subfunctions" class="code">function testCellIn(testCase, dataFileName)</a>
-0012       args = load(fullfile(testCase.testDataPath, <span class="string">'autogen'</span>, dataFileName));
+0012       args = load(fullfile(testCase.unitTestDataPath, <span class="string">'autogen'</span>, dataFileName));
 0013       expectedOut = args.argout;
 0014       
 0015       [~,filename] = fileparts2(dataFileName);
@@ -71,6 +71,6 @@ This function is called by:
 0026   <span class="keyword">end</span>
 0027   
 0028 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 28-Apr-2017 18:39:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Fri 28-Apr-2017 19:07:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

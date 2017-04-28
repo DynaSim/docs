@@ -76,12 +76,12 @@ This function is called by:
 0030 hash = DataHash(argin);
 0031 
 0032 testFileName = sprintf(<span class="string">'%s_autogen_%s.mat'</span>, fnName, hash);
-0033 testFileDir = fullfile(ds.getConfig(<span class="string">'ds_testData_path'</span>), <span class="string">'autogen_newSave'</span>);
+0033 testFileDir = fullfile(ds.getConfig(<span class="string">'ds_unitTestData_path'</span>), <span class="string">'autogen_newSave'</span>);
 0034 mkdirSilent(testFileDir);
 0035 testFilePath = fullfile(testFileDir, testFileName);
 0036 save(testFilePath, <span class="string">'argin'</span>, <span class="string">'argout'</span>)
 0037 
 0038 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 28-Apr-2017 18:39:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Fri 28-Apr-2017 19:07:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

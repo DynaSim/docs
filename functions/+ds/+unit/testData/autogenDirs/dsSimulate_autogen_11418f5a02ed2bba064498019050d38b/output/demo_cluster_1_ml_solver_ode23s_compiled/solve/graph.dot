@@ -1,6 +1,0 @@
-/* Created by mdot for Matlab */
-digraph m2html {
-
-  solve_ode_demo_cluster_1_ml_solver_ode23s_compiled [URL="solve_ode_demo_cluster_1_ml_solver_ode23s_compiled.html"];
-  solve_ode_demo_cluster_1_ml_solver_ode23s_compiled_odefun [URL="solve_ode_demo_cluster_1_ml_solver_ode23s_compiled_odefun.html"];
-}

@@ -51,15 +51,15 @@ This function is called by:
 0006 import matlab.unittest.selectors.HasTag
 0007 
 0008 <span class="comment">%% Rename autogen_newSave to autogen</span>
-0009 finalDir = fullfile(ds.getConfig(<span class="string">'ds_testData_path'</span>), <span class="string">'autogen'</span>);
+0009 finalDir = fullfile(ds.getConfig(<span class="string">'ds_unitTestData_path'</span>), <span class="string">'autogen'</span>);
 0010 <span class="keyword">if</span> ~exist(finalDir, <span class="string">'dir'</span>)
-0011   newDir = fullfile(ds.getConfig(<span class="string">'ds_testData_path'</span>), <span class="string">'autogen_newSave'</span>);
+0011   newDir = fullfile(ds.getConfig(<span class="string">'ds_unitTestData_path'</span>), <span class="string">'autogen_newSave'</span>);
 0012   movefile(newDir, finalDir);
 0013 <span class="keyword">end</span>
 0014 
 0015 <span class="comment">%% Rename autogenDirs_newSave to autogenDirs</span>
-0016 finalDir = fullfile(ds.getConfig(<span class="string">'ds_testData_path'</span>), <span class="string">'autogenDirs'</span>);
-0017 newDir = fullfile(ds.getConfig(<span class="string">'ds_testData_path'</span>), <span class="string">'autogenDirs_newSave'</span>);
+0016 finalDir = fullfile(ds.getConfig(<span class="string">'ds_unitTestData_path'</span>), <span class="string">'autogenDirs'</span>);
+0017 newDir = fullfile(ds.getConfig(<span class="string">'ds_unitTestData_path'</span>), <span class="string">'autogenDirs_newSave'</span>);
 0018 <span class="keyword">if</span> ~exist(finalDir, <span class="string">'dir'</span>) &amp;&amp; exist(newDir, <span class="string">'dir'</span>)
 0019   movefile(newDir, finalDir);
 0020 <span class="keyword">end</span>
@@ -71,6 +71,6 @@ This function is called by:
 0026 
 0027 <span class="comment">%% Run Test Suite</span>
 0028 result = run(fullSuite);</pre></div>
-<hr><address>Generated on Fri 28-Apr-2017 18:39:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Fri 28-Apr-2017 19:07:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

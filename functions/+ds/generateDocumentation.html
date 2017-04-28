@@ -29,17 +29,10 @@
 <div class="fragment"><pre class="comment">GENERATEDOCUMENTATION - Build DynaSim function documentation
 
   This is a simple call to `m2html()` to make it easy for anyone with DynaSim
-  on their path to build the documentation.
+  on their path to build the offline documentation.
 
-  HOWEVER, there are caveats:
-  1. This MUST be run from the root DynaSim directory, meaning the current
-     directory of your MATLAB instance must be in your &quot;/path/to/dynasim&quot;.
-    - This is because `m2html` must be clear on what &quot;functions&quot; folder you are
-      referring to, and because `function` and `functions` are reserved words in
-      MATLAB, you can't just simply locate the folder globally using
-      `which(functions)`. There may be a way around this, but you'll have to
-      step very carefully around the reserved words.
-  2. This is a custom version of m2html, in that I replaced all deprecated
+  HOWEVER, there is a caveat:
+     This is a custom version of m2html, in that I replaced all deprecated
      'error(nargin(...' uses, which were giving warnings that slowed down the
      program, into modern 'narginchk' uses, so this is NOT identical to the
      downloadable m2html.</pre></div>
@@ -61,28 +54,29 @@ This function is called by:
 0002 <span class="comment">%GENERATEDOCUMENTATION - Build DynaSim function documentation</span>
 0003 <span class="comment">%</span>
 0004 <span class="comment">%  This is a simple call to `m2html()` to make it easy for anyone with DynaSim</span>
-0005 <span class="comment">%  on their path to build the documentation.</span>
+0005 <span class="comment">%  on their path to build the offline documentation.</span>
 0006 <span class="comment">%</span>
-0007 <span class="comment">%  HOWEVER, there are caveats:</span>
-0008 <span class="comment">%  1. This MUST be run from the root DynaSim directory, meaning the current</span>
-0009 <span class="comment">%     directory of your MATLAB instance must be in your &quot;/path/to/dynasim&quot;.</span>
-0010 <span class="comment">%    - This is because `m2html` must be clear on what &quot;functions&quot; folder you are</span>
-0011 <span class="comment">%      referring to, and because `function` and `functions` are reserved words in</span>
-0012 <span class="comment">%      MATLAB, you can't just simply locate the folder globally using</span>
-0013 <span class="comment">%      `which(functions)`. There may be a way around this, but you'll have to</span>
-0014 <span class="comment">%      step very carefully around the reserved words.</span>
-0015 <span class="comment">%  2. This is a custom version of m2html, in that I replaced all deprecated</span>
-0016 <span class="comment">%     'error(nargin(...' uses, which were giving warnings that slowed down the</span>
-0017 <span class="comment">%     program, into modern 'narginchk' uses, so this is NOT identical to the</span>
-0018 <span class="comment">%     downloadable m2html.</span>
-0019 
-0020 m2html(<span class="string">'mfiles'</span>,{<span class="string">'functions'</span>},<span class="keyword">...</span>
-0021        <span class="string">'htmldir'</span>,<span class="string">'docs/offline_docs'</span>,<span class="keyword">...</span>
-0022        <span class="string">'recursive'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
-0023        <span class="string">'global'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
-0024        <span class="string">'template'</span>,<span class="string">'frame'</span>,<span class="keyword">...</span>
-0025        <span class="string">'index'</span>,<span class="string">'menu'</span>,<span class="keyword">...</span>
-0026        <span class="string">'graph'</span>,<span class="string">'on'</span>);</pre></div>
-<hr><address>Generated on Fri 28-Apr-2017 18:39:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+0007 <span class="comment">%  HOWEVER, there is a caveat:</span>
+0008 <span class="comment">%     This is a custom version of m2html, in that I replaced all deprecated</span>
+0009 <span class="comment">%     'error(nargin(...' uses, which were giving warnings that slowed down the</span>
+0010 <span class="comment">%     program, into modern 'narginchk' uses, so this is NOT identical to the</span>
+0011 <span class="comment">%     downloadable m2html.</span>
+0012 
+0013 cwd = pwd; <span class="comment">% store current working dir</span>
+0014 
+0015 fprintf(<span class="string">'Temporarily changing directory to dynasim root for offline documentation generation.\n'</span>)
+0016 cd(ds.getConfig(<span class="string">'ds_root_path'</span>));
+0017 
+0018 m2html(<span class="string">'mfiles'</span>,{<span class="string">'functions'</span>},<span class="keyword">...</span>
+0019        <span class="string">'htmldir'</span>,<span class="string">'docs/offline_docs'</span>,<span class="keyword">...</span>
+0020        <span class="string">'recursive'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0021        <span class="string">'global'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0022        <span class="string">'template'</span>,<span class="string">'frame'</span>,<span class="keyword">...</span>
+0023        <span class="string">'index'</span>,<span class="string">'menu'</span>,<span class="keyword">...</span>
+0024        <span class="string">'graph'</span>,<span class="string">'on'</span>);
+0025 
+0026 fprintf(<span class="string">'Changing directory back to original working directory.\n'</span>)
+0027 cd(cwd);</pre></div>
+<hr><address>Generated on Fri 28-Apr-2017 19:07:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>
