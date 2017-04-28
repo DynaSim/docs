@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of checkVersion</title>
+  <meta name="keywords" content="checkVersion">
+  <meta name="description" content="% ds.checkVersion - checks dynasim version against github">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html functions --><!-- menu.html +ds -->
+<h1>checkVersion
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>% ds.checkVersion - checks dynasim version against github</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function checkVersion() </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">% ds.checkVersion - checks dynasim version against github</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function checkVersion()</a>
+0002 <span class="comment">%% ds.checkVersion - checks dynasim version against github</span>
+0003 
+0004 <span class="comment">%% Get current commit SHA</span>
+0005 <span class="comment">% keyboard</span>
+0006 ds.getRootPath = fullfile(thisMfileDir(), <span class="string">'..'</span>);
+0007 vFile = fullfile(ds.getRootPath, <span class="string">'.ds_version'</span>);
+0008 keyboard
+0009 <span class="keyword">if</span> exist(vFile, <span class="string">'file'</span>)
+0010   fid = fopen(vFile, <span class="string">'r'</span>);<span class="comment">%,'n','UTF-8');</span>
+0011   currentSHA = textscan(fid,<span class="string">'%s'</span>);
+0012   currentSHA = currentSHA{1}{1};
+0013   fclose(fid);
+0014 <span class="keyword">else</span>
+0015   currentSHA = [];
+0016 <span class="keyword">end</span>
+0017 fid = fopen(vFile, <span class="string">'w'</span>);
+0018   
+0019 
+0020 <span class="comment">%% Get Github commit SHA</span>
+0021 request = matlab.net.http.RequestMessage;
+0022 uri = <span class="string">'https://api.github.com/repos/DynaSim/DynaSim/commits'</span>;
+0023 response = send(request, uri);
+0024 githubSHA = response.Body.Data(1).sha;
+0025 
+0026 <span class="comment">%% Compare versions</span>
+0027 <span class="keyword">if</span> ~strcmp(currentSHA, githubSHA)
+0028   fprintf(<span class="string">'\nWarning: Your version of dynasim is outdated. Please update from github.\n'</span>)
+0029 <span class="keyword">end</span>
+0030 
+0031 <span class="comment">%% Update</span>
+0032 <span class="comment">% dependencies = {...</span>
+0033 <span class="comment">% 'https://github.com/DynaSim/DynaSim'</span>
+0034 <span class="comment">% };</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">% if ds.isDevMode</span>
+0037 <span class="comment">%   dependencies = [dependencies, {...</span>
+0038 <span class="comment">%     'https://github.com/davestanley/MDD',...</span>
+0039 <span class="comment">%     'https://github.com/erikthered12/GIMBL-Vis',...</span>
+0040 <span class="comment">%     }];</span>
+0041 <span class="comment">% end</span>
+0042 <span class="comment">% githubSync(dependencies)</span>
+0043 <span class="comment">% fprintf('Updating DynaSim Commit SHA to: %s\n', githubSHA);</span>
+0044 <span class="comment">% fprintf(fid, '%s\r', githubSHA);</span>
+0045 
+0046 <span class="comment">%% Close file</span>
+0047 fclose(fid);</pre></div>
+<hr><address>Generated on Fri 28-Apr-2017 18:39:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of classifyEquation</title>
+  <meta name="keywords" content="classifyEquation">
+  <meta name="description" content="CLASSIFYEQUATION - use regular expressions to classify model expressions in STRING">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html functions --><!-- menu.html +ds -->
+<h1>classifyEquation
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>CLASSIFYEQUATION - use regular expressions to classify model expressions in STRING</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function classes = classifyEquation(string,delimiter, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">CLASSIFYEQUATION - use regular expressions to classify model expressions in STRING
+
+ Usage:
+ CLASS=ds.classifyEquation(STRING,DELIMITER)
+
+ Inputs:
+   - STRING
+   - DELIMITER (optional character, default=';'): delimit expressions in STRING
+
+ Output:
+  -  CLASS (string or cell array of strings for each delimited expression):
+     class:            format:
+     parameter         name=value
+     fixed_variable    name=expression/data
+     function          name(inputs)=expression
+     ODE               dx/dt or x' = expression
+     IC                x(0)=values
+     conditional       if(condition)(action) or if(condition)(action)else(action)
+     monitor           monitor *   (previously: monitor name=expression)
+     linker            {'+=','-=','*=','/='} ('=&gt;'for backwards compatibility) {'&gt;-','&gt;+','&gt;*',or '&gt;\'}
+     comment           % or #
+
+ Notes:
+ - Output &quot;class&quot; will be a cell array of strings if STRING contains
+   multiple expressions; otherwise it will be a string.
+ - This function is designed to be an internal helper function
+   called by user-level functions in DynaSim.
+
+ Examples:
+   class=ds.classifyEquation('dx/dt=3*a*x')
+   classes=ds.classifyEquation('dx/dt=3*a*x; x(0)=0')
+   classes=ds.classifyEquation('dx/dt=3*a*x, x(0)=0',',')
+   classes=ds.classifyEquation('a=2; b=2*a; f(x)=b; dx/dt=f(x); x(0)=0; if(x&gt;1)(x=0); current=&gt;f(x); monitor f(x); % comments')
+   classes=ds.classifyEquation('model.eqns');
+
+ See also: ds.<a href="parseModelEquations.html" class="code" title="function [model,name_map] = parseModelEquations(text,varargin)">parseModelEquations</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="strrep.html" class="code" title="function str = strrep(str,oldstr,newstr,lpad,rpad, varargin)">strrep</a>	STRREP - replace full words by new character strings, ignoring matches that appear as sub-strings.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function class = classify(string, varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function classes = classifyEquation(string,delimiter, varargin)</a>
+0002 <span class="comment">%CLASSIFYEQUATION - use regular expressions to classify model expressions in STRING</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Usage:</span>
+0005 <span class="comment">% CLASS=ds.classifyEquation(STRING,DELIMITER)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Inputs:</span>
+0008 <span class="comment">%   - STRING</span>
+0009 <span class="comment">%   - DELIMITER (optional character, default=';'): delimit expressions in STRING</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Output:</span>
+0012 <span class="comment">%  -  CLASS (string or cell array of strings for each delimited expression):</span>
+0013 <span class="comment">%     class:            format:</span>
+0014 <span class="comment">%     parameter         name=value</span>
+0015 <span class="comment">%     fixed_variable    name=expression/data</span>
+0016 <span class="comment">%     function          name(inputs)=expression</span>
+0017 <span class="comment">%     ODE               dx/dt or x' = expression</span>
+0018 <span class="comment">%     IC                x(0)=values</span>
+0019 <span class="comment">%     conditional       if(condition)(action) or if(condition)(action)else(action)</span>
+0020 <span class="comment">%     monitor           monitor *   (previously: monitor name=expression)</span>
+0021 <span class="comment">%     linker            {'+=','-=','*=','/='} ('=&gt;'for backwards compatibility) {'&gt;-','&gt;+','&gt;*',or '&gt;\'}</span>
+0022 <span class="comment">%     comment           % or #</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% Notes:</span>
+0025 <span class="comment">% - Output &quot;class&quot; will be a cell array of strings if STRING contains</span>
+0026 <span class="comment">%   multiple expressions; otherwise it will be a string.</span>
+0027 <span class="comment">% - This function is designed to be an internal helper function</span>
+0028 <span class="comment">%   called by user-level functions in DynaSim.</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">% Examples:</span>
+0031 <span class="comment">%   class=ds.classifyEquation('dx/dt=3*a*x')</span>
+0032 <span class="comment">%   classes=ds.classifyEquation('dx/dt=3*a*x; x(0)=0')</span>
+0033 <span class="comment">%   classes=ds.classifyEquation('dx/dt=3*a*x, x(0)=0',',')</span>
+0034 <span class="comment">%   classes=ds.classifyEquation('a=2; b=2*a; f(x)=b; dx/dt=f(x); x(0)=0; if(x&gt;1)(x=0); current=&gt;f(x); monitor f(x); % comments')</span>
+0035 <span class="comment">%   classes=ds.classifyEquation('model.eqns');</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">% See also: ds.parseModelEquations</span>
+0038 
+0039 <span class="comment">%% localfn output</span>
+0040 <span class="keyword">if</span> ~nargin
+0041   output = localfunctions;
+0042   <span class="keyword">return</span>
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="comment">%% auto_gen_test_data_flag argin</span>
+0046 options = ds.checkOptions(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
+0047 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0048   varargs = varargin;
+0049   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0050   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
+0051   argin = [{string},{delimiter}, varargs]; <span class="comment">% specific to this function</span>
+0052 <span class="keyword">end</span>
+0053 
+0054 
+0055 <span class="comment">%% check inputs</span>
+0056 <span class="keyword">if</span> nargin==1, delimiter=<span class="string">';'</span>; <span class="keyword">end</span> <span class="comment">% set default delimiter</span>
+0057 
+0058 <span class="keyword">if</span> ~ischar(string) <span class="comment">% error handling</span>
+0059   error(<span class="string">'input must be string containing equations'</span>);
+0060 <span class="keyword">end</span>
+0061 
+0062 <span class="keyword">if</span> exist(string,<span class="string">'file'</span>)
+0063   <span class="comment">% load equations from file and concatenate into a single string</span>
+0064   string=readtext(string);
+0065   string=[string{:}]; <span class="comment">% concatenate text from all lines</span>
+0066 <span class="keyword">end</span>
+0067 
+0068 <span class="comment">%% split string on delimiter; remove insignificant white space &amp; delimiters</span>
+0069 <span class="comment">%strings=strtrim(splitstr(string,delimiter));</span>
+0070 strings=strtrim(regexp(string,delimiter,<span class="string">'split'</span>));
+0071 strings=<a href="strrep.html" class="code" title="function str = strrep(str,oldstr,newstr,lpad,rpad, varargin)">strrep</a>(strings,delimiter,<span class="string">''</span>);
+0072 
+0073 <span class="comment">% classify each delimited expression in string</span>
+0074 classes=cell(1,length(strings));
+0075 <span class="keyword">for</span> i=1:length(strings)
+0076   classes{i} = <a href="#_sub1" class="code" title="subfunction class = classify(string, varargin)">classify</a>(strings{i}, varargin{:});
+0077 <span class="keyword">end</span>
+0078 
+0079 <span class="keyword">if</span> length(classes)==1 <span class="comment">% check for single expression</span>
+0080   classes=classes{1}; <span class="comment">% return class label as string</span>
+0081 <span class="keyword">end</span>
+0082 
+0083 <span class="comment">%% auto_gen_test_data_flag argout</span>
+0084 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0085   argout = {classes}; <span class="comment">% specific to this function</span>
+0086   
+0087   ds.unit.saveAutoGenTestData(argin, argout);
+0088 <span class="keyword">end</span>
+0089 
+0090 <span class="keyword">end</span> <span class="comment">% main fn</span>
+0091 
+0092 
+0093 <span class="comment">%% local functions</span>
+0094 
+0095 <a name="_sub1" href="#_subfunctions" class="code">function class = classify(string, varargin)</a>
+0096 <span class="comment">% input: string containing only one expression</span>
+0097 <span class="comment">% output: class label (string)</span>
+0098 
+0099 <span class="comment">%% auto_gen_test_data_flag argin</span>
+0100 options = ds.checkOptions(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
+0101 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0102   varargs = varargin;
+0103   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0104   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
+0105   argin = [{string}, varargs]; <span class="comment">% specific to this function</span>
+0106 <span class="keyword">end</span>
+0107 
+0108 class=<span class="string">''</span>;
+0109 
+0110 <span class="keyword">if</span> isempty(string)
+0111   <span class="comment">% null check</span>
+0112   class=<span class="string">'null'</span>;
+0113 <span class="keyword">elseif</span> string(1)==<span class="string">'%'</span> || string(1)==<span class="string">'#'</span>
+0114 <span class="comment">% comment check</span>
+0115   class=<span class="string">'comment'</span>;
+0116 <span class="keyword">end</span>
+0117 
+0118 <span class="comment">% linker check: % [link ]? target operation expression</span>
+0119                 <span class="comment">% DynaSim-linker (matlab-incompatible) character combinations</span>
+0120 pattern=<span class="string">'(link\s*)?((\+=)|(\-=)|(\*=)|(/=)|(=&gt;))'</span>;
+0121 <span class="keyword">if</span> isempty(class) &amp;&amp; ~isempty(regexp(string,pattern,<span class="string">'once'</span>))
+0122   class=<span class="string">'linker'</span>;
+0123 <span class="keyword">end</span>
+0124 
+0125 <span class="comment">% ODE check: x'=expression or dx/dt=expression</span>
+0126 pattern=<span class="string">'^((\w+'')|(d\w+/dt))\s*='</span>;
+0127 <span class="keyword">if</span> isempty(class) &amp;&amp; ~isempty(regexp(string,pattern,<span class="string">'once'</span>))
+0128   class=<span class="string">'ODE'</span>;
+0129 <span class="keyword">end</span>
+0130 
+0131 <span class="comment">% IC check: x(0)=expression</span>
+0132 pattern=<span class="string">'^\w+\(0\)\s*='</span>;
+0133 <span class="keyword">if</span> isempty(class) &amp;&amp; ~isempty(regexp(string,pattern,<span class="string">'once'</span>))
+0134   class=<span class="string">'IC'</span>;
+0135 <span class="keyword">end</span>
+0136 
+0137 <span class="comment">% parameter check: var=expression (string or numeric)</span>
+0138 <span class="comment">%pattern='^(([\w\.]+)|(\[\w+\]))\s*=\s*((''.*'')|(\[?[\d\.-(Inf)(inf)]+\]?))$';</span>
+0139 <span class="comment">% TODO: support scientific notation</span>
+0140 pattern=<span class="string">'^(([\w\.]+)|(\[\w+\]))\s*=\s*((''.*'')|(\[?[\d\.-(Inf)(inf)]+\]?)|(\d+e[\-\+]?\d+))$'</span>;
+0141 <span class="keyword">if</span> isempty(class) &amp;&amp; ~isempty(regexp(string,pattern,<span class="string">'once'</span>))
+0142   class=<span class="string">'parameter'</span>;
+0143 <span class="keyword">end</span>
+0144 
+0145 <span class="comment">% conditional check: if(conditions)(actions)(else)</span>
+0146 pattern=<span class="string">'^if\s*\(.+\)\s*\(.+\)'</span>;
+0147 <span class="keyword">if</span> isempty(class) &amp;&amp; ~isempty(regexp(string,pattern,<span class="string">'once'</span>,<span class="string">'ignorecase'</span>))
+0148   class=<span class="string">'conditional'</span>;
+0149 <span class="keyword">end</span>
+0150 
+0151 <span class="comment">% function check: f(vars)=exression</span>
+0152 pattern=<span class="string">'^\w+\([@a-zA-Z][\w,@]*\)\s*='</span>;
+0153 <span class="keyword">if</span> isempty(class) &amp;&amp; ~isempty(regexp(string,pattern,<span class="string">'once'</span>))
+0154   class=<span class="string">'function'</span>;
+0155 <span class="keyword">end</span>
+0156 
+0157 <span class="comment">% monitor check:  monitor f=(expression or function)</span>
+0158 pattern=<span class="string">'monitor .*'</span>;
+0159 <span class="keyword">if</span> isempty(class) &amp;&amp; ~isempty(regexp(string,pattern,<span class="string">'once'</span>))
+0160   class=<span class="string">'monitor'</span>;
+0161 <span class="keyword">end</span>
+0162 
+0163 <span class="comment">% fixed_variable (with indexing) check: var(#), var([#]), var([# #]), var([#,#]), var(#:#), var(#:end), var([#:#]), var([#:end])</span>
+0164 pattern=<span class="string">'^\w+\([\(\[?[\d\s,]+\]?\) | \(\[?\d+:[\(\d+\)|\(end\)]\]?\)]+\)'</span>; <span class="comment">% fixed with indexing: var(#), var([#]), var([# #]), var([#,#]), var(#:#), var(#:end), var([#:#]), var([#:end])</span>
+0165 <span class="keyword">if</span> isempty(class) &amp;&amp; ~isempty(regexp(string,pattern,<span class="string">'once'</span>))
+0166   class=<span class="string">'fixed_variable'</span>;
+0167 <span class="keyword">end</span>
+0168 
+0169 <span class="comment">% fixed_variable (without indexing) check: var=(expression with grouping or arithmetic)</span>
+0170 pattern=<span class="string">'^((\w+)|(\[\w+\]))\s*='</span>;
+0171 <span class="keyword">if</span> isempty(class) &amp;&amp; ~isempty(regexp(string,pattern,<span class="string">'once'</span>))
+0172   pattern1=<span class="string">'(.*[a-z_A-Z,&lt;&gt;(&lt;=)(&gt;=)]+.*)$'</span>; <span class="comment">% rhs contains: []{}(),&lt;&gt;*/|   % '=\s*.*[a-z_A-Z,&lt;&gt;(&lt;=)(&gt;=)]+.*'</span>
+0173   pattern2=<span class="string">'=\s*\d+e[\-\+]?\d+$'</span>; <span class="comment">% scientific notation (should be classified as parameter, not fixed_variable)</span>
+0174   <span class="keyword">if</span> ~isempty(regexp(string,pattern1,<span class="string">'once'</span>)) &amp;&amp; <span class="keyword">...</span>
+0175       isempty(regexp(string,pattern2,<span class="string">'once'</span>))
+0176     class=<span class="string">'fixed_variable'</span>;
+0177   <span class="keyword">end</span>
+0178 <span class="keyword">end</span>
+0179 
+0180 <span class="keyword">if</span> isempty(class)
+0181   class=<span class="string">'unclassified'</span>;
+0182 <span class="keyword">end</span>
+0183 
+0184 <span class="comment">%% auto_gen_test_data_flag argout</span>
+0185 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0186   argout = {class}; <span class="comment">% specific to this function</span>
+0187   
+0188   ds.unit.saveAutoGenTestDataLocalFn(argin, argout); <span class="comment">% localfn</span>
+0189 <span class="keyword">end</span>
+0190 
+0191 <span class="keyword">end</span> <span class="comment">%fn</span></pre></div>
+<hr><address>Generated on Fri 28-Apr-2017 18:39:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

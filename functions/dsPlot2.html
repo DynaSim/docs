@@ -1,0 +1,895 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of dsPlot2</title>
+  <meta name="keywords" content="dsPlot2">
+  <meta name="description" content="% handles=dsPlot(data,'option',value)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html functions -->
+<h1>dsPlot2
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>% handles=dsPlot(data,'option',value)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [handles,xp] = dsPlot2(data,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">% handles=dsPlot(data,'option',value)
+ Purpose: plot data in various ways depending on what data was provided
+ and what options are defined. this function is wrapped by ds.plotWaveforms,
+ PlotPower, ... to provide a single function for organizing and displaying
+ data.
+ Inputs:
+   data: DynaSim data structure (see ds.checkData)
+   Accepts the following name/value pairs:
+     'plot_type' {'waveform' (default),'rastergram','rates','power'} - what to plot
+     'population' - name of population to plot (default: 'all'); accepts
+                    regexp strings
+     'variable' - name of variable to plot for each population (default: state variable, X or V);
+                      accepts regexp strings
+     'varied1' - Indices of 1st varied model parameter to plot. If the parameter
+                 is numeric, specify indices (e.g. 1:3 corresponds to 1st-3rd
+                 varied values. If the parameter is a char array, uses
+                 regular expressions. Instead of 'varied1', can also use
+                 the actual parameter name (e.g. 'E_Iapp')
+     'varied2' - As varied 1, for 2nd varied parameter
+     ....
+     'variedN' - As varied 1, for 2nd varied parameter
+     'num_embedded_subplots' - maximum # of waveforms to overlay per plot
+     'max_num_overlaid' - maximum # of waveforms to overlay per plot
+     'do_mean' - {false, true} - Turn on/off averaging across all units
+                 in a population
+     'force_last' - {'none', 'populations' (default), 'variables', 'varied1' ... 'variedN'}
+                       If there is only one cell in a population, this forces
+                       dsPlot2 to add other information to the overlay.
+     'xlims' - [XMIN XMAX], x-axis limits (default: all data)
+     'ylims' - [YMIN YMAX], y-axis limits (default: all data)
+     'lock_axes' - {false, true}, locks abscissa and ordinate to be
+                                  the same across all subplots
+     'do_zoom' - {false, true} - Turn on zoom function in subplot_grid
+     'yscale' {'linear','log','log10'}, whether to plot linear or log scale
+     'visible' {'on','off'}
+     NOTE: analysis options available depending on plot_type
+       see see ds.calcFR options for plot_type 'rastergram' or 'rates'
+       see ds.calcPower options for plot_type 'power'
+ Outputs:
+   handles: graphic handles to figures
+ 
+ See also: ds.calcFR, ds.calcPower, ds.plotWaveforms, ds.checkData, <a href="dsPlot.html" class="code" title="function handles = dsPlot(data,varargin)">dsPlot</a>, xPlt,
+           nDDict</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../functions/+ds/strrep.html" class="code" title="function str = strrep(str,oldstr,newstr,lpad,rpad, varargin)">strrep</a>	STRREP - replace full words by new character strings, ignoring matches that appear as sub-strings.</li><li><a href="dsPlot2.html" class="code" title="function [handles,xp] = dsPlot2(data,varargin)">dsPlot2</a>	% handles=dsPlot(data,'option',value)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="dsPlot2.html" class="code" title="function [handles,xp] = dsPlot2(data,varargin)">dsPlot2</a>	% handles=dsPlot(data,'option',value)</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function_handles = {@xp_handles_newfig, @xp_subplot_grid,data_plothandle};</a></li><li><a href="#_sub2" class="code">function_args = {{figure_options},{subplot_options},{plot_options}};</a></li><li><a href="#_sub3" class="code">function_handles = {@xp_handles_newfig, @xp_subplot_grid,data_plothandle};</a></li><li><a href="#_sub4" class="code">function_args = {{figure_options},{subplot_options},{plot_options}};</a></li><li><a href="#_sub5" class="code">function_handles = {@xp_handles_newfig, @xp_subplot_grid, @xp_subplot_grid,data_plothandle};</a></li><li><a href="#_sub6" class="code">function_args = {{figure_options},{subplot_options2},{subplot_options},{plot_options}};</a></li><li><a href="#_sub7" class="code">function_handles = {@xp_handles_newfig, @xp_subplot_grid, @xp_subplot_grid,data_plothandle};</a></li><li><a href="#_sub8" class="code">function_args = {{figure_options},{subplot_options2},{subplot_options},{plot_options}};</a></li><li><a href="#_sub9" class="code">function_handles = function_handles(available_dims);</a></li><li><a href="#_sub10" class="code">function_args = function_args(available_dims);</a></li><li><a href="#_sub11" class="code">function var_out = getdefaultstatevar(xp)</a></li><li><a href="#_sub12" class="code">function [chosen_varied, options_varied ]= get_chosen_varied(varied_names,options_varied)</a></li><li><a href="#_sub13" class="code">function str_out = variedN_to_axisnames(str_in,ax_names_varied)</a></li><li><a href="#_sub14" class="code">function ax_ind_varied = findaxis_varied(xp)</a></li><li><a href="#_sub15" class="code">function dimensions = get_dimensions(ax_names,dims_per_function_handle)</a></li><li><a href="#_sub16" class="code">function xp2 = reduce_dims(xp2,maxNplotdims)</a></li><li><a href="#_sub17" class="code">function varied_names = only_varieds(xp)</a></li><li><a href="#_sub18" class="code">function varied_names = only_varieds_old_deleteme(all_names)</a></li><li><a href="#_sub19" class="code">function mydata_out = do_shift_lastdim (mydata,shift)</a></li><li><a href="#_sub20" class="code">function leg1 = setup_legends(xp2)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [handles,xp] = dsPlot2(data,varargin)</a>
+0002 <span class="comment">%% handles=dsPlot(data,'option',value)</span>
+0003 <span class="comment">% Purpose: plot data in various ways depending on what data was provided</span>
+0004 <span class="comment">% and what options are defined. this function is wrapped by ds.plotWaveforms,</span>
+0005 <span class="comment">% PlotPower, ... to provide a single function for organizing and displaying</span>
+0006 <span class="comment">% data.</span>
+0007 <span class="comment">% Inputs:</span>
+0008 <span class="comment">%   data: DynaSim data structure (see ds.checkData)</span>
+0009 <span class="comment">%   Accepts the following name/value pairs:</span>
+0010 <span class="comment">%     'plot_type' {'waveform' (default),'rastergram','rates','power'} - what to plot</span>
+0011 <span class="comment">%     'population' - name of population to plot (default: 'all'); accepts</span>
+0012 <span class="comment">%                    regexp strings</span>
+0013 <span class="comment">%     'variable' - name of variable to plot for each population (default: state variable, X or V);</span>
+0014 <span class="comment">%                      accepts regexp strings</span>
+0015 <span class="comment">%     'varied1' - Indices of 1st varied model parameter to plot. If the parameter</span>
+0016 <span class="comment">%                 is numeric, specify indices (e.g. 1:3 corresponds to 1st-3rd</span>
+0017 <span class="comment">%                 varied values. If the parameter is a char array, uses</span>
+0018 <span class="comment">%                 regular expressions. Instead of 'varied1', can also use</span>
+0019 <span class="comment">%                 the actual parameter name (e.g. 'E_Iapp')</span>
+0020 <span class="comment">%     'varied2' - As varied 1, for 2nd varied parameter</span>
+0021 <span class="comment">%     ....</span>
+0022 <span class="comment">%     'variedN' - As varied 1, for 2nd varied parameter</span>
+0023 <span class="comment">%     'num_embedded_subplots' - maximum # of waveforms to overlay per plot</span>
+0024 <span class="comment">%     'max_num_overlaid' - maximum # of waveforms to overlay per plot</span>
+0025 <span class="comment">%     'do_mean' - {false, true} - Turn on/off averaging across all units</span>
+0026 <span class="comment">%                 in a population</span>
+0027 <span class="comment">%     'force_last' - {'none', 'populations' (default), 'variables', 'varied1' ... 'variedN'}</span>
+0028 <span class="comment">%                       If there is only one cell in a population, this forces</span>
+0029 <span class="comment">%                       dsPlot2 to add other information to the overlay.</span>
+0030 <span class="comment">%     'xlims' - [XMIN XMAX], x-axis limits (default: all data)</span>
+0031 <span class="comment">%     'ylims' - [YMIN YMAX], y-axis limits (default: all data)</span>
+0032 <span class="comment">%     'lock_axes' - {false, true}, locks abscissa and ordinate to be</span>
+0033 <span class="comment">%                                  the same across all subplots</span>
+0034 <span class="comment">%     'do_zoom' - {false, true} - Turn on zoom function in subplot_grid</span>
+0035 <span class="comment">%     'yscale' {'linear','log','log10'}, whether to plot linear or log scale</span>
+0036 <span class="comment">%     'visible' {'on','off'}</span>
+0037 <span class="comment">%     NOTE: analysis options available depending on plot_type</span>
+0038 <span class="comment">%       see see ds.calcFR options for plot_type 'rastergram' or 'rates'</span>
+0039 <span class="comment">%       see ds.calcPower options for plot_type 'power'</span>
+0040 <span class="comment">% Outputs:</span>
+0041 <span class="comment">%   handles: graphic handles to figures</span>
+0042 <span class="comment">%</span>
+0043 <span class="comment">% See also: ds.calcFR, ds.calcPower, ds.plotWaveforms, ds.checkData, dsPlot, xPlt,</span>
+0044 <span class="comment">%           nDDict</span>
+0045 
+0046 <span class="comment">%% Set Master parameters</span>
+0047   
+0048 <span class="comment">% Flag for returning error if the user specifies name/value pairs that are not in the</span>
+0049 <span class="comment">% ds.checkOptions list</span>
+0050 strict_mode = 0;        <span class="comment">% Should be set to zero for this to work within simulate model</span>
+0051 
+0052 <span class="comment">%% Convert data input to appropriate form</span>
+0053 
+0054 <span class="comment">% If data is path to studyinfo...</span>
+0055 <span class="keyword">if</span> ischar(data)
+0056     study_dir = data;
+0057     
+0058     <span class="comment">% Import plot files</span>
+0059     data_img = ds.importPlots(study_dir);
+0060     
+0061     [handles, xp] = <a href="dsPlot2.html" class="code" title="function [handles,xp] = dsPlot2(data,varargin)">dsPlot2</a>(data_img,varargin{:});
+0062     <span class="keyword">return</span>;
+0063 <span class="keyword">end</span>
+0064 
+0065 <span class="comment">% Convert the incoming DynaSim data structure to an xPlt object</span>
+0066 <span class="keyword">if</span> ~isa(data,<span class="string">'xPlt'</span>)
+0067     [xp,is_image] = ds.all2xPlt(data);
+0068 <span class="keyword">else</span>
+0069     xp = data;
+0070     <span class="keyword">if</span> iscell(xp.data{1})
+0071         is_image = 1;
+0072     <span class="keyword">else</span>
+0073         is_image = 0;
+0074     <span class="keyword">end</span>
+0075 <span class="keyword">end</span>
+0076 
+0077 <span class="comment">%% Convert varargin to appropriate forms</span>
+0078 <span class="comment">% Find out names of varied variables</span>
+0079 varied_names = <a href="#_sub17" class="code" title="subfunction varied_names = only_varieds(xp)">only_varieds</a>(xp);  <span class="comment">% Returns only the names of the varied variables</span>
+0080 
+0081 <span class="comment">% Convert 'varied1'...'variedN' values in varargin to the names of the</span>
+0082 <span class="comment">% actual varied parameters</span>
+0083 myargin = varargin;
+0084 <span class="keyword">for</span> i = 1:length(myargin)
+0085     <span class="comment">% Char entries</span>
+0086     <span class="keyword">if</span> ischar(myargin{i})
+0087         myargin{i} = <a href="#_sub13" class="code" title="subfunction str_out = variedN_to_axisnames(str_in,ax_names_varied)">variedN_to_axisnames</a>(myargin{i},varied_names);
+0088     <span class="keyword">end</span>
+0089     
+0090     <span class="comment">% Nested char entries within cell array entries</span>
+0091     <span class="keyword">if</span> iscell(myargin{i})
+0092         <span class="keyword">for</span> j = 1:length(myargin{i})
+0093             <span class="keyword">if</span> ischar(myargin{i}{j})
+0094                 myargin{i}{j} = <a href="#_sub13" class="code" title="subfunction str_out = variedN_to_axisnames(str_in,ax_names_varied)">variedN_to_axisnames</a>(myargin{i}{j},varied_names);
+0095             <span class="keyword">end</span>
+0096         <span class="keyword">end</span>
+0097     <span class="keyword">end</span>
+0098 <span class="keyword">end</span>
+0099 
+0100 <span class="comment">% %% Add dummy axes as needed. Having these greatly simplifies the code below.</span>
+0101 <span class="comment">% if isempty(xp.findaxis('populations'))</span>
+0102 <span class="comment">%     Na=length(xp.axis);</span>
+0103 <span class="comment">%     xp.axis(Na+1).name = 'populations';</span>
+0104 <span class="comment">%     xp.axis(Na+1).values = 'Pop1';</span>
+0105 <span class="comment">% end</span>
+0106 <span class="comment">%</span>
+0107 <span class="comment">% if isempty(xp.findaxis('variables'))</span>
+0108 <span class="comment">%     Na=length(xp.axis);</span>
+0109 <span class="comment">%     xp.axis(Na+1).name = 'variables';</span>
+0110 <span class="comment">%     xp.axis(Na+1).values = 'X';</span>
+0111 <span class="comment">% end</span>
+0112 <span class="comment">%</span>
+0113 <span class="comment">% if isempty(findaxis_varied(xp))  % If no varied axes</span>
+0114 <span class="comment">%     Na=length(xp.axis);</span>
+0115 <span class="comment">%     xp.axis(Na+1).name = 'Varied1';</span>
+0116 <span class="comment">%     xp.axis(Na+1).values = 1;</span>
+0117 <span class="comment">% end</span>
+0118 
+0119 <span class="comment">%% Parse varargin and set up defaults</span>
+0120 [options, options_extras0] = ds.checkOptions(myargin,{<span class="keyword">...</span>
+0121   <span class="string">'population'</span>,[],[],<span class="keyword">...</span>
+0122   <span class="string">'variable'</span>,[],[],<span class="keyword">...</span>
+0123   <span class="string">'num_embedded_subplots'</span>,2,{1,2,3,4},<span class="keyword">...</span>
+0124   <span class="string">'max_num_overlaid'</span>,50,[],<span class="keyword">...</span>
+0125   <span class="string">'do_mean'</span>,false,[false true],<span class="keyword">...</span>
+0126   <span class="string">'force_last'</span>,[],[],<span class="keyword">...</span>
+0127   <span class="string">'do_overlay_shift'</span>,false,[false true],<span class="keyword">...</span>
+0128   <span class="string">'overlay_shift_val'</span>,[],[],<span class="keyword">...</span>
+0129   <span class="string">'do_zscore'</span>,[false],[false true],<span class="keyword">...</span>
+0130   <span class="string">'plot_type'</span>,<span class="string">'waveform'</span>,{<span class="string">'waveform'</span>,<span class="string">'imagesc'</span>,<span class="string">'rastergram'</span>,<span class="string">'raster'</span>,<span class="string">'power'</span>,<span class="string">'heatmapFR'</span>,<span class="string">'heatmap_sortedFR'</span>,<span class="string">'meanFR'</span>,<span class="string">'meanFRdens'</span>},<span class="keyword">...</span>
+0131   <span class="string">'xlims'</span>,[],[],<span class="keyword">...</span>
+0132   <span class="string">'ylims'</span>,[],[],<span class="keyword">...</span>
+0133   <span class="string">'zlims'</span>,[],[],<span class="keyword">...</span>
+0134   <span class="string">'figwidth'</span>,[1],[],<span class="keyword">...</span>
+0135   <span class="string">'figheight'</span>,[1],[],<span class="keyword">...</span>
+0136   <span class="string">'crop_range'</span>,[],[],<span class="keyword">...</span>
+0137   <span class="string">'lock_axes'</span>,true,[false true],<span class="keyword">...</span>
+0138   <span class="string">'saved_fignum'</span>,[1],[],<span class="keyword">...</span>
+0139   <span class="string">'max_num_newfigs'</span>,[10],[],<span class="keyword">...</span>
+0140   <span class="string">'plot_options'</span>,struct,[],<span class="keyword">...</span>
+0141   <span class="string">'subplot_options'</span>,struct,[],<span class="keyword">...</span>
+0142   <span class="string">'figure_options'</span>,struct,[],<span class="keyword">...</span>
+0143   <span class="string">'do_zoom'</span>,false,[false true],<span class="keyword">...</span>
+0144   <span class="string">'yscale'</span>,<span class="string">'linear'</span>,{<span class="string">'linear'</span>,<span class="string">'log'</span>,<span class="string">'log10'</span>,<span class="string">'log2'</span>},<span class="keyword">...</span>
+0145   <span class="string">'visible'</span>,<span class="string">'on'</span>,{<span class="string">'on'</span>,<span class="string">'off'</span>},<span class="keyword">...</span>
+0146   <span class="string">'show_colorbar'</span>,false,[false true],<span class="keyword">...</span>
+0147   <span class="string">'save_figures'</span>,false,[false true],<span class="keyword">...</span>
+0148   <span class="string">'save_figname_prefix'</span>,[],[],<span class="keyword">...</span>
+0149   <span class="string">'save_figname_path'</span>,[],[],<span class="keyword">...</span>
+0150   <span class="string">'prepend_date_time'</span>,true,[false true],<span class="keyword">...</span>
+0151   <span class="string">'supersize_me'</span>,false,[false true],<span class="keyword">...</span>
+0152   <span class="string">'save_res'</span>,[],[],<span class="keyword">...</span>
+0153   <span class="string">'Ndims_per_subplot'</span>,[],[],<span class="keyword">...</span>
+0154   <span class="string">'dim_stacking'</span>,[],[],<span class="keyword">...</span>
+0155   <span class="string">'plot_handle'</span>,[],[],<span class="keyword">...</span>
+0156   },false);
+0157 handles=[];
+0158 
+0159 
+0160 
+0161 
+0162 
+0163 <span class="comment">% Pull out fields from options struct</span>
+0164 plot_type = options.plot_type;
+0165 plot_options = options.plot_options;
+0166 subplot_options = options.subplot_options;
+0167 figure_options = options.figure_options;
+0168 num_embedded_subplots = options.num_embedded_subplots;
+0169 do_mean = options.do_mean;
+0170 force_last = options.force_last;
+0171 crop_range = options.crop_range;
+0172 lock_axes = options.lock_axes;
+0173 Ndims_per_subplot = options.Ndims_per_subplot;
+0174 plot_handle = options.plot_handle;
+0175 
+0176 <span class="comment">% Add default options to structures</span>
+0177 <span class="comment">% Plot_options</span>
+0178 <span class="comment">% Used when running xp_matrix_advancedplot3D</span>
+0179     plot_options = struct_addDef(plot_options,<span class="string">'ylims'</span>,options.ylims);
+0180     plot_options = struct_addDef(plot_options,<span class="string">'xlims'</span>,options.xlims);
+0181     plot_options = struct_addDef(plot_options,<span class="string">'zlims'</span>,options.zlims);
+0182 <span class="comment">% Used when running xp_plotimage</span>
+0183     plot_options = struct_addDef(plot_options,<span class="string">'saved_fignum'</span>,options.saved_fignum);
+0184 <span class="comment">% Used when running xp_PlotData or xp_PlotFR2</span>
+0185     plot_options = struct_addDef(plot_options,<span class="string">'args'</span>,{});
+0186 
+0187 <span class="comment">% Subplot_options</span>
+0188 subplot_options = struct_addDef(subplot_options,<span class="string">'subplotzoom_enabled'</span>,options.do_zoom);
+0189 subplot_options = struct_addDef(subplot_options,<span class="string">'force_rowvect'</span>,true);
+0190 
+0191 <span class="comment">% Figure options</span>
+0192 figure_options = struct_addDef(figure_options,<span class="string">'visible'</span>,options.visible);
+0193 figure_options = struct_addDef(figure_options,<span class="string">'save_figures'</span>,options.save_figures);
+0194 figure_options = struct_addDef(figure_options,<span class="string">'save_figname_path'</span>,options.save_figname_path);
+0195 figure_options = struct_addDef(figure_options,<span class="string">'save_figname_prefix'</span>,options.save_figname_prefix);
+0196 figure_options = struct_addDef(figure_options,<span class="string">'prepend_date_time'</span>,options.prepend_date_time);
+0197 figure_options = struct_addDef(figure_options,<span class="string">'supersize_me'</span>,options.supersize_me);
+0198 figure_options = struct_addDef(figure_options,<span class="string">'save_res'</span>,options.save_res);
+0199 figure_options = struct_addDef(figure_options,<span class="string">'max_num_newfigs'</span>,options.max_num_newfigs);
+0200 figure_options = struct_addDef(figure_options,<span class="string">'figwidth'</span>,options.figwidth);
+0201 figure_options = struct_addDef(figure_options,<span class="string">'figheight'</span>,options.figheight);
+0202 
+0203 
+0204 
+0205 
+0206 <span class="comment">%% Pre-process raw data contained in xp.data (mean + downsample)</span>
+0207 <span class="comment">% % Note: these options don't work if data are images</span>
+0208 <span class="comment">% Apply max overlaid</span>
+0209 MTPP = options.max_num_overlaid; <span class="comment">% max traces per plot</span>
+0210 <span class="keyword">if</span> any(strcmp(options.plot_type,{<span class="string">'waveform'</span>,<span class="string">'power'</span>})) &amp;&amp; all(cellfun(@isnumeric,xp.data(:))) &amp;&amp; ~do_mean &amp;&amp; ~is_image
+0211     mydata = xp.data;
+0212     mydata2 = cell(size(mydata));
+0213     <span class="keyword">for</span> i = 1:numel(mydata)
+0214         <span class="keyword">if</span> ~isempty(mydata{i})
+0215             mydata2{i} = mydata{i}(:,1:min(size(mydata{i},2),MTPP));
+0216         <span class="keyword">end</span>
+0217     <span class="keyword">end</span>
+0218     
+0219     xp.data = mydata2;
+0220     clear mydata mydata2
+0221     
+0222     <span class="comment">% Update cell numbers metadata</span>
+0223     cell_names = [1:max(cellfun(@(x) size(x,2),xp.data(:)))];
+0224     cell_names_str = cellfunu(@(s) [<span class="string">'Cell '</span> num2str(s)], num2cell(cell_names));
+0225     xp.meta.datainfo(2).values = cell_names_str;
+0226 <span class="keyword">end</span>
+0227 
+0228 
+0229 <span class="comment">% Average across cells if necessary</span>
+0230 <span class="keyword">if</span> do_mean &amp;&amp; ~is_image
+0231     mydata = xp.data;
+0232     mydata = cellfun(@(x) mean(x,2), mydata,<span class="string">'UniformOutput'</span>,0);
+0233     xp.data = mydata;
+0234     xp.meta.datainfo(2).values = {<span class="string">'&lt;Cells&gt;'</span>};
+0235 <span class="keyword">end</span>
+0236 
+0237 <span class="comment">%% Arrange dimensions of xp in appropriate order</span>
+0238 <span class="comment">% % Should be variables x populations x varied1 x ... x variedN</span>
+0239 
+0240 <span class="comment">% Axis indices of populations</span>
+0241 ax_ind_var = xp.findaxis(<span class="string">'variables'</span>);
+0242 ax_ind_pop = xp.findaxis(<span class="string">'population'</span>);
+0243 ax_ind_varied = <a href="#_sub14" class="code" title="subfunction ax_ind_varied = findaxis_varied(xp)">findaxis_varied</a>(xp);
+0244 
+0245 <span class="comment">% Permute to put varied variables last</span>
+0246 myorder = [ax_ind_var, ax_ind_pop, ax_ind_varied(:)'];
+0247 <span class="keyword">if</span> length(myorder) &gt; 1
+0248     xp = permute(xp,myorder);
+0249 <span class="keyword">end</span>
+0250 
+0251 <span class="comment">%% Identify user selections for populations, variables, etc., and convert xp to xp2</span>
+0252 <span class="comment">% %  (xp2 contains only user selections)</span>
+0253 <span class="comment">% User selection for populations</span>
+0254 chosen_pop = options.population;
+0255 <span class="keyword">if</span> isempty(chosen_pop)
+0256     chosen_pop = <span class="string">':'</span>;
+0257 <span class="keyword">end</span>
+0258 
+0259 <span class="comment">% User selection for state variables</span>
+0260 chosen_vars = options.variable;
+0261 <span class="keyword">if</span> isempty(chosen_vars)
+0262     chosen_vars = <a href="#_sub11" class="code" title="subfunction var_out = getdefaultstatevar(xp)">getdefaultstatevar</a>(xp);
+0263 <span class="keyword">end</span>
+0264 
+0265 <span class="comment">% User selection for varied parameters</span>
+0266 options_extras = options_extras0;
+0267 [chosen_varied , options_extras ]= <a href="#_sub12" class="code" title="subfunction [chosen_varied, options_varied ]= get_chosen_varied(varied_names,options_varied)">get_chosen_varied</a>(varied_names,options_extras);
+0268 
+0269 <span class="comment">% If any options are still leftover, these are extraneous. Report an error</span>
+0270 leftover_fields = fieldnames(options_extras);
+0271 <span class="keyword">if</span> ~isempty(leftover_fields) &amp;&amp; strict_mode
+0272     error(<span class="string">'The following unrecogized name/value pairs were passed in: %s'</span>, sprintf(<span class="string">'%s '</span>,leftover_fields{:}));
+0273 <span class="keyword">end</span>
+0274 
+0275 <span class="comment">% Convert any &quot;all&quot; strings in chosen_varied to colon operators</span>
+0276 inds = cellfun(@ischar,chosen_varied);
+0277 chosen_varied(inds) = cellfun(@(s) <a href="../functions/+ds/strrep.html" class="code" title="function str = strrep(str,oldstr,newstr,lpad,rpad, varargin)">strrep</a>(s,<span class="string">'all'</span>,<span class="string">':'</span>),chosen_varied(inds),<span class="string">'UniformOutput'</span>,0);
+0278 <span class="keyword">if</span> strcmp(chosen_vars,<span class="string">'all'</span>); chosen_vars = <span class="string">':'</span>; <span class="keyword">end</span>
+0279 <span class="keyword">if</span> strcmp(chosen_pop,<span class="string">'all'</span>); chosen_pop = <span class="string">':'</span>; <span class="keyword">end</span>
+0280 
+0281 <span class="comment">% Select out chosen data</span>
+0282 chosen_all = {};
+0283 <span class="keyword">if</span> ~isempty(ax_ind_varied); chosen_all = [chosen_varied,chosen_all]; <span class="keyword">end</span>
+0284 <span class="keyword">if</span> ~isempty(xp.findaxis(<span class="string">'populations'</span>)); chosen_all = [chosen_pop,chosen_all]; <span class="keyword">end</span>
+0285 <span class="keyword">if</span> ~isempty(xp.findaxis(<span class="string">'variables'</span>)); chosen_all = [chosen_vars,chosen_all]; <span class="keyword">end</span>
+0286 <span class="comment">%xp2 = xp(chosen_vars,chosen_pop,chosen_varied{:});</span>
+0287 <span class="keyword">if</span> ndims(xp) == 2 &amp;&amp; ~isempty(strfind(xp.axis(2).name,<span class="string">'Dim'</span>)) &amp;&amp; length(chosen_all) == 1
+0288     chosen_all = [chosen_all {<span class="string">':'</span>}];        <span class="comment">% If xp is a column vector and only 1 varied entry present, fill out chosen_all to be size 2.</span>
+0289 <span class="keyword">end</span>
+0290 xp2 = xp(chosen_all{:});
+0291 
+0292 
+0293 <span class="comment">%% Squeeze out unused dimensions</span>
+0294 <span class="comment">% Squeeze to eliminate superfluous dimensions</span>
+0295 xp2 = xp2.squeeze;
+0296 Nd = ndims(xp2);
+0297 
+0298 <span class="comment">% Rearrange dimensions of xp2 for stacking</span>
+0299 <span class="keyword">if</span> ~isempty(options.dim_stacking)
+0300     ax_names = xp2.exportAxisNames;
+0301     <span class="keyword">if</span> length(options.dim_stacking) ~= length(ax_names) -1
+0302         error(<span class="string">'Incorrect number of dimensions specified. dim_stacking must be some permutation of the following: %s'</span>, sprintf(<span class="string">'%s '</span>,ax_names{1:end}));
+0303     <span class="keyword">end</span>
+0304     xp2.permute(options.dim_stacking);
+0305 <span class="keyword">end</span>
+0306 
+0307 
+0308 <span class="comment">%% If only one cell</span>
+0309 
+0310 <span class="comment">% If only 1 cell, move in 2nd cell</span>
+0311 <span class="keyword">if</span> length(xp2.meta.datainfo(2).values) &lt;= 1 &amp;&amp; ~is_image
+0312     <span class="comment">% Move populations axis to the end if it exists</span>
+0313     ax2overlay = xp2.findaxis(<span class="string">'populations'</span>);
+0314     <span class="keyword">if</span> isempty(ax2overlay)
+0315         ax2overlay = xp2.ndims;     <span class="comment">% If can't find populations, use last axis on the stack</span>
+0316     <span class="keyword">end</span>
+0317     
+0318     <span class="comment">% Save variables associated with this axis</span>
+0319     packed_vars = xp2.axis(ax2overlay).values;
+0320     packed_name = xp2.axis(ax2overlay).name;
+0321     
+0322     <span class="comment">% Add &lt;average&gt; symbols if necessary to packed_vars</span>
+0323     cellnames = xp2.meta.datainfo(2).values;
+0324     temp = cellfun(@isempty,strfind(cellnames,<span class="string">'&lt;'</span>));    <span class="comment">% Check if originals were averages!</span>
+0325     <span class="keyword">if</span> any(~temp)
+0326         <span class="keyword">if</span> isnumeric(packed_vars); packed_vars = cellfunu(@(s) [<a href="../functions/+ds/strrep.html" class="code" title="function str = strrep(str,oldstr,newstr,lpad,rpad, varargin)">strrep</a>(packed_name,<span class="string">'_'</span>,<span class="string">' '</span>) <span class="string">' '</span> num2str(s)],num2cell(packed_vars)); <span class="keyword">end</span>
+0327         packed_vars = cellfunu(@(s) [<span class="string">'&lt;'</span> s <span class="string">'&gt;'</span>], packed_vars);
+0328     <span class="keyword">end</span>
+0329     
+0330     xp2.meta.datainfo(2).name = packed_name;
+0331     xp2.meta.datainfo(2).values = packed_vars(:)';
+0332     
+0333     xp2 = xp2.packDim(ax2overlay,2);
+0334     xp2 = xp2.squeezeRegexp(<span class="string">'Dim'</span>);
+0335 <span class="keyword">end</span>
+0336 
+0337 
+0338 
+0339 <span class="comment">%% If doing force overlay, move overlay population to the end</span>
+0340 <span class="keyword">if</span> ~isempty(force_last)
+0341     
+0342     <span class="comment">% If it's a stand-alone string, convert to cell array</span>
+0343     <span class="keyword">if</span> ischar(force_last)
+0344         force_last = {force_last};
+0345     <span class="keyword">end</span>
+0346     
+0347     <span class="comment">% Functionalize this at some point... building list of requested axes</span>
+0348     ax_names = xp2.exportAxisNames;
+0349     ax_ind = zeros(1,length(force_last));
+0350     <span class="keyword">for</span> i = 1:length(force_last)
+0351         temp = xp2.findaxis(force_last{i});
+0352         <span class="keyword">if</span> isempty(temp)
+0353             error(<span class="string">'Requested axis not found. force_last must be one of the following: : %s'</span>, sprintf(<span class="string">'%s '</span>,ax_names{1:end}));
+0354         <span class="keyword">end</span>
+0355         ax_ind(i) = temp;
+0356     <span class="keyword">end</span>
+0357     
+0358     <span class="comment">% Dims per subplot should be at least 2 if we're forcing last...</span>
+0359     <span class="comment">% perhaps change this later</span>
+0360     <span class="keyword">if</span> isempty(Ndims_per_subplot)
+0361         Ndims_per_subplot = 2;
+0362     <span class="keyword">end</span>
+0363     <span class="keyword">if</span> Ndims_per_subplot == 1
+0364         Ndims_per_subplot = 2;
+0365     <span class="keyword">end</span>
+0366     
+0367     others_ind = true(1,ndims(xp2));
+0368     others_ind(ax_ind) = false;
+0369     xp2 = xp2.permute([find(others_ind), ax_ind]);        <span class="comment">% Move chosen axis to the back!</span>
+0370     
+0371 <span class="keyword">end</span>
+0372 
+0373 
+0374 <span class="comment">%% Set up do z-score &amp; overlay shift</span>
+0375 <span class="keyword">if</span> options.do_zscore &amp;&amp; all(cellfun(@isnumeric,xp2.data(:))) &amp;&amp; ~is_image
+0376     mydata = xp2.data;
+0377     <span class="keyword">for</span> i = 1:numel(mydata)
+0378         mydata{i} = zscore(mydata{i});
+0379     <span class="keyword">end</span>
+0380     xp2.data = mydata;
+0381 <span class="keyword">end</span>
+0382 
+0383 <span class="comment">% Shift the overlay by a certain amount</span>
+0384 <span class="keyword">if</span> ~isempty(Ndims_per_subplot)
+0385     <span class="keyword">if</span> options.do_overlay_shift &amp;&amp; all(cellfun(@isnumeric,xp2.data(:))) &amp;&amp; ~is_image
+0386         Nd = ndims(xp2);
+0387         xp2 = xp2.packDim(Nd);
+0388         mydata = xp2.data;
+0389         <span class="keyword">for</span> i = 1:numel(mydata)
+0390             mydata{i} = <a href="#_sub19" class="code" title="subfunction mydata_out = do_shift_lastdim (mydata,shift)">do_shift_lastdim</a> (mydata{i},options.overlay_shift_val);
+0391         <span class="keyword">end</span>
+0392         xp2.data = mydata;
+0393         xp2 = xp2.unpackDim(3,Nd);
+0394         xp2 = xp2.squeezeRegexp(<span class="string">'Dim'</span>);
+0395     <span class="keyword">end</span>
+0396 <span class="keyword">end</span>
+0397 
+0398 <span class="comment">%% Crop data</span>
+0399 <span class="comment">% This is inserted here because apparently the operation is slow and it's</span>
+0400 <span class="comment">% faster to do this after we've already squeezed / selected.</span>
+0401 <span class="keyword">if</span> ~isempty(crop_range) &amp;&amp;  all(cellfun(@isnumeric,xp2.data(:))) &amp;&amp; ~is_image
+0402     t_temp = xp2.meta.datainfo(1).values;
+0403     ind = (t_temp &gt; crop_range(1) &amp; t_temp &lt;= crop_range(2));
+0404     <span class="keyword">for</span> i = 1:numel(xp2.data)
+0405         <span class="keyword">if</span> ~isempty(xp2.data{i}); xp2.data{i} = xp2.data{i}(ind,:); <span class="keyword">end</span>
+0406     <span class="keyword">end</span>
+0407     xp2.meta.datainfo(1).values = t_temp(ind);
+0408     
+0409     <span class="comment">% Also crop DynaSim metadata info about time.</span>
+0410     t_temp2 = xp2.meta.dynasim.time;
+0411     ind = (t_temp2 &gt; crop_range(1) &amp; t_temp2 &lt;= crop_range(2));
+0412     t_temp2 = t_temp2(ind);
+0413     xp2.meta.dynasim.time = t_temp2;
+0414     
+0415 <span class="keyword">end</span>
+0416 
+0417 
+0418 
+0419 <span class="comment">%% Set up legend entries and axis limits</span>
+0420 <span class="comment">% Set up legend entries</span>
+0421 subplot_options.legend1 = <a href="#_sub20" class="code" title="subfunction leg1 = setup_legends(xp2)">setup_legends</a>(xp2);
+0422 
+0423 
+0424 <span class="comment">% Get axis lims</span>
+0425 <span class="keyword">if</span> isempty(plot_options.xlims) &amp;&amp; lock_axes &amp;&amp; ~is_image
+0426         xdat = xp2.meta.datainfo(1).values;
+0427         plot_options.xlims = [min(xdat) max(xdat)];
+0428 <span class="keyword">end</span>
+0429 <span class="keyword">if</span> isempty(plot_options.ylims) &amp;&amp; lock_axes &amp;&amp; ~is_image
+0430     <span class="keyword">switch</span> plot_type
+0431         <span class="keyword">case</span> <span class="string">'waveform'</span>
+0432             <span class="comment">% Merge all data into one single huge column</span>
+0433             data_all = xp2.data(:);
+0434             data_all = cellfunu(@(x) x(:), data_all);
+0435             data_all = vertcat(data_all{:});
+0436             <span class="comment">% Find the max and minima - these are the largest and smallest</span>
+0437             <span class="comment">% values we could ever see.</span>
+0438             data_lims = [min(data_all) max(data_all)];
+0439             plot_options.ylims = data_lims;
+0440     <span class="keyword">end</span>
+0441 <span class="keyword">end</span>
+0442 
+0443 <span class="keyword">if</span> isempty(plot_options.zlims) &amp;&amp; lock_axes &amp;&amp; ~is_image
+0444     <span class="keyword">switch</span> plot_type
+0445         <span class="keyword">case</span> <span class="string">'imagesc'</span>
+0446             data_all = xp2.data(:);
+0447             data_all = cellfunu(@(x) x(:), data_all);
+0448             data_all = vertcat(data_all{:});
+0449             data_lims = [min(data_all) max(data_all)];
+0450             plot_options.zlims = data_lims;
+0451     <span class="keyword">end</span>
+0452 <span class="keyword">end</span>
+0453 
+0454 <span class="comment">%% Prepare plotting handles for specific plot types</span>
+0455 <span class="keyword">if</span> is_image
+0456     <span class="comment">% Is an image</span>
+0457     data_plothandle = @xp_plotimage;
+0458     plot_options.scale = .5;           <span class="comment">% Scale of .5 enforces some anti-aliasing</span>
+0459 <span class="keyword">else</span>
+0460     <span class="keyword">switch</span> plot_type
+0461         <span class="keyword">case</span> <span class="string">'waveform'</span>
+0462             <span class="comment">% Is data</span>
+0463             data_plothandle = @xp1D_matrix_plot;
+0464             <span class="keyword">if</span> ~isempty(plot_handle); data_plothandle = plot_handle; <span class="keyword">end</span>
+0465             
+0466         <span class="keyword">case</span> <span class="string">'imagesc'</span>
+0467             data_plothandle = @xp_matrix_imagesc;
+0468             <span class="keyword">if</span> ~isempty(plot_handle); data_plothandle = plot_handle; <span class="keyword">end</span>
+0469             <span class="comment">% Disable legend when using imagesc</span>
+0470             subplot_options.legend1 = [];
+0471             <span class="comment">% Add time information</span>
+0472             plot_options.xdat = xp2.meta.datainfo(1).values;
+0473             <span class="comment">% Control colorbar</span>
+0474             <span class="keyword">if</span> lock_axes
+0475                 <span class="comment">% If axes are locked, only need to show 1 colorbar across</span>
+0476                 <span class="comment">% all subplots</span>
+0477                 subplot_options.do_colorbar = options.show_colorbar;
+0478                 plot_options.do_colorbar = false;
+0479 <span class="comment">%                 subplot_options.do_colorbar = false;</span>
+0480 <span class="comment">%                 plot_options.do_colorbar = true;</span>
+0481             <span class="keyword">else</span>
+0482                 subplot_options.do_colorbar = false;
+0483                 plot_options.do_colorbar = options.show_colorbar;
+0484             <span class="keyword">end</span>
+0485             
+0486         <span class="keyword">case</span> {<span class="string">'power'</span>,<span class="string">'rastergram'</span>,<span class="string">'raster'</span>}
+0487             <span class="comment">% Disable legend when using dsPlot</span>
+0488             subplot_options.legend1 = [];
+0489             
+0490             <span class="comment">% Setup call to xp_PlotData</span>
+0491             plot_options.args = {plot_options.args{:}, <span class="string">'plot_type'</span>,plot_type};
+0492             data_plothandle = @xp_PlotData;
+0493             <span class="keyword">if</span> ~isempty(plot_handle); data_plothandle = plot_handle; <span class="keyword">end</span>
+0494             
+0495             <span class="keyword">if</span> any(strcmp(plot_type,{<span class="string">'rastergram'</span>,<span class="string">'raster'</span>}))
+0496                 <span class="comment">% Move populations axis to the end of xp2. This ensures</span>
+0497                 ax_names = xp2.exportAxisNames;
+0498                 ind_pop = false(1,length(ax_names));
+0499                 ind_pop(xp2.findaxis(<span class="string">'populations'</span>)) = true;
+0500                 ind_rest = ~ind_pop;
+0501                 order = [find(ind_rest) find(ind_pop)];
+0502                 xp2 = xp2.permute(order);
+0503                 <span class="keyword">if</span> isempty(Ndims_per_subplot)
+0504                     Ndims_per_subplot = 2;                 <span class="comment">% Overwrite Ndims_per_subplot to 2. This ensures</span>
+0505                 <span class="keyword">end</span>                                        <span class="comment">% that multiple populations can be stacked in a</span>
+0506                                                            <span class="comment">% single subplot.</span>
+0507             <span class="keyword">end</span>
+0508             
+0509         <span class="keyword">case</span> {<span class="string">'heatmapFR'</span>,<span class="string">'heatmap_sortedFR'</span>,<span class="string">'meanFR'</span>,<span class="string">'meanFRdens'</span>}
+0510             <span class="comment">% Disable legend when using ds.plotFR2</span>
+0511             subplot_options.legend1 = [];
+0512             <span class="comment">% Remove FR suffix from heatmap and heatmap_sorted plot types</span>
+0513             <span class="keyword">if</span> any(strcmp(plot_type,{<span class="string">'heatmapFR'</span>,<span class="string">'heatmap_sortedFR'</span>}))
+0514                 plot_type = <a href="../functions/+ds/strrep.html" class="code" title="function str = strrep(str,oldstr,newstr,lpad,rpad, varargin)">strrep</a>(plot_type,<span class="string">'FR'</span>,<span class="string">''</span>);
+0515             <span class="keyword">end</span>
+0516             
+0517             <span class="comment">% Setup call to xp_PlotFR2</span>
+0518             plot_options.args = {plot_options.args{:}, <span class="string">'plot_type'</span>,plot_type};
+0519             data_plothandle = @xp_PlotFR2;
+0520             <span class="keyword">if</span> ~isempty(plot_handle); data_plothandle = plot_handle; <span class="keyword">end</span>
+0521     <span class="keyword">end</span>
+0522 <span class="keyword">end</span>
+0523 
+0524 
+0525 <span class="comment">% If Ndims_per_subplot has not been set yet, set it now!</span>
+0526 <span class="keyword">if</span> isempty(Ndims_per_subplot)
+0527     Ndims_per_subplot = 1;
+0528 <span class="keyword">end</span>
+0529 
+0530 <span class="comment">%% Prepare plotting structure depending on number of embedded subplots</span>
+0531 <span class="comment">% Split available axes into the number of dimensions supported by each</span>
+0532 <span class="comment">% axis handle</span>
+0533 <span class="keyword">switch</span> num_embedded_subplots
+0534     <span class="keyword">case</span> 1
+0535         <span class="comment">% Ordering of axis handles</span>
+0536         <a name="_sub1" href="#_subfunctions" class="code">function_handles = {@xp_handles_newfig, @xp_subplot_grid,data_plothandle};   </a><span class="comment">% Specifies the handles of the plotting functions</span>
+0537         dims_per_function_handle = [1,1,Ndims_per_subplot];
+0538         <a name="_sub2" href="#_subfunctions" class="code">function_args = {{figure_options},{subplot_options},{plot_options}};</a>
+0539         
+0540     <span class="keyword">case</span> 2
+0541         <span class="comment">% Ordering of axis handles</span>
+0542         <a name="_sub3" href="#_subfunctions" class="code">function_handles = {@xp_handles_newfig, @xp_subplot_grid,data_plothandle};   </a><span class="comment">% Specifies the handles of the plotting functions</span>
+0543         dims_per_function_handle = [1,2,Ndims_per_subplot];
+0544         <a name="_sub4" href="#_subfunctions" class="code">function_args = {{figure_options},{subplot_options},{plot_options}};</a>
+0545         
+0546     <span class="keyword">case</span> 3
+0547         <span class="comment">% Ordering of axis handles</span>
+0548         <a name="_sub5" href="#_subfunctions" class="code">function_handles = {@xp_handles_newfig, @xp_subplot_grid, @xp_subplot_grid,data_plothandle};   </a><span class="comment">% Specifies the handles of the plotting functions</span>
+0549         dims_per_function_handle = [1,2,1,Ndims_per_subplot];
+0550         subplot_options2 = subplot_options;
+0551         subplot_options2.legend1 = [];
+0552         subplot_options.display_mode = 1;
+0553         <a name="_sub6" href="#_subfunctions" class="code">function_args = {{figure_options},{subplot_options2},{subplot_options},{plot_options}};</a>
+0554     <span class="keyword">case</span> 4
+0555         <span class="comment">% Ordering of axis handles</span>
+0556         <a name="_sub7" href="#_subfunctions" class="code">function_handles = {@xp_handles_newfig, @xp_subplot_grid, @xp_subplot_grid,data_plothandle};   </a><span class="comment">% Specifies the handles of the plotting functions</span>
+0557         dims_per_function_handle = [1,2,2,Ndims_per_subplot];
+0558         subplot_options2 = subplot_options;
+0559         subplot_options2.legend1 = [];
+0560         subplot_options.display_mode = 1;
+0561         <a name="_sub8" href="#_subfunctions" class="code">function_args = {{figure_options},{subplot_options2},{subplot_options},{plot_options}};</a>
+0562 <span class="keyword">end</span>
+0563 
+0564 
+0565 <span class="comment">%% Auto trim dimensions as needed</span>
+0566 <span class="comment">% Linearize dimensions of xp2 that are in excess of the total number we can</span>
+0567 <span class="comment">% plot</span>
+0568 maxNplotdims = sum(dims_per_function_handle)-1;
+0569 xp2 = <a href="#_sub16" class="code" title="subfunction xp2 = reduce_dims(xp2,maxNplotdims)">reduce_dims</a>(xp2,maxNplotdims);
+0570 
+0571 <span class="comment">% Stack up available dimensions based on how much each axis handle can hold</span>
+0572 ax_names = [xp2.exportAxisNames, <span class="string">'data'</span>];
+0573 
+0574 dimensions = <a href="#_sub15" class="code" title="subfunction dimensions = get_dimensions(ax_names,dims_per_function_handle)">get_dimensions</a>(ax_names,dims_per_function_handle);
+0575 
+0576 
+0577 <span class="comment">% Remove any excess function handles that aren't needed</span>
+0578 available_dims = ~cellfun(@isempty,dimensions);
+0579 <a name="_sub9" href="#_subfunctions" class="code">function_handles = function_handles(available_dims);</a>
+0580 dimensions = dimensions(available_dims);
+0581 <a name="_sub10" href="#_subfunctions" class="code">function_args = function_args(available_dims);</a>
+0582 
+0583 
+0584 <span class="comment">%% Run the plots!</span>
+0585 <span class="comment">% Open new figure if necessary &amp; plot the data</span>
+0586 <span class="keyword">if</span> ~isequal(@xp_handles_newfig, <a href="#_sub9" class="code" title="subfunction_handles = function_handles(available_dims);">function_handles</a>{1})
+0587     <span class="comment">% Cheap hack to force it to create a new figure using our desired</span>
+0588     <span class="comment">% parameters for instances when it wouldn't normally call</span>
+0589     <span class="comment">% xp_handles_newfig.</span>
+0590     xp3 = xPlt;
+0591     fhandle = @() recursivePlot(xp2,<a href="#_sub9" class="code" title="subfunction_handles = function_handles(available_dims);">function_handles</a>,dimensions,<a href="#_sub10" class="code" title="subfunction_args = function_args(available_dims);">function_args</a>);
+0592     xp3 = xp3.importData({fhandle});
+0593     handles = xp_handles_newfig(xp3,figure_options);
+0594 <span class="keyword">else</span>
+0595     handles = xp2.recursivePlot(<a href="#_sub9" class="code" title="subfunction_handles = function_handles(available_dims);">function_handles</a>,dimensions,<a href="#_sub10" class="code" title="subfunction_args = function_args(available_dims);">function_args</a>);
+0596 <span class="keyword">end</span>
+0597 
+0598 
+0599 <span class="keyword">end</span>
+0600 
+0601 
+0602 <a name="_sub11" href="#_subfunctions" class="code">function var_out = getdefaultstatevar(xp)</a>
+0603     <span class="comment">% search through and try to find the variable represnting voltage. If can't find</span>
+0604     <span class="comment">% it, just return the first variable listed.</span>
+0605     
+0606     <span class="comment">% See if variables axis even exists</span>
+0607     <span class="keyword">if</span> isempty(xp.findaxis(<span class="string">'variables'</span>))
+0608         <span class="comment">% If reach here, it means variables is not used in the code. Just</span>
+0609         <span class="comment">% return some dummy values and move on.</span>
+0610         var_out = <span class="string">':'</span>; 
+0611         <span class="keyword">return</span>;
+0612     <span class="keyword">end</span>
+0613     
+0614     vars_from_labels = ds.get_variables_from_meta(xp);
+0615     <span class="keyword">if</span> ~isempty(vars_from_labels)
+0616         vars_from_labels = vars_from_labels(1);   <span class="comment">% Best guess at default state variable. Usually its the 1st entry in labels</span>
+0617     <span class="keyword">end</span>
+0618     
+0619     <span class="comment">% Pull out variables</span>
+0620     vars_orig = xp.axis(<span class="string">'variables'</span>).values;
+0621     
+0622     <span class="comment">% Make everything uppercase to ensure</span>
+0623     <span class="comment">% case-insensitive.</span>
+0624     vars = upper(vars_orig);
+0625     possibilities = upper({vars_from_labels{:},<span class="string">'V'</span>,<span class="string">'X'</span>,<span class="string">'Vm'</span>,<span class="string">'Xm'</span>,<span class="string">'Y'</span>,<span class="string">'Ym'</span>});
+0626     
+0627     ind = [];
+0628     i=0;
+0629     <span class="keyword">while</span> isempty(ind) &amp;&amp; i &lt; length(possibilities)
+0630         i=i+1;
+0631         ind = find(strcmpi(vars,possibilities{i}));
+0632     <span class="keyword">end</span>
+0633     
+0634     <span class="keyword">if</span> ~isempty(ind)
+0635         var_out = vars_orig{ind};
+0636     <span class="keyword">else</span>
+0637         var_out = vars_orig{1};
+0638     <span class="keyword">end</span>
+0639 <span class="keyword">end</span>
+0640 
+0641 <a name="_sub12" href="#_subfunctions" class="code">function [chosen_varied, options_varied ]= get_chosen_varied(varied_names,options_varied)</a>
+0642 
+0643     <span class="comment">% Initialize output</span>
+0644     chosen_varied = repmat({<span class="string">':'</span>},1,length(varied_names));
+0645     
+0646     <span class="comment">% Varied name-value pairs entered by user</span>
+0647     varied_NVPs = fieldnames(options_varied);
+0648     
+0649     <span class="comment">% See if any of these match actual varied parameters</span>
+0650     <span class="keyword">for</span> i =  1:length(varied_NVPs)
+0651         ind = find(strcmp(varied_names,varied_NVPs{i}));
+0652         <span class="keyword">if</span> length(ind) == 1
+0653             chosen_varied{ind} = options_varied.(varied_NVPs{i});
+0654             
+0655             <span class="comment">% Optional (remove from options_varied)</span>
+0656             options_varied = rmfield(options_varied,varied_NVPs{i});
+0657         <span class="keyword">elseif</span> length(ind) &gt; 1
+0658             error(<span class="string">'Multiple varied arguments found'</span>);
+0659         <span class="keyword">else</span>
+0660             <span class="comment">% Not a varied variable name</span>
+0661         <span class="keyword">end</span>
+0662         
+0663         
+0664     <span class="keyword">end</span>
+0665     
+0666 <span class="keyword">end</span>
+0667 
+0668 <a name="_sub13" href="#_subfunctions" class="code">function str_out = variedN_to_axisnames(str_in,ax_names_varied)</a>
+0669 
+0670         <span class="keyword">if</span> strcmp(str_in(1:min(6,end)),<span class="string">'varied'</span>)        <span class="comment">% User has entered variedX</span>
+0671             <span class="comment">% fn is original fieldname (e.g. variedX)</span>
+0672             <span class="comment">% fn2 is new field name of varied parameter (e.g. E_Iapp)</span>
+0673             str_out = ax_names_varied{str2num(str_in(7:end))};
+0674         <span class="keyword">else</span>
+0675             str_out = str_in;
+0676         <span class="keyword">end</span>
+0677     
+0678 <span class="keyword">end</span>
+0679 
+0680 <a name="_sub14" href="#_subfunctions" class="code">function ax_ind_varied = findaxis_varied(xp)</a>
+0681     <span class="comment">% Uses metadata to identify a list of varied variables. Then validates</span>
+0682     <span class="comment">% that they match the available axis names and returns their index.</span>
+0683     varied = xp.meta.dynasim.varied;
+0684     ax_names = xp.exportAxisNames;
+0685     ax_ind_varied = false(1,length(ax_names));
+0686     <span class="keyword">for</span> i = 1:length(varied)
+0687         ind = strcmp(varied{i},ax_names);
+0688         <span class="keyword">if</span> sum(ind) ~= 1; error(<span class="string">'Varied axis not found OR something wrong with varied label'</span>); <span class="keyword">end</span>
+0689         ax_ind_varied = ax_ind_varied | ind;
+0690     <span class="keyword">end</span>
+0691     
+0692     ax_ind_varied = find(ax_ind_varied);
+0693 <span class="keyword">end</span>
+0694 
+0695 <a name="_sub15" href="#_subfunctions" class="code">function dimensions = get_dimensions(ax_names,dims_per_function_handle)</a>
+0696     <span class="comment">% Split available axes into the number of dimensions supported by each</span>
+0697     <span class="comment">% axis handle</span>
+0698 
+0699     i = length(dims_per_function_handle);
+0700     <span class="keyword">while</span> i &gt; 0 &amp;&amp; ~isempty(ax_names)
+0701         
+0702         Ndims_curr = dims_per_function_handle(i);
+0703         dimensions{i} = ax_names(max(1,end-Ndims_curr+1):end);
+0704         ax_names = ax_names(1:end-Ndims_curr);
+0705         i=i-1;
+0706     <span class="keyword">end</span>
+0707     
+0708 <span class="keyword">end</span>
+0709 
+0710 
+0711 
+0712 <a name="_sub16" href="#_subfunctions" class="code">function xp2 = reduce_dims(xp2,maxNplotdims)</a>
+0713     Nd = ndims(xp2);
+0714     <span class="keyword">if</span> Nd &gt; maxNplotdims 
+0715         xp2 = xp2.mergeDims( [maxNplotdims:Nd] );
+0716         xp2 = xp2.squeeze;
+0717         Nd = ndims(xp2);
+0718 
+0719         <span class="keyword">if</span> Nd ~= maxNplotdims; error(<span class="string">'something wrong'</span>); <span class="keyword">end</span>
+0720     <span class="keyword">end</span>
+0721 <span class="keyword">end</span>
+0722 
+0723 <a name="_sub17" href="#_subfunctions" class="code">function varied_names = only_varieds(xp)</a>
+0724     <span class="comment">% Get list of varied axis names</span>
+0725     varied_names = xp.meta.dynasim.varied;
+0726     
+0727     <span class="comment">% Make sure that they are acutally in xp.axis.names.</span>
+0728     <a href="#_sub14" class="code" title="subfunction ax_ind_varied = findaxis_varied(xp)">findaxis_varied</a>(xp); <span class="comment">% This function will return an error if they are missing!</span>
+0729     
+0730 <span class="keyword">end</span>
+0731 
+0732 
+0733 <a name="_sub18" href="#_subfunctions" class="code">function varied_names = only_varieds_old_deleteme(all_names)</a>
+0734     warning(<span class="string">'update this command or possibly merge with findaxis_varied'</span>);
+0735     inds = true(1,length(all_names));
+0736     inds(strcmp(all_names,<span class="string">'populations'</span>)) = false; 
+0737     inds(strcmp(all_names,<span class="string">'variables'</span>)) = false;
+0738     varied_names = all_names(inds);
+0739 <span class="keyword">end</span>
+0740 
+0741 <a name="_sub19" href="#_subfunctions" class="code">function mydata_out = do_shift_lastdim (mydata,shift)</a>
+0742     sz = size(mydata);
+0743     nd = ndims(mydata);
+0744     
+0745     <span class="keyword">if</span> isempty(shift)
+0746         <span class="comment">% Do adaptive shift</span>
+0747         upscale_factor = 2;
+0748         temp = reshape(mydata,prod(sz(1:nd-1)),sz(nd));
+0749         stdevs = nanstd(temp)*upscale_factor;               <span class="comment">% STD ignoring NaNs</span>
+0750         sh = [0, stdevs(1:end-1) + stdevs(2:end)]';
+0751         sh = sh * -1;        <span class="comment">% Forces shifts to be downward (same as subplots)</span>
+0752     <span class="keyword">else</span>
+0753         sh = shift*[0:sz(end)-1]';      <span class="comment">% Fixed shift amount</span>
+0754         sh = sh * -1;        <span class="comment">% Forces shifts to be downward (same as subplots)</span>
+0755     <span class="keyword">end</span>
+0756     
+0757     
+0758     sh = permute(sh, [2:nd,1]);
+0759     <span class="keyword">if</span> length(sz(1:nd-1)) == 1
+0760         sh2 = repmat(sh, sz(1:nd-1),1);     <span class="comment">% Special case for scalar input to repmat. When repmat receives a scalar, it repeats BOTH rows and columns instead of just rows</span>
+0761     <span class="keyword">else</span>
+0762         sh2 = repmat(sh, sz(1:nd-1));
+0763     <span class="keyword">end</span>
+0764     
+0765     mydata_out = mydata + sh2;
+0766     
+0767 <span class="keyword">end</span>
+0768 
+0769 <a name="_sub20" href="#_subfunctions" class="code">function leg1 = setup_legends(xp2)</a>
+0770     
+0771     <span class="comment">% Pull out all metadata names and values</span>
+0772     <span class="keyword">for</span> i = 1:length(xp2.meta.datainfo)
+0773         mn{i} = xp2.meta.datainfo(i).name;
+0774         mv{i} = xp2.meta.datainfo(i).values;
+0775     <span class="keyword">end</span>
+0776 
+0777     <span class="comment">% Convert any numeric entries to cell strings as needed</span>
+0778     <span class="keyword">for</span> i = 2:length(xp2.meta.datainfo)
+0779         <span class="keyword">if</span> isnumeric(mv{i})
+0780             <span class="comment">% If axis is numeric, as in the case with varied parameters, convert to</span>
+0781             <span class="comment">% a cell array of strings</span>
+0782             mv{i} = cellfun(@num2str,num2cell(mv{i}),<span class="string">'UniformOutput'</span>,0);
+0783 
+0784             <span class="comment">% Also pre-pend the name of the variable being varied</span>
+0785             <span class="keyword">for</span> j = 1:length(mv{i})
+0786                 mv{i}{j} = [<a href="../functions/+ds/strrep.html" class="code" title="function str = strrep(str,oldstr,newstr,lpad,rpad, varargin)">strrep</a>(mn{i},<span class="string">'_'</span>,<span class="string">' '</span>) <span class="string">' '</span> mv{i}{j}];
+0787             <span class="keyword">end</span>
+0788         <span class="keyword">end</span>
+0789     <span class="keyword">end</span>
+0790     
+0791     <span class="keyword">if</span> length(mv) == 2
+0792         leg1 = mv{2};
+0793     <span class="keyword">elseif</span> length(mv) == 3
+0794         <span class="comment">%Cartesean product of mv{2} and mv{3}</span>
+0795         k = 0;
+0796         <span class="keyword">for</span> j = 1:length(mv{3})
+0797             <span class="keyword">for</span> i = 1:length(mv{2})         <span class="comment">% We plot the 2nd dimension 1st; they are grouped together</span>
+0798                 k=k+1;
+0799                 leg1{k} = [mv{2}{i} <span class="string">' '</span> mv{3}{j}];
+0800             <span class="keyword">end</span>
+0801         <span class="keyword">end</span>
+0802     <span class="keyword">else</span>
+0803         error(<span class="string">'should not reach'</span>);
+0804     <span class="keyword">end</span>
+0805 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 28-Apr-2017 18:39:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

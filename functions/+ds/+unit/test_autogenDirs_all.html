@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of test_autogenDirs_all</title>
+  <meta name="keywords" content="test_autogenDirs_all">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html functions --><!-- ../menu.html +ds --><!-- menu.html +unit -->
+<h1>test_autogenDirs_all
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="test_autogenDirs_all.html" class="code" title="">test_autogenDirs_all</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="test_autogenDirs_all.html" class="code" title="">test_autogenDirs_all</a>	</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function testCellIn(testCase, dataDirName)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 classdef <a href="test_autogenDirs_all.html" class="code" title="">test_autogenDirs_all</a> &lt; matlab.unittest.TestCase
+0002   properties
+0003     testDataPath = ds.getConfig(<span class="string">'ds_testData_path'</span>);
+0004   <span class="keyword">end</span>
+0005   
+0006   properties (TestParameter)
+0007     dataDirName = ds.unit.getAutogenDirs();
+0008   <span class="keyword">end</span>
+0009   
+0010   methods (Test,  TestTags = {<span class="string">'autogen'</span>})
+0011     <a name="_sub0" href="#_subfunctions" class="code">function testCellIn(testCase, dataDirName)</a>
+0012       dataDirPath = fullfile(testCase.testDataPath, <span class="string">'autogenDirs'</span>, dataDirName);
+0013       
+0014       <span class="comment">% Make Temp Folder</span>
+0015       import matlab.unittest.fixtures.WorkingFolderFixture
+0016       tempDirFixture = testCase.applyFixture(WorkingFolderFixture(<span class="string">'WithSuffix'</span>, [<span class="string">'_'</span> dataDirName]));
+0017       tempDirPath = tempDirFixture.Folder;
+0018 <span class="comment">%       tempOutputDir = fullfile(tempDirPath, 'output');</span>
+0019 <span class="comment">%       mkdirSilent(tempOutputDir);</span>
+0020       
+0021       args = load(fullfile(dataDirPath, <span class="string">'args.mat'</span>));
+0022       expectedOut = args.argout;
+0023       
+0024       fnName = strsplit(dataDirName,<span class="string">'_autogen_'</span>);
+0025       fh = str2func(fnName{1});
+0026       
+0027       [testOut{1:length(expectedOut)}] = feval(fh, args.argin{:});
+0028       
+0029       <span class="comment">% testOut fig handles</span>
+0030       <span class="comment">% TODO: generalize fig handle checking</span>
+0031       <span class="keyword">if</span> all(isValidFigHandle(testOut{1}))
+0032         handles = testOut{1};
+0033         
+0034         ds.unit.save_figHandles( handles, tempDirPath )
+0035         
+0036         close all
+0037       <span class="keyword">end</span>
+0038       
+0039       <span class="comment">% test output args</span>
+0040       <span class="keyword">for</span> ind = 1:length(expectedOut)
+0041         testCase.verifyEqual(testOut{ind}, expectedOut{ind});
+0042       <span class="keyword">end</span>
+0043       
+0044       <span class="comment">% test output files</span>
+0045       expectedOutputDir = fullfile(dataDirPath, <span class="string">'output'</span>);
+0046       <span class="keyword">if</span> exist(expectedOutputDir, <span class="string">'dir'</span>)
+0047         expectedOutputFiles = rls(expectedOutputDir);
+0048         expectedOutputFiles(1) = []; <span class="comment">% remove 'output' reference</span>
+0049         testOutputFiles = rls(tempDirPath);
+0050         testOutputFiles(1) = []; <span class="comment">% remove parent folder reference</span>
+0051         
+0052         <span class="comment">% test same num files</span>
+0053         testCase.assertLength(testOutputFiles, length(expectedOutputFiles));
+0054         
+0055         <span class="comment">% test each file</span>
+0056         <span class="keyword">for</span> iFile = 1:length(expectedOutputFiles)
+0057 <span class="comment">%           thisExpectedOutputFilePath = fullfile(expectedOutputDir, expectedOutputFiles{iFile});</span>
+0058           thisExpectedOutputFilePath = expectedOutputFiles{iFile};
+0059           
+0060 <span class="comment">%           thistestOutputFilePath = fullfile(tempDirPath, testOutputFiles{iFile});</span>
+0061           thistestOutputFilePath = testOutputFiles{iFile};
+0062           
+0063           [~,~,ext] = fileparts2(thistestOutputFilePath);
+0064           <span class="keyword">switch</span> ext
+0065             <span class="keyword">case</span> <span class="string">''</span> <span class="comment">% dir</span>
+0066               <span class="keyword">continue</span>
+0067             <span class="keyword">case</span> <span class="string">'.fig'</span>
+0068               <span class="comment">% compareFigFiles</span>
+0069 <span class="comment">%               testCase.verifyTrue( ~any(cellfun(@isempty, compareFigFiles(testOutputFiles{iFile}, expectedOutputFiles{iFile}))) );</span>
+0070               testCase.verifyEmpty( compareFigFiles(thistestOutputFilePath, thisExpectedOutputFilePath, true) );
+0071             <span class="keyword">case</span> <span class="string">'.mat'</span>
+0072               <span class="comment">% compare loaded structs</span>
+0073               thistest = load(thistestOutputFilePath);
+0074               thisExpected = load(thisExpectedOutputFilePath);
+0075               testCase.verifyEqual(thistest, thisExpected);
+0076             <span class="keyword">case</span> <span class="string">'.mex4unittest'</span>
+0077               <span class="keyword">continue</span> <span class="comment">% skip testing of mex files</span>
+0078             <span class="keyword">otherwise</span>
+0079               <span class="comment">% do diff</span>
+0080               testCase.verifyFalse( logical(system(sprintf(<span class="string">'diff -qr %s %s'</span>, thistestOutputFilePath, thisExpectedOutputFilePath))) );
+0081           <span class="keyword">end</span>
+0082         <span class="keyword">end</span>
+0083       <span class="keyword">end</span>
+0084       
+0085     <span class="keyword">end</span>
+0086   <span class="keyword">end</span>
+0087   
+0088 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 28-Apr-2017 18:39:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of saveAutoGenTestData</title>
+  <meta name="keywords" content="saveAutoGenTestData">
+  <meta name="description" content="Inputs:">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html functions --><!-- ../menu.html +ds --><!-- menu.html +unit -->
+<h1>saveAutoGenTestData
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Inputs:</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function saveAutoGenTestData(argin, argout, localFn_flag) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Inputs:
+   argin: cell array with input arguments
+   argout: cell array with output arguments
+   localFn_flag: logical of whether to include 'fn1__fn2' in fnName or 'fn1'</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function saveAutoGenTestData(argin, argout, localFn_flag)</a>
+0002 <span class="comment">% Inputs:</span>
+0003 <span class="comment">%   argin: cell array with input arguments</span>
+0004 <span class="comment">%   argout: cell array with output arguments</span>
+0005 <span class="comment">%   localFn_flag: logical of whether to include 'fn1__fn2' in fnName or 'fn1'</span>
+0006 
+0007 <span class="keyword">if</span> ~exist(<span class="string">'localFn_flag'</span>,<span class="string">'var'</span>)
+0008   localFn_flag = false;
+0009 <span class="keyword">end</span>
+0010 
+0011 <span class="comment">% get fn name from stack</span>
+0012 stack = dbstack;
+0013 <span class="keyword">if</span> ~localFn_flag
+0014   fnNameStack = stack(2).name;
+0015   fnName = fnNameStack;
+0016 <span class="keyword">else</span>
+0017   fnNameStack = stack(4).name;
+0018   fnName = [fnNameStack <span class="string">'__'</span> stack(3).name];
+0019 <span class="keyword">end</span>
+0020 
+0021 <span class="comment">% check package namespace</span>
+0022 <span class="keyword">if</span> ~isfunction(fnNameStack) || strcmp(fnNameStack, <span class="string">'strrep'</span>)
+0023   <span class="keyword">if</span> isfunction([<span class="string">'ds.'</span> fnNameStack])
+0024     fnName = [<span class="string">'ds.'</span> fnName];
+0025   <span class="keyword">elseif</span> isfunction([<span class="string">'ds.unit.'</span> fnNameStack])
+0026     fnName = [<span class="string">'ds.unit.'</span> fnName];
+0027   <span class="keyword">end</span>
+0028 <span class="keyword">end</span>
+0029 
+0030 hash = DataHash(argin);
+0031 
+0032 testFileName = sprintf(<span class="string">'%s_autogen_%s.mat'</span>, fnName, hash);
+0033 testFileDir = fullfile(ds.getConfig(<span class="string">'ds_testData_path'</span>), <span class="string">'autogen_newSave'</span>);
+0034 mkdirSilent(testFileDir);
+0035 testFilePath = fullfile(testFileDir, testFileName);
+0036 save(testFilePath, <span class="string">'argin'</span>, <span class="string">'argout'</span>)
+0037 
+0038 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 28-Apr-2017 18:39:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

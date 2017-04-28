@@ -1,0 +1,5 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  solve_ode_demo_cluster_1_ml_solver_ode23s [URL="solve_ode_demo_cluster_1_ml_solver_ode23s.html"];
+}

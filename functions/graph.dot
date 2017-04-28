@@ -1,0 +1,18 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  dsAnalyze -> dsImport;
+  dsImport -> dsImport;
+  dsImport -> dsSelect;
+  dsPlot -> dsPlot;
+  dsPlot2 -> dsPlot2;
+  dsSimulate -> dsAnalyze;
+  dsSimulate -> dsImport;
+  dsSimulate -> dsSimulate;
+
+  dsAnalyze [URL="dsAnalyze.html"];
+  dsImport [URL="dsImport.html"];
+  dsPlot [URL="dsPlot.html"];
+  dsPlot2 [URL="dsPlot2.html"];
+  dsSelect [URL="dsSelect.html"];
+  dsSimulate [URL="dsSimulate.html"];
+}

@@ -1,0 +1,257 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of make_autogenData</title>
+  <meta name="keywords" content="make_autogenData">
+  <meta name="description" content="% Make DynaSim Autogen Files">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html functions --><!-- ../menu.html +ds --><!-- menu.html +unit -->
+<h1>make_autogenData
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>% Make DynaSim Autogen Files</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">% Make DynaSim Autogen Files</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../functions/dsImport.html" class="code" title="function [data,studyinfo] = dsImport(file,varargin)">dsImport</a>	DSIMPORT - load data into DynaSim formatted data structure.</li><li><a href="../../../functions/dsPlot.html" class="code" title="function handles = dsPlot(data,varargin)">dsPlot</a>	DSPlot - plot data in various ways depending on what data was provided and what options are defined.</li><li><a href="../../../functions/dsSimulate.html" class="code" title="function [data,studyinfo] = dsSimulate(model,varargin)">dsSimulate</a>	% data=dsSimulate(model,'option',value,...)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%% Make DynaSim Autogen Files</span>
+0002 
+0003 <span class="comment">% Set where to save outputs</span>
+0004 output_directory = fullfile(ds.getConfig(<span class="string">'ds_data_path'</span>), <span class="string">'autoGenSave_temp'</span>);
+0005 
+0006 <span class="comment">% Erase output_directory</span>
+0007 <span class="keyword">if</span> isdir(output_directory)
+0008   rmdir(output_directory, <span class="string">'s'</span>)
+0009 <span class="keyword">end</span>
+0010 
+0011 <span class="comment">% move to root directory where outputs will be saved</span>
+0012 mkdirSilent(output_directory);
+0013 cd(output_directory);
+0014 
+0015 autogenOptions = {<span class="string">'auto_gen_test_data_flag'</span>,1, <span class="string">'random_seed'</span>, 1, <span class="string">'verbose_flag'</span>,0, <span class="string">'visible'</span>, <span class="string">'off'</span>};
+0016 
+0017 <span class="comment">%% Lorenz equations</span>
+0018 eqns={
+0019   <span class="string">'s=10; r=27; b=2.666'</span>;
+0020   <span class="string">'dx/dt=s*(y-x)'</span>;
+0021   <span class="string">'dy/dt=r*x-y-x*z'</span>;
+0022   <span class="string">'dz/dt=-b*z+x*y'</span>;
+0023 };
+0024 data=<a href="../../../functions/dsSimulate.html" class="code" title="function [data,studyinfo] = dsSimulate(model,varargin)">dsSimulate</a>(eqns, <span class="string">'tspan'</span>,[0 100], <span class="string">'ic'</span>,[1 2 .5], <span class="string">'solver'</span>,<span class="string">'rk4'</span>, <span class="string">'study_dir'</span>,<span class="string">'demo_lorenz'</span>, autogenOptions{:});
+0025 <a href="../../../functions/dsPlot.html" class="code" title="function handles = dsPlot(data,varargin)">dsPlot</a>(data, autogenOptions{:}); close gcf
+0026 
+0027 <span class="comment">%% Izhikevich neuron with noisy drive</span>
+0028 eqns={
+0029   <span class="string">'C=100; vr=-60; vt=-40; k=.7; Iapp=70; ton=200; toff=800'</span>;
+0030   <span class="string">'a=.03; b=-2; c=-50; d=100; vpeak=35'</span>;
+0031   <span class="string">'dv/dt=(k*(v-vr)*(v-vt)-u+I(t))/C; v(0)=vr'</span>;
+0032   <span class="string">'du/dt=a*(b*(v-vr)-u); u(0)=0'</span>;
+0033   <span class="string">'if(v&gt;vpeak)(v=c; u=u+d)'</span>;
+0034   <span class="string">'I(t)=Iapp*(t&gt;ton&amp;t&lt;toff)*(1+.5*rand)'</span>; <span class="comment">% define applied input using reserved variables 't' for time and 'dt' for fixed time step of numerical integration</span>
+0035   <span class="string">'monitor I'</span>;                            <span class="comment">% indicate to store applied input during simulation</span>
+0036 };
+0037 data=<a href="../../../functions/dsSimulate.html" class="code" title="function [data,studyinfo] = dsSimulate(model,varargin)">dsSimulate</a>(eqns, <span class="string">'tspan'</span>,[0 1000], <span class="string">'study_dir'</span>,<span class="string">'demo_izhikevich'</span>, autogenOptions{:});
+0038 <a href="../../../functions/dsPlot.html" class="code" title="function handles = dsPlot(data,varargin)">dsPlot</a>(data, autogenOptions{:}); close gcf
+0039 
+0040 <span class="comment">%% RUNNING SETS OF Izhikevich SIMULATIONS</span>
+0041 eqns={
+0042   <span class="string">'a=.02; b=.2; c=-65; d=6; I=14'</span>;
+0043   <span class="string">'dv/dt=.04*v^2+5*v+140-u+I; v(0)=-70'</span>;
+0044   <span class="string">'du/dt=a*(b*v-u); u(0)=-20'</span>;
+0045   <span class="string">'if(v&gt;=30)(v=c;u=u+d)'</span>;
+0046   };
+0047 P=<span class="string">'pop1'</span>; <span class="comment">% name of population</span>
+0048 vary={
+0049   {P,<span class="string">'a'</span>,.02; P,<span class="string">'b'</span>,.2 ; P,<span class="string">'c'</span>,-50; P,<span class="string">'d'</span>,2;  P,<span class="string">'I'</span>,15} <span class="comment">% tonic bursting</span>
+0050   {P,<span class="string">'a'</span>,.01; P,<span class="string">'b'</span>,.2 ; P,<span class="string">'c'</span>,-65; P,<span class="string">'d'</span>,8;  P,<span class="string">'I'</span>,30} <span class="comment">% spike frequency adaptation</span>
+0051   {P,<span class="string">'a'</span>,.02; P,<span class="string">'b'</span>,.2 ; P,<span class="string">'c'</span>,-65; P,<span class="string">'d'</span>,6;  P,<span class="string">'I'</span>,7}  <span class="comment">% spike latency</span>
+0052   {P,<span class="string">'a'</span>,.03; P,<span class="string">'b'</span>,.25; P,<span class="string">'c'</span>,-52; P,<span class="string">'d'</span>,0;  P,<span class="string">'I'</span>,0}  <span class="comment">% rebound burst</span>
+0053   {P,<span class="string">'a'</span>,1;   P,<span class="string">'b'</span>,1.5; P,<span class="string">'c'</span>,-60; P,<span class="string">'d'</span>,0;  P,<span class="string">'I'</span>,-65}<span class="comment">% bistability</span>
+0054   {P,<span class="string">'a'</span>,.02; P,<span class="string">'b'</span>,1  ; P,<span class="string">'c'</span>,-55; P,<span class="string">'d'</span>,4;  P,<span class="string">'I'</span>,1}  <span class="comment">% accomodation</span>
+0055   {P,<span class="string">'a'</span>,-.02;P,<span class="string">'b'</span>,-1 ; P,<span class="string">'c'</span>,-60; P,<span class="string">'d'</span>,8;  P,<span class="string">'I'</span>,80} <span class="comment">% inhibition-induced spiking</span>
+0056   {P,<span class="string">'a'</span>,-.026;P,<span class="string">'b'</span>,-1; P,<span class="string">'c'</span>,-45; P,<span class="string">'d'</span>,0;  P,<span class="string">'I'</span>,70} <span class="comment">% inhibition-induced bursting</span>
+0057   };
+0058 
+0059 <span class="comment">%% normal</span>
+0060 data=<a href="../../../functions/dsSimulate.html" class="code" title="function [data,studyinfo] = dsSimulate(model,varargin)">dsSimulate</a>(eqns, <span class="string">'tspan'</span>,[0 250], <span class="string">'vary'</span>,vary, <span class="string">'study_dir'</span>,<span class="string">'demo_izhikevich_vary'</span>, autogenOptions{:});
+0061 
+0062 <span class="comment">% TODO: fix dsPlot bug</span>
+0063 <span class="comment">% dsPlot(data, autogenOptions{:}); close gcf</span>
+0064 
+0065 <span class="comment">%% parfor</span>
+0066 data=<a href="../../../functions/dsSimulate.html" class="code" title="function [data,studyinfo] = dsSimulate(model,varargin)">dsSimulate</a>(eqns, <span class="string">'tspan'</span>,[0 250], <span class="string">'vary'</span>,vary, <span class="string">'study_dir'</span>,<span class="string">'demo_izhikevich_vary_parfor'</span>,<span class="keyword">...</span>
+0067   <span class="string">'parallel_flag'</span>,1, autogenOptions{:});
+0068 
+0069 <span class="comment">%% parfor compile</span>
+0070 data=<a href="../../../functions/dsSimulate.html" class="code" title="function [data,studyinfo] = dsSimulate(model,varargin)">dsSimulate</a>(eqns, <span class="string">'tspan'</span>,[0 250], <span class="string">'vary'</span>,vary, <span class="string">'study_dir'</span>,<span class="string">'demo_izhikevich_vary_parfor_compile'</span>,<span class="keyword">...</span>
+0071   <span class="string">'parallel_flag'</span>,1, <span class="string">'compile_flag'</span>,1, autogenOptions{:});
+0072 
+0073 <span class="comment">%% compile</span>
+0074 data=<a href="../../../functions/dsSimulate.html" class="code" title="function [data,studyinfo] = dsSimulate(model,varargin)">dsSimulate</a>(eqns, <span class="string">'tspan'</span>,[0 250], <span class="string">'vary'</span>,vary, <span class="string">'study_dir'</span>,<span class="string">'demo_izhikevich_vary_compile'</span>,<span class="keyword">...</span>
+0075   <span class="string">'compile_flag'</span>,1, autogenOptions{:});
+0076 
+0077 <span class="comment">%% Hodgkin-Huxley neuron equations (without predefined mechanisms)</span>
+0078 eqns={
+0079   <span class="string">'gNa=120; gK=36; Cm=1'</span>;
+0080   <span class="string">'INa(v,m,h) = gNa.*m.^3.*h.*(v-50)'</span>;
+0081   <span class="string">'IK(v,n) = gK.*n.^4.*(v+77)'</span>;
+0082   <span class="string">'dv/dt = (10-INa(v,m,h)-IK(v,n))/Cm; v(0)=-65'</span>;
+0083   <span class="string">'dm/dt = aM(v).*(1-m)-bM(v).*m; m(0)=.1'</span>;
+0084   <span class="string">'dh/dt = aH(v).*(1-h)-bH(v).*h; h(0)=.1'</span>;
+0085   <span class="string">'dn/dt = aN(v).*(1-n)-bN(v).*n; n(0)=0'</span>;
+0086   <span class="string">'aM(v) = (2.5-.1*(v+65))./(exp(2.5-.1*(v+65))-1)'</span>;
+0087   <span class="string">'bM(v) = 4*exp(-(v+65)/18)'</span>;
+0088   <span class="string">'aH(v) = .07*exp(-(v+65)/20)'</span>;
+0089   <span class="string">'bH(v) = 1./(exp(3-.1*(v+65))+1)'</span>;
+0090   <span class="string">'aN(v) = (.1-.01*(v+65))./(exp(1-.1*(v+65))-1)'</span>;
+0091   <span class="string">'bN(v) = .125*exp(-(v+65)/80)'</span>;
+0092 };
+0093 data=<a href="../../../functions/dsSimulate.html" class="code" title="function [data,studyinfo] = dsSimulate(model,varargin)">dsSimulate</a>(eqns, <span class="string">'study_dir'</span>,<span class="string">'demo_hh_1'</span>, autogenOptions{:});
+0094 
+0095 <a href="../../../functions/dsPlot.html" class="code" title="function handles = dsPlot(data,varargin)">dsPlot</a>(data, autogenOptions{:}); close gcf
+0096 
+0097 <span class="comment">% Equivalent Hodgkin-Huxley neuron with predefined mechanisms</span>
+0098 data=<a href="../../../functions/dsSimulate.html" class="code" title="function [data,studyinfo] = dsSimulate(model,varargin)">dsSimulate</a>(<span class="string">'dv/dt=10+@current/Cm; Cm=1; v(0)=-65; {iNa,iK}'</span>, <span class="string">'study_dir'</span>,<span class="string">'demo_hh_2'</span>, autogenOptions{:});
+0099 
+0100 <span class="comment">% Example of a bursting neuron model using three active current mechanisms:</span>
+0101 eqns=<span class="string">'dv/dt=5+@current; {iNaF,iKDR,iM}; gNaF=100; gKDR=5; gM=1.5; v(0)=-70'</span>;
+0102 data=<a href="../../../functions/dsSimulate.html" class="code" title="function [data,studyinfo] = dsSimulate(model,varargin)">dsSimulate</a>(eqns, <span class="string">'tspan'</span>,[0 200], <span class="string">'study_dir'</span>,<span class="string">'demo_hh_3'</span>, autogenOptions{:});
+0103 <a href="../../../functions/dsPlot.html" class="code" title="function handles = dsPlot(data,varargin)">dsPlot</a>(data, autogenOptions{:}); close gcf
+0104 
+0105 <span class="comment">%% Sparse Pyramidal-Interneuron-Network-Gamma (sPING)</span>
+0106 
+0107 <span class="comment">% define equations of cell model (same for E and I populations)</span>
+0108 eqns={
+0109   <span class="string">'dv/dt=Iapp+@current+noise*randn(1,N_pop)'</span>;
+0110   <span class="string">'monitor iGABAa.functions, iAMPA.functions'</span>
+0111 };
+0112 <span class="comment">% Tip: monitor all functions of a mechanism using: monitor MECHANISM.functions</span>
+0113 
+0114 <span class="comment">% create DynaSim specification structure</span>
+0115 s=[];
+0116 s.populations(1).name=<span class="string">'E'</span>;
+0117 s.populations(1).size=80;
+0118 s.populations(1).equations=eqns;
+0119 s.populations(1).mechanism_list={<span class="string">'iNa'</span>,<span class="string">'iK'</span>};
+0120 s.populations(1).parameters={<span class="string">'Iapp'</span>,5,<span class="string">'gNa'</span>,120,<span class="string">'gK'</span>,36,<span class="string">'noise'</span>,40};
+0121 s.populations(2).name=<span class="string">'I'</span>;
+0122 s.populations(2).size=20;
+0123 s.populations(2).equations=eqns;
+0124 s.populations(2).mechanism_list={<span class="string">'iNa'</span>,<span class="string">'iK'</span>};
+0125 s.populations(2).parameters={<span class="string">'Iapp'</span>,0,<span class="string">'gNa'</span>,120,<span class="string">'gK'</span>,36,<span class="string">'noise'</span>,40};
+0126 s.connections(1).direction=<span class="string">'I-&gt;E'</span>;
+0127 s.connections(1).mechanism_list={<span class="string">'iGABAa'</span>};
+0128 s.connections(1).parameters={<span class="string">'tauD'</span>,10,<span class="string">'gSYN'</span>,.1,<span class="string">'netcon'</span>,<span class="string">'ones(N_pre,N_post)'</span>};
+0129 s.connections(2).direction=<span class="string">'E-&gt;I'</span>;
+0130 s.connections(2).mechanism_list={<span class="string">'iAMPA'</span>};
+0131 s.connections(2).parameters={<span class="string">'tauD'</span>,2,<span class="string">'gSYN'</span>,.1,<span class="string">'netcon'</span>,ones(80,20)};
+0132 data=<a href="../../../functions/dsSimulate.html" class="code" title="function [data,studyinfo] = dsSimulate(model,varargin)">dsSimulate</a>(s, <span class="string">'study_dir'</span>,<span class="string">'demo_sPING_0'</span>, autogenOptions{:});
+0133 
+0134 <a href="../../../functions/dsPlot.html" class="code" title="function handles = dsPlot(data,varargin)">dsPlot</a>(data, autogenOptions{:}); close all
+0135 
+0136 
+0137 <span class="comment">%% SAVING SIMULATED DATA</span>
+0138 
+0139 <span class="comment">%% Save data from a single simulation</span>
+0140 <span class="comment">% Example using the previous sPING model:</span>
+0141 data=<a href="../../../functions/dsSimulate.html" class="code" title="function [data,studyinfo] = dsSimulate(model,varargin)">dsSimulate</a>(s, <span class="string">'save_data_flag'</span>,1, <span class="string">'study_dir'</span>,<span class="string">'demo_sPING_1'</span>, autogenOptions{:});
+0142 
+0143 <span class="comment">%% Save data from a set of simulations</span>
+0144 
+0145 <span class="comment">% Specify what to vary</span>
+0146 <span class="comment">% Tip: use 'vary' Syntax 2 to systematically vary a parameter</span>
+0147 vary={<span class="string">'E'</span>,<span class="string">'Iapp'</span>,[0 10 20]}; <span class="comment">% vary the amplitude of tonic input to E-cells</span>
+0148 data=<a href="../../../functions/dsSimulate.html" class="code" title="function [data,studyinfo] = dsSimulate(model,varargin)">dsSimulate</a>(s, <span class="string">'save_data_flag'</span>,1, <span class="string">'study_dir'</span>,<span class="string">'demo_sPING_2'</span>,<span class="keyword">...</span>
+0149                      <span class="string">'vary'</span>,vary, autogenOptions{:});
+0150 
+0151 <span class="comment">% load and plot the saved data</span>
+0152 data_from_disk = <a href="../../../functions/dsImport.html" class="code" title="function [data,studyinfo] = dsImport(file,varargin)">dsImport</a>(<span class="string">'demo_sPING_2'</span>, <span class="string">'auto_gen_test_data_flag'</span>,1);
+0153 <span class="comment">% dsPlot(data_from_disk, autogenOptions{:}); close all</span>
+0154 <span class="comment">% dsPlot(data_from_disk,'variable','E_v', autogenOptions{:}); close all</span>
+0155 
+0156 <span class="comment">% Vary two parameters (run a simulation for all combinations of values)</span>
+0157 vary={
+0158   <span class="string">'E'</span>   ,<span class="string">'Iapp'</span>,[0 10 20];      <span class="comment">% amplitude of tonic input to E-cells</span>
+0159   <span class="string">'I-&gt;E'</span>,<span class="string">'tauD'</span>,[5 10 15]       <span class="comment">% inhibition decay time constant from I to E</span>
+0160   };
+0161 <a href="../../../functions/dsSimulate.html" class="code" title="function [data,studyinfo] = dsSimulate(model,varargin)">dsSimulate</a>(s, <span class="string">'save_data_flag'</span>,1, <span class="string">'study_dir'</span>,<span class="string">'demo_sPING_3'</span>,<span class="keyword">...</span>
+0162                 <span class="string">'vary'</span>,vary, <span class="string">'verbose_flag'</span>,1, autogenOptions{:});
+0163 data=<a href="../../../functions/dsImport.html" class="code" title="function [data,studyinfo] = dsImport(file,varargin)">dsImport</a>(<span class="string">'demo_sPING_3'</span>, autogenOptions{:});
+0164 <a href="../../../functions/dsPlot.html" class="code" title="function handles = dsPlot(data,varargin)">dsPlot</a>(data, autogenOptions{:}); close all
+0165 <a href="../../../functions/dsPlot.html" class="code" title="function handles = dsPlot(data,varargin)">dsPlot</a>(data,<span class="string">'plot_type'</span>,<span class="string">'rastergram'</span>, autogenOptions{:}); close all
+0166 <a href="../../../functions/dsPlot.html" class="code" title="function handles = dsPlot(data,varargin)">dsPlot</a>(data,<span class="string">'plot_type'</span>,<span class="string">'power'</span>, autogenOptions{:}); close all
+0167 ds.plotFR(data, autogenOptions{:}); close all
+0168 
+0169 <span class="comment">%% RUNNING SIMULATIONS ON THE CLUSTER</span>
+0170 
+0171 <span class="comment">% Run three simulations in parallel jobs and save the simulated data</span>
+0172 eqns=<span class="string">'dv/dt=@current+I; {iNa,iK}'</span>;
+0173 vary={<span class="string">''</span>,<span class="string">'I'</span>,[0 10 20]};
+0174 <a href="../../../functions/dsSimulate.html" class="code" title="function [data,studyinfo] = dsSimulate(model,varargin)">dsSimulate</a>(eqns,<span class="string">'save_data_flag'</span>,1,<span class="string">'study_dir'</span>,<span class="string">'demo_cluster_1_loop'</span>,<span class="keyword">...</span>
+0175                    <span class="string">'vary'</span>,vary,<span class="string">'cluster_flag'</span>,1, autogenOptions{:});
+0176                  
+0177 <span class="comment">% Array mode</span>
+0178 eqns=<span class="string">'dv/dt=@current+I; {iNa,iK}'</span>;
+0179 vary={<span class="string">''</span>,<span class="string">'I'</span>,[0 10 20]};
+0180 <a href="../../../functions/dsSimulate.html" class="code" title="function [data,studyinfo] = dsSimulate(model,varargin)">dsSimulate</a>(eqns,<span class="string">'save_data_flag'</span>,1,<span class="string">'study_dir'</span>,<span class="string">'demo_cluster_1_array'</span>,<span class="keyword">...</span>
+0181                    <span class="string">'vary'</span>,vary,<span class="string">'cluster_flag'</span>,1, <span class="string">'qsub_mode'</span>, <span class="string">'array'</span>,<span class="keyword">...</span>
+0182                    autogenOptions{:});
+0183 
+0184 <span class="comment">% Repeat but also save plotted data</span>
+0185 eqns=<span class="string">'dv/dt=@current+I; {iNa,iK}'</span>;
+0186 vary={<span class="string">''</span>,<span class="string">'I'</span>,[0 10 20]};
+0187 <a href="../../../functions/dsSimulate.html" class="code" title="function [data,studyinfo] = dsSimulate(model,varargin)">dsSimulate</a>(eqns,<span class="string">'save_data_flag'</span>,1,<span class="string">'study_dir'</span>,<span class="string">'demo_cluster_2'</span>,<span class="keyword">...</span>
+0188                    <span class="string">'vary'</span>,vary,<span class="string">'cluster_flag'</span>,1, autogenOptions{:},<span class="keyword">...</span>
+0189                    <span class="string">'plot_functions'</span>,@<a href="../../../functions/dsPlot.html" class="code" title="function handles = dsPlot(data,varargin)">dsPlot</a>);
+0190 
+0191 <span class="comment">% Save multiple plots and pass custom options to each plotting function</span>
+0192 eqns=<span class="string">'dv/dt=@current+I; {iNa,iK}'</span>;
+0193 vary={<span class="string">''</span>,<span class="string">'I'</span>,[0 10 20]};
+0194 <a href="../../../functions/dsSimulate.html" class="code" title="function [data,studyinfo] = dsSimulate(model,varargin)">dsSimulate</a>(eqns,<span class="string">'save_data_flag'</span>,1,<span class="string">'study_dir'</span>,<span class="string">'demo_cluster_3'</span>,<span class="keyword">...</span>
+0195                    <span class="string">'vary'</span>,vary,<span class="string">'cluster_flag'</span>,1, autogenOptions{:},<span class="keyword">...</span>
+0196                    <span class="string">'plot_functions'</span>,{@<a href="../../../functions/dsPlot.html" class="code" title="function handles = dsPlot(data,varargin)">dsPlot</a>,@<a href="../../../functions/dsPlot.html" class="code" title="function handles = dsPlot(data,varargin)">dsPlot</a>},<span class="keyword">...</span>
+0197                    <span class="string">'plot_options'</span>,{{},{<span class="string">'plot_type'</span>,<span class="string">'power'</span>}});
+0198 
+0199 <span class="comment">%% MORE FEATURES</span>
+0200 
+0201 <span class="comment">% Compile</span>
+0202 data=<a href="../../../functions/dsSimulate.html" class="code" title="function [data,studyinfo] = dsSimulate(model,varargin)">dsSimulate</a>(s,<span class="string">'compile_flag'</span>,1, <span class="string">'study_dir'</span>,<span class="string">'demo_sPING_3_compile'</span>, autogenOptions{:});
+0203 
+0204 <span class="comment">% Combine compilation and parallelization</span>
+0205 vary={<span class="string">''</span>,<span class="string">'I'</span>,0:2:14};
+0206 data=<a href="../../../functions/dsSimulate.html" class="code" title="function [data,studyinfo] = dsSimulate(model,varargin)">dsSimulate</a>(s, <span class="string">'compile_flag'</span>,1, <span class="string">'parallel_flag'</span>,1, <span class="string">'vary'</span>, vary, <span class="string">'study_dir'</span>,<span class="string">'demo_sPING_3_compile_parallel'</span>, autogenOptions{:});
+0207 <a href="../../../functions/dsPlot.html" class="code" title="function handles = dsPlot(data,varargin)">dsPlot</a>(data, autogenOptions{:}); close all
+0208 
+0209 <span class="comment">%% Remove output_directory</span>
+0210 fprintf(<span class="string">'Removing temporary output_directory: %s\n'</span>, output_directory)
+0211 rmdir(output_directory, <span class="string">'s'</span>)</pre></div>
+<hr><address>Generated on Fri 28-Apr-2017 18:39:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

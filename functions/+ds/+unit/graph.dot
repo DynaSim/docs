@@ -1,0 +1,34 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  template -> template;
+  test_autogenDirs_all -> test_autogenDirs_all;
+  test_autogen_all -> test_autogen_all;
+  test_autogen_all_localfn -> test_autogen_all_localfn;
+  test_autogen_query -> test_autogen_query;
+  test_checkModel -> test_checkModel;
+  test_strrep -> test_strrep;
+  test_strrep2 -> test_strrep2;
+
+  getAutogenDirs [URL="getAutogenDirs.html"];
+  getAutogenFiles [URL="getAutogenFiles.html"];
+  inputQuery [URL="inputQuery.html"];
+  make_autogenData [URL="make_autogenData.html"];
+  run_all [URL="run_all.html"];
+  run_autogen_all [URL="run_autogen_all.html"];
+  run_autogen_dirs [URL="run_autogen_dirs.html"];
+  run_autogen_query [URL="run_autogen_query.html"];
+  run_custom_all [URL="run_custom_all.html"];
+  run_template [URL="run_template.html"];
+  saveAutoGenTestData [URL="saveAutoGenTestData.html"];
+  saveAutoGenTestDataLocalFn [URL="saveAutoGenTestDataLocalFn.html"];
+  saveAutoGenTestDir [URL="saveAutoGenTestDir.html"];
+  save_figHandles [URL="save_figHandles.html"];
+  template [URL="template.html"];
+  test_autogenDirs_all [URL="test_autogenDirs_all.html"];
+  test_autogen_all [URL="test_autogen_all.html"];
+  test_autogen_all_localfn [URL="test_autogen_all_localfn.html"];
+  test_autogen_query [URL="test_autogen_query.html"];
+  test_checkModel [URL="test_checkModel.html"];
+  test_strrep [URL="test_strrep.html"];
+  test_strrep2 [URL="test_strrep2.html"];
+}

@@ -1,0 +1,300 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of calcFRmulti</title>
+  <meta name="keywords" content="calcFRmulti">
+  <meta name="description" content="CALCFRMULTI - extends ds.calcFR to get SUA and MUA firing rates">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html functions --><!-- menu.html +ds -->
+<h1>calcFRmulti
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>CALCFRMULTI - extends ds.calcFR to get SUA and MUA firing rates</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function data = calcFRmulti(data, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">CALCFRMULTI - extends ds.calcFR to get SUA and MUA firing rates
+
+ Usage:
+   data = ds.calcFRmulti(data,'option',value)
+
+ Inputs:
+   - data: DynaSim data structure (see ds.checkData)
+   - options:
+     'variable'         : name of field containing data on which to calculate
+                          firing rates (default: *_spikes or first variable in data.labels)
+     'time_limits'      : [beg,end] (units of data.time)
+     'threshold'        : scalar threshold value for detecting events (default: 0)
+     'bin_size'         : size of temporal window over which to calculate rate
+                          [ms or fraction of data set] (default: 5% of the data set)
+     'bin_shift'        : how much to shift the bin before calculating rate again [ms
+                          or fraction of data set] (default: 1% of the data set)
+     'exclude_data_flag': whether to remove simulated data from result
+                          structure (default: 0)
+     'output_suffix'    : suffix to attach to output variable names (default: '')
+
+ Outputs:
+   - data: data structure with firing rates [Hz] in .variable_FR
+
+ Notes:
+ - &quot;variable&quot; can be specified as the name of a variable listed in
+     data.labels, a cell array of string listing variable names, or as a
+     regular expression pattern for identifying variables to process.
+     See ds.selectVariables for more info on supported specifications.
+ - DynaSim spike monitor returns spike data in variables *_spikes.
+   - e.g., `data=dsSimulate('dv/dt=@current+10; {iNa,iK}; monitor v.spikes');`
+     returns spikes in data.pop1_v_spikes (where 'pop1' is the default
+     population name if not specified by the user).
+
+ Examples:
+   s.populations(1).name='E';
+   s.populations(1).equations='dv/dt=@current+10; {iNa,iK}; v(0)=-65';
+   s.populations(2).name='I';
+   s.populations(2).equations='dv/dt=@current+10; {iNa,iK}; v(0)=-65';
+   data=dsSimulate(s);
+   data=ds.calcFR(data,'variable','*_v');
+   data % contains firing rates for E and I pops in .E_v_FR_SUA/MUA and .I_v_FR_SUA/MUA.
+
+ See also: ds.<a href="plotFR.html" class="code" title="function handles = plotFR(data,varargin)">plotFR</a>, ds.<a href="analyzeStudy.html" class="code" title="function [results,studyinfo] = analyzeStudy(data,func,varargin)">analyzeStudy</a>, dsSimulate, ds.<a href="checkData.html" class="code" title="function data = checkData(data, varargin)">checkData</a>, ds.<a href="selectVariables.html" class="code" title="function [variables,pop_names] = selectVariables(labels,var_strings, varargin)">selectVariables</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function data = calcFRmulti(data, varargin)</a>
+0002 <span class="comment">%CALCFRMULTI - extends ds.calcFR to get SUA and MUA firing rates</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Usage:</span>
+0005 <span class="comment">%   data = ds.calcFRmulti(data,'option',value)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Inputs:</span>
+0008 <span class="comment">%   - data: DynaSim data structure (see ds.checkData)</span>
+0009 <span class="comment">%   - options:</span>
+0010 <span class="comment">%     'variable'         : name of field containing data on which to calculate</span>
+0011 <span class="comment">%                          firing rates (default: *_spikes or first variable in data.labels)</span>
+0012 <span class="comment">%     'time_limits'      : [beg,end] (units of data.time)</span>
+0013 <span class="comment">%     'threshold'        : scalar threshold value for detecting events (default: 0)</span>
+0014 <span class="comment">%     'bin_size'         : size of temporal window over which to calculate rate</span>
+0015 <span class="comment">%                          [ms or fraction of data set] (default: 5% of the data set)</span>
+0016 <span class="comment">%     'bin_shift'        : how much to shift the bin before calculating rate again [ms</span>
+0017 <span class="comment">%                          or fraction of data set] (default: 1% of the data set)</span>
+0018 <span class="comment">%     'exclude_data_flag': whether to remove simulated data from result</span>
+0019 <span class="comment">%                          structure (default: 0)</span>
+0020 <span class="comment">%     'output_suffix'    : suffix to attach to output variable names (default: '')</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% Outputs:</span>
+0023 <span class="comment">%   - data: data structure with firing rates [Hz] in .variable_FR</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% Notes:</span>
+0026 <span class="comment">% - &quot;variable&quot; can be specified as the name of a variable listed in</span>
+0027 <span class="comment">%     data.labels, a cell array of string listing variable names, or as a</span>
+0028 <span class="comment">%     regular expression pattern for identifying variables to process.</span>
+0029 <span class="comment">%     See ds.selectVariables for more info on supported specifications.</span>
+0030 <span class="comment">% - DynaSim spike monitor returns spike data in variables *_spikes.</span>
+0031 <span class="comment">%   - e.g., `data=dsSimulate('dv/dt=@current+10; {iNa,iK}; monitor v.spikes');`</span>
+0032 <span class="comment">%     returns spikes in data.pop1_v_spikes (where 'pop1' is the default</span>
+0033 <span class="comment">%     population name if not specified by the user).</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">% Examples:</span>
+0036 <span class="comment">%   s.populations(1).name='E';</span>
+0037 <span class="comment">%   s.populations(1).equations='dv/dt=@current+10; {iNa,iK}; v(0)=-65';</span>
+0038 <span class="comment">%   s.populations(2).name='I';</span>
+0039 <span class="comment">%   s.populations(2).equations='dv/dt=@current+10; {iNa,iK}; v(0)=-65';</span>
+0040 <span class="comment">%   data=dsSimulate(s);</span>
+0041 <span class="comment">%   data=ds.calcFR(data,'variable','*_v');</span>
+0042 <span class="comment">%   data % contains firing rates for E and I pops in .E_v_FR_SUA/MUA and .I_v_FR_SUA/MUA.</span>
+0043 <span class="comment">%</span>
+0044 <span class="comment">% See also: ds.plotFR, ds.analyzeStudy, dsSimulate, ds.checkData, ds.selectVariables</span>
+0045 
+0046 <span class="comment">%% 1.0 Check inputs</span>
+0047 options=ds.checkOptions(varargin,{<span class="keyword">...</span>
+0048   <span class="string">'variable'</span>,[],[],<span class="keyword">...</span>
+0049   <span class="string">'time_limits'</span>,[-inf inf],[],<span class="keyword">...</span>
+0050   <span class="string">'threshold'</span>,1e-5,[],<span class="keyword">...</span><span class="comment"> % slightly above zero in case variable is point process *_spikes {0,1}</span>
+0051   <span class="string">'bin_size'</span>,.05,[],<span class="keyword">...</span><span class="comment">  % 30</span>
+0052   <span class="string">'bin_shift'</span>,.01,[],<span class="keyword">...</span><span class="comment"> % 10</span>
+0053   <span class="string">'exclude_data_flag'</span>,0,{0,1},<span class="keyword">...</span>
+0054   <span class="string">'output_suffix'</span>,<span class="string">''</span>,[],<span class="keyword">...</span>
+0055   <span class="string">'auto_gen_test_data_flag'</span>,0,{0,1},<span class="keyword">...</span>
+0056   },false);
+0057 
+0058 <span class="comment">%% auto_gen_test_data_flag argin</span>
+0059 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0060   varargs = varargin;
+0061   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0062   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
+0063   argin = [{data}, varargs]; <span class="comment">% specific to this function</span>
+0064 <span class="keyword">end</span>
+0065 
+0066 data = ds.checkData(data, varargin{:});
+0067 <span class="comment">% note: calling ds.checkData() at beginning enables analysis function to</span>
+0068 <span class="comment">% accept data matrix [time x cells] in addition to DynaSim data structure.</span>
+0069 
+0070 <span class="keyword">if</span> numel(data)&gt;1
+0071   <span class="comment">% use ds.analyzeStudy to recursively call ds.calcFRmulti on each data set</span>
+0072   data=ds.analyzeStudy(data,@ds.calcFRmulti,varargin{:});
+0073   <span class="keyword">return</span>;
+0074 <span class="keyword">end</span>
+0075 
+0076 <span class="comment">% time info</span>
+0077 time = data.time;
+0078 dt = time(2)-time(1);
+0079 ntime=length(time);
+0080 t1=nearest(time,options.time_limits(1)); <span class="comment">% index to first sample</span>
+0081 t2=nearest(time,options.time_limits(2)); <span class="comment">% index to last sample</span>
+0082 ntime=t2-t1+1;
+0083 
+0084 <span class="comment">% set defaults</span>
+0085 <span class="comment">% default variable to process</span>
+0086 <span class="keyword">if</span> isempty(options.variable)
+0087   <span class="keyword">if</span> any(~cellfun(@isempty,regexp(data.labels,<span class="string">'_spikes$'</span>)))
+0088     <span class="comment">% use results from DynaSim spike monitor</span>
+0089     options.variable=data.labels(~cellfun(@isempty,regexp(data.labels,<span class="string">'_spikes$'</span>)));
+0090     <span class="keyword">if</span> length(options.variable)==1 <span class="comment">% store in string</span>
+0091       options.variable=options.variable{1};
+0092     <span class="keyword">end</span>
+0093   <span class="keyword">else</span>
+0094     <span class="comment">% use first state variable in model</span>
+0095     <span class="comment">%options.variable=data.labels{1};</span>
+0096   <span class="keyword">end</span>
+0097 <span class="keyword">end</span>
+0098 
+0099 <span class="comment">% check bin_size</span>
+0100 <span class="keyword">if</span> options.bin_size&gt;1
+0101   <span class="comment">% convert from ms to time points</span>
+0102   options.bin_size=ceil(options.bin_size/dt);
+0103 <span class="keyword">else</span>
+0104   <span class="comment">% convert from fraction to time points</span>
+0105   options.bin_size=ceil(options.bin_size*ntime);
+0106 <span class="keyword">end</span>
+0107 
+0108 <span class="comment">% constrain bin_size to entire data set</span>
+0109 <span class="keyword">if</span> options.bin_size&gt;ntime
+0110   options.bin_size=ntime;
+0111 <span class="keyword">end</span>
+0112 
+0113 <span class="comment">% check bin_shift</span>
+0114 <span class="keyword">if</span> options.bin_shift&gt;1
+0115   <span class="comment">% convert from ms to time points</span>
+0116   options.bin_shift=ceil(options.bin_shift/dt);
+0117 <span class="keyword">else</span>
+0118   <span class="comment">% convert from fraction to time points</span>
+0119   options.bin_shift=ceil(options.bin_shift*ntime);
+0120 <span class="keyword">end</span>
+0121 
+0122 <span class="comment">%% 2.0 set list of variables to process as cell array of strings</span>
+0123 options.variable=ds.selectVariables(data(1).labels,options.variable, varargin{:});
+0124 
+0125 <span class="comment">%% 3.0 calculate firing rates for each variable</span>
+0126 <span class="keyword">if</span> ~isfield(data,<span class="string">'results'</span>)
+0127   data.results={};
+0128 <span class="keyword">end</span>
+0129 
+0130 <span class="comment">% 3.1 calc bin info</span>
+0131 <span class="comment">% samples at which bins begin</span>
+0132 bin_index_begs=t1:options.bin_shift:t2;
+0133 <span class="comment">% samples at which bins end</span>
+0134 bin_index_ends=bin_index_begs+options.bin_size;
+0135 
+0136 <span class="keyword">if</span> bin_index_ends(end)&gt;t2
+0137   <span class="keyword">if</span> length(bin_index_ends) &gt; 1 <span class="comment">%multiple bins</span>
+0138     <span class="comment">% remove final bin if extends beyond data</span>
+0139     bin_index_begs=bin_index_begs(bin_index_ends&lt;=t2);
+0140     bin_index_ends=bin_index_ends(bin_index_ends&lt;=t2);
+0141   <span class="keyword">else</span> <span class="comment">%1 bin</span>
+0142     bin_index_ends = t2;
+0143   <span class="keyword">end</span>
+0144 <span class="keyword">end</span>
+0145 
+0146 <span class="comment">% times at which bins begin</span>
+0147 bin_times=time(bin_index_begs);
+0148 <span class="comment">% number of bins</span>
+0149 nbins=length(bin_index_begs);
+0150 <span class="comment">% time width of a single bin in seconds</span>
+0151 bin_width=(dt/1000)*options.bin_size;
+0152 
+0153 <span class="comment">% 3.2 loop over variables to process</span>
+0154 <span class="keyword">for</span> v=1:length(options.variable)
+0155   <span class="comment">% extract this data set</span>
+0156   var=options.variable{v};
+0157   dat=data.(var);
+0158   <span class="comment">% determine how many cells are in this data set</span>
+0159   ncells=size(dat,2);
+0160   <span class="comment">% loop over cells</span>
+0161   FR_SUA=zeros(nbins,ncells);
+0162   FR_MUA=zeros(nbins,1);
+0163   <span class="comment">%   spike_times=cell(1,ncells);</span>
+0164   <span class="comment">%   spike_inds = zeros(ntime, ncells);</span>
+0165   
+0166   <span class="comment">%   for i=1:ncells</span>
+0167   <span class="comment">%     % get spikes in this cell</span>
+0168   <span class="comment">%     spike_inds=1+find((dat(2:end,i)&gt;=options.threshold &amp; dat(1:end-1,i)&lt;options.threshold));</span>
+0169   <span class="comment">%     spikes=zeros(ntime,1);</span>
+0170   <span class="comment">%     spike_times{i}=time(spike_inds);</span>
+0171   <span class="comment">%   end</span>
+0172   
+0173   spikes = [zeros(1,ncells); (dat(2:<span class="keyword">end</span>,:)&gt;=options.threshold &amp; dat(1:end-1,:)&lt;options.threshold)];
+0174   
+0175   <span class="keyword">if</span> any(spikes(:))
+0176     <span class="comment">% calculate firing rates</span>
+0177     <span class="keyword">for</span> bin=1:nbins
+0178       <span class="comment">% (# spikes in bin) / (duration of bin in seconds)</span>
+0179       FR_SUA(bin,:)=sum(spikes(bin_index_begs(bin):bin_index_ends(bin), :))/bin_width;
+0180       FR_MUA(bin)=sum(sum(spikes(bin_index_begs(bin):bin_index_ends(bin), :)))/bin_width;
+0181     <span class="keyword">end</span>
+0182   <span class="keyword">end</span>
+0183   
+0184   <span class="comment">% add firing rates to data structure</span>
+0185   data.([var <span class="string">'_FR_SUA'</span> options.output_suffix])=FR_SUA;
+0186   data.([var <span class="string">'_FR_MUA'</span> options.output_suffix])=FR_MUA;
+0187   <span class="comment">%   data.([var '_spike_times'])=spike_times;</span>
+0188   <span class="keyword">if</span> ~ismember([var <span class="string">'_FR_SUA'</span> options.output_suffix], data.results)
+0189     data.results{end+1}=[var <span class="string">'_FR_SUA'</span> options.output_suffix];
+0190     <span class="comment">%     data.results{end+1}=[var '_spike_times'];</span>
+0191   <span class="keyword">end</span>
+0192   <span class="keyword">if</span> ~ismember([var <span class="string">'_FR_MUA'</span> options.output_suffix], data.results)
+0193     data.results{end+1}=[var <span class="string">'_FR_MUA'</span> options.output_suffix];
+0194   <span class="keyword">end</span>
+0195 <span class="keyword">end</span>
+0196 <span class="comment">% add bin times to data</span>
+0197 data.([<span class="string">'time_FR'</span> options.output_suffix])=bin_times;
+0198 <span class="keyword">if</span> ~ismember([<span class="string">'time_FR'</span> options.output_suffix], data.results)
+0199   data.results{end+1}=[<span class="string">'time_FR'</span> options.output_suffix];
+0200 <span class="keyword">end</span>
+0201 <span class="keyword">if</span> options.exclude_data_flag
+0202   <span class="keyword">for</span> l=1:length(data.labels)
+0203     data=rmfield(data,data.labels{l});
+0204   <span class="keyword">end</span>
+0205 <span class="keyword">end</span>
+0206 
+0207 <span class="comment">%% auto_gen_test_data_flag argout</span>
+0208 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0209   argout = {data}; <span class="comment">% specific to this function</span>
+0210   
+0211   ds.unit.saveAutoGenTestData(argin, argout);
+0212 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 28-Apr-2017 18:39:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

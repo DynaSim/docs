@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of solve_ode_demo_cluster_1_ml_solver_ode23s_compiled</title>
+  <meta name="keywords" content="solve_ode_demo_cluster_1_ml_solver_ode23s_compiled">
+  <meta name="description" content="------------------------------------------------------------">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../../../../../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../../../../../../../menu.html functions --><!-- ../../../../../../../menu.html +ds --><!-- ../../../../../../menu.html +unit --><!-- # testData --><!-- # autogenDirs --><!-- # dsSimulate_autogen_11418f5a02ed2bba064498019050d38b --><!-- # output --><!-- # demo_cluster_1_ml_solver_ode23s_compiled --><!-- menu.html solve -->
+<h1>solve_ode_demo_cluster_1_ml_solver_ode23s_compiled
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../../../../up.png"></a></h2>
+<div class="box"><strong>------------------------------------------------------------</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../../../../up.png"></a></h2>
+<div class="box"><strong>function [T,pop1_v,pop1_iNa_m,pop1_iNa_h,pop1_iK_n]=solve_ode </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> ------------------------------------------------------------
+ Parameters:
+ ------------------------------------------------------------</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [T,pop1_v,pop1_iNa_m,pop1_iNa_h,pop1_iK_n]=solve_ode</a>
+0002 <span class="comment">% ------------------------------------------------------------</span>
+0003 <span class="comment">% Parameters:</span>
+0004 <span class="comment">% ------------------------------------------------------------</span>
+0005 params = load(<span class="string">'params.mat'</span>,<span class="string">'p'</span>);
+0006 p = params.p;
+0007 downsample_factor = p.downsample_factor;
+0008 dt = p.dt;
+0009 T = (p.tspan(1):downsample_factor*dt:p.tspan(2))';
+0010 
+0011 <span class="comment">% ------------------------------------------------------------</span>
+0012 <span class="comment">% Initial conditions:</span>
+0013 <span class="comment">% ------------------------------------------------------------</span>
+0014 <span class="comment">% seed the random number generator</span>
+0015 rng(p.random_seed);
+0016 <span class="comment">% ###########################################################</span>
+0017 <span class="comment">% Numerical integration:</span>
+0018 <span class="comment">% ###########################################################</span>
+0019 [T,data] = ode23s(@solve_ode_demo_cluster_1_ml_solver_ode23s_compiled_odefun_mex, T, p.ic, p.matlab_solver_options);
+0020 
+0021 <span class="comment">%Extract linear data into original state variables</span>
+0022 pop1_v = data(:, 1:1);
+0023 pop1_iNa_m = data(:, 2:2);
+0024 pop1_iNa_h = data(:, 3:3);
+0025 pop1_iK_n = data(:, 4:4);
+0026 
+0027 <span class="keyword">end</span>
+0028</pre></div>
+<hr><address>Generated on Fri 28-Apr-2017 18:39:28 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
