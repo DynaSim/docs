@@ -189,7 +189,7 @@ This function is called by:
 0104 
 0105 <span class="comment">% check if input is a filename</span>
 0106 <span class="keyword">if</span> ischar(text) &amp;&amp; exist(text,<span class="string">'file'</span>)
-0107   [~,name,ext]=fileparts(text);
+0107   [~,name,ext]=fileparts2(text);
 0108   <span class="keyword">switch</span> ext
 0109     <span class="keyword">case</span> <span class="string">'.m'</span>
 0110       model=feval(name); <span class="comment">% evaluate model-creating function and return model</span>
@@ -468,6 +468,6 @@ This function is called by:
 0383 <span class="keyword">end</span>
 0384 
 0385 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 28-Apr-2017 19:07:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Thu 18-May-2017 08:41:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

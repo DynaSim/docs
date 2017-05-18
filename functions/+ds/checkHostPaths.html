@@ -107,7 +107,7 @@ This function is called by:
 0044   matched=0;
 0045   error_message=sprintf(<span class="string">'%sPath changed to DynaSim functions (expected: %s, found: %s). '</span>,error_message,studyinfo.paths.dynasim_functions,dynasim_path);
 0046 <span class="keyword">end</span>
-0047   
+0047 
 0048 <span class="comment">% compare model paths</span>
 0049 <span class="keyword">if</span> ~isequal(unique(mech_paths),unique(studyinfo.paths.mechanisms))
 0050   matched=0; mech_paths, studyinfo.paths.mechanisms
@@ -117,9 +117,9 @@ This function is called by:
 0054 <span class="comment">%% auto_gen_test_data_flag argout</span>
 0055 <span class="keyword">if</span> options.auto_gen_test_data_flag
 0056   argout = {matched, error_message}; <span class="comment">% specific to this function</span>
-0057   
+0057 
 0058   ds.unit.saveAutoGenTestData(argin, argout);
 0059 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 28-Apr-2017 19:07:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Thu 18-May-2017 08:41:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

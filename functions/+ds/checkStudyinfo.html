@@ -232,12 +232,12 @@ This function is called by:
 0111 <span class="comment">% check if study_dir was provided</span>
 0112 <span class="keyword">if</span> ischar(studyinfo) &amp;&amp; isdir(studyinfo)
 0113   study_dir=studyinfo;
-0114   studyinfo=fullfile(study_dir,[<span class="string">'studyinfo.mat'</span>]);
+0114   studyinfo=fullfile(study_dir,<span class="string">'studyinfo.mat'</span>);
 0115 <span class="keyword">end</span>
 0116 
 0117 <span class="comment">% check if studyinfo.mat was provided (or derived from input study_dir)</span>
 0118 <span class="keyword">if</span> ischar(studyinfo) &amp;&amp; exist(studyinfo,<span class="string">'file'</span>)
-0119   study_dir=fileparts(studyinfo);
+0119   study_dir=fileparts2(studyinfo);
 0120   studyinfo=ds.studyinfoIO([],study_dir,options.process_id,options.verbose_flag);
 0121 <span class="keyword">elseif</span> isnumeric(studyinfo) &amp;&amp; isempty(studyinfo) <span class="comment">% [], created dummy studyinfo</span>
 0122   <span class="comment">% set some default studyinfo fields</span>
@@ -386,9 +386,9 @@ This function is called by:
 0265 <span class="comment">%% auto_gen_test_data_flag argout</span>
 0266 <span class="keyword">if</span> options.auto_gen_test_data_flag
 0267   argout = {studyinfo}; <span class="comment">% specific to this function</span>
-0268   
-0269   ds.unit.saveAutoGenTestData(argin, argout);
+0268 
+0269 <span class="comment">%   ds.unit.saveAutoGenTestData(argin, argout);</span>
 0270 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 28-Apr-2017 19:07:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Thu 18-May-2017 08:41:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

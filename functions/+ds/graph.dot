@@ -8,8 +8,6 @@ digraph m2html {
   generateModel -> strrep;
   importPlots -> strrep;
   mergeData -> mergeData;
-  mergeData -> xPlt2ds;
-  mergeData -> xPlt2dsImage;
   parseModelEquations -> strrep;
   plotFR -> strrep;
   plotFR2 -> strrep;
@@ -20,7 +18,7 @@ digraph m2html {
   writeDynaSimSolver -> strrep;
   writeMatlabSolver -> strrep;
 
-  all2xPlt [URL="all2xPlt.html"];
+  all2mdd [URL="all2mdd.html"];
   analyzeStudy [URL="analyzeStudy.html"];
   applyModifications [URL="applyModifications.html"];
   calcACF [URL="calcACF.html"];
@@ -51,7 +49,7 @@ digraph m2html {
   data2Table [URL="data2Table.html"];
   dataField2Table [URL="dataField2Table.html"];
   decimateData [URL="decimateData.html"];
-  ds2xPlt [URL="ds2xPlt.html"];
+  ds2mdd [URL="ds2mdd.html"];
   dynasim2odefun [URL="dynasim2odefun.html"];
   editModelFiles [URL="editModelFiles.html"];
   exportData [URL="exportData.html"];
@@ -64,7 +62,7 @@ digraph m2html {
   getSolveFile [URL="getSolveFile.html"];
   get_populations_from_meta [URL="get_populations_from_meta.html"];
   get_variables_from_meta [URL="get_variables_from_meta.html"];
-  img2xPlt [URL="img2xPlt.html"];
+  img2mdd [URL="img2mdd.html"];
   importCSV [URL="importCSV.html"];
   importModel [URL="importModel.html"];
   importPlots [URL="importPlots.html"];
@@ -73,6 +71,9 @@ digraph m2html {
   isDevMode [URL="isDevMode.html"];
   locateModelFiles [URL="locateModelFiles.html"];
   makeDefaultConfig [URL="makeDefaultConfig.html"];
+  makeDefaultConfigJenkins [URL="makeDefaultConfigJenkins.html"];
+  mdd2ds [URL="mdd2ds.html"];
+  mdd2dsImage [URL="mdd2dsImage.html"];
   mergeData [URL="mergeData.html"];
   monitorStudy [URL="monitorStudy.html"];
   nameFromVaried [URL="nameFromVaried.html"];
@@ -83,7 +84,6 @@ digraph m2html {
   plotStudy [URL="plotStudy.html"];
   plotWaveforms [URL="plotWaveforms.html"];
   prepareMEX [URL="prepareMEX.html"];
-  previewTable [URL="previewTable.html"];
   probeCellProperties [URL="probeCellProperties.html"];
   probeFI [URL="probeFI.html"];
   propagateFunctions [URL="propagateFunctions.html"];
@@ -103,7 +103,5 @@ digraph m2html {
   vary2Modifications [URL="vary2Modifications.html"];
   writeDynaSimSolver [URL="writeDynaSimSolver.html"];
   writeMatlabSolver [URL="writeMatlabSolver.html"];
-  xPlt2ds [URL="xPlt2ds.html"];
-  xPlt2dsImage [URL="xPlt2dsImage.html"];
   zipDemoData [URL="zipDemoData.html"];
 }

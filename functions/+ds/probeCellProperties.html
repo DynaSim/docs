@@ -63,7 +63,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="../../functions/dsSimulate.html" class="code" title="function [data,studyinfo] = dsSimulate(model,varargin)">dsSimulate</a>	% data=dsSimulate(model,'option',value,...)</li></ul>
+<li><a href="../../functions/dsSimulate.html" class="code" title="function [data,studyinfo,result] = dsSimulate(model,varargin)">dsSimulate</a>	% data=dsSimulate(model,'option',value,...)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 </ul>
@@ -187,12 +187,12 @@ This function is called by:
 0113 <span class="comment">% execute experimental protocol by varying parameters across simulations</span>
 0114 fprintf(<span class="string">'Running experiment: %s\n'</span>,mfilename);
 0115 keyvals=ds.removeKeyval(varargin,<span class="string">'tspan'</span>);
-0116 data=<a href="../../functions/dsSimulate.html" class="code" title="function [data,studyinfo] = dsSimulate(model,varargin)">dsSimulate</a>(model,<span class="string">'vary'</span>,vary,<span class="string">'tspan'</span>,options.tspan,keyvals{:});
+0116 data=<a href="../../functions/dsSimulate.html" class="code" title="function [data,studyinfo,result] = dsSimulate(model,varargin)">dsSimulate</a>(model,<span class="string">'vary'</span>,vary,<span class="string">'tspan'</span>,options.tspan,keyvals{:});
 0117 
 0118 <span class="comment">% add options to data</span>
 0119 <span class="keyword">for</span> i=1:length(data)
 0120   data(i).simulator_options.experiment_options=options;
 0121 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 28-Apr-2017 19:07:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Thu 18-May-2017 08:41:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

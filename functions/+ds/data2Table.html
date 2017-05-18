@@ -27,7 +27,7 @@
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 <div class="fragment"><pre class="comment"> Converts DynaSim structure to 1D cell array format. Later can use to
- import to xPlt</pre></div>
+ import to MDD</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
@@ -44,7 +44,7 @@ This function is called by:
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 <div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [data_table,column_titles,time] = data2Table(data,verbose_flag)</a>
 0002     <span class="comment">% Converts DynaSim structure to 1D cell array format. Later can use to</span>
-0003     <span class="comment">% import to xPlt</span>
+0003     <span class="comment">% import to MDD</span>
 0004     
 0005     <span class="keyword">if</span> nargin &lt; 2
 0006         verbose_flag = 0;
@@ -146,10 +146,10 @@ This function is called by:
 0102     column_titles = {<span class="string">'data'</span>,ax_names{:}};
 0103     
 0104     <span class="keyword">if</span> verbose_flag
-0105         ds.previewTable(data_table,column_titles);
+0105         previewTable(data_table,column_titles);
 0106     <span class="keyword">end</span>
 0107     
 0108 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 28-Apr-2017 19:07:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Thu 18-May-2017 08:41:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

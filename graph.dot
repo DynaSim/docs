@@ -1,6 +1,5 @@
 /* Created by mdot for Matlab */
 digraph m2html {
-  make_autogenData -> dsImport;
   make_autogenData -> dsPlot;
   make_autogenData -> dsSimulate;
   template -> template;
@@ -21,8 +20,6 @@ digraph m2html {
   generateModel -> strrep;
   importPlots -> strrep;
   mergeData -> mergeData;
-  mergeData -> xPlt2ds;
-  mergeData -> xPlt2dsImage;
   parseModelEquations -> strrep;
   plotFR -> strrep;
   plotFR2 -> strrep;
@@ -34,6 +31,7 @@ digraph m2html {
   updateStudy -> strrep;
   writeDynaSimSolver -> strrep;
   writeMatlabSolver -> strrep;
+  dsAnalyze -> nameFromVaried;
   dsAnalyze -> dsImport;
   dsImport -> strrep;
   dsImport -> dsImport;
@@ -52,8 +50,11 @@ digraph m2html {
   inputQuery [URL="functions/+ds/+unit/inputQuery.html"];
   make_autogenData [URL="functions/+ds/+unit/make_autogenData.html"];
   run_all [URL="functions/+ds/+unit/run_all.html"];
+  run_all_jenkins [URL="functions/+ds/+unit/run_all_jenkins.html"];
   run_autogen_all [URL="functions/+ds/+unit/run_autogen_all.html"];
+  run_autogen_all_jenkins [URL="functions/+ds/+unit/run_autogen_all_jenkins.html"];
   run_autogen_dirs [URL="functions/+ds/+unit/run_autogen_dirs.html"];
+  run_autogen_non_dirs [URL="functions/+ds/+unit/run_autogen_non_dirs.html"];
   run_autogen_query [URL="functions/+ds/+unit/run_autogen_query.html"];
   run_custom_all [URL="functions/+ds/+unit/run_custom_all.html"];
   run_template [URL="functions/+ds/+unit/run_template.html"];
@@ -69,7 +70,7 @@ digraph m2html {
   test_checkModel [URL="functions/+ds/+unit/test_checkModel.html"];
   test_strrep [URL="functions/+ds/+unit/test_strrep.html"];
   test_strrep2 [URL="functions/+ds/+unit/test_strrep2.html"];
-  all2xPlt [URL="functions/+ds/all2xPlt.html"];
+  all2mdd [URL="functions/+ds/all2mdd.html"];
   analyzeStudy [URL="functions/+ds/analyzeStudy.html"];
   applyModifications [URL="functions/+ds/applyModifications.html"];
   calcACF [URL="functions/+ds/calcACF.html"];
@@ -100,7 +101,7 @@ digraph m2html {
   data2Table [URL="functions/+ds/data2Table.html"];
   dataField2Table [URL="functions/+ds/dataField2Table.html"];
   decimateData [URL="functions/+ds/decimateData.html"];
-  ds2xPlt [URL="functions/+ds/ds2xPlt.html"];
+  ds2mdd [URL="functions/+ds/ds2mdd.html"];
   dynasim2odefun [URL="functions/+ds/dynasim2odefun.html"];
   editModelFiles [URL="functions/+ds/editModelFiles.html"];
   exportData [URL="functions/+ds/exportData.html"];
@@ -113,7 +114,7 @@ digraph m2html {
   getSolveFile [URL="functions/+ds/getSolveFile.html"];
   get_populations_from_meta [URL="functions/+ds/get_populations_from_meta.html"];
   get_variables_from_meta [URL="functions/+ds/get_variables_from_meta.html"];
-  img2xPlt [URL="functions/+ds/img2xPlt.html"];
+  img2mdd [URL="functions/+ds/img2mdd.html"];
   importCSV [URL="functions/+ds/importCSV.html"];
   importModel [URL="functions/+ds/importModel.html"];
   importPlots [URL="functions/+ds/importPlots.html"];
@@ -122,6 +123,9 @@ digraph m2html {
   isDevMode [URL="functions/+ds/isDevMode.html"];
   locateModelFiles [URL="functions/+ds/locateModelFiles.html"];
   makeDefaultConfig [URL="functions/+ds/makeDefaultConfig.html"];
+  makeDefaultConfigJenkins [URL="functions/+ds/makeDefaultConfigJenkins.html"];
+  mdd2ds [URL="functions/+ds/mdd2ds.html"];
+  mdd2dsImage [URL="functions/+ds/mdd2dsImage.html"];
   mergeData [URL="functions/+ds/mergeData.html"];
   monitorStudy [URL="functions/+ds/monitorStudy.html"];
   nameFromVaried [URL="functions/+ds/nameFromVaried.html"];
@@ -132,7 +136,6 @@ digraph m2html {
   plotStudy [URL="functions/+ds/plotStudy.html"];
   plotWaveforms [URL="functions/+ds/plotWaveforms.html"];
   prepareMEX [URL="functions/+ds/prepareMEX.html"];
-  previewTable [URL="functions/+ds/previewTable.html"];
   probeCellProperties [URL="functions/+ds/probeCellProperties.html"];
   probeFI [URL="functions/+ds/probeFI.html"];
   propagateFunctions [URL="functions/+ds/propagateFunctions.html"];
@@ -152,9 +155,8 @@ digraph m2html {
   vary2Modifications [URL="functions/+ds/vary2Modifications.html"];
   writeDynaSimSolver [URL="functions/+ds/writeDynaSimSolver.html"];
   writeMatlabSolver [URL="functions/+ds/writeMatlabSolver.html"];
-  xPlt2ds [URL="functions/+ds/xPlt2ds.html"];
-  xPlt2dsImage [URL="functions/+ds/xPlt2dsImage.html"];
   zipDemoData [URL="functions/+ds/zipDemoData.html"];
+  CompareSolveFiles [URL="functions/CompareSolveFiles.html"];
   dsAnalyze [URL="functions/dsAnalyze.html"];
   dsImport [URL="functions/dsImport.html"];
   dsPlot [URL="functions/dsPlot.html"];

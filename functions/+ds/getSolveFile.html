@@ -170,7 +170,7 @@ This function is called by:
 0106   solve_file=[<span class="string">'solve_ode_'</span> datestr(now,<span class="string">'yyyymmddHHMMSS_FFF'</span>) <span class="string">'.m'</span>];
 0107 <span class="keyword">end</span>
 0108 
-0109 [fpath,fname,fext]=fileparts(solve_file);
+0109 [fpath,fname,fext]=fileparts2(solve_file);
 0110 
 0111 <span class="keyword">if</span> isempty(fpath)
 0112   <span class="comment">% add path to solve_file name</span>
@@ -183,7 +183,7 @@ This function is called by:
 0119   <span class="comment">% convert relative path to absolute path</span>
 0120   solve_file = getAbsolutePath(solve_file);
 0121 <span class="keyword">end</span>
-0122 [fpath,fname,fext]=fileparts(solve_file);
+0122 [fpath,fname,fext]=fileparts2(solve_file);
 0123 
 0124 <span class="comment">% check that solve file name is less than max function name allwoed by matlab</span>
 0125 <span class="keyword">if</span> length(fname)&gt;(63-4) <span class="comment">% subtract 4 to allow suffix '_mex'</span>
@@ -254,6 +254,6 @@ This function is called by:
 0190   <span class="keyword">end</span>
 0191   cd(cwd);
 0192 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 28-Apr-2017 19:07:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Thu 18-May-2017 08:41:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

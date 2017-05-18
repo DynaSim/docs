@@ -48,29 +48,49 @@ This function is called by:
 0003 <span class="comment">% result = runtests('ds.unit.test_autogen_all');</span>
 0004 
 0005 import matlab.unittest.TestSuite
-0006 import matlab.unittest.selectors.HasTag
-0007 
-0008 <span class="comment">%% Rename autogen_newSave to autogen</span>
-0009 finalDir = fullfile(ds.getConfig(<span class="string">'ds_unitTestData_path'</span>), <span class="string">'autogen'</span>);
-0010 <span class="keyword">if</span> ~exist(finalDir, <span class="string">'dir'</span>)
-0011   newDir = fullfile(ds.getConfig(<span class="string">'ds_unitTestData_path'</span>), <span class="string">'autogen_newSave'</span>);
-0012   movefile(newDir, finalDir);
-0013 <span class="keyword">end</span>
-0014 
-0015 <span class="comment">%% Rename autogenDirs_newSave to autogenDirs</span>
-0016 finalDir = fullfile(ds.getConfig(<span class="string">'ds_unitTestData_path'</span>), <span class="string">'autogenDirs'</span>);
-0017 newDir = fullfile(ds.getConfig(<span class="string">'ds_unitTestData_path'</span>), <span class="string">'autogenDirs_newSave'</span>);
-0018 <span class="keyword">if</span> ~exist(finalDir, <span class="string">'dir'</span>) &amp;&amp; exist(newDir, <span class="string">'dir'</span>)
-0019   movefile(newDir, finalDir);
-0020 <span class="keyword">end</span>
-0021 
-0022 <span class="comment">%% Make Test Suite</span>
-0023 fullSuite = TestSuite.fromPackage(<span class="string">'ds.unit'</span>);
-0024 fullSuite = fullSuite.selectIf(~HasTag(<span class="string">'query'</span>));
-0025 fullSuite = fullSuite.selectIf(HasTag(<span class="string">'autogen'</span>));
-0026 
-0027 <span class="comment">%% Run Test Suite</span>
-0028 result = run(fullSuite);</pre></div>
-<hr><address>Generated on Fri 28-Apr-2017 19:07:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+0006 import matlab.unittest.TestRunner
+0007 import matlab.unittest.selectors.HasTag
+0008 import matlab.unittest.plugins.CodeCoveragePlugin
+0009 import edu.stanford.covert.test.Coverage
+0010 
+0011 <span class="comment">%% Rename autogen_newSave to autogen</span>
+0012 finalDir = fullfile(ds.getConfig(<span class="string">'ds_unitTestData_path'</span>), <span class="string">'autogen'</span>);
+0013 <span class="keyword">if</span> ~exist(finalDir, <span class="string">'dir'</span>)
+0014   newDir = fullfile(ds.getConfig(<span class="string">'ds_unitTestData_path'</span>), <span class="string">'autogen_newSave'</span>);
+0015   movefile(newDir, finalDir);
+0016 <span class="keyword">end</span>
+0017 
+0018 <span class="comment">%% Rename autogenDirs_newSave to autogenDirs</span>
+0019 finalDir = fullfile(ds.getConfig(<span class="string">'ds_unitTestData_path'</span>), <span class="string">'autogenDirs'</span>);
+0020 newDir = fullfile(ds.getConfig(<span class="string">'ds_unitTestData_path'</span>), <span class="string">'autogenDirs_newSave'</span>);
+0021 <span class="keyword">if</span> ~exist(finalDir, <span class="string">'dir'</span>) &amp;&amp; exist(newDir, <span class="string">'dir'</span>)
+0022   movefile(newDir, finalDir);
+0023 <span class="keyword">end</span>
+0024 
+0025 <span class="comment">%% Make Test Suite</span>
+0026 fullSuite = TestSuite.fromPackage(<span class="string">'ds.unit'</span>);
+0027 fullSuite = fullSuite.selectIf(~HasTag(<span class="string">'query'</span>));
+0028 fullSuite = fullSuite.selectIf(HasTag(<span class="string">'autogen'</span>));
+0029 
+0030 <span class="comment">%% code coverage runner</span>
+0031 runner = TestRunner.withTextOutput;
+0032 runner.addPlugin(CodeCoveragePlugin.forFolder(fullfile(ds.getConfig(<span class="string">'ds_root_path'</span>), <span class="string">'functions'</span>)))
+0033 runner.addPlugin(CodeCoveragePlugin.forPackage(<span class="string">'ds'</span>))
+0034 
+0035 <span class="comment">%% Run Test Suite</span>
+0036 <span class="comment">% result = run(fullSuite); % test suite without code covereage or parallel</span>
+0037 result = runner.run(fullSuite); <span class="comment">% runner for code coverage</span>
+0038 
+0039 <span class="comment">%% Run Test Suite in Parallel</span>
+0040 <span class="comment">% runner = matlab.unittest.TestRunner.withTextOutput;</span>
+0041 <span class="comment">% result = runInParallel(runner,fullSuite); % runner in parallel, no code coverage</span>
+0042 
+0043 <span class="comment">%% XML Coverage Output</span>
+0044 testCoverageDir = fullfile(ds.getConfig(<span class="string">'ds_root_path'</span>), <span class="string">'testCoverage'</span>);
+0045 mkdirSilent(testCoverageDir)
+0046 reportPath = fullfile(testCoverageDir, <span class="string">'dsAllAutogenTestCoverage.xml'</span>);
+0047 report = Coverage( fullfile(ds.getConfig(<span class="string">'ds_root_path'</span>), <span class="string">'functions'</span>) );
+0048 report.exportXML(reportPath);</pre></div>
+<hr><address>Generated on Thu 18-May-2017 08:41:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

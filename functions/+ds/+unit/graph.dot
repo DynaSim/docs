@@ -14,8 +14,11 @@ digraph m2html {
   inputQuery [URL="inputQuery.html"];
   make_autogenData [URL="make_autogenData.html"];
   run_all [URL="run_all.html"];
+  run_all_jenkins [URL="run_all_jenkins.html"];
   run_autogen_all [URL="run_autogen_all.html"];
+  run_autogen_all_jenkins [URL="run_autogen_all_jenkins.html"];
   run_autogen_dirs [URL="run_autogen_dirs.html"];
+  run_autogen_non_dirs [URL="run_autogen_non_dirs.html"];
   run_autogen_query [URL="run_autogen_query.html"];
   run_custom_all [URL="run_custom_all.html"];
   run_template [URL="run_template.html"];

@@ -29,14 +29,17 @@
 <div class="fragment"><pre class="comment">DSIMPORT - load data into DynaSim formatted data structure.
 
  Usage:
-   [data,studyinfo]=dsImport(data_file)
-   data=dsImport(data_file)
+   [data,studyinfo] = dsImport(data_file)
+   [data,studyinfo] = dsImport(studyinfo)
+   data = ImportData(data_file)
 
  Inputs:
-   - data_file data file name in accepted format (csv, mat, ...), or also
-     accepted: list of data files, studyinfo structure, study_dir, or studyinfo
-     file
-   - studyinfo: DynaSim studyinfo structure (see ds.checkStudyinfo)
+   - First input/argument:
+     - data_file: data file name in accepted format (csv, mat, ...)
+     - cell array of data files
+     - study_dir
+     - studyinfo structure
+     - studyinfo file
    - options:
      'verbose_flag': {0,1} (default: 1)
      'process_id'  : process identifier for loading studyinfo if necessary
@@ -46,14 +49,16 @@
 
  Outputs:
    - DynaSim data structure:
-     data.labels           : list of state variables and monitors recorded
-     data.(state_variables): state variable data matrix [time x cells]
-     data.(monitors)       : monitor data matrix [time x cells]
-     data.time             : time vector [time x 1]
-     data.simulator_options: simulator options used to generate simulated data
-     data.model            : model used to generate simulated data
-     [data.varied]         : list of varied model components
-     [data.results]        : list of derived data sets created by post-processing
+       data.labels           : list of state variables and monitors recorded
+       data.(state_variables): state variable data matrix [time x cells]
+       data.(monitors)       : monitor data matrix [time x cells]
+       data.time             : time vector [time x 1]
+       data.simulator_options: simulator options used to generate simulated data
+       data.model            : model used to generate simulated data
+       [data.varied]         : list of varied model components
+       [data.results]        : list of derived data sets created by post-processing
+   - studyinfo: DynaSim studyinfo structure (see CheckStudyinfo)
+     Note: if data is missing, studyinfo.simulations will only show found data
 
  Notes:
    - NOTE 1: CSV file structure assumes CSV file contains data organized
@@ -89,7 +94,7 @@ This function calls:
 <li><a href="../functions/+ds/strrep.html" class="code" title="function str = strrep(str,oldstr,newstr,lpad,rpad, varargin)">strrep</a>	STRREP - replace full words by new character strings, ignoring matches that appear as sub-strings.</li><li><a href="dsImport.html" class="code" title="function [data,studyinfo] = dsImport(file,varargin)">dsImport</a>	DSIMPORT - load data into DynaSim formatted data structure.</li><li><a href="dsSelect.html" class="code" title="function data = dsSelect(data,varargin)">dsSelect</a>	DSSELECT -  select subset of data</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../matlabicon.gif)">
-<li><a href="../functions/+ds/+unit/make_autogenData.html" class="code" title="">make_autogenData</a>	% Make DynaSim Autogen Files</li><li><a href="../functions/+ds/analyzeStudy.html" class="code" title="function [results,studyinfo] = analyzeStudy(data,func,varargin)">analyzeStudy</a>	ds.analyzeStudy - Apply an analysis function to DynaSim data, optionally saving data</li><li><a href="dsAnalyze.html" class="code" title="function result = dsAnalyze(data,func,varargin)">dsAnalyze</a>	DSANALYZE - Apply an analysis function to DynaSim data, optionally saving data</li><li><a href="dsImport.html" class="code" title="function [data,studyinfo] = dsImport(file,varargin)">dsImport</a>	DSIMPORT - load data into DynaSim formatted data structure.</li><li><a href="dsSimulate.html" class="code" title="function [data,studyinfo] = dsSimulate(model,varargin)">dsSimulate</a>	% data=dsSimulate(model,'option',value,...)</li></ul>
+<li><a href="../functions/+ds/analyzeStudy.html" class="code" title="function [results,studyinfo] = analyzeStudy(data,func,varargin)">analyzeStudy</a>	ds.analyzeStudy - Apply an analysis function to DynaSim data, optionally saving data</li><li><a href="dsAnalyze.html" class="code" title="function result = dsAnalyze(src,funcIn,varargin)">dsAnalyze</a>	DSANALYZE - Apply an analysis function to DynaSim data, optionally saving data</li><li><a href="dsImport.html" class="code" title="function [data,studyinfo] = dsImport(file,varargin)">dsImport</a>	DSIMPORT - load data into DynaSim formatted data structure.</li><li><a href="dsSimulate.html" class="code" title="function [data,studyinfo,result] = dsSimulate(model,varargin)">dsSimulate</a>	% data=dsSimulate(model,'option',value,...)</li></ul>
 <!-- crossreference -->
 
 
@@ -99,283 +104,299 @@ This function is called by:
 0002 <span class="comment">%DSIMPORT - load data into DynaSim formatted data structure.</span>
 0003 <span class="comment">%</span>
 0004 <span class="comment">% Usage:</span>
-0005 <span class="comment">%   [data,studyinfo]=dsImport(data_file)</span>
-0006 <span class="comment">%   data=dsImport(data_file)</span>
-0007 <span class="comment">%</span>
-0008 <span class="comment">% Inputs:</span>
-0009 <span class="comment">%   - data_file data file name in accepted format (csv, mat, ...), or also</span>
-0010 <span class="comment">%     accepted: list of data files, studyinfo structure, study_dir, or studyinfo</span>
-0011 <span class="comment">%     file</span>
-0012 <span class="comment">%   - studyinfo: DynaSim studyinfo structure (see ds.checkStudyinfo)</span>
-0013 <span class="comment">%   - options:</span>
-0014 <span class="comment">%     'verbose_flag': {0,1} (default: 1)</span>
-0015 <span class="comment">%     'process_id'  : process identifier for loading studyinfo if necessary</span>
-0016 <span class="comment">%     'time_limits' : [beg,end] ms (see NOTE 2)</span>
-0017 <span class="comment">%     'variables'   : cell array of matrix names (see NOTE 2)</span>
-0018 <span class="comment">%     'simIDs'      : array of simIDs to import (default: [])</span>
-0019 <span class="comment">%</span>
-0020 <span class="comment">% Outputs:</span>
-0021 <span class="comment">%   - DynaSim data structure:</span>
-0022 <span class="comment">%     data.labels           : list of state variables and monitors recorded</span>
-0023 <span class="comment">%     data.(state_variables): state variable data matrix [time x cells]</span>
-0024 <span class="comment">%     data.(monitors)       : monitor data matrix [time x cells]</span>
-0025 <span class="comment">%     data.time             : time vector [time x 1]</span>
-0026 <span class="comment">%     data.simulator_options: simulator options used to generate simulated data</span>
-0027 <span class="comment">%     data.model            : model used to generate simulated data</span>
-0028 <span class="comment">%     [data.varied]         : list of varied model components</span>
-0029 <span class="comment">%     [data.results]        : list of derived data sets created by post-processing</span>
-0030 <span class="comment">%</span>
-0031 <span class="comment">% Notes:</span>
-0032 <span class="comment">%   - NOTE 1: CSV file structure assumes CSV file contains data organized</span>
-0033 <span class="comment">%   according to output from ds.writeDynaSimSolver: time points along rows; state</span>
-0034 <span class="comment">%   variables and monitors are columns; first column is time vector; next</span>
-0035 <span class="comment">%   columns are state variables; final columns are monitors. first row has</span>
-0036 <span class="comment">%   headers for each column. if a population has more than one cell, different</span>
-0037 <span class="comment">%   cells are sequential columns with same header repeated for each cell.</span>
-0038 <span class="comment">%</span>
-0039 <span class="comment">%   - NOTE 2: DynaSim data exported to MAT-files are HDF-compatible. To obtain</span>
-0040 <span class="comment">%   partial data sets without having to load the entire file, use dsImport</span>
-0041 <span class="comment">%   with options 'time_limits' and/or 'variables'. Alternatively, the entire</span>
-0042 <span class="comment">%   data set can be loaded using dsImport with default options, then subsets</span>
-0043 <span class="comment">%   extracted using dsSelect with appropriate options.</span>
-0044 <span class="comment">%</span>
-0045 <span class="comment">% Examples:</span>
-0046 <span class="comment">%   - Example 1: full data set</span>
-0047 <span class="comment">%       data=dsImport('data.mat'); % load single data set</span>
-0048 <span class="comment">%       data=dsImport(studyinfo); % load all data sets in studyinfo.study_dir</span>
-0049 <span class="comment">%   - Example 2: partial data set with HDF-style loading</span>
-0050 <span class="comment">%       data=dsImport('data.mat','variables','pop1_v','time_limits',[1000 4000])</span>
-0051 <span class="comment">%</span>
-0052 <span class="comment">% TODO:</span>
-0053 <span class="comment">% - specify subsets to return in terms of varied parameters, time_limits, ROIs,</span>
-0054 <span class="comment">%   etc possible format for specifying range_varied: {'E','gNa',[.1 .3];</span>
-0055 <span class="comment">%   'I-&gt;E','tauI',[15 25]; 'I','mechanism_list','+iM'}</span>
-0056 <span class="comment">% - achieve by calling function dsSelect() at end of this function.</span>
-0057 
-0058 <span class="comment">% See also: dsSimulate, ds.exportData, ds.checkData, dsSelect</span>
-0059 
-0060 
-0061 <span class="comment">% Check inputs</span>
-0062 options=ds.checkOptions(varargin,{<span class="keyword">...</span>
-0063   <span class="string">'verbose_flag'</span>,1,{0,1},<span class="keyword">...</span>
-0064   <span class="string">'process_id'</span>,[],[],<span class="keyword">...</span><span class="comment"> % process identifier for loading studyinfo if necessary</span>
-0065   <span class="string">'time_limits'</span>,[],[],<span class="keyword">...</span>
-0066   <span class="string">'variables'</span>,[],[],<span class="keyword">...</span>
-0067   <span class="string">'simIDs'</span>,[],[],<span class="keyword">...</span>
-0068   <span class="string">'auto_gen_test_data_flag'</span>,0,{0,1},<span class="keyword">...</span>
-0069   },false);
-0070   
-0071 <span class="comment">%% auto_gen_test_data_flag argin</span>
-0072 <span class="keyword">if</span> options.auto_gen_test_data_flag
-0073   varargs = varargin;
-0074   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
-0075   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
-0076   argin = [{file}, varargs]; <span class="comment">% specific to this function</span>
-0077 <span class="keyword">end</span>
-0078 
-0079 <span class="keyword">if</span> ischar(options.variables)
-0080   options.variables = {options.variables};
-0081 <span class="keyword">end</span>
-0082 
-0083 <span class="comment">% check if input is a DynaSim studyinfo structure</span>
-0084 <span class="keyword">if</span> ischar(file) &amp;&amp; isdir(file) <span class="comment">% study directory</span>
-0085   study_dir = file;
-0086   clear file
-0087   file.study_dir = study_dir;
-0088 <span class="keyword">end</span>
-0089 
-0090 <span class="keyword">if</span> isstruct(file) &amp;&amp; isfield(file,<span class="string">'study_dir'</span>)
-0091   <span class="comment">% &quot;file&quot; is a studyinfo structure.</span>
-0092   <span class="comment">% retrieve most up-to-date studyinfo structure from studyinfo.mat file</span>
-0093   studyinfo = ds.checkStudyinfo(file.study_dir,<span class="string">'process_id'</span>,options.process_id, varargin{:});
-0094   
-0095   <span class="comment">% compare simIDs to sim_id</span>
-0096   <span class="keyword">if</span> ~isempty(options.simIDs)
-0097      [~,~,simsInds] = intersect(options.simIDs, [studyinfo.simulations.sim_id]);
-0098   <span class="keyword">end</span>
-0099   
-0100   <span class="comment">% get list of data_files from studyinfo</span>
-0101   <span class="keyword">if</span> isempty(options.simIDs)
-0102     data_files = {studyinfo.simulations.data_file};
-0103   <span class="keyword">else</span>
-0104     data_files = {studyinfo.simulations(simsInds).data_file};
-0105   <span class="keyword">end</span>
-0106   success = cellfun(@exist,data_files)==2;
-0107   
-0108   <span class="keyword">if</span> ~all(success)
-0109     <span class="comment">% convert original absolute paths to paths relative to study_dir</span>
-0110     <span class="keyword">for</span> i = 1:length(data_files)
-0111       [~,fname,fext] = fileparts(data_files{i});
-0112       data_files{i} = fullfile(file.study_dir,<span class="string">'data'</span>,[fname fext]);
-0113     <span class="keyword">end</span>
-0114     
-0115     success = cellfun(@exist,data_files)==2;
-0116   <span class="keyword">end</span>
-0117   
-0118   data_files = data_files(success);
-0119   sim_info = studyinfo.simulations(success);
-0120   
-0121   <span class="comment">% load each data set recursively</span>
-0122   keyvals = ds.options2Keyval(options);
-0123   num_files = length(data_files);
-0124   
-0125   <span class="keyword">for</span> i = 1:num_files
-0126     fprintf(<span class="string">'loading file %g/%g: %s\n'</span>,i,num_files,data_files{i});
-0127     tmp_data=<a href="dsImport.html" class="code" title="function [data,studyinfo] = dsImport(file,varargin)">dsImport</a>(data_files{i},keyvals{:});
-0128     num_sets_per_file=length(tmp_data);
-0129     <span class="keyword">if</span> ~isfield(tmp_data,<span class="string">'varied'</span>)
-0130     <span class="comment">% add varied info</span>
-0131       <span class="comment">% this is necessary here when loading .csv data lacking metadata</span>
-0132       tmp_data.varied={};
-0133       modifications=sim_info(i).modifications;
-0134       modifications(:,1:2) = cellfun( @(x) <a href="../functions/+ds/strrep.html" class="code" title="function str = strrep(str,oldstr,newstr,lpad,rpad, varargin)">strrep</a>(x,<span class="string">'-&gt;'</span>,<span class="string">'_'</span>),modifications(:,1:2),<span class="string">'UniformOutput'</span>,0);
-0135       
-0136       <span class="keyword">for</span> j=1:size(modifications,1)
-0137         varied=[modifications{j,1} <span class="string">'_'</span> modifications{j,2}];
-0138         <span class="keyword">for</span> k=1:num_sets_per_file
-0139           tmp_data(k).varied{end+1}=varied;
-0140           tmp_data(k).(varied)=modifications{j,3};
-0141         <span class="keyword">end</span>
-0142       <span class="keyword">end</span>
-0143     <span class="keyword">end</span>
-0144     
-0145     <span class="comment">% store this data</span>
-0146     <span class="keyword">if</span> i==1
-0147       total_num_sets=num_sets_per_file*num_files;
-0148       set_indices=0:num_sets_per_file:total_num_sets-1;
-0149       
-0150       <span class="comment">% preallocate full data matrix based on first data file</span>
-0151       data(1:total_num_sets)=tmp_data(1);
-0152 <span class="comment">%       data(1:length(data_files))=tmp_data;</span>
-0153 <span class="comment">%     else</span>
-0154 <span class="comment">%       data(i)=tmp_data;</span>
-0155     <span class="keyword">end</span>
-0156     <span class="comment">% replace i-th set of data sets by these data sets</span>
-0157     data(set_indices(i)+(1:num_sets_per_file))=tmp_data;
-0158   <span class="keyword">end</span>
-0159   
-0160   <span class="keyword">return</span>;
-0161 <span class="keyword">else</span>
-0162   studyinfo=[];
-0163 <span class="keyword">end</span>
-0164 
-0165 <span class="comment">% check if input is a list of data files (todo: eliminate duplicate code by</span>
-0166 <span class="comment">% combining with the above recursive loading for studyinfo data_files)</span>
-0167 <span class="keyword">if</span> iscellstr(file)
-0168   data_files=file;
-0169   success=cellfun(@exist,data_files)==2;
-0170   data_files=data_files(success);
-0171   keyvals=ds.options2Keyval(options);
-0172   
-0173   <span class="comment">% load each data set recursively</span>
-0174   <span class="keyword">for</span> i=1:length(data_files)
-0175     tmp_data=<a href="dsImport.html" class="code" title="function [data,studyinfo] = dsImport(file,varargin)">dsImport</a>(data_files{i},keyvals{:});
-0176     <span class="comment">% store this data</span>
-0177     <span class="keyword">if</span> i==1
-0178       <span class="comment">% preallocate full data matrix based on first data file</span>
-0179       data(1:length(data_files))=tmp_data;
-0180     <span class="keyword">else</span>
-0181       <span class="comment">% replace i-th data element by this data set</span>
-0182       data(i)=tmp_data;
-0183     <span class="keyword">end</span>
-0184   <span class="keyword">end</span>
-0185   <span class="keyword">return</span>;
-0186 <span class="keyword">end</span>
-0187 
-0188 <span class="keyword">if</span> ischar(file)
-0189   [~,~,ext]=fileparts(file);
-0190   <span class="keyword">switch</span> lower(ext)
-0191     <span class="keyword">case</span> <span class="string">'.mat'</span>
-0192       <span class="comment">% MAT-file contains data fields as separate variables (-v7.3 for HDF)</span>
-0193       <span class="keyword">if</span> isempty(options.time_limits) &amp;&amp; isempty(options.variables)
-0194         <span class="comment">% load full data set</span>
-0195         data=load(file);
-0196         
-0197         <span class="comment">% if file only contains a structure called 'data' then return that</span>
-0198         <span class="keyword">if</span> isfield(data,<span class="string">'data'</span>) &amp;&amp; length(fieldnames(data))==1
-0199           data=data.data;
-0200         <span class="keyword">end</span>
-0201       <span class="keyword">else</span>
-0202         <span class="comment">% load partial data set</span>
-0203         <span class="comment">% use matfile() to load HDF subsets given varargin options...</span>
-0204         obj=matfile(file); <span class="comment">% MAT-file object</span>
-0205         varlist=who(obj); <span class="comment">% variables stored in mat-file</span>
-0206         labels=obj.labels; <span class="comment">% list of state variables and monitors</span>
-0207         
-0208         <span class="keyword">if</span> iscellstr(options.variables) <span class="comment">% restrict variables to load</span>
-0209           labels=labels(ismember(labels,options.variables));
-0210         <span class="keyword">end</span>
-0211         
-0212         simulator_options=obj.simulator_options;
-0213         time=(simulator_options.tspan(1):simulator_options.dt:simulator_options.tspan(2))';
-0214         time=time(1:simulator_options.downsample_factor:length(time));
-0215         
-0216         <span class="keyword">if</span> ~isempty(options.time_limits)
-0217           <span class="comment">% determine time indices to load</span>
-0218           time_indices=nearest(time,options.time_limits(1)):nearest(time,options.time_limits(2));
-0219         <span class="keyword">else</span>
-0220           <span class="comment">% load all time points</span>
-0221           time_indices=1:length(time);
-0222         <span class="keyword">end</span>
-0223         
-0224         <span class="comment">% create DynaSim data structure:</span>
-0225         data=[];
-0226         data.labels=labels;
-0227         
-0228         <span class="comment">% load state variables and monitors</span>
-0229         <span class="keyword">for</span> i=1:length(labels)
-0230           data.(labels{i})=obj.(labels{i})(time_indices,:);
-0231         <span class="keyword">end</span>
-0232         
-0233         data.time=time(time_indices);
-0234         data.simulator_options=simulator_options;
-0235         
-0236         <span class="keyword">if</span> ismember(<span class="string">'model'</span>,varlist)
-0237           data.model=obj.model;
+0005 <span class="comment">%   [data,studyinfo] = dsImport(data_file)</span>
+0006 <span class="comment">%   [data,studyinfo] = dsImport(studyinfo)</span>
+0007 <span class="comment">%   data = ImportData(data_file)</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Inputs:</span>
+0010 <span class="comment">%   - First input/argument:</span>
+0011 <span class="comment">%     - data_file: data file name in accepted format (csv, mat, ...)</span>
+0012 <span class="comment">%     - cell array of data files</span>
+0013 <span class="comment">%     - study_dir</span>
+0014 <span class="comment">%     - studyinfo structure</span>
+0015 <span class="comment">%     - studyinfo file</span>
+0016 <span class="comment">%   - options:</span>
+0017 <span class="comment">%     'verbose_flag': {0,1} (default: 1)</span>
+0018 <span class="comment">%     'process_id'  : process identifier for loading studyinfo if necessary</span>
+0019 <span class="comment">%     'time_limits' : [beg,end] ms (see NOTE 2)</span>
+0020 <span class="comment">%     'variables'   : cell array of matrix names (see NOTE 2)</span>
+0021 <span class="comment">%     'simIDs'      : array of simIDs to import (default: [])</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% Outputs:</span>
+0024 <span class="comment">%   - DynaSim data structure:</span>
+0025 <span class="comment">%       data.labels           : list of state variables and monitors recorded</span>
+0026 <span class="comment">%       data.(state_variables): state variable data matrix [time x cells]</span>
+0027 <span class="comment">%       data.(monitors)       : monitor data matrix [time x cells]</span>
+0028 <span class="comment">%       data.time             : time vector [time x 1]</span>
+0029 <span class="comment">%       data.simulator_options: simulator options used to generate simulated data</span>
+0030 <span class="comment">%       data.model            : model used to generate simulated data</span>
+0031 <span class="comment">%       [data.varied]         : list of varied model components</span>
+0032 <span class="comment">%       [data.results]        : list of derived data sets created by post-processing</span>
+0033 <span class="comment">%   - studyinfo: DynaSim studyinfo structure (see CheckStudyinfo)</span>
+0034 <span class="comment">%     Note: if data is missing, studyinfo.simulations will only show found data</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">% Notes:</span>
+0037 <span class="comment">%   - NOTE 1: CSV file structure assumes CSV file contains data organized</span>
+0038 <span class="comment">%   according to output from ds.writeDynaSimSolver: time points along rows; state</span>
+0039 <span class="comment">%   variables and monitors are columns; first column is time vector; next</span>
+0040 <span class="comment">%   columns are state variables; final columns are monitors. first row has</span>
+0041 <span class="comment">%   headers for each column. if a population has more than one cell, different</span>
+0042 <span class="comment">%   cells are sequential columns with same header repeated for each cell.</span>
+0043 <span class="comment">%</span>
+0044 <span class="comment">%   - NOTE 2: DynaSim data exported to MAT-files are HDF-compatible. To obtain</span>
+0045 <span class="comment">%   partial data sets without having to load the entire file, use dsImport</span>
+0046 <span class="comment">%   with options 'time_limits' and/or 'variables'. Alternatively, the entire</span>
+0047 <span class="comment">%   data set can be loaded using dsImport with default options, then subsets</span>
+0048 <span class="comment">%   extracted using dsSelect with appropriate options.</span>
+0049 <span class="comment">%</span>
+0050 <span class="comment">% Examples:</span>
+0051 <span class="comment">%   - Example 1: full data set</span>
+0052 <span class="comment">%       data=dsImport('data.mat'); % load single data set</span>
+0053 <span class="comment">%       data=dsImport(studyinfo); % load all data sets in studyinfo.study_dir</span>
+0054 <span class="comment">%   - Example 2: partial data set with HDF-style loading</span>
+0055 <span class="comment">%       data=dsImport('data.mat','variables','pop1_v','time_limits',[1000 4000])</span>
+0056 <span class="comment">%</span>
+0057 <span class="comment">% TODO:</span>
+0058 <span class="comment">% - specify subsets to return in terms of varied parameters, time_limits, ROIs,</span>
+0059 <span class="comment">%   etc possible format for specifying range_varied: {'E','gNa',[.1 .3];</span>
+0060 <span class="comment">%   'I-&gt;E','tauI',[15 25]; 'I','mechanism_list','+iM'}</span>
+0061 <span class="comment">% - achieve by calling function dsSelect() at end of this function.</span>
+0062 
+0063 <span class="comment">% See also: dsSimulate, ds.exportData, ds.checkData, dsSelect</span>
+0064 
+0065 
+0066 <span class="comment">% Check inputs</span>
+0067 options=ds.checkOptions(varargin,{<span class="keyword">...</span>
+0068   <span class="string">'verbose_flag'</span>,1,{0,1},<span class="keyword">...</span>
+0069   <span class="string">'process_id'</span>,[],[],<span class="keyword">...</span><span class="comment"> % process identifier for loading studyinfo if necessary</span>
+0070   <span class="string">'time_limits'</span>,[],[],<span class="keyword">...</span>
+0071   <span class="string">'variables'</span>,[],[],<span class="keyword">...</span>
+0072   <span class="string">'simIDs'</span>,[],[],<span class="keyword">...</span>
+0073   <span class="string">'auto_gen_test_data_flag'</span>,0,{0,1},<span class="keyword">...</span>
+0074   },false);
+0075 
+0076 <span class="comment">%% auto_gen_test_data_flag argin</span>
+0077 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0078   varargs = varargin;
+0079   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0080   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
+0081   argin = [{file}, varargs]; <span class="comment">% specific to this function</span>
+0082 <span class="keyword">end</span>
+0083 
+0084 <span class="keyword">if</span> ischar(options.variables)
+0085   options.variables = {options.variables};
+0086 <span class="keyword">end</span>
+0087 
+0088 <span class="comment">% check if input is a DynaSim study_dir or path to studyinfo</span>
+0089 <span class="keyword">if</span> ischar(file)
+0090   <span class="keyword">if</span> isdir(file) <span class="comment">% study directory</span>
+0091     study_dir = file;
+0092     clear file
+0093     file.study_dir = study_dir;
+0094   <span class="keyword">elseif</span> strfind(file, <span class="string">'studyinfo'</span>)
+0095     filePath = fileparts2(file);
+0096     <span class="keyword">if</span> isempty(filePath)
+0097       filePath = pwd;
+0098     <span class="keyword">end</span>
+0099     study_dir = filePath;
+0100     clear file
+0101     file.study_dir = study_dir;
+0102   <span class="keyword">end</span>
+0103 <span class="keyword">end</span>
+0104 
+0105 <span class="keyword">if</span> isstruct(file) &amp;&amp; isfield(file,<span class="string">'study_dir'</span>)
+0106   <span class="comment">% &quot;file&quot; is a studyinfo structure.</span>
+0107   <span class="comment">% retrieve most up-to-date studyinfo structure from studyinfo.mat file</span>
+0108   studyinfo = ds.checkStudyinfo(file.study_dir,<span class="string">'process_id'</span>,options.process_id, varargin{:});
+0109 
+0110   <span class="comment">% compare simIDs to sim_id</span>
+0111   <span class="keyword">if</span> ~isempty(options.simIDs)
+0112      [~,~,simsInds] = intersect(options.simIDs, [studyinfo.simulations.sim_id]);
+0113   <span class="keyword">end</span>
+0114 
+0115   <span class="comment">% get list of data_files from studyinfo</span>
+0116   <span class="keyword">if</span> isempty(options.simIDs)
+0117     data_files = {studyinfo.simulations.data_file};
+0118   <span class="keyword">else</span>
+0119     data_files = {studyinfo.simulations(simsInds).data_file};
+0120   <span class="keyword">end</span>
+0121   success = cellfun(@exist,data_files)==2;
+0122 
+0123   <span class="keyword">if</span> ~all(success)
+0124     <span class="comment">% convert original absolute paths to paths relative to study_dir</span>
+0125     <span class="keyword">for</span> i = 1:length(data_files)
+0126       [~,fname,fext] = fileparts2(data_files{i});
+0127       data_files{i} = fullfile(file.study_dir,<span class="string">'data'</span>,[fname fext]);
+0128     <span class="keyword">end</span>
+0129 
+0130     success = cellfun(@exist,data_files)==2;
+0131   <span class="keyword">end</span>
+0132 
+0133   data_files = data_files(success);
+0134   sim_info = studyinfo.simulations(success);
+0135   studyinfo.simulations = studyinfo.simulations(success); <span class="comment">% remove missing data</span>
+0136 
+0137   <span class="comment">% load each data set recursively</span>
+0138   keyvals = ds.options2Keyval(options);
+0139   num_files = length(data_files);
+0140 
+0141   <span class="keyword">for</span> i = 1:num_files
+0142     fprintf(<span class="string">'loading file %g/%g: %s\n'</span>,i,num_files,data_files{i});
+0143     tmp_data=<a href="dsImport.html" class="code" title="function [data,studyinfo] = dsImport(file,varargin)">dsImport</a>(data_files{i},keyvals{:});
+0144     num_sets_per_file=length(tmp_data);
+0145     <span class="keyword">if</span> ~isfield(tmp_data,<span class="string">'varied'</span>)
+0146     <span class="comment">% add varied info</span>
+0147       <span class="comment">% this is necessary here when loading .csv data lacking metadata</span>
+0148       tmp_data.varied={};
+0149       modifications=sim_info(i).modifications;
+0150       modifications(:,1:2) = cellfun( @(x) <a href="../functions/+ds/strrep.html" class="code" title="function str = strrep(str,oldstr,newstr,lpad,rpad, varargin)">strrep</a>(x,<span class="string">'-&gt;'</span>,<span class="string">'_'</span>),modifications(:,1:2),<span class="string">'UniformOutput'</span>,0);
+0151 
+0152       <span class="keyword">for</span> j=1:size(modifications,1)
+0153         varied=[modifications{j,1} <span class="string">'_'</span> modifications{j,2}];
+0154         <span class="keyword">for</span> k=1:num_sets_per_file
+0155           tmp_data(k).varied{end+1}=varied;
+0156           tmp_data(k).(varied)=modifications{j,3};
+0157         <span class="keyword">end</span>
+0158       <span class="keyword">end</span>
+0159     <span class="keyword">end</span>
+0160 
+0161     <span class="comment">% store this data</span>
+0162     <span class="keyword">if</span> i==1
+0163       total_num_sets=num_sets_per_file*num_files;
+0164       set_indices=0:num_sets_per_file:total_num_sets-1;
+0165 
+0166       <span class="comment">% preallocate full data matrix based on first data file</span>
+0167       data(1:total_num_sets)=tmp_data(1);
+0168 <span class="comment">%       data(1:length(data_files))=tmp_data;</span>
+0169 <span class="comment">%     else</span>
+0170 <span class="comment">%       data(i)=tmp_data;</span>
+0171     <span class="keyword">end</span>
+0172     <span class="comment">% replace i-th set of data sets by these data sets</span>
+0173     data(set_indices(i)+(1:num_sets_per_file))=tmp_data;
+0174   <span class="keyword">end</span>
+0175 
+0176   <span class="keyword">return</span>;
+0177 <span class="keyword">else</span>
+0178   studyinfo=[];
+0179 <span class="keyword">end</span>
+0180 
+0181 <span class="comment">% check if input is a list of data files (TODO: eliminate duplicate code by</span>
+0182 <span class="comment">% combining with the above recursive loading for studyinfo data_files)</span>
+0183 <span class="keyword">if</span> iscellstr(file)
+0184   data_files=file;
+0185   success=cellfun(@exist,data_files)==2;
+0186   data_files=data_files(success);
+0187   keyvals=ds.options2Keyval(options);
+0188 
+0189   <span class="comment">% load each data set recursively</span>
+0190   <span class="keyword">for</span> i=1:length(data_files)
+0191     tmp_data=<a href="dsImport.html" class="code" title="function [data,studyinfo] = dsImport(file,varargin)">dsImport</a>(data_files{i},keyvals{:});
+0192     <span class="comment">% store this data</span>
+0193     <span class="keyword">if</span> i==1
+0194       <span class="comment">% preallocate full data matrix based on first data file</span>
+0195       data(1:length(data_files))=tmp_data;
+0196     <span class="keyword">else</span>
+0197       <span class="comment">% replace i-th data element by this data set</span>
+0198       data(i)=tmp_data;
+0199     <span class="keyword">end</span>
+0200   <span class="keyword">end</span>
+0201   <span class="keyword">return</span>;
+0202 <span class="keyword">end</span>
+0203 
+0204 <span class="keyword">if</span> ischar(file)
+0205   [~,~,ext]=fileparts2(file);
+0206   <span class="keyword">switch</span> lower(ext)
+0207     <span class="keyword">case</span> <span class="string">'.mat'</span>
+0208       <span class="comment">% MAT-file contains data fields as separate variables (-v7.3 for HDF)</span>
+0209       <span class="keyword">if</span> isempty(options.time_limits) &amp;&amp; isempty(options.variables)
+0210         <span class="comment">% load full data set</span>
+0211         data=load(file);
+0212 
+0213         <span class="comment">% if file only contains a structure called 'data' then return that</span>
+0214         <span class="keyword">if</span> isfield(data,<span class="string">'data'</span>) &amp;&amp; length(fieldnames(data))==1
+0215           data=data.data;
+0216         <span class="keyword">end</span>
+0217       <span class="keyword">else</span>
+0218         <span class="comment">% load partial data set</span>
+0219         <span class="comment">% use matfile() to load HDF subsets given varargin options...</span>
+0220         obj=matfile(file); <span class="comment">% MAT-file object</span>
+0221         varlist=who(obj); <span class="comment">% variables stored in mat-file</span>
+0222         labels=obj.labels; <span class="comment">% list of state variables and monitors</span>
+0223 
+0224         <span class="keyword">if</span> iscellstr(options.variables) <span class="comment">% restrict variables to load</span>
+0225           labels=labels(ismember(labels,options.variables));
+0226         <span class="keyword">end</span>
+0227 
+0228         simulator_options=obj.simulator_options;
+0229         time=(simulator_options.tspan(1):simulator_options.dt:simulator_options.tspan(2))';
+0230         time=time(1:simulator_options.downsample_factor:length(time));
+0231 
+0232         <span class="keyword">if</span> ~isempty(options.time_limits)
+0233           <span class="comment">% determine time indices to load</span>
+0234           time_indices=nearest(time,options.time_limits(1)):nearest(time,options.time_limits(2));
+0235         <span class="keyword">else</span>
+0236           <span class="comment">% load all time points</span>
+0237           time_indices=1:length(time);
 0238         <span class="keyword">end</span>
-0239         
-0240         <span class="keyword">if</span> ismember(<span class="string">'varied'</span>,varlist)
-0241           varied=obj.varied;
-0242           data.varied=varied;
-0243           <span class="keyword">for</span> i=1:length(varied)
-0244             data.(varied{i})=obj.(varied{i});
-0245           <span class="keyword">end</span>
-0246         <span class="keyword">end</span>
-0247         
-0248         <span class="keyword">if</span> ismember(<span class="string">'results'</span>,varlist)
-0249           results=obj.results;
-0250           <span class="keyword">if</span> iscellstr(options.variables)
-0251             results=results(ismember(results,options.variables));
-0252           <span class="keyword">end</span>
-0253           data.results=results;
-0254           
-0255           <span class="comment">% load results</span>
-0256           <span class="keyword">for</span> i=1:length(results)
-0257             data.(results{i})=obj.(results{i})(time_indices,:);
-0258           <span class="keyword">end</span>
-0259         <span class="keyword">end</span>
-0260       <span class="keyword">end</span>
-0261     <span class="keyword">case</span> <span class="string">'.csv'</span>
-0262       <span class="comment">% assumes CSV file contains data organized according to output from ds.writeDynaSimSolver:</span>
-0263       data=ds.importCSV(file);
-0264       
-0265       <span class="keyword">if</span> ~(isempty(options.time_limits) &amp;&amp; isempty(options.variables))
-0266         <span class="comment">% limit to select subsets</span>
-0267         data=<a href="dsSelect.html" class="code" title="function data = dsSelect(data,varargin)">dsSelect</a>(data,varargin{:}); <span class="comment">% todo: create dsSelect()</span>
-0268       <span class="keyword">end</span>
-0269     <span class="keyword">otherwise</span>
-0270       error(<span class="string">'file type not recognized. dsImport currently supports DynaSim data structure in MAT file, data values in CSV file.'</span>);
-0271   <span class="keyword">end</span>
-0272 <span class="keyword">end</span>
-0273 
-0274 <span class="comment">%% auto_gen_test_data_flag argout</span>
-0275 <span class="keyword">if</span> options.auto_gen_test_data_flag
-0276   argout = {data, studyinfo}; <span class="comment">% specific to this function</span>
-0277   
-0278   ds.unit.saveAutoGenTestData(argin, argout);
-0279 <span class="keyword">end</span>
+0239 
+0240         <span class="comment">% create DynaSim data structure:</span>
+0241         data=[];
+0242         data.labels=labels;
+0243 
+0244         <span class="comment">% load state variables and monitors</span>
+0245         <span class="keyword">for</span> i=1:length(labels)
+0246           data.(labels{i})=obj.(labels{i})(time_indices,:);
+0247         <span class="keyword">end</span>
+0248 
+0249         data.time=time(time_indices);
+0250         data.simulator_options=simulator_options;
+0251 
+0252         <span class="keyword">if</span> ismember(<span class="string">'model'</span>,varlist)
+0253           data.model=obj.model;
+0254         <span class="keyword">end</span>
+0255 
+0256         <span class="keyword">if</span> ismember(<span class="string">'varied'</span>,varlist)
+0257           varied=obj.varied;
+0258           data.varied=varied;
+0259           <span class="keyword">for</span> i=1:length(varied)
+0260             data.(varied{i})=obj.(varied{i});
+0261           <span class="keyword">end</span>
+0262         <span class="keyword">end</span>
+0263 
+0264         <span class="keyword">if</span> ismember(<span class="string">'results'</span>,varlist)
+0265           results=obj.results;
+0266           <span class="keyword">if</span> iscellstr(options.variables)
+0267             results=results(ismember(results,options.variables));
+0268           <span class="keyword">end</span>
+0269           data.results=results;
+0270 
+0271           <span class="comment">% load results</span>
+0272           <span class="keyword">for</span> i=1:length(results)
+0273             data.(results{i})=obj.(results{i})(time_indices,:);
+0274           <span class="keyword">end</span>
+0275         <span class="keyword">end</span>
+0276       <span class="keyword">end</span>
+0277     <span class="keyword">case</span> <span class="string">'.csv'</span>
+0278       <span class="comment">% assumes CSV file contains data organized according to output from ds.writeDynaSimSolver:</span>
+0279       data=ds.importCSV(file);
 0280 
-0281 <span class="keyword">end</span> <span class="comment">% main fn</span></pre></div>
-<hr><address>Generated on Fri 28-Apr-2017 19:07:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+0281       <span class="keyword">if</span> ~(isempty(options.time_limits) &amp;&amp; isempty(options.variables))
+0282         <span class="comment">% limit to select subsets</span>
+0283         data=<a href="dsSelect.html" class="code" title="function data = dsSelect(data,varargin)">dsSelect</a>(data,varargin{:}); <span class="comment">% todo: create dsSelect()</span>
+0284       <span class="keyword">end</span>
+0285     <span class="keyword">otherwise</span>
+0286       error(<span class="string">'file type not recognized. dsImport currently supports DynaSim data structure in MAT file, data values in CSV file.'</span>);
+0287   <span class="keyword">end</span>
+0288 <span class="keyword">end</span>
+0289 
+0290 <span class="comment">%% auto_gen_test_data_flag argout</span>
+0291 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0292   argout = {data, studyinfo}; <span class="comment">% specific to this function</span>
+0293 
+0294   ds.unit.saveAutoGenTestData(argin, argout);
+0295 <span class="keyword">end</span>
+0296 
+0297 <span class="keyword">end</span> <span class="comment">% main fn</span></pre></div>
+<hr><address>Generated on Thu 18-May-2017 08:41:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

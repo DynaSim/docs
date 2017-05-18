@@ -23,7 +23,7 @@
 <div class="box"><strong>IMPORTRESULTS - Import analysis result of a simulation</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="box"><strong>function results = importResults(studyinfo,func) </strong></div>
+<div class="box"><strong>function results = importResults(studyinfo,func, varargin) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 <div class="fragment"><pre class="comment">IMPORTRESULTS - Import analysis result of a simulation
@@ -58,7 +58,7 @@ This function is called by:
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function results = importResults(studyinfo,func)</a>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function results = importResults(studyinfo,func, varargin)</a>
 0002 <span class="comment">%IMPORTRESULTS - Import analysis result of a simulation</span>
 0003 <span class="comment">%</span>
 0004 <span class="comment">% Usage:</span>
@@ -93,7 +93,7 @@ This function is called by:
 0033   
 0034   <span class="comment">% get list of data_files from studyinfo</span>
 0035   result_functions=studyinfo.simulations(1).result_functions;
-0036   matches=cellfun(@(x)isequal(x,func),result_functions);
+0036   matches=cellfun(@(x) strcmp(func2str(x), func2str(func)),result_functions);
 0037   <span class="keyword">if</span> ~any(matches)
 0038     wprintf(<span class="string">'Didnt find match for result function parameter'</span>)
 0039     <span class="keyword">return</span>
@@ -107,7 +107,7 @@ This function is called by:
 0047 <span class="comment">%     % convert original absolute paths to paths relative to study_dir</span>
 0048 <span class="comment">%     for s=1:num_sims</span>
 0049 <span class="comment">%       for i=1:num_instances(s)</span>
-0050 <span class="comment">%         [~,fname,fext]=fileparts(result_files{s}{i});</span>
+0050 <span class="comment">%         [~,fname,fext]=fileparts2(result_files{s}{i});</span>
 0051 <span class="comment">%         result_files{s}{i}=fullfile(studyinfo.study_dir,'data',[fname fext]);</span>
 0052 <span class="comment">%       end</span>
 0053 <span class="comment">%     end</span>
@@ -121,7 +121,7 @@ This function is called by:
 0061         results(s,i)=result;
 0062       <span class="keyword">else</span>
 0063         <span class="comment">%check relative path</span>
-0064         [~,fname,fext]=fileparts(result_files{s}{i});
+0064         [~,fname,fext]=fileparts2(result_files{s}{i});
 0065         result_files{s}{i}=fullfile(studyinfo.study_dir,<span class="string">'data'</span>,[fname fext]);
 0066         <span class="keyword">if</span> exist(result_files{s}{i},<span class="string">'file'</span>)
 0067           load(result_files{s}{i},<span class="string">'result'</span>);
@@ -131,6 +131,6 @@ This function is called by:
 0071     <span class="keyword">end</span>
 0072   <span class="keyword">end</span>
 0073 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 28-Apr-2017 19:07:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Thu 18-May-2017 08:41:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

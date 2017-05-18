@@ -412,7 +412,7 @@ This function is called by:
 0255       MechScope=[specification.populations(i).name <span class="string">'_'</span> tmp{2}];
 0256     <span class="keyword">else</span>
 0257       <span class="comment">% extract mechanism file name without path</span>
-0258       [~,MechID]=fileparts(mechanism);
+0258       [~,MechID]=fileparts2(mechanism);
 0259       MechScope=[specification.populations(i).name <span class="string">'_'</span> MechID];
 0260     <span class="keyword">end</span>
 0261 
@@ -466,7 +466,7 @@ This function is called by:
 0309     <span class="keyword">if</span> numel(mechanism_)&gt;1, new_linker=mechanism_{2}; <span class="keyword">else</span> new_linker=[]; <span class="keyword">end</span>
 0310     
 0311     <span class="comment">% extract mechanism file name without path</span>
-0312     [~,MechID]=fileparts(mechanism);
+0312     [~,MechID]=fileparts2(mechanism);
 0313     MechScope=[target <span class="string">'_'</span> source <span class="string">'_'</span> MechID];
 0314         <span class="comment">% NOTE: must use target_source_mechanism for connection mechanisms</span>
 0315         <span class="comment">% to distinguish their parent namespaces from those of population mechanisms</span>
@@ -867,6 +867,6 @@ This function is called by:
 0710     str=regexprep(str,pat,rep);
 0711   <span class="keyword">end</span>
 0712 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 28-Apr-2017 19:07:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Thu 18-May-2017 08:41:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

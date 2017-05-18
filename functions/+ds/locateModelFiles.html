@@ -139,7 +139,7 @@ This function is called by:
 0084       file=<span class="string">''</span>;
 0085     <span class="keyword">end</span>
 0086     <span class="comment">% use 'which' to get full filename of file in Matlab path</span>
-0087     <span class="keyword">if</span> isempty(fileparts(file)) <span class="comment">% file is a name without a path</span>
+0087     <span class="keyword">if</span> isempty(fileparts2(file)) <span class="comment">% file is a name without a path</span>
 0088       file=which(file);
 0089     <span class="keyword">end</span>
 0090     <span class="keyword">if</span> ~isempty(file)
@@ -149,7 +149,7 @@ This function is called by:
 0094 <span class="keyword">end</span>
 0095 
 0096 <span class="comment">% extract unique paths to mechanism files</span>
-0097 paths=unique(cellfun(@fileparts,files,<span class="string">'uni'</span>,0),<span class="string">'stable'</span>);</pre></div>
-<hr><address>Generated on Fri 28-Apr-2017 19:07:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+0097 paths=unique(cellfun(@fileparts2,files,<span class="string">'uni'</span>,0),<span class="string">'stable'</span>);</pre></div>
+<hr><address>Generated on Thu 18-May-2017 08:41:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

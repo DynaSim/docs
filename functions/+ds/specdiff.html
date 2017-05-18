@@ -83,8 +83,8 @@ This function is called by:
 0023 <span class="keyword">end</span>
 0024 
 0025 
-0026 <span class="keyword">if</span> ~exist(<span class="string">'nDDict'</span>,<span class="string">'class'</span>)
-0027     fprintf(<span class="string">'This function requires the class nDDict. Make sure this is in your MATLAB path.\n'</span>);
+0026 <span class="keyword">if</span> ~exist(<span class="string">'MDD'</span>,<span class="string">'class'</span>)
+0027     fprintf(<span class="string">'This function requires the class MDD. Make sure this is in your MATLAB path.\n'</span>);
 0028     fprintf(<span class="string">'It can be downloaded from the following links: \n.'</span>);
 0029     fprintf(<span class="string">'1. https://github.com/davestanley/nDDims \n'</span>);
 0030     fprintf(<span class="string">'2. https://www.mathworks.com/matlabcentral/fileexchange/61656-multidimensional-dictionaries\n'</span>);
@@ -121,14 +121,14 @@ This function is called by:
 0061 
 0062 <span class="comment">% Build specs structure.</span>
 0063 <span class="comment">% population name x entry x spec1 or spec2</span>
-0064 nd = nDDict;
-0065 nd = nd.importLinearData(val,pop_names,properties,specID);
+0064 nd = MDD;
+0065 nd = nd.importDataTable(val,{pop_names,properties,specID});
 0066 nd.axis(1).name = <span class="string">'Populations'</span>;
 0067 nd.axis(2).name = <span class="string">'Properties'</span>;
 0068 nd.axis(3).name = <span class="string">'SpecID'</span>;
 0069 
 0070 <span class="keyword">if</span> debug_mode
-0071     nd.getaxisinfo
+0071     nd.printAxisInfo
 0072 <span class="keyword">end</span>
 0073 
 0074 <span class="keyword">if</span> verbose; <a href="#_sub6" class="code" title="subfunction run_comparison(nd)">run_comparison</a>(nd); <span class="keyword">end</span>
@@ -163,14 +163,14 @@ This function is called by:
 0103 <span class="comment">% Build specs structure.</span>
 0104 <span class="comment">% Connection name x entry x spec1 or spec2</span>
 0105 <span class="keyword">if</span> ~isempty(val)
-0106     nd = nDDict;
-0107     nd = nd.importLinearData(val,pop_names,properties,specID);
+0106     nd = MDD;
+0107     nd = nd.importDataTable(val,{pop_names,properties,specID});
 0108     nd.axis(1).name = <span class="string">'Connections'</span>;
 0109     nd.axis(2).name = <span class="string">'Properties'</span>;
 0110     nd.axis(3).name = <span class="string">'SpecID'</span>;
 0111     
 0112     <span class="keyword">if</span> debug_mode
-0113         nd.getaxisinfo
+0113         nd.printAxisInfo
 0114     <span class="keyword">end</span>
 0115     
 0116     <span class="keyword">if</span> verbose; <a href="#_sub6" class="code" title="subfunction run_comparison(nd)">run_comparison</a>(nd); <span class="keyword">end</span>
@@ -402,6 +402,6 @@ This function is called by:
 0342     
 0343 
 0344 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 28-Apr-2017 19:07:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Thu 18-May-2017 08:41:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

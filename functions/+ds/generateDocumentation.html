@@ -64,7 +64,7 @@ This function is called by:
 0012 
 0013 cwd = pwd; <span class="comment">% store current working dir</span>
 0014 
-0015 fprintf(<span class="string">'Temporarily changing directory to dynasim root for offline documentation generation.\n'</span>)
+0015 <span class="comment">% fprintf('Temporarily changing directory to dynasim root for offline documentation generation.\n\n')</span>
 0016 cd(ds.getConfig(<span class="string">'ds_root_path'</span>));
 0017 
 0018 m2html(<span class="string">'mfiles'</span>,{<span class="string">'functions'</span>},<span class="keyword">...</span>
@@ -75,8 +75,8 @@ This function is called by:
 0023        <span class="string">'index'</span>,<span class="string">'menu'</span>,<span class="keyword">...</span>
 0024        <span class="string">'graph'</span>,<span class="string">'on'</span>);
 0025 
-0026 fprintf(<span class="string">'Changing directory back to original working directory.\n'</span>)
+0026 <span class="comment">% fprintf('\nChanging directory back to original working directory.\n')</span>
 0027 cd(cwd);</pre></div>
-<hr><address>Generated on Fri 28-Apr-2017 19:07:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Thu 18-May-2017 08:41:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

@@ -254,7 +254,7 @@ This function is called by:
 0106 
 0107 <span class="comment">%% localfn output</span>
 0108 <span class="keyword">if</span> ~nargin
-0109   spec = localfunctions;
+0109   spec = localfunctions; <span class="comment">% output var name specific to this fn</span>
 0110   <span class="keyword">return</span>
 0111 <span class="keyword">end</span>
 0112 
@@ -625,7 +625,7 @@ This function is called by:
 0477 <span class="keyword">if</span> ~isempty(files)
 0478   fnames={};
 0479   <span class="keyword">for</span> f=1:length(files)
-0480     [~,name]=fileparts(files{f});
+0480     [~,name]=fileparts2(files{f});
 0481     fnames{f}=name;
 0482   <span class="keyword">end</span>
 0483   
@@ -814,6 +814,6 @@ This function is called by:
 0666 <span class="keyword">end</span>
 0667 
 0668 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 28-Apr-2017 19:07:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Thu 18-May-2017 08:41:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

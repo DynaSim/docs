@@ -45,7 +45,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="../../functions/dsSimulate.html" class="code" title="function [data,studyinfo] = dsSimulate(model,varargin)">dsSimulate</a>	% data=dsSimulate(model,'option',value,...)</li></ul>
+<li><a href="../../functions/dsSimulate.html" class="code" title="function [data,studyinfo,result] = dsSimulate(model,varargin)">dsSimulate</a>	% data=dsSimulate(model,'option',value,...)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 </ul>
@@ -94,7 +94,7 @@ This function is called by:
 0038 model=ds.applyModifications(model,modifications, varargin{:});
 0039 
 0040 <span class="comment">% run simulations varying tonic drives</span>
-0041 data=<a href="../../functions/dsSimulate.html" class="code" title="function [data,studyinfo] = dsSimulate(model,varargin)">dsSimulate</a>(model,<span class="string">'vary'</span>,vary,varargin{:});
+0041 data=<a href="../../functions/dsSimulate.html" class="code" title="function [data,studyinfo,result] = dsSimulate(model,varargin)">dsSimulate</a>(model,<span class="string">'vary'</span>,vary,varargin{:});
 0042 
 0043 <span class="comment">% prepare ds.calcFR options:</span>
 0044 <span class="keyword">if</span> ~any(cellfun(@(x)isequal(x,<span class="string">'variable'</span>),varargin))
@@ -107,6 +107,6 @@ This function is called by:
 0051 <span class="keyword">end</span>
 0052 <span class="comment">% calculate resulting firing rates for each population</span>
 0053 data=ds.calcFR(data,varargin{:});</pre></div>
-<hr><address>Generated on Fri 28-Apr-2017 19:07:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Thu 18-May-2017 08:41:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

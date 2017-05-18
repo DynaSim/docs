@@ -55,7 +55,7 @@ This function is called by:
 0010   <span class="keyword">end</span>
 0011   
 0012   fid = fopen(dsVarsFile);
-0013   dsVars = textscan(fid, <span class="string">'%s = %s'</span>);
+0013   dsVars = textscan(fid, <span class="string">'%s = %q'</span>);
 0014   fclose(fid);
 0015   
 0016   varCell = dsVars{2}(~cellfun(@isempty,strfind(dsVars{1}, query)));
@@ -64,10 +64,10 @@ This function is called by:
 0019     varOutput = varCell{1}; <span class="comment">% eval variable string as variable</span>
 0020   <span class="keyword">else</span>
 0021     varOutput = [];
-0022     <span class="keyword">if</span> isempty(varOutput); warning(<span class="string">'Requested path not found. dsVars.txt is possibly corrupt. Try deleting dsVars.txt and running ds.makeDefaultConfig()'</span>);
+0022     <span class="keyword">if</span> isempty(varOutput); warning(<span class="string">'Requested path not found. dsConfig.txt is possibly corrupt. Try deleting dsConfig.txt and running ds.makeDefaultConfig()'</span>);
 0023   <span class="keyword">end</span>
 0024     
 0025 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 28-Apr-2017 19:07:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Thu 18-May-2017 08:41:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

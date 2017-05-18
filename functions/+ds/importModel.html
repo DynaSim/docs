@@ -245,7 +245,7 @@ This function is called by:
 0180 query=sprintf(<span class="string">'select file from modeldb_modelspec where model_id=%g'</span>,ModelID);
 0181 data = get(fetch(exec(dbConn,query)), <span class="string">'Data'</span>);
 0182 jsonfile=data{1};
-0183 [usermedia,modelfile,ext] = fileparts(jsonfile); <span class="comment">% remote server media directory</span>
+0183 [usermedia,modelfile,ext] = fileparts2(jsonfile); <span class="comment">% remote server media directory</span>
 0184 usermedia=fullfile(cfg.MEDIA_PATH,usermedia);
 0185 modelfile=[modelfile ext];<span class="comment">%'.json'];</span>
 0186 
@@ -270,6 +270,6 @@ This function is called by:
 0205 <span class="comment">% delete(tempfile);</span>
 0206 <span class="comment">%close ftp connection</span>
 0207 close(f);</pre></div>
-<hr><address>Generated on Fri 28-Apr-2017 19:07:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Thu 18-May-2017 08:41:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>
