@@ -1,0 +1,302 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of dsGetLinearIndependentCell</title>
+  <meta name="keywords" content="dsGetLinearIndependentCell">
+  <meta name="description" content="[Abasis, Abasisi, Asubs] = getLinearIndependentCell(A,ignore_constant_shift)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html functions --><!-- menu.html internal -->
+<h1>dsGetLinearIndependentCell
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[Abasis, Abasisi, Asubs] = getLinearIndependentCell(A,ignore_constant_shift)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Abasis, Abasisi, Asubs] = dsGetLinearIndependentCell(A,ignore_constant_shift) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [Abasis, Abasisi, Asubs] = getLinearIndependentCell(A,ignore_constant_shift)
+
+ Purpose: Takes in a matrix or cell array and identifies a
+ subset of independent columns. It also clusters subsets of columns
+ that are dependent upon each other. 
+ 
+ Details: If input is a matrix, behavior is exacly the same as
+ getLinearIndependent. That is, for numeric inputs, &quot;dependence&quot; is
+ determined based on linear dependence (e.g. If col2 = 2*col1, then col1 and
+ col2 would be considered dependent. For non-numeric inputs, columns are
+ automatically considered independent unless they are equivalent (see
+ examples).
+ 
+ Usage:
+   [Abasis, Abasisi, Asubs] = getLinearIndependentCell(A)
+   [Abasis, Abasisi, Asubs] = getLinearIndependentCell(A,ignore_constant_shift)
+
+ Inputs:
+   A: Input matrix or cell array. If a matrix is supplied, behavor is the
+   same as getLinearIndependent.
+
+ Inputs (Optional):
+   ignore_constant_shift: Flag (true / false [default]) for ignoring a constant term
+   in determining independence (e.g. if col2 = 10-col1, col1 and col2 will
+   be grouped together if true; otherwise separately if false).
+
+ Outputs:
+   Abasis: The set of linearly independent basis vectors in A
+ 
+   Abasisi: Index locations of original basis vectors in A, such
+   that Abasis = A(:,Abasisi).
+ 
+   Asub: Cell array with one element for each basis vector in A. Each cell
+   in Asub identifies clusters of columns in the original matrix A that
+   share linear dependence.
+
+ Example:
+ A = {'a','b','c';'a','b','c';'d','e','f';1,2,3;1,2,5;5,3,@plot;5,3,@plot;1,2,3}';
+ A = 
+     'a'    'a'    'd'    [1]    [1]    [  5]    [  5]    [1]
+     'b'    'b'    'e'    [2]    [2]    [  3]    [  3]    [2]
+     'c'    'c'    'f'    [3]    [5]    @plot    @plot    [3]
+ [Abasis, Abasisi, Asubs] = getLinearIndependentCell(A)
+ 
+ Results:
+ 
+ % % % % % % % % Abasis - the subset of basis columns % % % % % % % % %
+ 
+ horzcat(Abasis{:})
+   3�5 cell array
+     [1]    [1]    'a'    'd'    [  5]
+     [2]    [2]    'b'    'e'    [  3]
+     [3]    [5]    'c'    'f'    @plot
+ 
+ % % % Abasisi - the indices of these columns in the original matrix % % % 
+ 
+ Abasisi =
+   1�5 cell array
+     [4]    [5]    [1]    [3]    [6]
+ 
+ % % % % % % % % Asubs - subsets ofl linearly dependent columns % % % % % % % % %
+ 
+ Asubs =
+   1�5 cell array
+     [1�2 double]    [5]    [1�2 double]    [3]    [1�2 double]
+ Asubs{1} : [4, 8]
+ Asubs{2} : [5]
+ Asubs{3} : [1, 2]
+ Asubs{4} : [3]
+ Asubs{5} : [6, 7]
+ 
+ 
+ Submodules: getLinearIndependent, uniqueCellGeneralized, iscellnum
+
+ Author: David Stanley, Boston University, 2017
+
+ See also: getLinearIndependent, rref, unique</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="dsGetLinearIndependentDs.html" class="code" title="function [Abasis, Abasisi, Asubs] = dsGetLinearIndependentDs(data,ignore_constant_shift,varargin)">dsGetLinearIndependentDs</a>	[Asubs, Abasis, Abasisi] = getLinearIndependentDs(data,ignore_constant_shift,varargin)</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function inds_out = convert_submat_indices_to_fullmat_indices(inds_in,mapping)</a></li><li><a href="#_sub2" class="code">function covaried = getLICellOnly(vary_cell)</a></li><li><a href="#_sub3" class="code">function out = nestCellColumns(in)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 
+0002 
+0003 <a name="_sub0" href="#_subfunctions" class="code">function [Abasis, Abasisi, Asubs] = dsGetLinearIndependentCell(A,ignore_constant_shift)</a>
+0004 <span class="comment">% [Abasis, Abasisi, Asubs] = getLinearIndependentCell(A,ignore_constant_shift)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Purpose: Takes in a matrix or cell array and identifies a</span>
+0007 <span class="comment">% subset of independent columns. It also clusters subsets of columns</span>
+0008 <span class="comment">% that are dependent upon each other.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Details: If input is a matrix, behavior is exacly the same as</span>
+0011 <span class="comment">% getLinearIndependent. That is, for numeric inputs, &quot;dependence&quot; is</span>
+0012 <span class="comment">% determined based on linear dependence (e.g. If col2 = 2*col1, then col1 and</span>
+0013 <span class="comment">% col2 would be considered dependent. For non-numeric inputs, columns are</span>
+0014 <span class="comment">% automatically considered independent unless they are equivalent (see</span>
+0015 <span class="comment">% examples).</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% Usage:</span>
+0018 <span class="comment">%   [Abasis, Abasisi, Asubs] = getLinearIndependentCell(A)</span>
+0019 <span class="comment">%   [Abasis, Abasisi, Asubs] = getLinearIndependentCell(A,ignore_constant_shift)</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% Inputs:</span>
+0022 <span class="comment">%   A: Input matrix or cell array. If a matrix is supplied, behavor is the</span>
+0023 <span class="comment">%   same as getLinearIndependent.</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% Inputs (Optional):</span>
+0026 <span class="comment">%   ignore_constant_shift: Flag (true / false [default]) for ignoring a constant term</span>
+0027 <span class="comment">%   in determining independence (e.g. if col2 = 10-col1, col1 and col2 will</span>
+0028 <span class="comment">%   be grouped together if true; otherwise separately if false).</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">% Outputs:</span>
+0031 <span class="comment">%   Abasis: The set of linearly independent basis vectors in A</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">%   Abasisi: Index locations of original basis vectors in A, such</span>
+0034 <span class="comment">%   that Abasis = A(:,Abasisi).</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">%   Asub: Cell array with one element for each basis vector in A. Each cell</span>
+0037 <span class="comment">%   in Asub identifies clusters of columns in the original matrix A that</span>
+0038 <span class="comment">%   share linear dependence.</span>
+0039 <span class="comment">%</span>
+0040 <span class="comment">% Example:</span>
+0041 <span class="comment">% A = {'a','b','c';'a','b','c';'d','e','f';1,2,3;1,2,5;5,3,@plot;5,3,@plot;1,2,3}';</span>
+0042 <span class="comment">% A =</span>
+0043 <span class="comment">%     'a'    'a'    'd'    [1]    [1]    [  5]    [  5]    [1]</span>
+0044 <span class="comment">%     'b'    'b'    'e'    [2]    [2]    [  3]    [  3]    [2]</span>
+0045 <span class="comment">%     'c'    'c'    'f'    [3]    [5]    @plot    @plot    [3]</span>
+0046 <span class="comment">% [Abasis, Abasisi, Asubs] = getLinearIndependentCell(A)</span>
+0047 <span class="comment">%</span>
+0048 <span class="comment">% Results:</span>
+0049 <span class="comment">%</span>
+0050 <span class="comment">% % % % % % % % % Abasis - the subset of basis columns % % % % % % % % %</span>
+0051 <span class="comment">%</span>
+0052 <span class="comment">% horzcat(Abasis{:})</span>
+0053 <span class="comment">%   3�5 cell array</span>
+0054 <span class="comment">%     [1]    [1]    'a'    'd'    [  5]</span>
+0055 <span class="comment">%     [2]    [2]    'b'    'e'    [  3]</span>
+0056 <span class="comment">%     [3]    [5]    'c'    'f'    @plot</span>
+0057 <span class="comment">%</span>
+0058 <span class="comment">% % % % Abasisi - the indices of these columns in the original matrix % % %</span>
+0059 <span class="comment">%</span>
+0060 <span class="comment">% Abasisi =</span>
+0061 <span class="comment">%   1�5 cell array</span>
+0062 <span class="comment">%     [4]    [5]    [1]    [3]    [6]</span>
+0063 <span class="comment">%</span>
+0064 <span class="comment">% % % % % % % % % Asubs - subsets ofl linearly dependent columns % % % % % % % % %</span>
+0065 <span class="comment">%</span>
+0066 <span class="comment">% Asubs =</span>
+0067 <span class="comment">%   1�5 cell array</span>
+0068 <span class="comment">%     [1�2 double]    [5]    [1�2 double]    [3]    [1�2 double]</span>
+0069 <span class="comment">% Asubs{1} : [4, 8]</span>
+0070 <span class="comment">% Asubs{2} : [5]</span>
+0071 <span class="comment">% Asubs{3} : [1, 2]</span>
+0072 <span class="comment">% Asubs{4} : [3]</span>
+0073 <span class="comment">% Asubs{5} : [6, 7]</span>
+0074 <span class="comment">%</span>
+0075 <span class="comment">%</span>
+0076 <span class="comment">% Submodules: getLinearIndependent, uniqueCellGeneralized, iscellnum</span>
+0077 <span class="comment">%</span>
+0078 <span class="comment">% Author: David Stanley, Boston University, 2017</span>
+0079 <span class="comment">%</span>
+0080 <span class="comment">% See also: getLinearIndependent, rref, unique</span>
+0081 
+0082 <span class="comment">%%Code%%</span>
+0083 
+0084 <span class="keyword">if</span> nargin &lt; 2
+0085     ignore_constant_shift = false;
+0086 <span class="keyword">end</span>
+0087 
+0088 <span class="comment">% Make sure working with a cell array initially</span>
+0089 <span class="keyword">if</span> isnumeric(A); A = num2cell(A); <span class="keyword">end</span>
+0090 
+0091 <span class="comment">% Identify all columns that are numeric, cell str, or others</span>
+0092 sz = size(A);
+0093 numeric_cols = false(1,sz(2));
+0094 cellstr_cols = false(1,sz(2));
+0095 unknown_cols = false(1,sz(2));
+0096 <span class="keyword">for</span> j = 1:sz(2)
+0097     <span class="keyword">if</span> iscellnum(A(:,j)); numeric_cols(j) = true;
+0098     <span class="keyword">elseif</span> iscellstr(A(:,j)); cellstr_cols(j) = true;
+0099     <span class="keyword">else</span>; unknown_cols(j) = true;
+0100     <span class="keyword">end</span>
+0101 <span class="keyword">end</span>
+0102 
+0103 <span class="comment">% ID clustering within numeric columns. Check for any form of linear</span>
+0104 <span class="comment">% dependence</span>
+0105 <span class="keyword">if</span> any(numeric_cols)
+0106     Anum = cell2mat(A(:,numeric_cols));
+0107     [~,~,covaried1] = getLinearIndependent(Anum,ignore_constant_shift);
+0108     <span class="keyword">for</span> i = 1:length(covaried1); covaried1{i} = <a href="#_sub1" class="code" title="subfunction inds_out = convert_submat_indices_to_fullmat_indices(inds_in,mapping)">convert_submat_indices_to_fullmat_indices</a>(covaried1{i},find(numeric_cols)); <span class="keyword">end</span>
+0109 <span class="keyword">else</span>
+0110     covaried1 = {};
+0111 <span class="keyword">end</span>
+0112 
+0113 <span class="comment">% ID clustering within non-numeric columns</span>
+0114 ind = cellstr_cols | unknown_cols;              <span class="comment">% The getLICellOnly function can handle any type of content (not just strings); it relies on the isequal() function to determine equality</span>
+0115 <span class="keyword">if</span> any(ind)
+0116     Aother = A(:,ind);
+0117     covaried2 = <a href="#_sub2" class="code" title="subfunction covaried = getLICellOnly(vary_cell)">getLICellOnly</a>(Aother);
+0118     <span class="keyword">for</span> i = 1:length(covaried2); covaried2{i} = <a href="#_sub1" class="code" title="subfunction inds_out = convert_submat_indices_to_fullmat_indices(inds_in,mapping)">convert_submat_indices_to_fullmat_indices</a>(covaried2{i},find(ind)); <span class="keyword">end</span>
+0119 <span class="keyword">else</span>
+0120     covaried2 = {};
+0121 <span class="keyword">end</span>
+0122 
+0123 Asubs=vertcat(covaried1(:),covaried2(:))';
+0124 
+0125 <span class="keyword">for</span> i = 1:length(Asubs)
+0126     Abasisi{i} = Asubs{i}(1);
+0127     Abasis{i} = A(:,Abasisi{i});
+0128 <span class="keyword">end</span>
+0129 
+0130     
+0131 <span class="keyword">end</span>
+0132 
+0133 <span class="comment">% function covaried = idCovariedNumerics_Princomp(vary_numerics)</span>
+0134 <span class="comment">%     % This method needs some modification to get it working. I believe</span>
+0135 <span class="comment">%     % that using reduced row-echelon form will be simpler.</span>
+0136 <span class="comment">%     [coef,score,latent] = princomp(zscore(vary_numerics));</span>
+0137 <span class="comment">%</span>
+0138 <span class="comment">%     % Identify independent principle components in vary_params</span>
+0139 <span class="comment">%     thresh = 0.01;</span>
+0140 <span class="comment">%     coef = abs(coef) &gt; thresh;          % Threshold columns of vary_params for being governed by each principle component. Each column in coef denotes a principle component, and denotes which columns in vary_params are associated with that pc (1 for yes, 0 for no)</span>
+0141 <span class="comment">%     latent = abs(latent) &gt; thresh;</span>
+0142 <span class="comment">%</span>
+0143 <span class="comment">%     pc = find(latent);</span>
+0144 <span class="comment">%</span>
+0145 <span class="comment">%     covaried = cell(1,length(pc));</span>
+0146 <span class="comment">%     for i = 1:length(pc)</span>
+0147 <span class="comment">%         covaried{i} = find(coef(:,i));</span>
+0148 <span class="comment">%     end</span>
+0149 <span class="comment">%</span>
+0150 <span class="comment">% end</span>
+0151 
+0152 <a name="_sub1" href="#_subfunctions" class="code">function inds_out = convert_submat_indices_to_fullmat_indices(inds_in,mapping)</a>
+0153     inds_out = mapping(inds_in);
+0154 
+0155 <span class="keyword">end</span>
+0156 
+0157 <a name="_sub2" href="#_subfunctions" class="code">function covaried = getLICellOnly(vary_cell)</a>
+0158     
+0159     A = <a href="#_sub3" class="code" title="subfunction out = nestCellColumns(in)">nestCellColumns</a>(vary_cell);
+0160     [C,ia,ic] = uniqueCellGeneralized(A);
+0161     
+0162     covaried = cell(1,length(C));
+0163     <span class="keyword">for</span> i = 1:length(C)
+0164         covaried{i} = find(ic == i);
+0165     <span class="keyword">end</span>
+0166 <span class="keyword">end</span>
+0167 
+0168 
+0169 
+0170 <a name="_sub3" href="#_subfunctions" class="code">function out = nestCellColumns(in)</a>
+0171     <span class="keyword">if</span> ~ismatrix(in); error(<span class="string">'input must be of size NxM'</span>); <span class="keyword">end</span>
+0172     <span class="keyword">if</span> ~iscell(in); error(<span class="string">'input must be a cell'</span>); <span class="keyword">end</span>
+0173     
+0174     sz = size(in);
+0175     <span class="keyword">for</span> j = 1:sz(2)
+0176         out{j} = in(:,j)';
+0177     <span class="keyword">end</span>
+0178 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

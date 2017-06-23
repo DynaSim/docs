@@ -9,7 +9,6 @@ digraph m2html {
   dsSimulate -> dsImport;
   dsSimulate -> dsSimulate;
 
-  CompareSolveFiles [URL="CompareSolveFiles.html"];
   dsAnalyze [URL="dsAnalyze.html"];
   dsImport [URL="dsImport.html"];
   dsPlot [URL="dsPlot.html"];

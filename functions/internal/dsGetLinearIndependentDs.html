@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of dsGetLinearIndependentDs</title>
+  <meta name="keywords" content="dsGetLinearIndependentDs">
+  <meta name="description" content="[Asubs, Abasis, Abasisi] = getLinearIndependentDs(data,ignore_constant_shift,varargin)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html functions --><!-- menu.html internal -->
+<h1>dsGetLinearIndependentDs
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[Asubs, Abasis, Abasisi] = getLinearIndependentDs(data,ignore_constant_shift,varargin)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Abasis, Abasisi, Asubs] = dsGetLinearIndependentDs(data,ignore_constant_shift,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [Asubs, Abasis, Abasisi] = getLinearIndependentDs(data,ignore_constant_shift,varargin)
+
+ Purpose: Takes in DynaSim Data structure and identifies
+ subsets varied parameters that are linearly dependent upon each other.
+ This is a wrapper for getLinearIndependent (see documentation for 
+ getLinearIndependentCell for full explanation).
+
+ Usage:
+   [Asubs, Abasis, Abasisi] = getLinearIndependentDs(data)
+   [Asubs, Abasis, Abasisi] = getLinearIndependentDs(data,ignore_constant_shift)
+
+ Inputs:
+   data: DynaSim data structure
+
+ Inputs (Optional):
+   ignore_constant_shift: Flag (true / false [default]) for ignoring a 
+   constant term in determining independence.
+
+ Outputs:
+   Abasis: A subset data.varied values that are linearly independent 
+   across simulations
+ 
+   Abasisi: Corresponding index locations in data(1).varied of varied 
+   values given in Abasis.
+ 
+   Asub: Index locations in data(1).varied of clusters of linearly
+   dependent (e.g. covaried) varied parameters. (One cluster for each
+   basis vector in Abasis)
+
+ Examples:
+ See documentation for getLinearIndependentCell.
+ 
+ Submodules: getLinearIndependent, getLinearIndependentCell uniqueCellGeneralized, iscellnum
+
+ Author: David Stanley, Boston University, 2017
+
+ See also: getLinearIndependent, getLinearIndependentCell, rref, unique</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>	CHECKOPTIONS - organize key/value pairs in structure with default or user-supplied values according to a schema</li><li><a href="dsGetLinearIndependentCell.html" class="code" title="function [Abasis, Abasisi, Asubs] = dsGetLinearIndependentCell(A,ignore_constant_shift)">dsGetLinearIndependentCell</a>	[Abasis, Abasisi, Asubs] = getLinearIndependentCell(A,ignore_constant_shift)</li><li><a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestDataLocalFn.html" class="code" title="function dsUnitSaveAutoGenTestDataLocalFn(argin, argout)">dsUnitSaveAutoGenTestDataLocalFn</a>	% saveAutoGenTestDataLocalFn(argin, argout)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="ds2mdd.html" class="code" title="function xp = ds2mdd(data,merge_covaried_axes,merge_sparse_axes,varargin)">ds2mdd</a>	Convert DynaSim data structure to xp format</li><li><a href="dsImg2mdd.html" class="code" title="function xp = dsImg2mdd(data_img,merge_covaried_axes,merge_sparse_axes,varargin)">dsImg2mdd</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Abasis, Abasisi, Asubs] = dsGetLinearIndependentDs(data,ignore_constant_shift,varargin)</a>
+0002 <span class="comment">% [Asubs, Abasis, Abasisi] = getLinearIndependentDs(data,ignore_constant_shift,varargin)</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Purpose: Takes in DynaSim Data structure and identifies</span>
+0005 <span class="comment">% subsets varied parameters that are linearly dependent upon each other.</span>
+0006 <span class="comment">% This is a wrapper for getLinearIndependent (see documentation for</span>
+0007 <span class="comment">% getLinearIndependentCell for full explanation).</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Usage:</span>
+0010 <span class="comment">%   [Asubs, Abasis, Abasisi] = getLinearIndependentDs(data)</span>
+0011 <span class="comment">%   [Asubs, Abasis, Abasisi] = getLinearIndependentDs(data,ignore_constant_shift)</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% Inputs:</span>
+0014 <span class="comment">%   data: DynaSim data structure</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Inputs (Optional):</span>
+0017 <span class="comment">%   ignore_constant_shift: Flag (true / false [default]) for ignoring a</span>
+0018 <span class="comment">%   constant term in determining independence.</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Outputs:</span>
+0021 <span class="comment">%   Abasis: A subset data.varied values that are linearly independent</span>
+0022 <span class="comment">%   across simulations</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%   Abasisi: Corresponding index locations in data(1).varied of varied</span>
+0025 <span class="comment">%   values given in Abasis.</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%   Asub: Index locations in data(1).varied of clusters of linearly</span>
+0028 <span class="comment">%   dependent (e.g. covaried) varied parameters. (One cluster for each</span>
+0029 <span class="comment">%   basis vector in Abasis)</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">% Examples:</span>
+0032 <span class="comment">% See documentation for getLinearIndependentCell.</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">% Submodules: getLinearIndependent, getLinearIndependentCell uniqueCellGeneralized, iscellnum</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">% Author: David Stanley, Boston University, 2017</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">% See also: getLinearIndependent, getLinearIndependentCell, rref, unique</span>
+0039 
+0040 <span class="comment">%% auto_gen_test_data_flag argin</span>
+0041 options = <a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
+0042 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0043     varargs = varargin;
+0044     varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0045     varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
+0046     argin = [{vary_lengths}, {data_length}, varargs]; <span class="comment">% specific to this function</span>
+0047 <span class="keyword">end</span>
+0048 
+0049 <span class="keyword">if</span> nargin &lt; 2; ignore_constant_shift = false; <span class="keyword">end</span>
+0050 
+0051 N = length(data);
+0052 vary_labels = data(1).varied; <span class="comment">% data(1).simulator_options.vary;</span>
+0053 Nlabels = length(vary_labels);
+0054 
+0055 <span class="comment">% Get varied list</span>
+0056 <span class="keyword">for</span> i = 1:N
+0057     <span class="keyword">for</span> j = 1:Nlabels
+0058         vary_params{i,j} = data(i).(vary_labels{j});
+0059     <span class="keyword">end</span>
+0060 <span class="keyword">end</span>
+0061 
+0062 [Abasis, Abasisi, Asubs] = <a href="dsGetLinearIndependentCell.html" class="code" title="function [Abasis, Abasisi, Asubs] = dsGetLinearIndependentCell(A,ignore_constant_shift)">dsGetLinearIndependentCell</a>(vary_params,ignore_constant_shift);
+0063 
+0064 
+0065 <span class="comment">%% auto_gen_test_data_flag argout</span>
+0066 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0067     argout = {linked_indices, non_linked_indices}; <span class="comment">% specific to this function</span>
+0068     
+0069     <a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestDataLocalFn.html" class="code" title="function dsUnitSaveAutoGenTestDataLocalFn(argin, argout)">dsUnitSaveAutoGenTestDataLocalFn</a>(argin, argout); <span class="comment">% localfn</span>
+0070 <span class="keyword">end</span>
+0071 
+0072 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

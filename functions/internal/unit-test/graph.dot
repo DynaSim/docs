@@ -1,0 +1,44 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  dsUnitRun_autogen_query -> dsUnitInputQuery;
+  dsUnitSaveAutoGenTestDataLocalFn -> dsUnitSaveAutoGenTestData;
+  dsUnitSaveAutoGenTestDir -> dsUnitSave_figHandles;
+  dsUnitTest_autogenDirs_all -> dsUnitGetAutogenDirs;
+  dsUnitTest_autogenDirs_all -> dsUnitSave_figHandles;
+  dsUnitTest_autogenDirs_all -> dsUnitTest_autogenDirs_all;
+  dsUnitTest_autogen_all -> dsUnitGetAutogenFiles;
+  dsUnitTest_autogen_all -> dsUnitTest_autogen_all;
+  dsUnitTest_autogen_all_localfn -> dsUnitGetAutogenFiles;
+  dsUnitTest_autogen_all_localfn -> dsUnitTest_autogen_all_localfn;
+  dsUnitTest_autogen_query -> dsUnitGetAutogenFiles;
+  dsUnitTest_autogen_query -> dsUnitTest_autogen_query;
+  dsUnitTest_checkModel -> dsUnitTest_checkModel;
+  dsUnitTest_strrep -> dsUnitTest_strrep;
+  dsUnitTest_strrep2 -> dsUnitTest_strrep2;
+
+  dsUnitGetAutogenDirs [URL="dsUnitGetAutogenDirs.html"];
+  dsUnitGetAutogenFiles [URL="dsUnitGetAutogenFiles.html"];
+  dsUnitInputQuery [URL="dsUnitInputQuery.html"];
+  dsUnitMake_autogenData [URL="dsUnitMake_autogenData.html"];
+  dsUnitRun_all [URL="dsUnitRun_all.html"];
+  dsUnitRun_all_jenkins [URL="dsUnitRun_all_jenkins.html"];
+  dsUnitRun_autogen_all [URL="dsUnitRun_autogen_all.html"];
+  dsUnitRun_autogen_all_jenkins [URL="dsUnitRun_autogen_all_jenkins.html"];
+  dsUnitRun_autogen_dirs [URL="dsUnitRun_autogen_dirs.html"];
+  dsUnitRun_autogen_non_dirs [URL="dsUnitRun_autogen_non_dirs.html"];
+  dsUnitRun_autogen_query [URL="dsUnitRun_autogen_query.html"];
+  dsUnitRun_custom_all [URL="dsUnitRun_custom_all.html"];
+  dsUnitRun_template [URL="dsUnitRun_template.html"];
+  dsUnitSaveAutoGenTestData [URL="dsUnitSaveAutoGenTestData.html"];
+  dsUnitSaveAutoGenTestDataLocalFn [URL="dsUnitSaveAutoGenTestDataLocalFn.html"];
+  dsUnitSaveAutoGenTestDir [URL="dsUnitSaveAutoGenTestDir.html"];
+  dsUnitSave_figHandles [URL="dsUnitSave_figHandles.html"];
+  dsUnitTemplate [URL="dsUnitTemplate.html"];
+  dsUnitTest_autogenDirs_all [URL="dsUnitTest_autogenDirs_all.html"];
+  dsUnitTest_autogen_all [URL="dsUnitTest_autogen_all.html"];
+  dsUnitTest_autogen_all_localfn [URL="dsUnitTest_autogen_all_localfn.html"];
+  dsUnitTest_autogen_query [URL="dsUnitTest_autogen_query.html"];
+  dsUnitTest_checkModel [URL="dsUnitTest_checkModel.html"];
+  dsUnitTest_strrep [URL="dsUnitTest_strrep.html"];
+  dsUnitTest_strrep2 [URL="dsUnitTest_strrep2.html"];
+}

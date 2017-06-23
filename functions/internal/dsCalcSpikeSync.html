@@ -1,0 +1,392 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of dsCalcSpikeSync</title>
+  <meta name="keywords" content="dsCalcSpikeSync">
+  <meta name="description" content="CALCSPIKESYNC - Compute spike synchronization between spiketrains">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html functions --><!-- menu.html internal -->
+<h1>dsCalcSpikeSync
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>CALCSPIKESYNC - Compute spike synchronization between spiketrains</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function stats = dsCalcSpikeSync(data, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">CALCSPIKESYNC - Compute spike synchronization between spiketrains
+
+ Usage:
+   stats = dsCalcSpikeSync(data,'option',value)
+
+ Inputs:
+   - data: DynaSim data structure (see dsCheckData)
+   - options:
+     'ROI_pairs'   : {'var1',roi1,'var2',roi2; ...}
+     'kernel_width': ms, width of gaussian for kernel regression (default: 1)
+     'Ts'          : ms, set to this effective time step for rate process
+                     before regression (default: 1)
+     'maxlag_time' : ms, max lag time for cross correlation (default: 10)
+     'spike_threshold',0,[],...:  threshold for spike detection
+       - Note: Fractional roi=[a b] selects the interval (a,b]
+         - Example: N=10: [0 .5] -&gt; [1:5], [.5 1]-&gt;[6:10]
+
+ Examples:
+   ROI_pairs={'E_v',[0 1],'E_v',[0 1]; 'E_v',[0 1],'I_v',[0 1]};
+   ROI_pairs={'E_v',[0 .49],'E_v',[.5 1]};
+   ROI_pairs={'E_v',1:4,'E_v',4:8};
+
+   spike_threshold=0; % same for all ROIs
+   spike_threshold=[0 .5]; % use 0 for all ROI1s and .5 for all ROI2s
+   spike_threshold=[0 .5; 0 .25];</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../functions/dsSelect.html" class="code" title="function data = dsSelect(data,varargin)">dsSelect</a>	DSSELECT -  select subset of data</li><li><a href="dsCalcPower.html" class="code" title="function data = dsCalcPower(data, varargin)">dsCalcPower</a>	CALCPOWER - Compute spectral analysis of DynaSim data</li><li><a href="dsCheckData.html" class="code" title="function data = dsCheckData(data, varargin)">dsCheckData</a>	CHECKDATA - Standardize data structure and auto-populate missing fields</li><li><a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>	CHECKOPTIONS - organize key/value pairs in structure with default or user-supplied values according to a schema</li><li><a href="dsComputeRaster.html" class="code" title="function raster  = dsComputeRaster(t,V,threshold)">dsComputeRaster</a>	dsComputeRaster - Use a threshold to find spiketrain for a voltage trace</li><li><a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>	Inputs:</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function stats = dsCalcSpikeSync(data, varargin)</a>
+0002 <span class="comment">%CALCSPIKESYNC - Compute spike synchronization between spiketrains</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Usage:</span>
+0005 <span class="comment">%   stats = dsCalcSpikeSync(data,'option',value)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Inputs:</span>
+0008 <span class="comment">%   - data: DynaSim data structure (see dsCheckData)</span>
+0009 <span class="comment">%   - options:</span>
+0010 <span class="comment">%     'ROI_pairs'   : {'var1',roi1,'var2',roi2; ...}</span>
+0011 <span class="comment">%     'kernel_width': ms, width of gaussian for kernel regression (default: 1)</span>
+0012 <span class="comment">%     'Ts'          : ms, set to this effective time step for rate process</span>
+0013 <span class="comment">%                     before regression (default: 1)</span>
+0014 <span class="comment">%     'maxlag_time' : ms, max lag time for cross correlation (default: 10)</span>
+0015 <span class="comment">%     'spike_threshold',0,[],...:  threshold for spike detection</span>
+0016 <span class="comment">%       - Note: Fractional roi=[a b] selects the interval (a,b]</span>
+0017 <span class="comment">%         - Example: N=10: [0 .5] -&gt; [1:5], [.5 1]-&gt;[6:10]</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Examples:</span>
+0020 <span class="comment">%   ROI_pairs={'E_v',[0 1],'E_v',[0 1]; 'E_v',[0 1],'I_v',[0 1]};</span>
+0021 <span class="comment">%   ROI_pairs={'E_v',[0 .49],'E_v',[.5 1]};</span>
+0022 <span class="comment">%   ROI_pairs={'E_v',1:4,'E_v',4:8};</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%   spike_threshold=0; % same for all ROIs</span>
+0025 <span class="comment">%   spike_threshold=[0 .5]; % use 0 for all ROI1s and .5 for all ROI2s</span>
+0026 <span class="comment">%   spike_threshold=[0 .5; 0 .25];</span>
+0027 
+0028 <span class="comment">%% 1.0 Check inputs</span>
+0029 options=<a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="keyword">...</span>
+0030   <span class="string">'ROI_pairs'</span>,[],[],<span class="keyword">...</span>
+0031   <span class="string">'spike_threshold'</span>,0,[],<span class="keyword">...</span><span class="comment"> % threshold for spike detection</span>
+0032   <span class="string">'kernel_width'</span>,1,[],<span class="keyword">...</span><span class="comment"> % ms, width of gaussian for kernel regression</span>
+0033   <span class="string">'Ts'</span>,1,[],<span class="keyword">...</span><span class="comment">           % ms, set to this effective time step for rate process before regression</span>
+0034   <span class="string">'maxlag_time'</span>,10,[],<span class="keyword">...</span><span class="comment"> % ms, max lag time for cross correlation</span>
+0035   <span class="string">'time_limits'</span>,[100 inf],[],<span class="keyword">...</span><span class="comment"> % time limits for spectral analysis</span>
+0036   <span class="string">'auto_gen_test_data_flag'</span>,0,{0,1},<span class="keyword">...</span>
+0037   },false);
+0038 
+0039 <span class="comment">%% auto_gen_test_data_flag argin</span>
+0040 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0041   varargs = varargin;
+0042   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0043   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
+0044   argin = [{data}, varargs]; <span class="comment">% specific to this function</span>
+0045 <span class="keyword">end</span>
+0046 
+0047 data=<a href="dsCheckData.html" class="code" title="function data = dsCheckData(data, varargin)">dsCheckData</a>(data, varargin{:});
+0048 
+0049 <span class="keyword">if</span> numel(data)&gt;1
+0050   error(<span class="string">'dsCalcSpikeSync currently only supports one data set at a time'</span>);
+0051 <span class="keyword">end</span>
+0052 <span class="keyword">if</span> isempty(options.ROI_pairs)
+0053   <span class="comment">% set default ROIs</span>
+0054   var=data.labels{1};
+0055   roi=[0 1];
+0056   options.ROI_pairs={var,roi,var,roi};
+0057 <span class="keyword">end</span>
+0058 <span class="keyword">if</span> size(options.ROI_pairs,2)&lt;4
+0059   error(<span class="string">'ROIs must include four elements: {var1,roi1,var2,roi2}'</span>);
+0060 <span class="keyword">end</span>
+0061 
+0062 <span class="comment">% determine ROI pairs for which to calculate spike synchrony</span>
+0063 pop_names={data.model.specification.populations.name};
+0064 pop_sizes=[data.model.specification.populations.size];
+0065 npairs=size(options.ROI_pairs,1);
+0066 VAR1=cell(npairs,1); ROI1=VAR1;
+0067 VAR2=cell(npairs,1); ROI2=VAR2;
+0068 exclude=[];
+0069 <span class="keyword">for</span> i=1:npairs
+0070   VAR1{i}=options.ROI_pairs{i,1};
+0071   VAR2{i}=options.ROI_pairs{i,3};
+0072   roi1=options.ROI_pairs{i,2};
+0073   roi2=options.ROI_pairs{i,4};
+0074   <span class="comment">% set ROI in cell indices for var1</span>
+0075   name=regexp(VAR1{i},<span class="string">'^([a-zA-Z0-9]+)_'</span>,<span class="string">'tokens'</span>,<span class="string">'once'</span>);
+0076   <span class="keyword">if</span> ~ismember(name{1},pop_names)
+0077     exclude=[exclude i];
+0078     <span class="keyword">continue</span>;
+0079   <span class="keyword">end</span>
+0080   N=pop_sizes(strcmp(pop_names,name{1}));
+0081   <span class="keyword">if</span> numel(roi1)==2 &amp;&amp; any(roi1&lt;1)
+0082     x=floor(N*roi1); a=x(1)+1; b=x(2);
+0083     <span class="comment">%a=round(roi1(1)*N);%round(1+roi1(1)*(N-1));</span>
+0084     <span class="comment">%b=round(roi1(2)*N);%round(1+roi1(2)*(N-1));</span>
+0085   <span class="keyword">else</span>
+0086     a=roi1(1);
+0087     b=roi1(2);
+0088   <span class="keyword">end</span>
+0089   ROI1{i}=a:b;
+0090   <span class="comment">% set ROI in cell indices for var2</span>
+0091   name=regexp(VAR2{i},<span class="string">'^([a-zA-Z0-9]+)_'</span>,<span class="string">'tokens'</span>,<span class="string">'once'</span>);
+0092   <span class="keyword">if</span> ~ismember(name{1},pop_names)
+0093     exclude=[exclude i];
+0094     <span class="keyword">continue</span>;
+0095   <span class="keyword">end</span>
+0096   N=pop_sizes(strcmp(pop_names,name{1}));
+0097   <span class="keyword">if</span> numel(roi2)==2 &amp;&amp; any(roi2&lt;1)
+0098     x=floor(N*roi2); a=x(1)+1; b=x(2);
+0099     <span class="comment">%a=round(roi2(1)*N);%round(1+roi2(1)*(N-1));</span>
+0100     <span class="comment">%b=round(roi2(2)*N);%round(1+roi2(2)*(N-1));</span>
+0101   <span class="keyword">else</span>
+0102     a=roi2(1);
+0103     b=roi2(2);
+0104   <span class="keyword">end</span>
+0105   ROI2{i}=a:b;
+0106 <span class="keyword">end</span>
+0107 <span class="keyword">if</span> ~isempty(exclude)
+0108   options.ROI_pairs(exclude,:)=[];
+0109   VAR1(exclude)=[];
+0110   VAR2(exclude)=[];
+0111   ROI1(exclude)=[];
+0112   ROI2(exclude)=[];
+0113   npairs=length(VAR1);
+0114 <span class="keyword">end</span>
+0115 
+0116 <span class="comment">% determine thresholds for each ROI</span>
+0117 thresholds=zeros(npairs,2);
+0118 <span class="keyword">if</span> numel(options.spike_threshold)==1
+0119   thresholds(:)=options.spike_threshold;
+0120 <span class="keyword">elseif</span> numel(options.spike_threshold)==2
+0121   thresholds(:,1)=options.spike_threshold(1);
+0122   thresholds(:,2)=options.spike_threshold(2);
+0123 <span class="keyword">end</span>
+0124 
+0125 kwidth=options.kernel_width;
+0126 Ts=options.Ts;
+0127 maxlag_time=options.maxlag_time;
+0128 
+0129 stats=[]; cnt=0;
+0130 <span class="keyword">for</span> pair=1:npairs
+0131 
+0132   var1=VAR1{pair};
+0133   var2=VAR2{pair};
+0134   roi1=ROI1{pair};
+0135   roi2=ROI2{pair};
+0136   fldprefix=[var1 <span class="string">'_'</span> var2];
+0137   equal_rois=(isequal(var1,var2) &amp;&amp; isequal(roi1,roi2));
+0138 
+0139   <span class="comment">% do nothing if the variables are not present in data</span>
+0140   <span class="keyword">if</span> ~ismember(var1,data.labels) || ~ismember(var2,data.labels)
+0141     <span class="keyword">continue</span>;
+0142   <span class="keyword">end</span>
+0143   cnt=cnt+1;
+0144   
+0145   stats.pairs(cnt).var1=var1;
+0146   stats.pairs(cnt).indices1=roi1;
+0147   stats.pairs(cnt).var2=var2;
+0148   stats.pairs(cnt).indices2=roi2;
+0149   stats.pairs(cnt).roi1=options.ROI_pairs{pair,2};
+0150   stats.pairs(cnt).roi2=options.ROI_pairs{pair,4};
+0151   
+0152   t=data.time;
+0153   V1=data.(var1)(:,roi1);
+0154   V2=data.(var2)(:,roi2);
+0155 
+0156   n1=length(roi1);
+0157   n2=length(roi2);
+0158   nt=length(min(t):Ts:max(t));
+0159 
+0160   <span class="comment">% get spike rasters</span>
+0161   raster1=<a href="dsComputeRaster.html" class="code" title="function raster  = dsComputeRaster(t,V,threshold)">dsComputeRaster</a>(t,V1,thresholds(pair,1));
+0162   <span class="keyword">if</span> equal_rois
+0163     raster2=raster1;
+0164   <span class="keyword">else</span>
+0165     raster2=<a href="dsComputeRaster.html" class="code" title="function raster  = dsComputeRaster(t,V,threshold)">dsComputeRaster</a>(t,V2,thresholds(pair,2));
+0166   <span class="keyword">end</span>
+0167   <span class="comment">% raster(:,1) -&gt; spike times</span>
+0168   <span class="comment">% raster(:,2) -&gt; cell index for each spike</span>
+0169 
+0170   <span class="comment">% calculate fraction of 10ms bins with spikes in both populations</span>
+0171   edges=0:maxlag_time:max(t);
+0172   spiked1=zeros(1,length(edges));
+0173   spiked2=zeros(1,length(edges));
+0174   <span class="keyword">for</span> i=1:length(edges)-1
+0175     <span class="keyword">if</span> size(raster1,1)&gt;0
+0176       spiked1(i)=any(raster1(:,1)&gt;edges(i)&amp;raster1(:,1)&lt;=edges(i+1));
+0177     <span class="keyword">end</span>
+0178     <span class="keyword">if</span> size(raster2,1)&gt;0
+0179       spiked2(i)=any(raster2(:,1)&gt;edges(i)&amp;raster2(:,1)&lt;=edges(i+1));
+0180     <span class="keyword">end</span>
+0181   <span class="keyword">end</span>
+0182   coactive=length(find(spiked1&amp;spiked2))/length(find(spiked1|spiked2));
+0183   
+0184   <span class="comment">% calculate fraction of 10ms bins with spikes in both populations</span>
+0185   edges=0:maxlag_time:max(t);
+0186   nspiked1=zeros(1,length(edges));
+0187   nspiked2=zeros(1,length(edges));
+0188   <span class="keyword">for</span> i=1:length(edges)-1
+0189     <span class="keyword">if</span> size(raster1,1)&gt;0
+0190       nspiked1(i)=length(find(raster1(:,1)&gt;edges(i)&amp;raster1(:,1)&lt;=edges(i+1)));
+0191     <span class="keyword">end</span>
+0192     <span class="keyword">if</span> size(raster2,1)&gt;0
+0193       nspiked2(i)=length(find(raster2(:,1)&gt;edges(i)&amp;raster2(:,1)&lt;=edges(i+1)));
+0194     <span class="keyword">end</span>
+0195   <span class="keyword">end</span>
+0196   th=99;
+0197   tmp=nspiked1.*nspiked2;
+0198   rm=tmp&gt;prctile(tmp,th);
+0199   tmp(rm)=0;
+0200   ncoactive=sum(tmp)/(sum(nspiked1(~rm))*sum(nspiked2(~rm)));
+0201     
+0202   <span class="comment">% Calculate instantaneous firing rates for each cell</span>
+0203   r1=zeros(nt,n1);
+0204   <span class="keyword">if</span> ~isempty(raster1)
+0205     <span class="keyword">for</span> i=1:n1
+0206       [ri,time]=dsNwGaussKernelRegr(t,raster1,i,kwidth,Ts);
+0207       r1(:,i)=ri;
+0208     <span class="keyword">end</span>
+0209   <span class="keyword">else</span>
+0210     time=0:Ts:max(t)+Ts;
+0211     time=time(nearest(time,min(t))):Ts:time(nearest(time,max(t)));
+0212   <span class="keyword">end</span>
+0213   <span class="keyword">if</span> equal_rois
+0214     r2=r1;
+0215   <span class="keyword">else</span>
+0216     r2=zeros(nt,n2);
+0217     <span class="keyword">if</span> ~isempty(raster2)
+0218       <span class="keyword">for</span> i=1:n2
+0219         [ri,time]=dsNwGaussKernelRegr(t,raster2,i,kwidth,Ts);
+0220         r2(:,i)=ri;
+0221       <span class="keyword">end</span>
+0222     <span class="keyword">end</span>
+0223   <span class="keyword">end</span>
+0224 
+0225   <span class="comment">% Calculate pairwise cross correlations</span>
+0226   maxlags=maxlag_time/(time(2)-time(1));
+0227   allxc_possums=nan(n1,n2);
+0228   allxc_avgs=nan(n1,n2);
+0229   allxc_maxs=nan(n1,n2);
+0230   <span class="keyword">for</span> i=1:n1
+0231     xi=r1(:,i);
+0232     <span class="keyword">for</span> j=1:n2
+0233       <span class="keyword">if</span> equal_rois &amp;&amp; j&gt;=i, <span class="keyword">continue</span>; <span class="keyword">end</span> <span class="comment">% exclude symmetric upper triangular matrix and self-correlation</span>
+0234       xj=r2(:,j);
+0235       [xc,lags]=xcov(xi,xj,maxlags,<span class="string">'coeff'</span>);
+0236       <span class="comment">% take sum over the positive part of the curve</span>
+0237       allxc_possums(i,j)=sum(xc(xc&gt;0));
+0238       allxc_avgs(i,j)=mean(xc);
+0239       allxc_maxs(i,j)=max(xc);
+0240     <span class="keyword">end</span>
+0241   <span class="keyword">end</span>
+0242   
+0243   <span class="comment">% Calculate competition measures</span>
+0244   num_spikes1=size(raster1,1);
+0245   num_spikes2=size(raster2,1);
+0246   dN=num_spikes1-num_spikes2;
+0247   dNsumN=dN/(num_spikes1+num_spikes2);
+0248   minN=min(num_spikes1,num_spikes2);
+0249   maxN=max(num_spikes1,num_spikes2);
+0250   
+0251   <span class="comment">% spectral analysis</span>
+0252   dat=<a href="../../functions/dsSelect.html" class="code" title="function data = dsSelect(data,varargin)">dsSelect</a>(data,<span class="string">'roi'</span>,{var1,roi1});
+0253   dat=<a href="dsCalcPower.html" class="code" title="function data = dsCalcPower(data, varargin)">dsCalcPower</a>(dat,<span class="string">'time_limits'</span>,options.time_limits);
+0254   Power_MUA1=dat.([var1 <span class="string">'_Power_MUA'</span>]);
+0255   Power_SUA1=dat.([var1 <span class="string">'_Power_SUA'</span>]);
+0256   Power_SUA1.Pxx_mu=nanmean(Power_SUA1.Pxx,2);
+0257   Power_SUA1.Pxx_sd=nanstd(Power_SUA1.Pxx,[],2);
+0258 
+0259   dat=<a href="../../functions/dsSelect.html" class="code" title="function data = dsSelect(data,varargin)">dsSelect</a>(data,<span class="string">'roi'</span>,{var2,roi2});
+0260   dat=<a href="dsCalcPower.html" class="code" title="function data = dsCalcPower(data, varargin)">dsCalcPower</a>(dat,<span class="string">'time_limits'</span>,options.time_limits);
+0261   Power_MUA2=dat.([var2 <span class="string">'_Power_MUA'</span>]);
+0262   Power_SUA2=dat.([var2 <span class="string">'_Power_SUA'</span>]);
+0263   Power_SUA2.Pxx_mu=nanmean(Power_SUA2.Pxx,2);
+0264   Power_SUA2.Pxx_sd=nanstd(Power_SUA2.Pxx,[],2);
+0265   
+0266   <span class="comment">% store measures</span>
+0267   stats.pairs(cnt).raster1=raster1;
+0268   stats.pairs(cnt).raster2=raster2;
+0269   stats.pairs(cnt).coactivity=coactive;
+0270   stats.pairs(cnt).ncoactivity=ncoactive;
+0271   stats.pairs(cnt).binned_spikes1=nspiked1;
+0272   stats.pairs(cnt).binned_spikes2=nspiked2;
+0273   stats.pairs(cnt).bin_edges=edges;
+0274   stats.pairs(cnt).r1=r1;
+0275   stats.pairs(cnt).r2=r2;
+0276   stats.pairs(cnt).Nspikes1=num_spikes1;
+0277   stats.pairs(cnt).Nspikes2=num_spikes2;
+0278   stats.pairs(cnt).dN=dN;
+0279   stats.pairs(cnt).dNsumN=dNsumN;
+0280   stats.pairs(cnt).minN=minN;
+0281   stats.pairs(cnt).maxN=maxN;
+0282   stats.pairs(cnt).xcsum_cells=allxc_possums;
+0283   stats.pairs(cnt).xcavg_cells=allxc_avgs;
+0284   stats.pairs(cnt).xcmax_cells=allxc_maxs;
+0285   stats.pairs(cnt).xcsum_pops=nanmean(allxc_possums(:));
+0286   stats.pairs(cnt).xcavg_pops=nanmean(allxc_avgs(:));
+0287   stats.pairs(cnt).xcmax_pops=nanmean(allxc_maxs(:));
+0288   stats.pairs(cnt).Power_MUA1=Power_MUA1;
+0289   stats.pairs(cnt).Power_SUA1=Power_SUA1;
+0290   stats.pairs(cnt).Power_MUA2=Power_MUA2;
+0291   stats.pairs(cnt).Power_SUA2=Power_SUA2;
+0292   
+0293 <span class="comment">%   stats.([var1 '_roi'])=roi1;</span>
+0294 <span class="comment">%   stats.([var2 '_roi'])=roi2;</span>
+0295 <span class="comment">%   stats.([var1 '_raster'])=raster1;</span>
+0296 <span class="comment">%   stats.([var2 '_raster'])=raster2;</span>
+0297 <span class="comment">%   stats.([var1 '_inst_rate_cells'])=r1;</span>
+0298 <span class="comment">%   stats.([var2 '_inst_rate_cells'])=r2;</span>
+0299 <span class="comment">%   stats.([var1 '_num_spikes'])=num_spikes1;</span>
+0300 <span class="comment">%   stats.([var2 '_num_spikes'])=num_spikes2;</span>
+0301 <span class="comment">%   stats.([fldprefix '_dN'])=dN;</span>
+0302 <span class="comment">%   stats.([fldprefix '_dNsumN'])=dNsumN;</span>
+0303 <span class="comment">%   stats.([fldprefix '_minN'])=minN;</span>
+0304 <span class="comment">%   stats.([fldprefix '_xcsum_cells'])=allxc_possums;</span>
+0305 <span class="comment">%   stats.([fldprefix '_xcavg_cells'])=allxc_avgs;</span>
+0306 <span class="comment">%   stats.([fldprefix '_xcmax_cells'])=allxc_maxs;</span>
+0307 <span class="comment">%   stats.([fldprefix '_xcsum_pops'])=nanmean(allxc_possums(:));</span>
+0308 <span class="comment">%   stats.([fldprefix '_xcavg_pops'])=nanmean(allxc_avgs(:));</span>
+0309 <span class="comment">%   stats.([fldprefix '_xcmax_pops'])=nanmean(allxc_maxs(:));</span>
+0310 <span class="keyword">end</span>
+0311 stats.options=options;
+0312 
+0313 <span class="comment">% calculate instantaneous population firing rate</span>
+0314 <span class="comment">% pop=unique(raster(:,2));</span>
+0315 <span class="comment">% [inst_pop_rate,time]=dsNwGaussKernelRegr(t,raster,pop,kwidth,Ts);</span>
+0316 
+0317 <span class="comment">%% auto_gen_test_data_flag argout</span>
+0318 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0319   argout = {stats};
+0320   
+0321   <a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>(argin, argout);
+0322 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

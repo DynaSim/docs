@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of dsGetConfig</title>
+  <meta name="keywords" content="dsGetConfig">
+  <meta name="description" content="GETCONFIG - returns the value of the variable specificed as string in argument">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html functions --><!-- menu.html internal -->
+<h1>dsGetConfig
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>GETCONFIG - returns the value of the variable specificed as string in argument</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function varOutput = dsGetConfig(query) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> GETCONFIG - returns the value of the variable specificed as string in argument
+
+ Usage: pathOutput = getConfig(pathQueryString)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="dsGetRootPath.html" class="code" title="function ds_root_path = dsGetRootPath()">dsGetRootPath</a>	getRootPath - get path to main ds directory</li><li><a href="dsMakeDefaultConfig.html" class="code" title="function makeDefaultConfig()">dsMakeDefaultConfig</a>	dsMakeDefaultConfig - write default DS config vars to disk as text file in main DS dir.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="dsGenerateDocumentation.html" class="code" title="function generateDocumentation">dsGenerateDocumentation</a>	GENERATEDOCUMENTATION - Build DynaSim function documentation</li><li><a href="dsUnzipDemoData.html" class="code" title="function study_dir = dsUnzipDemoData(zipfname,overwrite_flag,verbose_flag)">dsUnzipDemoData</a>	dsUnzipDemoData - Unzips demo data (utility function)</li><li><a href="dsZipDemoData.html" class="code" title="function zipfname = dsZipDemoData(study_dir)">dsZipDemoData</a>	ZIPDEMODATA - Zips demo data (utility function)</li><li><a href="../../functions/internal/unit-test/dsUnitGetAutogenDirs.html" class="code" title="function [ files ] = dsUnitGetAutogenDirs( localfn_flag, query_flag )">dsUnitGetAutogenDirs</a>	GETAUTOGENFILES returns cell list of autogen directories, for functions which write files to disk</li><li><a href="../../functions/internal/unit-test/dsUnitGetAutogenFiles.html" class="code" title="function [ files ] = dsUnitGetAutogenFiles( localfn_flag, query_flag )">dsUnitGetAutogenFiles</a>	GETAUTOGENFILES returns cell list of autogen files</li><li><a href="../../functions/internal/unit-test/dsUnitMake_autogenData.html" class="code" title="">dsUnitMake_autogenData</a>	% Make DynaSim Autogen Files</li><li><a href="../../functions/internal/unit-test/dsUnitRun_all.html" class="code" title="">dsUnitRun_all</a>	% Run all tests</li><li><a href="../../functions/internal/unit-test/dsUnitRun_autogen_all.html" class="code" title="">dsUnitRun_autogen_all</a>	% Run all autogen tests</li><li><a href="../../functions/internal/unit-test/dsUnitRun_autogen_all_jenkins.html" class="code" title="">dsUnitRun_autogen_all_jenkins</a>	% Run all autogen tests</li><li><a href="../../functions/internal/unit-test/dsUnitRun_autogen_dirs.html" class="code" title="">dsUnitRun_autogen_dirs</a>	% Run autogen dirs tests</li><li><a href="../../functions/internal/unit-test/dsUnitRun_autogen_non_dirs.html" class="code" title="">dsUnitRun_autogen_non_dirs</a>	% Run non-dir non-local autogen tests</li><li><a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>	Inputs:</li><li><a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestDir.html" class="code" title="function dsUnitSaveAutoGenTestDir(argin, argout, dirIn, dirOut, localFn_flag)">dsUnitSaveAutoGenTestDir</a>	Inputs:</li><li><a href="../../functions/internal/unit-test/dsUnitTest_autogenDirs_all.html" class="code" title="">dsUnitTest_autogenDirs_all</a>	</li><li><a href="../../functions/internal/unit-test/dsUnitTest_autogen_all.html" class="code" title="">dsUnitTest_autogen_all</a>	</li><li><a href="../../functions/internal/unit-test/dsUnitTest_autogen_all_localfn.html" class="code" title="">dsUnitTest_autogen_all_localfn</a>	</li><li><a href="../../functions/internal/unit-test/dsUnitTest_autogen_query.html" class="code" title="">dsUnitTest_autogen_query</a>	</li><li><a href="../../functions/internal/unit-test/dsUnitTest_checkModel.html" class="code" title="">dsUnitTest_checkModel</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varOutput = dsGetConfig(query)</a>
+0002 <span class="comment">% GETCONFIG - returns the value of the variable specificed as string in argument</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Usage: pathOutput = getConfig(pathQueryString)</span>
+0005 
+0006   dsVarsFile = fullfile(<a href="dsGetRootPath.html" class="code" title="function ds_root_path = dsGetRootPath()">dsGetRootPath</a>(),<span class="string">'dsConfig.txt'</span>);
+0007 
+0008   <span class="keyword">if</span> ~exist(dsVarsFile, <span class="string">'file'</span>)
+0009     <a href="dsMakeDefaultConfig.html" class="code" title="function makeDefaultConfig()">dsMakeDefaultConfig</a>(); <span class="comment">% bring all path vars into namespace</span>
+0010   <span class="keyword">end</span>
+0011   
+0012   fid = fopen(dsVarsFile);
+0013   dsVars = textscan(fid, <span class="string">'%s = %q'</span>);
+0014   fclose(fid);
+0015   
+0016   varCell = dsVars{2}(~cellfun(@isempty,strfind(dsVars{1}, query)));
+0017   
+0018   <span class="keyword">if</span> ~isempty(varCell)
+0019     varOutput = varCell{1}; <span class="comment">% eval variable string as variable</span>
+0020   <span class="keyword">else</span>
+0021     varOutput = [];
+0022     <span class="keyword">if</span> isempty(varOutput); warning(<span class="string">'Requested path not found. dsConfig.txt is possibly corrupt. Try deleting dsConfig.txt and running dsMakeDefaultConfig()'</span>);
+0023   <span class="keyword">end</span>
+0024     
+0025 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

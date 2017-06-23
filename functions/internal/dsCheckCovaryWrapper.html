@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of dsCheckCovaryWrapper</title>
+  <meta name="keywords" content="dsCheckCovaryWrapper">
+  <meta name="description" content="Calls checkCovary and handles all the set up automagically.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html functions --><!-- menu.html internal -->
+<h1>dsCheckCovaryWrapper
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Calls checkCovary and handles all the set up automagically.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [effective_vary_indices, linked_inds] = dsCheckCovaryWrapper(data,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Calls checkCovary and handles all the set up automagically.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="dsCheckCovary.html" class="code" title="function [effective_vary_indices, linked_indices] = dsCheckCovary(vary_lengths, vary_params, varargin)">dsCheckCovary</a>	CHECKCOVARY - TODO I assume this checks if any varied parameters are covaried?</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [effective_vary_indices, linked_inds] = dsCheckCovaryWrapper(data,varargin)</a>
+0002     <span class="comment">% Calls checkCovary and handles all the set up automagically.</span>
+0003     
+0004     <span class="comment">% First, remove any data in data(1...N) that is empty (e.g. skipped by</span>
+0005     <span class="comment">% the simulator; if you pass DynaSim a varied statement of the form</span>
+0006     <span class="comment">% (RS,FS),1:2, data will actually be 1:4 with off-diagonal entries</span>
+0007     <span class="comment">% empty).</span>
+0008     <span class="comment">% Note: This function is likey no longer used (at least not for dsPlot2</span>
+0009     <span class="comment">% an has been replaced by other functions (see dsGetCovariedDs).</span>
+0010     labels = data(1).labels;
+0011     inds = arrayfun(@(s) ~isempty(s.(labels{1})),data);
+0012     data = data(inds);
+0013 
+0014     <span class="comment">% % First, if there are any covaried axes, merge them together.</span>
+0015     <span class="comment">% 1. Initialize variables for checkCovary</span>
+0016     vary_labels = data(1).varied; <span class="comment">% data(1).simulator_options.vary;</span>
+0017     no_vary_labels = length(vary_labels);
+0018     vary_params = cell(length(data), no_vary_labels);       <span class="comment">% First assume they can be anything (numerics, strings, etc., so store them as a cell array first)</span>
+0019     vary_vectors = cell(no_vary_labels, 1);
+0020     vary_lengths = nan(no_vary_labels, 1);
+0021 
+0022     <span class="comment">% 2. Populate variables for checkCovary</span>
+0023     <span class="comment">% get varied params</span>
+0024     <span class="keyword">for</span> v = 1:no_vary_labels
+0025         <span class="keyword">for</span> i = 1:length(data)
+0026             vary_params{i, v} = data(i).(vary_labels{v});
+0027         <span class="keyword">end</span>
+0028     <span class="keyword">end</span>
+0029     
+0030     <span class="comment">% Format vary_params appropriately</span>
+0031     <span class="keyword">if</span> iscellnum(vary_params);
+0032         <span class="comment">% If they're all numerics, convert to matrix</span>
+0033         vary_params = cell2mat(vary_params);
+0034     <span class="keyword">elseif</span> iscell(vary_params) &amp;&amp; ~iscellstr(vary_params)
+0035         <span class="comment">% If its a cell, but not full of strings, convert it to all</span>
+0036         <span class="comment">% strings. This is because checkCovary can only do comparisons</span>
+0037         <span class="comment">% between all numerics and all chars, but can't compare chars to</span>
+0038         <span class="comment">% numerics.</span>
+0039         <span class="keyword">for</span> j = 1:numel(vary_params)
+0040             <span class="keyword">if</span> isnumeric(vary_params{j})
+0041                 vary_params{j} = num2str(vary_params{j});
+0042             <span class="keyword">end</span>
+0043         <span class="keyword">end</span>
+0044     <span class="keyword">end</span>
+0045     
+0046     <span class="keyword">for</span> v = 1:no_vary_labels
+0047         vary_vectors{v} = unique(vary_params(:, v));
+0048         vary_lengths(v) = length(vary_vectors{v});
+0049     <span class="keyword">end</span>
+0050 
+0051     <span class="comment">% 3. Run checkCovary</span>
+0052     [effective_vary_indices, linked_inds] = <a href="dsCheckCovary.html" class="code" title="function [effective_vary_indices, linked_indices] = dsCheckCovary(vary_lengths, vary_params, varargin)">dsCheckCovary</a>(vary_lengths, vary_params, varargin{:});
+0053     <span class="comment">%dsIdCovaried(vary_params);</span>
+0054 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of dsCheckCovary</title>
+  <meta name="keywords" content="dsCheckCovary">
+  <meta name="description" content="CHECKCOVARY - TODO I assume this checks if any varied parameters are covaried?">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html functions --><!-- menu.html internal -->
+<h1>dsCheckCovary
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>CHECKCOVARY - TODO I assume this checks if any varied parameters are covaried?</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [effective_vary_indices, linked_indices] = dsCheckCovary(vary_lengths, vary_params, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">CHECKCOVARY - TODO I assume this checks if any varied parameters are covaried?</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>	CHECKOPTIONS - organize key/value pairs in structure with default or user-supplied values according to a schema</li><li><a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>	Inputs:</li><li><a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestDataLocalFn.html" class="code" title="function dsUnitSaveAutoGenTestDataLocalFn(argin, argout)">dsUnitSaveAutoGenTestDataLocalFn</a>	% saveAutoGenTestDataLocalFn(argin, argout)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../functions/dsPlot.html" class="code" title="function handles = dsPlot(data,varargin)">dsPlot</a>	DSPlot - plot data in various ways depending on what data was provided and what options are defined.</li><li><a href="dsCheckCovaryWrapper.html" class="code" title="function [effective_vary_indices, linked_inds] = dsCheckCovaryWrapper(data,varargin)">dsCheckCovaryWrapper</a>	Calls checkCovary and handles all the set up automagically.</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [linked_indices, non_linked_indices] = find_linked_params(param_indices, vary_params, varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [effective_vary_indices, linked_indices] = dsCheckCovary(vary_lengths, vary_params, varargin)</a>
+0002   <span class="comment">%CHECKCOVARY - TODO I assume this checks if any varied parameters are covaried?</span>
+0003  
+0004   <span class="comment">%% localfn output</span>
+0005   <span class="keyword">if</span> ~nargin
+0006       effective_vary_indices = localfunctions; <span class="comment">% output var name specific to this fn</span>
+0007       <span class="keyword">return</span>
+0008   <span class="keyword">end</span>
+0009   
+0010   <span class="comment">%% auto_gen_test_data_flag argin</span>
+0011   options = <a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
+0012   <span class="keyword">if</span> options.auto_gen_test_data_flag
+0013       varargs = varargin;
+0014       varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0015       varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
+0016       argin = [{vary_lengths}, {data_length}, varargs]; <span class="comment">% specific to this function</span>
+0017   <span class="keyword">end</span>
+0018   
+0019   <span class="comment">%% Function start.</span>
+0020   data_length = size(vary_params, 1);
+0021 
+0022   <span class="comment">% Remove any vary statements used to set parameter values.</span>
+0023   non_singleton_vary_indices = vary_lengths &gt; 1;
+0024   non_singleton_vary_lengths = vary_lengths(non_singleton_vary_indices);
+0025   non_singleton_vary_params = vary_params(:, non_singleton_vary_indices);
+0026   n_varied = length(non_singleton_vary_lengths);
+0027 
+0028   <span class="comment">%% Check all combinations of varied parameters to see if the product of the number</span>
+0029   <span class="comment">% of their unique values describes the amount of data simulated.</span>
+0030   full_rank_choices = {};
+0031   index = 1;
+0032 
+0033   <span class="keyword">for</span> n_chosen = 1:n_varied
+0034     <span class="comment">% Check all pairs, then all triplets...</span>
+0035     choices = nchoosek(1:n_varied, n_chosen);
+0036     n_choices = nchoosek(n_varied, n_chosen);
+0037 
+0038     <span class="comment">% For each subset of varied parameters, see if the product of the numbers of</span>
+0039     <span class="comment">% unique parameters equals data_length.</span>
+0040     <span class="keyword">for</span> choice = 1:n_choices
+0041       estimated_data_length = prod(non_singleton_vary_lengths(choices(choice, :)));
+0042       <span class="keyword">if</span> estimated_data_length == data_length
+0043         full_rank_choices{index} = choices(choice, :);
+0044         index = index + 1;
+0045       <span class="keyword">end</span>
+0046     <span class="keyword">end</span>
+0047 
+0048   <span class="keyword">end</span>
+0049 
+0050   linked_indices = {};
+0051   
+0052   <span class="comment">%% Parse the results of finding &quot;full rank&quot; choices.</span>
+0053   <span class="keyword">if</span> isempty(full_rank_choices)
+0054     <span class="comment">% No combination of varied parameters equals total data length,</span>
+0055     <span class="comment">% so treat data as linear.</span>
+0056     linked_indices{1} = 1:n_varied;
+0057 
+0058   <span class="keyword">else</span>
+0059     <span class="comment">% If one or more combinations of varied parameters describes the total data length,</span>
+0060     <span class="comment">% we need to link covaried parameters.</span>
+0061     no_full_rank_choices = length(full_rank_choices);
+0062 
+0063     <span class="comment">% Create a matrix in which each row represents a full rank choice of varied parameters.</span>
+0064     full_rank_participation = zeros(no_full_rank_choices, n_varied);
+0065     <span class="keyword">for</span> frc = 1:no_full_rank_choices
+0066       full_rank_participation(frc, full_rank_choices{frc}) = 1;
+0067     <span class="keyword">end</span>
+0068     
+0069     <span class="comment">% If a certain parameter is not involved in any &quot;full rank&quot; product,</span>
+0070     <span class="comment">% consider it linked.</span>
+0071     index = 1;
+0072     non_participating_parameters = find(all(full_rank_participation == 0, 1));
+0073     <span class="keyword">if</span> ~isempty(non_participating_parameters)
+0074         linked_indices{index} = [0 non_participating_parameters];
+0075         index = index + 1;
+0076     <span class="keyword">end</span>
+0077 
+0078     <span class="keyword">if</span> no_full_rank_choices &gt; 1
+0079         <span class="comment">%%</span>
+0080         <span class="comment">% If more than one combination of varied parameters describes the total</span>
+0081         <span class="comment">% data length, we have to figure out which of these varied</span>
+0082         <span class="comment">% parameters is co-varied.</span>
+0083         param_indices = find(sum(full_rank_participation, 1) &gt; 0);
+0084         
+0085         iteration_number = 1;
+0086         <span class="keyword">while</span> length(param_indices) &gt; 1
+0087             [linked_set, param_indices] = <a href="#_sub1" class="code" title="subfunction [linked_indices, non_linked_indices] = find_linked_params(param_indices, vary_params, varargin)">find_linked_params</a>(param_indices, non_singleton_vary_params, varargin{:});
+0088             
+0089             <span class="keyword">if</span> ~isempty(linked_set)
+0090                 linked_indices{index} = linked_set;
+0091                 index = index + 1;
+0092             <span class="keyword">end</span>
+0093             
+0094             iteration_number = iteration_number + 1;
+0095             <span class="keyword">if</span> iteration_number &gt; 10
+0096                 <span class="keyword">return</span>
+0097             <span class="keyword">end</span>
+0098         <span class="keyword">end</span>
+0099         
+0100     <span class="keyword">end</span>
+0101 
+0102   <span class="keyword">end</span>
+0103 
+0104   <span class="comment">% Remove linked sets of parameters from effective_vary_lengths.</span>
+0105   marked_for_removal = zeros(size(non_singleton_vary_lengths));
+0106   <span class="keyword">for</span> l = 1:length(linked_indices)
+0107     marked_for_removal(linked_indices{l}(2:end)) = 1;
+0108   <span class="keyword">end</span>
+0109   <span class="comment">% effective_vary_lengths = non_singleton_vary_lengths;</span>
+0110   <span class="comment">% effective_vary_lengths(logical(marked_for_removal)) = [];</span>
+0111   effective_non_singleton_vary_indices = ~marked_for_removal;
+0112   
+0113   effective_vary_indices = false(size(vary_lengths));
+0114   
+0115   effective_vary_indices(non_singleton_vary_indices) = logical(effective_non_singleton_vary_indices);
+0116   
+0117   <span class="comment">%% auto_gen_test_data_flag argout</span>
+0118   <span class="keyword">if</span> options.auto_gen_test_data_flag
+0119       argout = {effective_vary_lengths, linked_indices}; <span class="comment">% specific to this function</span>
+0120       
+0121       <a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>(argin, argout);
+0122   <span class="keyword">end</span>
+0123 
+0124 <span class="keyword">end</span>
+0125 
+0126 <a name="_sub1" href="#_subfunctions" class="code">function [linked_indices, non_linked_indices] = find_linked_params(param_indices, vary_params, varargin)</a>
+0127 
+0128 <span class="comment">%% auto_gen_test_data_flag argin</span>
+0129 options = <a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
+0130 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0131   varargs = varargin;
+0132   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0133   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
+0134   argin = [{param_indices},{vary_params}, varargs];
+0135 <span class="keyword">end</span>
+0136 
+0137 param1_index = param_indices(1);
+0138 
+0139 <span class="keyword">if</span> iscellstr(vary_params)
+0140     params_at_value1 = vary_params(strcmp(vary_params(:, param1_index),vary_params(1, param1_index)), :);
+0141     
+0142 <span class="comment">%params_at_value1 = vary_params(cellfun(@(x) isequal(x, vary_params(1, param1_index)),vary_params(:, param1_index)), :);</span>
+0143 <span class="keyword">elseif</span> isnumeric(vary_params)
+0144     params_at_value1 = vary_params(vary_params(:, param1_index) == vary_params(1, param1_index), :);
+0145 <span class="keyword">elseif</span> iscellnum(vary_params)
+0146     vary_params2 = cell2mat(vary_params);
+0147     params_at_value1 = vary_params(vary_params2(:, param1_index) == vary_params2(1, param1_index), :);
+0148 <span class="keyword">else</span>
+0149     <span class="keyword">try</span>
+0150         params_at_value1 = vary_params(vary_params(:, param1_index) == vary_params(1, param1_index), :);
+0151     <span class="keyword">catch</span>
+0152         error(<span class="string">'case not implemented. vary_params must all cell array of chars of all numeric'</span>);
+0153     <span class="keyword">end</span>
+0154 <span class="keyword">end</span>
+0155 
+0156 no_values_at_value1 = nan(size(param_indices));
+0157 
+0158 no_values_at_value1(1) = 1;
+0159 
+0160 <span class="keyword">for</span> p = 2:length(param_indices)
+0161   
+0162   param_index = param_indices(p);
+0163   
+0164   no_values_at_value1(p) = length(unique(params_at_value1(:, param_index)));
+0165   
+0166 <span class="keyword">end</span>
+0167 
+0168 linked_indices = param_indices(no_values_at_value1 == 1);
+0169 
+0170 non_linked_indices = param_indices(no_values_at_value1 &gt; 1);
+0171 
+0172 
+0173 <span class="comment">%% auto_gen_test_data_flag argout</span>
+0174 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0175   argout = {linked_indices, non_linked_indices}; <span class="comment">% specific to this function</span>
+0176   
+0177   <a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestDataLocalFn.html" class="code" title="function dsUnitSaveAutoGenTestDataLocalFn(argin, argout)">dsUnitSaveAutoGenTestDataLocalFn</a>(argin, argout); <span class="comment">% localfn</span>
+0178 <span class="keyword">end</span>
+0179 
+0180 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

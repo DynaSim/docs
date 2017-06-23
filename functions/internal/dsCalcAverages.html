@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of dsCalcAverages</title>
+  <meta name="keywords" content="dsCalcAverages">
+  <meta name="description" content="CALCAVERAGES - Average fields in a DynaSim data struct across neurons">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html functions --><!-- menu.html internal -->
+<h1>dsCalcAverages
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>CALCAVERAGES - Average fields in a DynaSim data struct across neurons</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function data_out = dsCalcAverages(data,opts, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">CALCAVERAGES - Average fields in a DynaSim data struct across neurons
+
+ Usage:
+   data_out = dsCalcAverages(data,'option',value)
+
+ Inputs:
+   - data: DynaSim data structure (see dsCheckData)
+   - opts: Options structure
+     'opts.save_std': Also creates new fields storing standard deviations
+                      (true or false)
+
+ Outputs:
+   - data_out: data structure, all fields replaced by their average values
+       (averaged across neurons).
+
+ See also: <a href="dsPlotFR.html" class="code" title="function handles = dsPlotFR(data,varargin)">dsPlotFR</a>, <a href="dsAnalyzeStudy.html" class="code" title="function [results,studyinfo] = dsAnalyzeStudy(data,func,varargin)">dsAnalyzeStudy</a>, dsSimulate, <a href="dsCheckData.html" class="code" title="function data = dsCheckData(data, varargin)">dsCheckData</a>, <a href="dsSelectVariables.html" class="code" title="function [variables,pop_names] = dsSelectVariables(labels,var_strings, varargin)">dsSelectVariables</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="dsCheckData.html" class="code" title="function data = dsCheckData(data, varargin)">dsCheckData</a>	CHECKDATA - Standardize data structure and auto-populate missing fields</li><li><a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>	CHECKOPTIONS - organize key/value pairs in structure with default or user-supplied values according to a schema</li><li><a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>	Inputs:</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="dsRearrangeStudies2Neurons.html" class="code" title="function data_out = dsRearrangeStudies2Neurons(data)">dsRearrangeStudies2Neurons</a>	REARRANGESTUDIES2NEURONS - Takes a DynaSim data structure that is the result of a parameter sweep and rearranges it into a single (1D) data structure.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function data_out = dsCalcAverages(data,opts, varargin)</a>
+0002 <span class="comment">%CALCAVERAGES - Average fields in a DynaSim data struct across neurons</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Usage:</span>
+0005 <span class="comment">%   data_out = dsCalcAverages(data,'option',value)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Inputs:</span>
+0008 <span class="comment">%   - data: DynaSim data structure (see dsCheckData)</span>
+0009 <span class="comment">%   - opts: Options structure</span>
+0010 <span class="comment">%     'opts.save_std': Also creates new fields storing standard deviations</span>
+0011 <span class="comment">%                      (true or false)</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% Outputs:</span>
+0014 <span class="comment">%   - data_out: data structure, all fields replaced by their average values</span>
+0015 <span class="comment">%       (averaged across neurons).</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% See also: dsPlotFR, dsAnalyzeStudy, dsSimulate, dsCheckData, dsSelectVariables</span>
+0018 
+0019 <span class="comment">%% auto_gen_test_data_flag argin</span>
+0020 options = <a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
+0021 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0022   varargs = varargin;
+0023   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0024   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
+0025   argin = [{data}, {opts}, varargs]; <span class="comment">% specific to this function</span>
+0026 <span class="keyword">end</span>
+0027 
+0028 <span class="comment">%% 1.0 Check inputs</span>
+0029 <span class="keyword">if</span> nargin &lt; 2
+0030     opts = struct;
+0031 <span class="keyword">end</span>
+0032 
+0033 data = <a href="dsCheckData.html" class="code" title="function data = dsCheckData(data, varargin)">dsCheckData</a>(data, varargin{:});
+0034 <span class="comment">% note: calling dsCheckData() at beginning enables analysis function to</span>
+0035 <span class="comment">% accept data matrix [time x cells] in addition to DynaSim data structure.</span>
+0036 
+0037 opts = struct_addDef(opts,<span class="string">'save_std'</span>,0);
+0038 
+0039 <span class="comment">%% do the averaging</span>
+0040 
+0041 data_out = data;
+0042 <span class="keyword">for</span> i = 1:length(data)
+0043     <span class="comment">% Identify all fields in data containing simulated output</span>
+0044     labels = data(i).labels;
+0045     labels = labels(~strcmp(labels,<span class="string">'time'</span>));
+0046     
+0047     <span class="comment">% Sweep through these fields and take averages</span>
+0048     <span class="keyword">for</span> j = 1:length(labels)
+0049         <span class="comment">% Save mean</span>
+0050         data_out(i).(labels{j}) = mean(data(i).(labels{j}),2);
+0051         
+0052         <span class="comment">% Save standard deviation also if requested</span>
+0053         <span class="keyword">if</span> opts.save_std
+0054             data_out(i).([labels{j} <span class="string">'_std'</span>]) = std(data(i).(labels{j}),0,2);
+0055         <span class="keyword">end</span>
+0056     <span class="keyword">end</span>
+0057     
+0058     <span class="comment">% Set the size of all populations to 1</span>
+0059     <span class="keyword">for</span> j = 1:length(data(i).model.specification.populations)
+0060         data_out(i).model.specification.populations(j).size = 1;
+0061     <span class="keyword">end</span>
+0062     
+0063 <span class="keyword">end</span>
+0064 
+0065 <span class="comment">%% auto_gen_test_data_flag argout</span>
+0066 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0067   argout = {data_out}; <span class="comment">% specific to this function</span>
+0068   
+0069   <a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>(argin, argout);
+0070 <span class="keyword">end</span>
+0071 
+0072 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

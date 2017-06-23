@@ -1,0 +1,281 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of dsAutoMergeVarieds</title>
+  <meta name="keywords" content="dsAutoMergeVarieds">
+  <meta name="description" content="[data_new, variedname_merged, varied_vals ] = mergeVarieds(data,varied_fields)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html functions --><!-- menu.html internal -->
+<h1>dsAutoMergeVarieds
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[data_new, variedname_merged, varied_vals ] = mergeVarieds(data,varied_fields)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [data, variedname_merged, varied_vals ] = dsAutoMergeVarieds(data,strategy,verbose_on,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [data_new, variedname_merged, varied_vals ] = mergeVarieds(data,varied_fields)
+
+ Need to write this description.
+ 
+ % % % % % % % % % % % % % % % % % % % % 
+ 
+ A1=[1,3,1];A2=[1,5,2]; A3=[2,3,4];
+ B1=[6,2,9];B2=[4,5,1]; B3=[1,2,5];
+ M = [A1 B1 ; A2 B1 ; A3 B1 ; 
+ A1 B2; A2 B2; A3 B2;
+ A1 B3; A2 B3; A3 B3];</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>	CHECKOPTIONS - organize key/value pairs in structure with default or user-supplied values according to a schema</li><li><a href="dsMergeVarieds.html" class="code" title="function [data_new, variedname_merged, varied_vals ] = dsMergeVarieds(data,varied_fields)">dsMergeVarieds</a>	[data_new, variedname_merged, varied_vals ] = mergeVarieds(data,varied_fields)</li><li><a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestDataLocalFn.html" class="code" title="function dsUnitSaveAutoGenTestDataLocalFn(argin, argout)">dsUnitSaveAutoGenTestDataLocalFn</a>	% saveAutoGenTestDataLocalFn(argin, argout)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="ds2mdd.html" class="code" title="function xp = ds2mdd(data,merge_covaried_axes,merge_sparse_axes,varargin)">ds2mdd</a>	Convert DynaSim data structure to xp format</li><li><a href="dsImg2mdd.html" class="code" title="function xp = dsImg2mdd(data_img,merge_covaried_axes,merge_sparse_axes,varargin)">dsImg2mdd</a>	</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [cols2merge_out] = find_shortest_mergelist(vary_params,success_thresh,maxiter)</a></li><li><a href="#_sub2" class="code">function cols_list = subdivide_ind_list(vary_params,cols_list,success_thresh,maxiter)</a></li><li><a href="#_sub3" class="code">function vary_params = all2str(vary_params)</a></li><li><a href="#_sub4" class="code">function out = mergevary(in,varargin)</a></li><li><a href="#_sub5" class="code">function out = mergevary_sub(in,cols2merge)</a></li><li><a href="#_sub6" class="code">function str_out = cat_with_underscores(cellstr_in)</a></li><li><a href="#_sub7" class="code">function percent_full = getpercentfull(vary_merged)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 
+0002 <a name="_sub0" href="#_subfunctions" class="code">function [data, variedname_merged, varied_vals ] = dsAutoMergeVarieds(data,strategy,verbose_on,varargin)</a>
+0003 <span class="comment">% [data_new, variedname_merged, varied_vals ] = mergeVarieds(data,varied_fields)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Need to write this description.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% % % % % % % % % % % % % % % % % % % % %</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% A1=[1,3,1];A2=[1,5,2]; A3=[2,3,4];</span>
+0010 <span class="comment">% B1=[6,2,9];B2=[4,5,1]; B3=[1,2,5];</span>
+0011 <span class="comment">% M = [A1 B1 ; A2 B1 ; A3 B1 ;</span>
+0012 <span class="comment">% A1 B2; A2 B2; A3 B2;</span>
+0013 <span class="comment">% A1 B3; A2 B3; A3 B3];</span>
+0014 
+0015 <span class="comment">% % % % % % % % % % % % % % % % % % % % %</span>
+0016 
+0017 <span class="comment">% auto_gen_test_data_flag argin</span>
+0018 options = <a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
+0019 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0020     varargs = varargin;
+0021     varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0022     varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
+0023 <span class="keyword">end</span>
+0024 
+0025     maxiter = 10000;
+0026     success_thresh = 0.5;
+0027     variedname_merged = {};
+0028     varied_vals = {};
+0029     <span class="keyword">if</span> nargin &lt; 3; verbose_on = false; <span class="keyword">end</span>
+0030     
+0031 <span class="comment">% % % % % % % % % % % %</span>
+0032 <span class="comment">% Add in section for pre-screening for linearly depndence as well</span>
+0033 <span class="comment">% % % % % % % % % % % %</span>
+0034 
+0035 <span class="comment">% Build vary_parms - cell array of varied params (sims x parameters)</span>
+0036 N = length(data);
+0037 vary_labels = data(1).varied; <span class="comment">% data(1).simulator_options.vary;</span>
+0038 Nvarieds = length(vary_labels);
+0039 <span class="keyword">for</span> i = 1:N
+0040     <span class="keyword">for</span> j = 1:Nvarieds
+0041         vary_params{i,j} = data(i).(vary_labels{j});
+0042     <span class="keyword">end</span>
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="comment">% Convert everything to strings for easier analysis</span>
+0046 vary_params = <a href="#_sub3" class="code" title="subfunction vary_params = all2str(vary_params)">all2str</a>(vary_params);
+0047 
+0048 percent_full = <a href="#_sub7" class="code" title="subfunction percent_full = getpercentfull(vary_merged)">getpercentfull</a>(vary_params);
+0049 <span class="keyword">if</span> percent_full &gt; success_thresh; <span class="keyword">return</span>; <span class="keyword">end</span>
+0050 
+0051 [cols2merge] = <a href="#_sub1" class="code" title="subfunction [cols2merge_out] = find_shortest_mergelist(vary_params,success_thresh,maxiter)">find_shortest_mergelist</a>(vary_params,success_thresh,maxiter);  <span class="comment">%</span>
+0052 
+0053 <span class="keyword">if</span> isempty(cols2merge); cols2merge = 1:size(vary_params,2); <span class="keyword">end</span>
+0054 
+0055 <span class="comment">% Now, see if it is possible to subdivide the merged list</span>
+0056 cols_list{1} = cols2merge;
+0057 cols_list = <a href="#_sub2" class="code" title="subfunction cols_list = subdivide_ind_list(vary_params,cols_list,success_thresh,maxiter)">subdivide_ind_list</a>(vary_params,cols_list,success_thresh,maxiter);
+0058 
+0059 <span class="comment">% Merge eached linked_ind into a single varied statement</span>
+0060 vary_labels = data(1).varied; <span class="comment">% data(1).simulator_options.vary;</span>
+0061 Nlinked = length(cols_list);
+0062 variedname_merged = cell(1,Nlinked);
+0063 varied_vals = cell(1,Nlinked);
+0064 <span class="keyword">for</span> j = 1:Nlinked
+0065     [data, variedname_merged{j}, varied_vals{j} ] = <a href="dsMergeVarieds.html" class="code" title="function [data_new, variedname_merged, varied_vals ] = dsMergeVarieds(data,varied_fields)">dsMergeVarieds</a>(data,vary_labels(cols_list{j}));
+0066 <span class="keyword">end</span>
+0067 
+0068 <span class="comment">% auto_gen_test_data_flag argout</span>
+0069 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0070     argout = {linked_indices, non_linked_indices}; <span class="comment">% specific to this function</span>
+0071     
+0072     <a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestDataLocalFn.html" class="code" title="function dsUnitSaveAutoGenTestDataLocalFn(argin, argout)">dsUnitSaveAutoGenTestDataLocalFn</a>(argin, argout); <span class="comment">% localfn</span>
+0073 <span class="keyword">end</span>
+0074 
+0075 
+0076 
+0077 <span class="keyword">end</span>
+0078 
+0079 <span class="comment">% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %</span>
+0080 <span class="comment">% % % % % % % % % % % % Main subfunctions % % % % % % % % % %</span>
+0081 <span class="comment">% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %</span>
+0082 <a name="_sub1" href="#_subfunctions" class="code">function [cols2merge_out] = find_shortest_mergelist(vary_params,success_thresh,maxiter)</a>
+0083 
+0084 <span class="comment">%     maxiter = 10000;</span>
+0085 <span class="comment">%     success_thresh = 0.999;</span>
+0086 
+0087     <span class="keyword">if</span> ~ismatrix(vary_params); error(<span class="string">'vary_params cell array must be MxN'</span>);<span class="keyword">end</span>
+0088 
+0089     sz = size(vary_params);
+0090 
+0091     Nparams = sz(2);
+0092 
+0093     <span class="comment">% Loop through various options</span>
+0094     count = 0;
+0095     cols2merge_out = [];
+0096     <span class="keyword">for</span> i = 2:Nparams-1
+0097         b = nchoosek(Nparams,i);        <span class="comment">% Number of possible choices</span>
+0098         C = nchoosek(1:Nparams,i);      <span class="comment">% Combinations</span>
+0099         <span class="keyword">for</span> j = 1:b
+0100             count = count + 1;
+0101             cols2merge = C(j,:);
+0102             vary_merged = <a href="#_sub4" class="code" title="subfunction out = mergevary(in,varargin)">mergevary</a>(vary_params,cols2merge);
+0103             percent_full = <a href="#_sub7" class="code" title="subfunction percent_full = getpercentfull(vary_merged)">getpercentfull</a>(vary_merged);
+0104             <span class="keyword">if</span> percent_full &gt; success_thresh; cols2merge_out = cols2merge; <span class="keyword">return</span>; <span class="keyword">end</span>
+0105             <span class="keyword">if</span> count &gt; maxiter ; cols2merge_out = []; <span class="keyword">return</span>; <span class="keyword">end</span>
+0106 
+0107         <span class="keyword">end</span>
+0108     <span class="keyword">end</span>
+0109 
+0110 <span class="keyword">end</span>
+0111 
+0112 <a name="_sub2" href="#_subfunctions" class="code">function cols_list = subdivide_ind_list(vary_params,cols_list,success_thresh,maxiter)</a>
+0113 
+0114 <span class="comment">%     maxiter = 10000;</span>
+0115 <span class="comment">%     success_thresh = 0.999;</span>
+0116     
+0117     ind_last = cols_list{end};
+0118     Nlast = length(ind_last);
+0119     <span class="keyword">if</span> Nlast &lt; 4; <span class="keyword">return</span>; <span class="keyword">end</span>       <span class="comment">% We can't up anything less than 4 columns, since the smallest grouping we can have is 2 (e.g. 3 columns would divide into 2 and 1; but can't merge 1 column)</span>
+0120     
+0121     count = 0;
+0122     <span class="keyword">for</span> i = 2:floor(Nlast/2)  <span class="comment">% If Nlast it 9, only go up to 4 since choosing 4 will implicitly choose 5 leftover</span>
+0123         b = nchoosek(Nlast,i);
+0124         C = nchoosek(1:Nlast,i);
+0125         <span class="keyword">for</span> j = 1:b
+0126             count = count + 1;
+0127             inds2merge1 = C(j,:);
+0128             inds2merge2 = setxor(1:Nlast,inds2merge1);                                                              <span class="comment">% Get complement of chosen inds (e.g. unchosen columns) (see https://www.mathworks.com/matlabcentral/newsreader/view_thread/45631)</span>
+0129             colslast1 = ind_last(inds2merge1);
+0130             colslast2 = ind_last(inds2merge2);
+0131             vary_merged = <a href="#_sub4" class="code" title="subfunction out = mergevary(in,varargin)">mergevary</a>(vary_params,cols_list{1:end-1},colslast1,colslast2);     <span class="comment">% Merge columns as needed (note: need to convert indices to be in terms of vary_params)</span>
+0132             percent_full = <a href="#_sub7" class="code" title="subfunction percent_full = getpercentfull(vary_merged)">getpercentfull</a>(vary_merged);
+0133             <span class="keyword">if</span> percent_full &gt; success_thresh
+0134                 cols_list{end} = inds2merge1;
+0135                 cols_list{end+1} = inds2merge2;
+0136                 cols_list = <a href="#_sub2" class="code" title="subfunction cols_list = subdivide_ind_list(vary_params,cols_list,success_thresh,maxiter)">subdivide_ind_list</a>(vary_params,cols_list,success_thres,maxiter);    <span class="comment">% Recursive call (see if we can subdivide it further).</span>
+0137                 <span class="keyword">return</span>;
+0138             <span class="keyword">end</span>
+0139             <span class="keyword">if</span> count &gt; maxiter ; cols2merge_out = []; warning(<span class="string">'Aborting: Exceeded maximum iterations; consider increasing maxiter '</span>); <span class="keyword">return</span>; <span class="keyword">end</span>
+0140         <span class="keyword">end</span>
+0141     <span class="keyword">end</span>
+0142 
+0143 <span class="keyword">end</span>
+0144 
+0145 <span class="comment">% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %</span>
+0146 <span class="comment">% % % % % % % % % % Supporting subfunctions % % % % % % % % %</span>
+0147 <span class="comment">% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %</span>
+0148 
+0149 
+0150 <a name="_sub3" href="#_subfunctions" class="code">function vary_params = all2str(vary_params)</a>
+0151     <span class="comment">% Convert all vary_params from numerics to strings</span>
+0152     <span class="keyword">for</span> i = 1:numel(vary_params)
+0153         <span class="keyword">if</span> isnumeric(vary_params{i}); vary_params{i} = num2str(vary_params{i});
+0154         <span class="keyword">elseif</span> ischar(vary_params{i}); <span class="comment">% Good</span>
+0155         <span class="keyword">else</span>
+0156             error(<span class="string">'vary_param entries must be of type numeric or char'</span>);
+0157         <span class="keyword">end</span>
+0158     <span class="keyword">end</span>
+0159 <span class="keyword">end</span>
+0160 
+0161 
+0162 
+0163 <a name="_sub4" href="#_subfunctions" class="code">function out = mergevary(in,varargin)</a>
+0164 
+0165     merge_inds_cell = varargin;
+0166     
+0167     sz = size(in);
+0168     Ncols = sz(2);
+0169     
+0170     out = in;
+0171     <span class="keyword">for</span> i = 1:length(merge_inds_cell)
+0172         out = <a href="#_sub5" class="code" title="subfunction out = mergevary_sub(in,cols2merge)">mergevary_sub</a>(out,merge_inds_cell{i});
+0173     <span class="keyword">end</span>
+0174     
+0175     <span class="comment">% Discard cols2merge(2:end), which have been merged into cols2merge(1)</span>
+0176     ci = true(1,Ncols);
+0177     <span class="keyword">for</span> i = 1:length(merge_inds_cell)
+0178         cols_curr = merge_inds_cell{i};
+0179         ci(cols_curr(2:end)) = false;
+0180     <span class="keyword">end</span>
+0181     out = out(:,ci);    
+0182 
+0183 <span class="keyword">end</span>
+0184 
+0185 
+0186 <a name="_sub5" href="#_subfunctions" class="code">function out = mergevary_sub(in,cols2merge)</a>
+0187     <span class="keyword">if</span> length(cols2merge) &lt; 2; error(<span class="string">'Must supply at least 2 cols to merge'</span>);
+0188     <span class="keyword">end</span>
+0189     
+0190     sz = size(in);
+0191     Nrows = sz(1);
+0192     
+0193     out = in;
+0194     <span class="keyword">for</span> i = 1:Nrows
+0195         out{i,cols2merge(1)} = <a href="#_sub6" class="code" title="subfunction str_out = cat_with_underscores(cellstr_in)">cat_with_underscores</a>(in(i,cols2merge));
+0196     <span class="keyword">end</span>
+0197 
+0198 <span class="keyword">end</span>
+0199 
+0200 
+0201 <a name="_sub6" href="#_subfunctions" class="code">function str_out = cat_with_underscores(cellstr_in)</a>
+0202     <span class="comment">% Takes in a cell array of chars and concatenates them together with</span>
+0203     <span class="comment">% underscores separating the original divisions between cells. E.g.</span>
+0204     <span class="comment">% {'cat','dog'} becomes 'cat_dog'</span>
+0205 
+0206     temp = vertcat(cellstr_in(:)', repmat({<span class="string">'_'</span>},1,length(cellstr_in)));
+0207     temp = temp(:)';
+0208     str_out = horzcat(temp{1:end-1});
+0209 <span class="keyword">end</span>
+0210 
+0211 <a name="_sub7" href="#_subfunctions" class="code">function percent_full = getpercentfull(vary_merged)</a>
+0212 
+0213     sz = size(vary_merged);
+0214 
+0215     Nsims = sz(1);
+0216     Nparams = sz(2);
+0217     vmu = cell(1,Nparams);
+0218     <span class="keyword">for</span> j = 1:Nparams
+0219         vmu{j} = uniqueCellGeneralized(vary_merged(:,j));
+0220     <span class="keyword">end</span>
+0221     Nuniq = cellfun(@length,vmu);
+0222     percent_full = Nsims / prod(Nuniq);
+0223 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

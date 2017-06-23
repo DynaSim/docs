@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of dsImg2mdd</title>
+  <meta name="keywords" content="dsImg2mdd">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html functions --><!-- menu.html internal -->
+<h1>dsImg2mdd
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function xp = dsImg2mdd(data_img,merge_covaried_axes,merge_sparse_axes,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="dsAutoMergeVarieds.html" class="code" title="function [data, variedname_merged, varied_vals ] = dsAutoMergeVarieds(data,strategy,verbose_on,varargin)">dsAutoMergeVarieds</a>	[data_new, variedname_merged, varied_vals ] = mergeVarieds(data,varied_fields)</li><li><a href="dsDataField2Table.html" class="code" title="function [data_table,column_titles] = dsDataField2Table (data,fieldname,verbose_flag)">dsDataField2Table</a>	Converts DynaSim structure to 1D cell array format. Later can use to</li><li><a href="dsGetLinearIndependentDs.html" class="code" title="function [Abasis, Abasisi, Asubs] = dsGetLinearIndependentDs(data,ignore_constant_shift,varargin)">dsGetLinearIndependentDs</a>	[Asubs, Abasis, Abasisi] = getLinearIndependentDs(data,ignore_constant_shift,varargin)</li><li><a href="dsMergeVarieds.html" class="code" title="function [data_new, variedname_merged, varied_vals ] = dsMergeVarieds(data,varied_fields)">dsMergeVarieds</a>	[data_new, variedname_merged, varied_vals ] = mergeVarieds(data,varied_fields)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="dsAll2mdd.html" class="code" title="function [xp,is_image] = dsAll2mdd(data,varargin)">dsAll2mdd</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function xp = dsImg2mdd(data_img,merge_covaried_axes,merge_sparse_axes,varargin)</a>
+0002 
+0003   
+0004     <span class="keyword">if</span> nargin &lt; 2
+0005         merge_covaried_axes = false;
+0006     <span class="keyword">end</span>
+0007     
+0008     <span class="keyword">if</span> nargin &lt; 3
+0009         merge_sparse_axes = false;
+0010     <span class="keyword">end</span>
+0011 
+0012 <span class="comment">% % % % % % % % % % % % % % %</span>
+0013     <span class="keyword">if</span> merge_covaried_axes &amp;&amp; isfield(data_img(1),<span class="string">'varied'</span>)
+0014 
+0015         
+0016 
+0017         
+0018         <span class="comment">% Identified covaried axes (note; this will fail if</span>
+0019         [Abasis,Abasisi, Asubs] = <a href="dsGetLinearIndependentDs.html" class="code" title="function [Abasis, Abasisi, Asubs] = dsGetLinearIndependentDs(data,ignore_constant_shift,varargin)">dsGetLinearIndependentDs</a>(data_img);
+0020         
+0021         gt1 = cellfun(@(x) length(x) &gt; 1, Asubs);  <span class="comment">% Identified all linked indices with at least 2 varieds</span>
+0022         Asubs = Asubs(gt1);                  <span class="comment">% Only perform the merge if there are at least 2 varieds to merge!</span>
+0023         
+0024         
+0025 
+0026         <span class="comment">% Merge eached linked_ind into a single varied statement</span>
+0027         vary_labels = data_img(1).varied; <span class="comment">% data(1).simulator_options.vary;</span>
+0028         Nlinked = length(Asubs);
+0029         variedname_merged = cell(1,Nlinked);
+0030         varied_vals = cell(1,Nlinked);
+0031         <span class="keyword">for</span> j = 1:Nlinked
+0032             [data_img, variedname_merged{j}, varied_vals{j} ] = <a href="dsMergeVarieds.html" class="code" title="function [data_new, variedname_merged, varied_vals ] = dsMergeVarieds(data,varied_fields)">dsMergeVarieds</a>(data_img,vary_labels(Asubs{j}));
+0033         <span class="keyword">end</span>
+0034         
+0035         <span class="comment">% Automerge any additional dimensions based on analysis of</span>
+0036         <span class="comment">% sparseness</span>
+0037         
+0038     <span class="keyword">end</span>
+0039     
+0040     <span class="keyword">if</span> merge_sparse_axes &amp;&amp; isfield(data_img(1),<span class="string">'varied'</span>)
+0041         [data_img] = <a href="dsAutoMergeVarieds.html" class="code" title="function [data, variedname_merged, varied_vals ] = dsAutoMergeVarieds(data,strategy,verbose_on,varargin)">dsAutoMergeVarieds</a>(data_img);
+0042     <span class="keyword">end</span>
+0043     
+0044 <span class="comment">% % % % % % % % % % % % % % %</span>
+0045 
+0046 
+0047     <span class="comment">% Load into DynaSim structure</span>
+0048     [data_table,column_titles] = <a href="dsDataField2Table.html" class="code" title="function [data_table,column_titles] = dsDataField2Table (data,fieldname,verbose_flag)">dsDataField2Table</a> (data_img,<span class="string">'plot_files'</span>);
+0049 
+0050     <span class="comment">% The entries in the first column contain the paths to the figure files.</span>
+0051     <span class="comment">% There can be multiple figures associated with each simulation, which is</span>
+0052     <span class="comment">% why these are cell arrays of strings.</span>
+0053     <span class="comment">%disp(data_table{1}{1})</span>
+0054     <span class="comment">%disp(data_table{1}{2})</span>
+0055 
+0056     <span class="comment">% Import the linear data into an MDD object</span>
+0057     xp = MDD;
+0058     X = data_table{1}; axislabels = data_table(2:end);
+0059     xp = xp.importDataTable(X, axislabels);
+0060     xp = xp.importAxisNames(column_titles(2:end));
+0061 
+0062     <span class="comment">% Squeeze out any empty dims that might have been introduced by the</span>
+0063     <span class="comment">% above operations. This is necessary if xp was originally 2x1 (e.g.</span>
+0064     <span class="comment">% varied1 x Dim 1) and then added populations and variables onto this</span>
+0065     <span class="comment">% after Dim 1</span>
+0066     xp = xp.squeezeRegexp(<span class="string">'Dim'</span>);
+0067     
+0068     <span class="comment">% Set up metadata</span>
+0069     <span class="comment">% Store metadata info (putting random info in here for time being)</span>
+0070     meta = struct;
+0071     meta.datainfo(1:2) = MDDAxis;
+0072     meta.datainfo(1).name = <span class="string">'time(ms)'</span>;
+0073     meta.datainfo(1).values = 1:10;
+0074     meta.datainfo(2).name = <span class="string">'cells'</span>;
+0075         cell_names = [1:5];
+0076         cell_names_str = cellfunu(@(s) [<span class="string">'Cell '</span> num2str(s)], num2cell(cell_names));
+0077     <span class="keyword">if</span> isfield(data_img(1),<span class="string">'varied'</span>)
+0078         meta.dynasim.varied = data_img(1).varied;
+0079     <span class="keyword">else</span>
+0080         <span class="comment">% For case when nothing varied, insert some dummy data</span>
+0081         meta.dynasim.varied = {<span class="string">'Varied1'</span>};
+0082     <span class="keyword">end</span>
+0083     xp.meta = meta;
+0084     
+0085     
+0086     
+0087 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

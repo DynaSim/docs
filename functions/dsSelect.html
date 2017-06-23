@@ -43,7 +43,7 @@
  Notes:
  - NOTE 1: 'varied' can be specified in two ways:
    - Method 1: a way similar to 'vary' in dsSimulate and
-     ds.vary2Modifications. However, instead of indicating values for a variable to
+     dsVary2Modifications. However, instead of indicating values for a variable to
      take, 'varied' involves the specification of a range of values. Syntax:
      vary={object, variable, [low,high]; ...}, where low is the lower bound on
      the range varied and high is the upper bound for the component varied. For
@@ -70,16 +70,16 @@
    - Possible format for specifying range_varied:
      {'E','gNa',[.1 .3]; 'I-&gt;E','tauI',[15 25]; 'I','mechanism_list','+iM'}
 
- See also: <a href="dsSimulate.html" class="code" title="function [data,studyinfo,result] = dsSimulate(model,varargin)">dsSimulate</a>, ds.vary2Modifications, <a href="dsImport.html" class="code" title="function [data,studyinfo] = dsImport(file,varargin)">dsImport</a></pre></div>
+ See also: <a href="dsSimulate.html" class="code" title="function [data,studyinfo,result] = dsSimulate(model,varargin)">dsSimulate</a>, dsVary2Modifications, <a href="dsImport.html" class="code" title="function [data,studyinfo] = dsImport(file,varargin)">dsImport</a></pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../matlabicon.gif)">
-</ul>
+<li><a href="../functions/internal/dsCheckData.html" class="code" title="function data = dsCheckData(data, varargin)">dsCheckData</a>	CHECKDATA - Standardize data structure and auto-populate missing fields</li><li><a href="../functions/internal/dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>	CHECKOPTIONS - organize key/value pairs in structure with default or user-supplied values according to a schema</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../matlabicon.gif)">
-<li><a href="../functions/+ds/calcSpikeSync.html" class="code" title="function stats = calcSpikeSync(data, varargin)">calcSpikeSync</a>	CALCSPIKESYNC - Compute spike synchronization between spiketrains</li><li><a href="dsImport.html" class="code" title="function [data,studyinfo] = dsImport(file,varargin)">dsImport</a>	DSIMPORT - load data into DynaSim formatted data structure.</li></ul>
+<li><a href="dsImport.html" class="code" title="function [data,studyinfo] = dsImport(file,varargin)">dsImport</a>	DSIMPORT - load data into DynaSim formatted data structure.</li><li><a href="../functions/internal/dsCalcSpikeSync.html" class="code" title="function stats = dsCalcSpikeSync(data, varargin)">dsCalcSpikeSync</a>	CALCSPIKESYNC - Compute spike synchronization between spiketrains</li></ul>
 <!-- crossreference -->
 
 
@@ -103,7 +103,7 @@ This function is called by:
 0016 <span class="comment">% Notes:</span>
 0017 <span class="comment">% - NOTE 1: 'varied' can be specified in two ways:</span>
 0018 <span class="comment">%   - Method 1: a way similar to 'vary' in dsSimulate and</span>
-0019 <span class="comment">%     ds.vary2Modifications. However, instead of indicating values for a variable to</span>
+0019 <span class="comment">%     dsVary2Modifications. However, instead of indicating values for a variable to</span>
 0020 <span class="comment">%     take, 'varied' involves the specification of a range of values. Syntax:</span>
 0021 <span class="comment">%     vary={object, variable, [low,high]; ...}, where low is the lower bound on</span>
 0022 <span class="comment">%     the range varied and high is the upper bound for the component varied. For</span>
@@ -130,12 +130,12 @@ This function is called by:
 0043 <span class="comment">%   - Possible format for specifying range_varied:</span>
 0044 <span class="comment">%     {'E','gNa',[.1 .3]; 'I-&gt;E','tauI',[15 25]; 'I','mechanism_list','+iM'}</span>
 0045 <span class="comment">%</span>
-0046 <span class="comment">% See also: dsSimulate, ds.vary2Modifications, dsImport</span>
+0046 <span class="comment">% See also: dsSimulate, dsVary2Modifications, dsImport</span>
 0047 
 0048 <span class="comment">% check inputs</span>
-0049 data=ds.checkData(data, varargin{:});
+0049 data=<a href="../functions/internal/dsCheckData.html" class="code" title="function data = dsCheckData(data, varargin)">dsCheckData</a>(data, varargin{:});
 0050 
-0051 options=ds.checkOptions(varargin,{<span class="keyword">...</span>
+0051 options=<a href="../functions/internal/dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="keyword">...</span>
 0052   <span class="string">'time_limits'</span>,[-inf inf],[],<span class="keyword">...</span>
 0053   <span class="string">'varied'</span>,[],[],<span class="keyword">...</span>
 0054   <span class="string">'roi'</span>,[],[],<span class="keyword">...</span>
@@ -229,6 +229,6 @@ This function is called by:
 0142   
 0143 <span class="keyword">end</span>
 0144</pre></div>
-<hr><address>Generated on Thu 18-May-2017 08:41:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

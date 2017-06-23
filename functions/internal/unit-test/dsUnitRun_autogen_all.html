@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of dsUnitRun_autogen_all</title>
+  <meta name="keywords" content="dsUnitRun_autogen_all">
+  <meta name="description" content="% Run all autogen tests">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html functions --><!-- ../menu.html internal --><!-- menu.html unit-test -->
+<h1>dsUnitRun_autogen_all
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>% Run all autogen tests</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">% Run all autogen tests
+ result_localfn = runtests('dsUnitTest_autogen_all_localfn');
+ result = runtests('dsUnitTest_autogen_all');</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../functions/internal/dsGetConfig.html" class="code" title="function varOutput = dsGetConfig(query)">dsGetConfig</a>	GETCONFIG - returns the value of the variable specificed as string in argument</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%% Run all autogen tests</span>
+0002 <span class="comment">% result_localfn = runtests('dsUnitTest_autogen_all_localfn');</span>
+0003 <span class="comment">% result = runtests('dsUnitTest_autogen_all');</span>
+0004 
+0005 import matlab.unittest.TestSuite
+0006 import matlab.unittest.TestRunner
+0007 import matlab.unittest.selectors.HasTag
+0008 import matlab.unittest.plugins.CodeCoveragePlugin
+0009 import edu.stanford.covert.test.Coverage
+0010 
+0011 <span class="comment">%% Rename autogen_newSave to autogen</span>
+0012 finalDir = fullfile(<a href="../../../functions/internal/dsGetConfig.html" class="code" title="function varOutput = dsGetConfig(query)">dsGetConfig</a>(<span class="string">'ds_unitTestData_path'</span>), <span class="string">'autogen'</span>);
+0013 <span class="keyword">if</span> ~exist(finalDir, <span class="string">'dir'</span>)
+0014   newDir = fullfile(<a href="../../../functions/internal/dsGetConfig.html" class="code" title="function varOutput = dsGetConfig(query)">dsGetConfig</a>(<span class="string">'ds_unitTestData_path'</span>), <span class="string">'autogen_newSave'</span>);
+0015   movefile(newDir, finalDir);
+0016 <span class="keyword">end</span>
+0017 
+0018 <span class="comment">%% Rename autogenDirs_newSave to autogenDirs</span>
+0019 finalDir = fullfile(<a href="../../../functions/internal/dsGetConfig.html" class="code" title="function varOutput = dsGetConfig(query)">dsGetConfig</a>(<span class="string">'ds_unitTestData_path'</span>), <span class="string">'autogenDirs'</span>);
+0020 newDir = fullfile(<a href="../../../functions/internal/dsGetConfig.html" class="code" title="function varOutput = dsGetConfig(query)">dsGetConfig</a>(<span class="string">'ds_unitTestData_path'</span>), <span class="string">'autogenDirs_newSave'</span>);
+0021 <span class="keyword">if</span> ~exist(finalDir, <span class="string">'dir'</span>) &amp;&amp; exist(newDir, <span class="string">'dir'</span>)
+0022   movefile(newDir, finalDir);
+0023 <span class="keyword">end</span>
+0024 
+0025 <span class="comment">%% Make Test Suite</span>
+0026 fullSuite = TestSuite.fromPackage(<span class="string">'dsUnit'</span>);
+0027 fullSuite = fullSuite.selectIf(~HasTag(<span class="string">'query'</span>));
+0028 fullSuite = fullSuite.selectIf(HasTag(<span class="string">'autogen'</span>));
+0029 
+0030 <span class="comment">%% code coverage runner</span>
+0031 runner = TestRunner.withTextOutput;
+0032 runner.addPlugin(CodeCoveragePlugin.forFolder(fullfile(<a href="../../../functions/internal/dsGetConfig.html" class="code" title="function varOutput = dsGetConfig(query)">dsGetConfig</a>(<span class="string">'ds_root_path'</span>), <span class="string">'functions'</span>)))
+0033 runner.addPlugin(CodeCoveragePlugin.forPackage(<span class="string">'ds'</span>))
+0034 
+0035 <span class="comment">%% Run Test Suite</span>
+0036 <span class="comment">% result = run(fullSuite); % test suite without code covereage or parallel</span>
+0037 result = runner.run(fullSuite); <span class="comment">% runner for code coverage</span>
+0038 
+0039 <span class="comment">%% Run Test Suite in Parallel</span>
+0040 <span class="comment">% runner = matlab.unittest.TestRunner.withTextOutput;</span>
+0041 <span class="comment">% result = runInParallel(runner,fullSuite); % runner in parallel, no code coverage</span>
+0042 
+0043 <span class="comment">%% XML Coverage Output</span>
+0044 testCoverageDir = fullfile(<a href="../../../functions/internal/dsGetConfig.html" class="code" title="function varOutput = dsGetConfig(query)">dsGetConfig</a>(<span class="string">'ds_root_path'</span>), <span class="string">'testCoverage'</span>);
+0045 mkdirSilent(testCoverageDir)
+0046 reportPath = fullfile(testCoverageDir, <span class="string">'dsAllAutogenTestCoverage.xml'</span>);
+0047 report = Coverage( fullfile(<a href="../../../functions/internal/dsGetConfig.html" class="code" title="function varOutput = dsGetConfig(query)">dsGetConfig</a>(<span class="string">'ds_root_path'</span>), <span class="string">'functions'</span>) );
+0048 report.exportXML(reportPath);</pre></div>
+<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

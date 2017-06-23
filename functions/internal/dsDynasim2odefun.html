@@ -1,0 +1,228 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of dsDynasim2odefun</title>
+  <meta name="keywords" content="dsDynasim2odefun">
+  <meta name="description" content="Purpose: prepare ODEFUN for use with built-in Matlab solvers.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html functions --><!-- menu.html internal -->
+<h1>dsDynasim2odefun
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Purpose: prepare ODEFUN for use with built-in Matlab solvers.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [ODEFUN,IC,elem_names] = dsDynasim2odefun(model, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Purpose: prepare ODEFUN for use with built-in Matlab solvers.
+ 
+ % Example: solve model using ode23
+ [ODEFUN,IC,elem_names]=dsDynasim2odefun(model);
+ [ODEFUN,IC,elem_names]=dsDynasim2odefun(dsPropagateParameters(dsPropagateFunctions(model)));
+ options=odeset('RelTol',1e-2,'AbsTol',1e-4,'InitialStep',.01);
+ [t,y]=ode23(ODEFUN,[0 100],IC,options);
+ figure; plot(t,y); legend(elem_names{:},'Location','EastOutside');
+ 
+ % Example: solve model manually using Euler method:
+ [ODEFUN,IC,elem_names]=dsDynasim2odefun(model);
+ dt=.01; t=0:dt:100;
+ y=zeros(length(t),length(IC));
+ y(1,:)=IC;
+ for i=2:length(t)
+   y(i,:)=y(i-1,:)+dt*ODEFUN(t,y(i-1,:)')';
+ end
+ figure; plot(t,y); legend(elem_names{:},'Location','EastOutside');
+ 
+ % without transposition:
+ dt=.01; t=0:dt:100;
+ y=zeros(length(IC),length(t));
+ y(:,1)=IC;
+ for i=2:length(t)
+   y(:,i)=y(:,i-1)+dt*ODEFUN(t,y(:,i-1));
+ end
+ figure; plot(t,y); legend(elem_names{:},'Location','EastOutside');
+ 
+ Note on implementation:
+ built-in solvers require ODEFUN to return state vector rows (i.e., cells 
+ along rows), and they output state vectors with cells along columns
+ ([y]=time x cells). In contrast, DynaSim ODEs/functions and output state
+ vectors have cells along columns. Therefore, for DynaSim models to be
+ compatible with built-in solvers, all state vectors must be transposed in
+ ODEFUN. This slows down simulation but cannot be avoided easily.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>	CHECKOPTIONS - organize key/value pairs in structure with default or user-supplied values according to a schema</li><li><a href="dsStrrep.html" class="code" title="function str = dsStrrep(str,oldstr,newstr,lpad,rpad, varargin)">dsStrrep</a>	STRREP - replace full words by new character strings, ignoring matches that appear as sub-strings.</li><li><a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>	Inputs:</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../functions/dsSimulate.html" class="code" title="function [data,studyinfo,result] = dsSimulate(model,varargin)">dsSimulate</a>	% data=dsSimulate(model,'option',value,...)</li><li><a href="dsWriteMatlabSolver.html" class="code" title="function solve_ode_filepath = dsWriteMatlabSolver(model,varargin)">dsWriteMatlabSolver</a>	WRITEMATLABSOLVER - write m-file that numerically inteegrates the model</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ODEFUN,IC,elem_names] = dsDynasim2odefun(model, varargin)</a>
+0002 <span class="comment">% Purpose: prepare ODEFUN for use with built-in Matlab solvers.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% % Example: solve model using ode23</span>
+0005 <span class="comment">% [ODEFUN,IC,elem_names]=dsDynasim2odefun(model);</span>
+0006 <span class="comment">% [ODEFUN,IC,elem_names]=dsDynasim2odefun(dsPropagateParameters(dsPropagateFunctions(model)));</span>
+0007 <span class="comment">% options=odeset('RelTol',1e-2,'AbsTol',1e-4,'InitialStep',.01);</span>
+0008 <span class="comment">% [t,y]=ode23(ODEFUN,[0 100],IC,options);</span>
+0009 <span class="comment">% figure; plot(t,y); legend(elem_names{:},'Location','EastOutside');</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% % Example: solve model manually using Euler method:</span>
+0012 <span class="comment">% [ODEFUN,IC,elem_names]=dsDynasim2odefun(model);</span>
+0013 <span class="comment">% dt=.01; t=0:dt:100;</span>
+0014 <span class="comment">% y=zeros(length(t),length(IC));</span>
+0015 <span class="comment">% y(1,:)=IC;</span>
+0016 <span class="comment">% for i=2:length(t)</span>
+0017 <span class="comment">%   y(i,:)=y(i-1,:)+dt*ODEFUN(t,y(i-1,:)')';</span>
+0018 <span class="comment">% end</span>
+0019 <span class="comment">% figure; plot(t,y); legend(elem_names{:},'Location','EastOutside');</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% % without transposition:</span>
+0022 <span class="comment">% dt=.01; t=0:dt:100;</span>
+0023 <span class="comment">% y=zeros(length(IC),length(t));</span>
+0024 <span class="comment">% y(:,1)=IC;</span>
+0025 <span class="comment">% for i=2:length(t)</span>
+0026 <span class="comment">%   y(:,i)=y(:,i-1)+dt*ODEFUN(t,y(:,i-1));</span>
+0027 <span class="comment">% end</span>
+0028 <span class="comment">% figure; plot(t,y); legend(elem_names{:},'Location','EastOutside');</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">% Note on implementation:</span>
+0031 <span class="comment">% built-in solvers require ODEFUN to return state vector rows (i.e., cells</span>
+0032 <span class="comment">% along rows), and they output state vectors with cells along columns</span>
+0033 <span class="comment">% ([y]=time x cells). In contrast, DynaSim ODEs/functions and output state</span>
+0034 <span class="comment">% vectors have cells along columns. Therefore, for DynaSim models to be</span>
+0035 <span class="comment">% compatible with built-in solvers, all state vectors must be transposed in</span>
+0036 <span class="comment">% ODEFUN. This slows down simulation but cannot be avoided easily.</span>
+0037  
+0038 <span class="comment">% Approach:</span>
+0039 <span class="comment">% 1. evaluate params -&gt; fixed_vars -&gt; funcs</span>
+0040 <span class="comment">% 2. evaluate ICs to get (# elems) per state var</span>
+0041 <span class="comment">% 3. prepare state vector X</span>
+0042 <span class="comment">% 4. replace state vars in ODEs by X</span>
+0043 <span class="comment">% 5. combine X ODEs into ODEFUN</span>
+0044 
+0045 options=<a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="keyword">...</span>
+0046   <span class="string">'odefun_output'</span>,<span class="string">'func_handle'</span>,{<span class="string">'func_handle'</span>,<span class="string">'anonymous_func_string'</span>,<span class="string">'func_body'</span>},<span class="keyword">...</span>
+0047   <span class="string">'auto_gen_test_data_flag'</span>,0,{0,1},<span class="keyword">...</span>
+0048   },false);
+0049   
+0050 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0051   varargs = varargin;
+0052   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0053   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
+0054   argin = [{model}, varargs]; <span class="comment">% specific to this function</span>
+0055 <span class="keyword">end</span>
+0056 
+0057 <span class="comment">% % evaluate params -&gt; fixed_vars -&gt; funcs</span>
+0058 <span class="comment">% types={'parameters','fixed_variables','functions'};</span>
+0059 <span class="comment">% for p=1:length(types)</span>
+0060 <span class="comment">%   type=types{p};</span>
+0061 <span class="comment">%   if ~isempty(model.(type))</span>
+0062 <span class="comment">%     fields=fieldnames(model.(type));</span>
+0063 <span class="comment">%     for i=1:length(fields)</span>
+0064 <span class="comment">%       val=model.(type).(fields{i});</span>
+0065 <span class="comment">%       if ~ischar(val)</span>
+0066 <span class="comment">%         val=toString(val,'compact');</span>
+0067 <span class="comment">%       end</span>
+0068 <span class="comment">%       % evaluate</span>
+0069 <span class="comment">%       eval(sprintf('%s = %s;',fields{i},val));</span>
+0070 <span class="comment">% %       evalin('caller',sprintf('%s = %s;',fields{i},val));</span>
+0071 <span class="comment">% %       assignin('caller',fields{i},val);</span>
+0072 <span class="comment">%     end</span>
+0073 <span class="comment">%   end</span>
+0074 <span class="comment">% end</span>
+0075 
+0076 <span class="comment">% evaluate ICs to get (# elems) per state var and set up generic state var X</span>
+0077 num_vars=length(model.state_variables);
+0078 num_elems=zeros(1,num_vars);
+0079 old_vars=model.state_variables;
+0080 new_vars=cell(1,num_vars);
+0081 new_inds=cell(1,num_vars);
+0082 all_ICs=cell(1,num_vars);
+0083 IC_names={};
+0084 state_var_index=0;
+0085 
+0086 <span class="keyword">for</span> i=1:num_vars
+0087   var=model.state_variables{i};
+0088   
+0089   <span class="comment">% check ICs for use of inital state_var value and put in proper starting value</span>
+0090   <span class="keyword">if</span> regexp(model.ICs.(var), <span class="string">'_last'</span>)
+0091     stateVars = regexp(model.ICs.(var), <span class="string">'([\w_]+)_last'</span>, <span class="string">'tokens'</span>);
+0092     model.ICs.(var) = regexprep(model.ICs.(var), <span class="string">'_last'</span>, <span class="string">''</span>);
+0093     
+0094     <span class="keyword">for</span> iSVar = 1:length(stateVars)
+0095       thisSvar = stateVars{iSVar}{1};
+0096       model.ICs.(var) = regexprep(model.ICs.(var), thisSvar, model.ICs.(thisSvar));
+0097     <span class="keyword">end</span>
+0098   <span class="keyword">end</span>
+0099   
+0100   <span class="comment">% evaluate ICs to get (# elems) per state var</span>
+0101   ic=eval([model.ICs.(var) <span class="string">';'</span>]);
+0102   num_elems(i)=length(ic);
+0103   
+0104   <span class="comment">% set state var indices a variables for generic state vector X</span>
+0105   all_ICs{i}=ic;
+0106   IC_names{i}=repmat({var},[1 num_elems(i)]);
+0107   new_inds{i}=state_var_index+(1:length(ic));
+0108   new_vars{i}=sprintf(<span class="string">'X(%g:%g)'''</span>,new_inds{i}(1),new_inds{i}(end));
+0109   state_var_index=state_var_index+length(ic);
+0110 <span class="keyword">end</span>
+0111 
+0112 <span class="comment">% prepare ODE system (comma-separated ODEs)</span>
+0113 ODEs=strtrim(struct2cell(model.ODEs));
+0114 idx=cellfun(@isempty,regexp(ODEs,<span class="string">';$'</span>)); <span class="comment">% lines that need semicolons</span>
+0115 ODEs(idx)=cellfun(@(x)[x <span class="string">'&amp;'</span>],ODEs(idx),<span class="string">'uni'</span>,0);
+0116 ODEs=[ODEs{:}]; <span class="comment">% concatenate ODEs into a single string</span>
+0117 
+0118 <span class="comment">% substitute in generic state vector X</span>
+0119 <span class="keyword">for</span> i=1:num_vars
+0120   ODEs=<a href="dsStrrep.html" class="code" title="function str = dsStrrep(str,oldstr,newstr,lpad,rpad, varargin)">dsStrrep</a>(ODEs,old_vars{i},new_vars{i}, <span class="string">''</span>,<span class="string">''</span>, varargin{:});
+0121 <span class="keyword">end</span>
+0122 
+0123 <span class="comment">% prepare outputs (function handle string, ICs, and element names for</span>
+0124 <span class="comment">% mapping each X(i) to a particular state variable):</span>
+0125 elem_names=cat(2,IC_names{:});
+0126 
+0127 <span class="keyword">switch</span> options.odefun_output
+0128   <span class="keyword">case</span> <span class="string">'func_handle'</span>
+0129     ODEs=strrep(ODEs,<span class="string">'&amp;'</span>,<span class="string">','</span>); <span class="comment">% replace semicolons by commas</span>
+0130     ODEs(end) = []; <span class="comment">%remove trailing comma</span>
+0131     ODEFUN = eval([<span class="string">'@(t,X) ['</span> ODEs <span class="string">']'';'</span>]);
+0132   <span class="keyword">case</span> <span class="string">'anonymous_func_string'</span>
+0133     ODEs=strrep(ODEs,<span class="string">'&amp;'</span>,<span class="string">','</span>); <span class="comment">% replace semicolons by commas</span>
+0134     ODEs(end) = []; <span class="comment">%remove trailing comma</span>
+0135     ODEFUN = [<span class="string">'@(t,X) ['</span> ODEs <span class="string">']'';'</span>];
+0136   <span class="keyword">case</span> <span class="string">'func_body'</span>
+0137     ODEs=strrep(ODEs,<span class="string">'&amp;'</span>,<span class="string">',...\n'</span>); <span class="comment">% replace semicolons by commas with newline</span>
+0138     ODEFUN = ODEs;
+0139 <span class="keyword">end</span>
+0140 
+0141 IC=cat(2,all_ICs{:})';
+0142 
+0143 <span class="comment">%% auto_gen_test_data_flag argout</span>
+0144 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0145   argout = {ODEFUN, IC, elem_names}; <span class="comment">% specific to this function</span>
+0146   
+0147   <a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>(argin, argout);
+0148 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

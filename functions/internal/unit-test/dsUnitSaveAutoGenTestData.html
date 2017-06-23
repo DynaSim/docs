@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of dsUnitSaveAutoGenTestData</title>
+  <meta name="keywords" content="dsUnitSaveAutoGenTestData">
+  <meta name="description" content="Inputs:">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../../menu.html functions --><!-- ../menu.html internal --><!-- menu.html unit-test -->
+<h1>dsUnitSaveAutoGenTestData
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Inputs:</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Inputs:
+   argin: cell array with input arguments
+   argout: cell array with output arguments
+   localFn_flag: logical of whether to include 'fn1__fn2' in fnName or 'fn1'</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../functions/internal/dsGetConfig.html" class="code" title="function varOutput = dsGetConfig(query)">dsGetConfig</a>	GETCONFIG - returns the value of the variable specificed as string in argument</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../functions/dsImport.html" class="code" title="function [data,studyinfo] = dsImport(file,varargin)">dsImport</a>	DSIMPORT - load data into DynaSim formatted data structure.</li><li><a href="../../../functions/internal/dsApplyModifications.html" class="code" title="function [output,modifications] = dsApplyModifications(model, modifications, varargin)">dsApplyModifications</a>	APPLYMODIFICATIONS - Apply modifications to DynaSim specification or model structure</li><li><a href="../../../functions/internal/dsCalcACF.html" class="code" title="function data = dsCalcACF(data, varargin)">dsCalcACF</a>	CALCACF - Calculate the autocorrelation function.</li><li><a href="../../../functions/internal/dsCalcAverages.html" class="code" title="function data_out = dsCalcAverages(data,opts, varargin)">dsCalcAverages</a>	CALCAVERAGES - Average fields in a DynaSim data struct across neurons</li><li><a href="../../../functions/internal/dsCalcCellProperties.html" class="code" title="function stats = dsCalcCellProperties(data, varargin)">dsCalcCellProperties</a>	CALCCELLPROPERTIES - calculates the intrinsic electrophysiological properties of all cells in one or more populations</li><li><a href="../../../functions/internal/dsCalcFR.html" class="code" title="function data = dsCalcFR(data, varargin)">dsCalcFR</a>	CALCFR - Calculate firing rage for DynaSim data</li><li><a href="../../../functions/internal/dsCalcFRmulti.html" class="code" title="function data = dsCalcFRmulti(data, varargin)">dsCalcFRmulti</a>	CALCFRMULTI - extends dsCalcFR to get SUA and MUA firing rates</li><li><a href="../../../functions/internal/dsCalcISI.html" class="code" title="function data = dsCalcISI(data, varargin)">dsCalcISI</a>	CALCISI - Calculate the interspike interval.</li><li><a href="../../../functions/internal/dsCalcPower.html" class="code" title="function data = dsCalcPower(data, varargin)">dsCalcPower</a>	CALCPOWER - Compute spectral analysis of DynaSim data</li><li><a href="../../../functions/internal/dsCalcSpikeSync.html" class="code" title="function stats = dsCalcSpikeSync(data, varargin)">dsCalcSpikeSync</a>	CALCSPIKESYNC - Compute spike synchronization between spiketrains</li><li><a href="../../../functions/internal/dsCalcSumOverFields.html" class="code" title="function data = dsCalcSumOverFields(data, fields, output_field_name, varargin)">dsCalcSumOverFields</a>	CALCSUMOVERFIELDS - Creates a new field in data that is the sum of a bunch of other fields</li><li><a href="../../../functions/internal/dsCheckCovary.html" class="code" title="function [effective_vary_indices, linked_indices] = dsCheckCovary(vary_lengths, vary_params, varargin)">dsCheckCovary</a>	CHECKCOVARY - TODO I assume this checks if any varied parameters are covaried?</li><li><a href="../../../functions/internal/dsCheckData.html" class="code" title="function data = dsCheckData(data, varargin)">dsCheckData</a>	CHECKDATA - Standardize data structure and auto-populate missing fields</li><li><a href="../../../functions/internal/dsCheckHostPaths.html" class="code" title="function [matched,error_message] = dsCheckHostPaths(studyinfo, varargin)">dsCheckHostPaths</a>	CHECKHOSTPATHS - Compare paths on host to those set in studyinfo when batch was created</li><li><a href="../../../functions/internal/dsCheckModel.html" class="code" title="function model = dsCheckModel(model, varargin)">dsCheckModel</a>	CHECKMODEL - Standardize model structure and auto-populate missing fields</li><li><a href="../../../functions/internal/dsCheckSpecification.html" class="code" title="function spec = dsCheckSpecification(specification, varargin)">dsCheckSpecification</a>	CHECKSPECIFICATION - standardize specification structure and auto-populate missing fields</li><li><a href="../../../functions/internal/dsClassifyEquation.html" class="code" title="function classes = dsClassifyEquation(string,delimiter, varargin)">dsClassifyEquation</a>	CLASSIFYEQUATION - use regular expressions to classify model expressions in STRING</li><li><a href="../../../functions/internal/dsCollectVariedParams.html" class="code" title="function [param_mat,varied,param_cell] = dsCollectVariedParams(data, varargin)">dsCollectVariedParams</a>	COLLECTVARIEDPARAMS - Gathers info on parameters that have been varied in a batch</li><li><a href="../../../functions/internal/dsCombineModels.html" class="code" title="function model = dsCombineModels(model1,model2, varargin)">dsCombineModels</a>	COMBINEMODELS - combine subfields in two DynaSim model structures</li><li><a href="../../../functions/internal/dsDynasim2odefun.html" class="code" title="function [ODEFUN,IC,elem_names] = dsDynasim2odefun(model, varargin)">dsDynasim2odefun</a>	Purpose: prepare ODEFUN for use with built-in Matlab solvers.</li><li><a href="../../../functions/internal/dsGenerateModel.html" class="code" title="function [model,name_map] = dsGenerateModel(specification, varargin)">dsGenerateModel</a>	GENERATEMODEL - Parse DynaSim specification and organize model data in DynaSim model structure</li><li><a href="../../../functions/internal/dsGetParentNamespace.html" class="code" title="function parent = dsGetParentNamespace(namespace, varargin)">dsGetParentNamespace</a>	GETPARENTNAMESPACE - determine parent namespace from namespace specified in namespace</li><li><a href="../../../functions/internal/dsParseModelEquations.html" class="code" title="function [model,name_map] = dsParseModelEquations(text,varargin)">dsParseModelEquations</a>	PARSEMODELEQUATIONS - parse equations and organize model data in DynaSim model structure</li><li><a href="../../../functions/internal/dsPropagateFunctions.html" class="code" title="function model = dsPropagateFunctions(model, varargin)">dsPropagateFunctions</a>	PROPAGATEFUNCTIONS - eliminate internal function calls from model ODEs, ICs, monitors, and conditionals.</li><li><a href="../../../functions/internal/dsPropagateNamespaces.html" class="code" title="function model = dsPropagateNamespaces(model,map, varargin)">dsPropagateNamespaces</a>	PROPAGATENAMESPACES - namespace-establishing namespace substitutions.</li><li><a href="../../../functions/internal/dsPropagateParameters.html" class="code" title="function model = dsPropagateParameters(model,varargin)">dsPropagateParameters</a>	PROPAGATEPARAMETERS - substitute parameter values or prepend parameter names with prefix across all model equations.</li><li><a href="../../../functions/internal/dsSelectVariables.html" class="code" title="function [variables,pop_names] = dsSelectVariables(labels,var_strings, varargin)">dsSelectVariables</a>	SELECTVARIABLES - determine what variables to plot</li><li><a href="../../../functions/internal/dsStrrep.html" class="code" title="function str = dsStrrep(str,oldstr,newstr,lpad,rpad, varargin)">dsStrrep</a>	STRREP - replace full words by new character strings, ignoring matches that appear as sub-strings.</li><li><a href="../../../functions/internal/dsStrrep2.html" class="code" title="function str = dsStrrep2(str,oldstr,newstr,lpad,rpad, varargin)">dsStrrep2</a>	STRREP2 - replace full words by new character strings, WITHOUT ignoring matches that appear as sub-strings.</li><li><a href="dsUnitSaveAutoGenTestDataLocalFn.html" class="code" title="function dsUnitSaveAutoGenTestDataLocalFn(argin, argout)">dsUnitSaveAutoGenTestDataLocalFn</a>	% saveAutoGenTestDataLocalFn(argin, argout)</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)</a>
+0002 <span class="comment">% Inputs:</span>
+0003 <span class="comment">%   argin: cell array with input arguments</span>
+0004 <span class="comment">%   argout: cell array with output arguments</span>
+0005 <span class="comment">%   localFn_flag: logical of whether to include 'fn1__fn2' in fnName or 'fn1'</span>
+0006 
+0007 <span class="keyword">if</span> ~exist(<span class="string">'localFn_flag'</span>,<span class="string">'var'</span>)
+0008   localFn_flag = false;
+0009 <span class="keyword">end</span>
+0010 
+0011 <span class="comment">% get fn name from stack</span>
+0012 stack = dbstack;
+0013 <span class="keyword">if</span> ~localFn_flag
+0014   fnNameStack = stack(2).name;
+0015   fnName = fnNameStack;
+0016 <span class="keyword">else</span>
+0017   fnNameStack = stack(4).name;
+0018   fnName = [fnNameStack <span class="string">'__'</span> stack(3).name];
+0019 <span class="keyword">end</span>
+0020 
+0021 <span class="comment">% check package namespace</span>
+0022 <span class="keyword">if</span> ~isfunction(fnNameStack) || strcmp(fnNameStack, <span class="string">'strrep'</span>)
+0023   <span class="keyword">if</span> isfunction([<span class="string">'ds.'</span> fnNameStack])
+0024     fnName = [<span class="string">'ds.'</span> fnName];
+0025   <span class="keyword">elseif</span> isfunction([<span class="string">'dsUnit.'</span> fnNameStack])
+0026     fnName = [<span class="string">'dsUnit.'</span> fnName];
+0027   <span class="keyword">end</span>
+0028 <span class="keyword">end</span>
+0029 
+0030 hash = DataHash(argin);
+0031 
+0032 testFileName = sprintf(<span class="string">'%s_autogen_%s.mat'</span>, fnName, hash);
+0033 testFileDir = fullfile(<a href="../../../functions/internal/dsGetConfig.html" class="code" title="function varOutput = dsGetConfig(query)">dsGetConfig</a>(<span class="string">'ds_unitTestData_path'</span>), <span class="string">'autogen_newSave'</span>);
+0034 mkdirSilent(testFileDir);
+0035 testFilePath = fullfile(testFileDir, testFileName);
+0036 save(testFilePath, <span class="string">'argin'</span>, <span class="string">'argout'</span>)
+0037 
+0038 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of dsGetSolveFile</title>
+  <meta name="keywords" content="dsGetSolveFile">
+  <meta name="description" content="GETSOLVEFILE - helper function that creates or retrieves the desired solver file.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html functions --><!-- menu.html internal -->
+<h1>dsGetSolveFile
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>GETSOLVEFILE - helper function that creates or retrieves the desired solver file.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function solve_file = dsGetSolveFile(model,studyinfo,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">GETSOLVEFILE - helper function that creates or retrieves the desired solver file.
+
+ Usage:
+   solve_file = dsGetSolveFile(model,studyinfo,options)
+
+ Inputs:
+   - model: DynaSim model structure (see dsGenerateModel)
+   - studyinfo (optional): DynaSim studyinfo structure (see dsCheckStudyinfo)
+   - options (optional): cell array of key/value pairs or Matlab structure with options
+     'solver'      : solver for numerical integration (see dsGetSolveFile)
+                     {'euler','rk2','rk4'} (default: 'rk4')
+     'disk_flag'   : whether to write to disk during simulation instead of
+                     storing in memory {0 or 1} (default: 0)
+     'study_dir'   : relative or absolute path to output directory (default:
+                     current directory)
+     'verbose_flag': whether to display informative messages/logs (default: 0)
+
+ Output:
+   - solver_file: full file name of file solving the system in model
+
+ See also: <a href="dsWriteDynaSimSolver.html" class="code" title="function [outfile,options] = dsWriteDynaSimSolver(model,varargin)">dsWriteDynaSimSolver</a>, <a href="dsCompareSolveFiles.html" class="code" title="function solve_file_m = dsCompareSolveFiles(solve_file_m,mexPath)">dsCompareSolveFiles</a>, <a href="dsPrepareMEX.html" class="code" title="function mexfileOutput = dsPrepareMEX(mfileInput, varargin)">dsPrepareMEX</a>,
+           dsSimulate, <a href="dsCreateBatch.html" class="code" title="function [studyinfo, cmd] = dsCreateBatch(base_model,modifications_set,varargin)">dsCreateBatch</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>	CHECKOPTIONS - organize key/value pairs in structure with default or user-supplied values according to a schema</li><li><a href="dsCompareSolveFiles.html" class="code" title="function solve_file_m = dsCompareSolveFiles(solve_file_m,mexPath)">dsCompareSolveFiles</a>	COMPARESOLVEFILES - look for an equivalent file in same directory</li><li><a href="dsOptions2Keyval.html" class="code" title="function keyval = dsOptions2Keyval(options)">dsOptions2Keyval</a>	OPTIONS2KEYVAL - Convert from options structure to a list of key/value pairs.</li><li><a href="dsPrepareMEX.html" class="code" title="function mexfileOutput = dsPrepareMEX(mfileInput, varargin)">dsPrepareMEX</a>	PREPAREMEX - take an m-file path and compile it using the Matlab coder.</li><li><a href="dsWriteDynaSimSolver.html" class="code" title="function [outfile,options] = dsWriteDynaSimSolver(model,varargin)">dsWriteDynaSimSolver</a>	WRITEDYNASIMSOLVER - write m-file that numerically inteegrates the model</li><li><a href="dsWriteMatlabSolver.html" class="code" title="function solve_ode_filepath = dsWriteMatlabSolver(model,varargin)">dsWriteMatlabSolver</a>	WRITEMATLABSOLVER - write m-file that numerically inteegrates the model</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../functions/dsSimulate.html" class="code" title="function [data,studyinfo,result] = dsSimulate(model,varargin)">dsSimulate</a>	% data=dsSimulate(model,'option',value,...)</li><li><a href="dsCreateBatch.html" class="code" title="function [studyinfo, cmd] = dsCreateBatch(base_model,modifications_set,varargin)">dsCreateBatch</a>	CREATEBATCH - create and submit jobs to run sets of simulations or analyses.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function solve_file = dsGetSolveFile(model,studyinfo,varargin)</a>
+0002 <span class="comment">%GETSOLVEFILE - helper function that creates or retrieves the desired solver file.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Usage:</span>
+0005 <span class="comment">%   solve_file = dsGetSolveFile(model,studyinfo,options)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Inputs:</span>
+0008 <span class="comment">%   - model: DynaSim model structure (see dsGenerateModel)</span>
+0009 <span class="comment">%   - studyinfo (optional): DynaSim studyinfo structure (see dsCheckStudyinfo)</span>
+0010 <span class="comment">%   - options (optional): cell array of key/value pairs or Matlab structure with options</span>
+0011 <span class="comment">%     'solver'      : solver for numerical integration (see dsGetSolveFile)</span>
+0012 <span class="comment">%                     {'euler','rk2','rk4'} (default: 'rk4')</span>
+0013 <span class="comment">%     'disk_flag'   : whether to write to disk during simulation instead of</span>
+0014 <span class="comment">%                     storing in memory {0 or 1} (default: 0)</span>
+0015 <span class="comment">%     'study_dir'   : relative or absolute path to output directory (default:</span>
+0016 <span class="comment">%                     current directory)</span>
+0017 <span class="comment">%     'verbose_flag': whether to display informative messages/logs (default: 0)</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Output:</span>
+0020 <span class="comment">%   - solver_file: full file name of file solving the system in model</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% See also: dsWriteDynaSimSolver, dsCompareSolveFiles, dsPrepareMEX,</span>
+0023 <span class="comment">%           dsSimulate, dsCreateBatch</span>
+0024 
+0025 <span class="comment">% Check inputs</span>
+0026 opts=[];
+0027 <span class="keyword">if</span> nargin&lt;1
+0028   error(<span class="string">'first argument must be a DynaSim model structure.'</span>);
+0029 <span class="keyword">end</span>
+0030 <span class="keyword">if</span> nargin&lt;2
+0031   studyinfo=[];
+0032 <span class="keyword">end</span>
+0033 <span class="keyword">if</span> nargin&lt;3
+0034   varargin={};
+0035 <span class="keyword">elseif</span> isstruct(varargin{1}) <span class="comment">% user provided an options structure</span>
+0036   opts=varargin{1};
+0037   fields=fieldnames(opts);
+0038   varargin={};
+0039 <span class="keyword">end</span>
+0040 
+0041 options=<a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="keyword">...</span>
+0042   <span class="string">'solver'</span>,<span class="string">'rk4'</span>,{<span class="string">'euler'</span>,<span class="string">'rk1'</span>,<span class="string">'rk2'</span>,<span class="string">'rk4'</span>,<span class="string">'modified_euler'</span>,<span class="string">'rungekutta'</span>,<span class="string">'rk'</span>,<span class="string">'ode23'</span>,<span class="string">'ode45'</span>,<span class="keyword">...</span>
+0043     <span class="string">'ode1'</span>,<span class="string">'ode2'</span>,<span class="string">'ode3'</span>,<span class="string">'ode4'</span>,<span class="string">'ode5'</span>,<span class="string">'ode8'</span>,<span class="string">'ode113'</span>,<span class="string">'ode15s'</span>,<span class="string">'ode23s'</span>,<span class="string">'ode23t'</span>,<span class="string">'ode23tb'</span>},<span class="keyword">...</span><span class="comment"> % DynaSim and built-in Matlab solvers</span>
+0044   <span class="string">'matlab_solver_options'</span>,[],[],<span class="keyword">...</span><span class="comment"> % options from odeset for use with built-in Matlab solvers</span>
+0045   <span class="string">'disk_flag'</span>,0,{0,1},<span class="keyword">...</span><span class="comment">            % whether to write to disk during simulation instead of storing in memory</span>
+0046   <span class="string">'solve_file'</span>,[],[],<span class="keyword">...</span><span class="comment"> % m- or mex-file solving the system</span>
+0047   <span class="string">'study_dir'</span>,[],[],<span class="keyword">...</span><span class="comment"> % study directory</span>
+0048   <span class="string">'verbose_flag'</span>,0,{0,1},<span class="keyword">...</span>
+0049   <span class="string">'parallel_flag'</span>,0,{0,1},<span class="keyword">...</span><span class="comment">     % whether to run simulations in parallel (using parfor)</span>
+0050   <span class="string">'compile_flag'</span>,0,{0,1},<span class="keyword">...</span><span class="comment"> % exist('codegen')==6, whether to compile using coder instead of interpreting Matlab</span>
+0051   <span class="string">'mex_dir'</span>,[],[],<span class="keyword">...</span><span class="comment"> % Directory to search for pre-compiled solve files (solve*_mex*)</span>
+0052   <span class="string">'auto_gen_test_data_flag'</span>,0,{0,1},<span class="keyword">...</span>
+0053   <span class="string">'unit_test_flag'</span>,0,{0,1},<span class="keyword">...</span>
+0054   },false);
+0055   
+0056 <span class="keyword">if</span> ~isempty(opts)
+0057   <span class="comment">% combine default options and user-supplied options w/ the latter</span>
+0058   <span class="comment">% overriding the former</span>
+0059   warning(<span class="string">'off'</span>,<span class="string">'catstruct:DuplicatesFound'</span>);
+0060   options=catstruct(options,opts);
+0061   options=orderfields(options,fields);
+0062 <span class="keyword">end</span>
+0063 
+0064 <span class="keyword">if</span> options.verbose_flag
+0065   fprintf(<span class="string">'\nPREPARING SOLVER:\n'</span>);
+0066 <span class="keyword">end</span>
+0067 
+0068 <span class="comment">% check solver options</span>
+0069 <span class="keyword">switch</span> options.solver
+0070   <span class="keyword">case</span> {<span class="string">'euler'</span>,<span class="string">'rk1'</span>,<span class="string">'rk2'</span>,<span class="string">'modified_euler'</span>,<span class="string">'rk4'</span>,<span class="string">'rungekutta'</span>,<span class="string">'rk'</span>}
+0071     solver_type = <span class="string">'dynasim'</span>;
+0072     <span class="keyword">if</span> ~isempty(options.matlab_solver_options)
+0073       warning(<span class="string">'matlab_solver_options are not used by DynaSim solvers. instead try ''ode23'' or ''ode45'' to use those options.'</span>);
+0074     <span class="keyword">end</span>
+0075   <span class="keyword">case</span> {<span class="string">'ode23'</span>,<span class="string">'ode45'</span>} <span class="comment">% note: only ode23 and ode45 are supported by codegen (see: http://www.mathworks.com/help/coder/ug/functions-supported-for-code-generation--alphabetical-list.html)</span>
+0076     solver_type = <span class="string">'matlab'</span>;
+0077     <span class="keyword">if</span> options.disk_flag==1
+0078       warning(<span class="string">'using disk for real-time storage instead of memory is only available for DynaSim solvers. try using ''euler'',''rk2'', or ''rk4'' for real-time disk usage.'</span>);
+0079     <span class="keyword">end</span>
+0080 <span class="comment">%   case {'ode1','ode2','ode3','ode4','ode5','ode8','ode113','ode15s','ode23s','ode23t','ode23tb'} % not mex supported</span>
+0081   <span class="keyword">case</span> {<span class="string">'ode113'</span>,<span class="string">'ode15s'</span>,<span class="string">'ode23s'</span>,<span class="string">'ode23t'</span>,<span class="string">'ode23tb'</span>} <span class="comment">% not mex supported</span>
+0082     solver_type = <span class="string">'matlab_no_mex'</span>;
+0083     <span class="keyword">if</span> options.disk_flag==1
+0084       warning(<span class="string">'using disk for real-time storage instead of memory is only available for DynaSim solvers. try using ''euler'',''rk2'', or ''rk4'' for real-time disk usage.'</span>);
+0085     <span class="keyword">end</span>
+0086   <span class="keyword">otherwise</span>
+0087     error(<span class="string">'unrecognized solver type'</span>);
+0088 <span class="keyword">end</span>
+0089 
+0090 <span class="comment">%check type of solver against disk_flag</span>
+0091 <span class="keyword">if</span> ~strcmp(solver_type, <span class="string">'dynasim'</span>) &amp;&amp; options.disk_flag
+0092   error(<span class="string">'Disk_flag not supported with built-in matlab solvers'</span>)
+0093 <span class="keyword">end</span>
+0094 
+0095 <span class="keyword">if</span> ~isempty(options.solve_file)
+0096   <span class="comment">% use user-provided solve_file</span>
+0097   solve_file=options.solve_file;
+0098   <span class="comment">% note: options.solve_file is used by cluster sim jobs (see dsCreateBatch())</span>
+0099 <span class="keyword">elseif</span> isfield(studyinfo,<span class="string">'solve_file'</span>)
+0100   <span class="comment">% use study-associated solve_file</span>
+0101   solve_file=studyinfo.solve_file;
+0102 <span class="keyword">elseif</span> options.auto_gen_test_data_flag || options.unit_test_flag
+0103   solve_file=<span class="string">'solve_ode.m'</span>;
+0104 <span class="keyword">else</span>
+0105   <span class="comment">% set default solve_file name</span>
+0106   solve_file=[<span class="string">'solve_ode_'</span> datestr(now,<span class="string">'yyyymmddHHMMSS_FFF'</span>) <span class="string">'.m'</span>];
+0107 <span class="keyword">end</span>
+0108 
+0109 [fpath,fname,fext]=fileparts2(solve_file);
+0110 
+0111 <span class="keyword">if</span> isempty(fpath)
+0112   <span class="comment">% add path to solve_file name</span>
+0113   <span class="keyword">if</span> ~isempty(options.sim_id)
+0114     solve_file=fullfile(options.study_dir,<span class="string">'solve'</span>,[<span class="string">'sim'</span> num2str(options.sim_id)],[fname fext]);
+0115   <span class="keyword">else</span>
+0116     solve_file=fullfile(options.study_dir,<span class="string">'solve'</span>,[fname fext]);
+0117   <span class="keyword">end</span>
+0118   
+0119   <span class="comment">% convert relative path to absolute path</span>
+0120   solve_file = getAbsolutePath(solve_file);
+0121 <span class="keyword">end</span>
+0122 [fpath,fname,fext]=fileparts2(solve_file);
+0123 
+0124 <span class="comment">% check that solve file name is less than max function name allwoed by matlab</span>
+0125 <span class="keyword">if</span> length(fname)&gt;(63-4) <span class="comment">% subtract 4 to allow suffix '_mex'</span>
+0126   fname=fname(1:(63-4));
+0127   solve_file=fullfile(fpath,[fname fext]);
+0128 <span class="keyword">end</span>
+0129 
+0130 <span class="comment">% create directory for solve_file if it doesn't exist</span>
+0131 <span class="keyword">if</span> ~isdir(fpath)
+0132   <span class="keyword">if</span> options.verbose_flag
+0133     fprintf(<span class="string">'Creating solver directory %s\n'</span>,fpath);
+0134   <span class="keyword">end</span>
+0135   mkdir(fpath);
+0136 <span class="keyword">end</span>
+0137 cwd=pwd;
+0138 
+0139 <span class="keyword">if</span> ~strcmp(cwd,fpath)
+0140   <span class="keyword">if</span> options.verbose_flag
+0141     fprintf(<span class="string">'Changing directory to %s\n'</span>,fpath);
+0142   <span class="keyword">end</span>
+0143   cd(fpath);
+0144 <span class="keyword">end</span>
+0145 
+0146 <span class="comment">% create solve_file if it doesn't exist</span>
+0147 <span class="keyword">if</span> ~exist(solve_file,<span class="string">'file'</span>)
+0148   keyvals = <a href="dsOptions2Keyval.html" class="code" title="function keyval = dsOptions2Keyval(options)">dsOptions2Keyval</a>(options);
+0149   <span class="keyword">switch</span> solver_type
+0150     <span class="keyword">case</span> <span class="string">'dynasim'</span>  <span class="comment">% write DynaSim solver function (solve_ode.m)</span>
+0151       solve_file_m = <a href="dsWriteDynaSimSolver.html" class="code" title="function [outfile,options] = dsWriteDynaSimSolver(model,varargin)">dsWriteDynaSimSolver</a>(model,keyvals{:},<span class="string">'filename'</span>,solve_file); <span class="comment">% create DynaSim solver m-file</span>
+0152     <span class="keyword">case</span> {<span class="string">'matlab'</span>, <span class="string">'matlab_no_mex'</span>} <span class="comment">% prepare model function handle etc for built-in solver (@odefun)</span>
+0153       solve_file_m = <a href="dsWriteMatlabSolver.html" class="code" title="function solve_ode_filepath = dsWriteMatlabSolver(model,varargin)">dsWriteMatlabSolver</a>(model,keyvals{:},<span class="string">'filename'</span>,solve_file, <span class="string">'solver_type'</span>,solver_type); <span class="comment">% create Matlab solver m-file</span>
+0154                 <span class="comment">% design: dsWriteMatlabSolver should be very similar to</span>
+0155                 <span class="comment">% dsWriteDynaSimSolver except have a subfunction with an odefun</span>
+0156                 <span class="comment">% format variation and main function that calls odeset and</span>
+0157                 <span class="comment">% feval.</span>
+0158                 <span class="comment">% DynaSimToOdefun(): a function called outside of</span>
+0159                 <span class="comment">% dsSimulate. it should evaluate fixed_variables and</span>
+0160                 <span class="comment">% return @odefun with all substitutions. dsSimulate</span>
+0161                 <span class="comment">% should be able to handle: dsSimulate(@odefun,'tspan',tspan,'ic',ic)</span>
+0162   <span class="keyword">end</span>
+0163   solve_file=<a href="dsCompareSolveFiles.html" class="code" title="function solve_file_m = dsCompareSolveFiles(solve_file_m,mexPath)">dsCompareSolveFiles</a>(solve_file_m);               <span class="comment">% First search in local solve folder...</span>
+0164   <span class="keyword">if</span> options.compile_flag
+0165     solve_file=<a href="dsCompareSolveFiles.html" class="code" title="function solve_file_m = dsCompareSolveFiles(solve_file_m,mexPath)">dsCompareSolveFiles</a>(solve_file,options.mex_dir); <span class="comment">% Then search in mex_dir (if it exists and if compile_flag==1).</span>
+0166   <span class="keyword">end</span>
+0167 <span class="keyword">else</span>
+0168   <span class="keyword">if</span> options.verbose_flag
+0169     fprintf(<span class="string">'Using previous solver file: %s\n'</span>,solve_file);
+0170   <span class="keyword">end</span>
+0171 <span class="keyword">end</span>
+0172 
+0173 <span class="comment">%% MEX Compilation</span>
+0174 <span class="comment">% create MEX file if desired and doesn't exist</span>
+0175 
+0176 <span class="comment">% NOTE: if using stiff built-in solver, it should only compile the odefun, not</span>
+0177 <span class="comment">%   the dynasim solve file. this is called from dsWriteMatlabSolver</span>
+0178 
+0179 <span class="keyword">if</span> options.compile_flag &amp;&amp; ~strcmp(solver_type,<span class="string">'matlab_no_mex'</span>) <span class="comment">% compile solver function</span>
+0180   <span class="keyword">if</span> options.one_solve_file_flag
+0181     options.codegen_args = {0};
+0182   <span class="keyword">end</span>
+0183   solve_file = <a href="dsPrepareMEX.html" class="code" title="function mexfileOutput = dsPrepareMEX(mfileInput, varargin)">dsPrepareMEX</a>(solve_file, options);
+0184 <span class="keyword">end</span>
+0185 
+0186 <span class="comment">%%</span>
+0187 <span class="keyword">if</span> ~strcmp(cwd,fpath)
+0188   <span class="keyword">if</span> options.verbose_flag
+0189     fprintf(<span class="string">'Changing directory back to %s\n'</span>,cwd);
+0190   <span class="keyword">end</span>
+0191   cd(cwd);
+0192 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

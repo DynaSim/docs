@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of dsCollectVariedParams</title>
+  <meta name="keywords" content="dsCollectVariedParams">
+  <meta name="description" content="COLLECTVARIEDPARAMS - Gathers info on parameters that have been varied in a batch">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html functions --><!-- menu.html internal -->
+<h1>dsCollectVariedParams
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>COLLECTVARIEDPARAMS - Gathers info on parameters that have been varied in a batch</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [param_mat,varied,param_cell] = dsCollectVariedParams(data, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">COLLECTVARIEDPARAMS - Gathers info on parameters that have been varied in a batch
+
+ Usage: [deprecated?]
+   [all_values,param_names,unique_values]=dsCollectVariedParams(data)
+
+ Inputs:
+   - data: DynaSim data structure
+
+ Outputs:
+   - all_values: [num_sets x num_params_varied], values used for each data set
+   - param_names: list of names of varied parameters
+   - unique_values: cell array of unique values used for each varied  parameter</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>	CHECKOPTIONS - organize key/value pairs in structure with default or user-supplied values according to a schema</li><li><a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>	Inputs:</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [param_mat,varied,param_cell] = dsCollectVariedParams(data, varargin)</a>
+0002 <span class="comment">%COLLECTVARIEDPARAMS - Gathers info on parameters that have been varied in a batch</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Usage: [deprecated?]</span>
+0005 <span class="comment">%   [all_values,param_names,unique_values]=dsCollectVariedParams(data)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Inputs:</span>
+0008 <span class="comment">%   - data: DynaSim data structure</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Outputs:</span>
+0011 <span class="comment">%   - all_values: [num_sets x num_params_varied], values used for each data set</span>
+0012 <span class="comment">%   - param_names: list of names of varied parameters</span>
+0013 <span class="comment">%   - unique_values: cell array of unique values used for each varied  parameter</span>
+0014 
+0015 <span class="comment">% Check inputs</span>
+0016 <span class="comment">%% auto_gen_test_data_flag argin</span>
+0017 options = <a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
+0018 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0019   varargs = varargin;
+0020   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0021   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
+0022   argin = [{data}, varargs]; <span class="comment">% specific to this function</span>
+0023 <span class="keyword">end</span>
+0024 
+0025 <span class="keyword">if</span> ~isstruct(data)
+0026   fprintf(<span class="string">'input must be a structure...exiting dsCollectVariedParams.\n'</span>);
+0027   <span class="keyword">return</span>;
+0028 <span class="keyword">end</span>
+0029 <span class="keyword">if</span> ~isfield(data,<span class="string">'varied'</span>)
+0030   fprintf(<span class="string">'no varied info in data.\n'</span>);
+0031   <span class="keyword">return</span>;
+0032 <span class="keyword">end</span>
+0033 
+0034 <span class="comment">% collect info on parameters varied</span>
+0035 varied=data(1).varied;
+0036 num_varied=length(varied); <span class="comment">% number of model components varied across simulations</span>
+0037 num_sims=length(data); <span class="comment">% number of data sets (one per simulation)</span>
+0038 
+0039 <span class="comment">% collect info on parameters varied</span>
+0040 param_mat=zeros(num_sims,num_varied); <span class="comment">% values for each simulation</span>
+0041 param_cell=cell(1,num_varied); <span class="comment">% unique values for each parameter</span>
+0042 
+0043 <span class="comment">% loop over varied components and collect values</span>
+0044 <span class="keyword">for</span> j=1:num_varied
+0045   <span class="keyword">if</span> isnumeric(data(1).(varied{j}))
+0046     param_mat(:,j)=[data.(varied{j})]; <span class="comment">% values for each simulation</span>
+0047     param_cell{j}=unique([data.(varied{j})]); <span class="comment">% unique values for each parameter</span>
+0048   <span class="keyword">else</span>
+0049     <span class="comment">% TODO: handle sims varying non-numeric model components</span>
+0050     <span class="comment">% (eg, mechanisms) (also in dsPlotFR and dsSelect)</span>
+0051   <span class="keyword">end</span>
+0052 <span class="keyword">end</span>
+0053 
+0054 <span class="comment">%% auto_gen_test_data_flag argout</span>
+0055 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0056   argout = {param_mat, varied, param_cell}; <span class="comment">% specific to this function</span>
+0057   
+0058   <a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>(argin, argout);
+0059 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

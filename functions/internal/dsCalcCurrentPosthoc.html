@@ -1,0 +1,282 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of dsCalcCurrentPosthoc</title>
+  <meta name="keywords" content="dsCalcCurrentPosthoc">
+  <meta name="description" content="data = calcCurrentPosthoc(data, mechanism_prefix, current_equation, additional_fields, additional_constants, current_suffix, varargin)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html functions --><!-- menu.html internal -->
+<h1>dsCalcCurrentPosthoc
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>data = calcCurrentPosthoc(data, mechanism_prefix, current_equation, additional_fields, additional_constants, current_suffix, varargin)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function data = dsCalcCurrentPosthoc(data, mechanism_prefix, current_equation, additional_fields, additional_constants, current_suffix, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">data = calcCurrentPosthoc(data, mechanism_prefix, current_equation, additional_fields, additional_constants, current_suffix, varargin)
+ 
+ v1.0 David Stanley, Boston University 2017, stanleyd@bu.edu</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>	CHECKOPTIONS - organize key/value pairs in structure with default or user-supplied values according to a schema</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function data = dsCalcCurrentPosthoc(data, mechanism_prefix, current_equation, additional_fields, additional_constants, current_suffix, varargin)</a>
+0002 <span class="comment">%data = calcCurrentPosthoc(data, mechanism_prefix, current_equation, additional_fields, additional_constants, current_suffix, varargin)</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% v1.0 David Stanley, Boston University 2017, stanleyd@bu.edu</span>
+0005 
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Purpose: Calculates synaptic or ionic currents post-simulation, given state</span>
+0008 <span class="comment">% variables. This allows the user to avoid recording synaptic currents</span>
+0009 <span class="comment">% using monitor functions, which can be slow in large simulations.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Usage:</span>
+0012 <span class="comment">%   calcCurrentPosthoc(data, mechanism_prefix, current_equation, additional_fields, additional_constants, current_suffix, varargin)</span>
+0013 <span class="comment">%   calcCurrentPosthoc(data, mechanism_prefix, current_equation);</span>
+0014 <span class="comment">%   calcCurrentPosthoc(data, mechanism_prefix, current_equation, additional_fields);</span>
+0015 <span class="comment">%   calcCurrentPosthoc(data, mechanism_prefix, current_equation, additional_fields, additional_constants);</span>
+0016 <span class="comment">%   calcCurrentPosthoc(data, mechanism_prefix, current_equation, additional_fields, additional_constants, current_suffix);</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Inputs:</span>
+0019 <span class="comment">%   data:               DynaSim data structure</span>
+0020 <span class="comment">%   mechanism_prefix:   Prefix of the mechanism to use to calculate the current. Most times this will be the same as the</span>
+0021 <span class="comment">%                          mechanism filename (e.g. iNa)</span>
+0022 <span class="comment">%   current_equation:   Char array containing the formula used to calculate the synaptic or ionic current.</span>
+0023 <span class="comment">%                          (E.g. 'm.^3*h.^1*(iNa_V - ENa)'). Generally this can be copied directly from the</span>
+0024 <span class="comment">%                          function line in the original mechanism.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% Inputs (Optional):</span>
+0027 <span class="comment">%   additional_fields:   Additional fields to pull out from data that current_equation</span>
+0028 <span class="comment">%                          might need access too. Useful for referencing</span>
+0029 <span class="comment">%                          state variables outside of the current</span>
+0030 <span class="comment">%                          mechanism, such as the membrane voltage of the</span>
+0031 <span class="comment">%                          parent population, or variables in another</span>
+0032 <span class="comment">%                          mechanism (e.g. calcium pool). This is provided</span>
+0033 <span class="comment">%                          in the form of a cell array of chars, listing</span>
+0034 <span class="comment">%                          the desired field names. The full field names</span>
+0035 <span class="comment">%                          will then be available in current_equation (see</span>
+0036 <span class="comment">%                          examples).</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">%   additional_constants: Any additional constants you might be using in</span>
+0039 <span class="comment">%                           current_equation. This would likely be things</span>
+0040 <span class="comment">%                           like the reversal potential. This is provided</span>
+0041 <span class="comment">%                           in the form of a structure:</span>
+0042 <span class="comment">%</span>
+0043 <span class="comment">%                   additional_constants.(constant_name) = constant_value</span>
+0044 <span class="comment">%</span>
+0045 <span class="comment">%                         Constants &quot;constant_name&quot; will then be accessible</span>
+0046 <span class="comment">%                         within current_equation (see examples).</span>
+0047 <span class="comment">%</span>
+0048 <span class="comment">%   current_suffix:       Suffix to append to the newly created field</span>
+0049 <span class="comment">%                           (default: 'posthoc')</span>
+0050 <span class="comment">%</span>
+0051 <span class="comment">% Outputs:</span>
+0052 <span class="comment">%   data: DynaSim data structure</span>
+0053 <span class="comment">%</span>
+0054 <span class="comment">% Examples:</span>
+0055 <span class="comment">% % % % % % % % % % % % % % % % % % Example 1 % % % % % % % % % % % % % % % % %</span>
+0056 <span class="comment">% tic; data1=dsSimulate('dv[5]/dt=10+@current; {iNa,iK}; monitor iNa.functions','tspan',[0 200]); toc     % Simulate with monitoring</span>
+0057 <span class="comment">% tic; data2=dsSimulate('dv[5]/dt=10+@current; {iNa,iK};','tspan',[0 200]); toc;                          % Simulate without montioring</span>
+0058 <span class="comment">%     % Add the iNa currents to data2</span>
+0059 <span class="comment">%     mechanism_prefix = 'pop1_iNa';</span>
+0060 <span class="comment">%     additional_constants = struct;</span>
+0061 <span class="comment">%     additional_constants.ENa = 50;                  % From mech file, iNa.mech</span>
+0062 <span class="comment">%     additional_constants.gNa = 120;                 % From mech file, iNa.mech</span>
+0063 <span class="comment">% current_string = 'gNa.*m.^3.*h.*(pop1_v-ENa)';  % Adapted from mech file, iNa.mech</span>
+0064 <span class="comment">%                                                     % m and h are state variables with prefix matching mechanism_prefix (pop1_iNa)</span>
+0065 <span class="comment">%                                                     % ENa and gNa are supplied as additional constants and hence will be recognized</span>
+0066 <span class="comment">%                                                     % pop1_v is specified below in &quot;additional fields&quot;</span>
+0067 <span class="comment">%     additional_fields = {'pop1_v'};</span>
+0068 <span class="comment">%     data2b = dsCalcCurrentPosthoc(data2,mechanism_prefix, current_string, additional_fields, additional_constants, 'INa');</span>
+0069 <span class="comment">%</span>
+0070 <span class="comment">%     figure; plot(data1.pop1_iNa_INa,data1.pop1_v); xlabel('INa'); ylabel('Vm'); title('Vm vs INa with monitor functions');</span>
+0071 <span class="comment">%     figure; plot(data2b.pop1_iNa_INa,data2b.pop1_v); xlabel('INa'); ylabel('Vm'); title('Vm vs INa with posthoc calculation');</span>
+0072 <span class="comment">%</span>
+0073 <span class="comment">% % % % % % % % % % % % % % % % % Example 2 - PING network % % % % % % % % % % % % % % % % %</span>
+0074 <span class="comment">% % Simulate PING network with and without monitor functions</span>
+0075 <span class="comment">% eqns1={</span>
+0076 <span class="comment">%   'dv/dt=Iapp+@current+noise*randn(1,N_pop)';</span>
+0077 <span class="comment">%   'monitor functions'</span>
+0078 <span class="comment">% };</span>
+0079 <span class="comment">%</span>
+0080 <span class="comment">% eqns2={</span>
+0081 <span class="comment">%   'dv/dt=Iapp+@current+noise*randn(1,N_pop)';</span>
+0082 <span class="comment">% };</span>
+0083 <span class="comment">%</span>
+0084 <span class="comment">% scale_factor = 1;</span>
+0085 <span class="comment">% N_E = 80*scale_factor;</span>
+0086 <span class="comment">% N_I = 20*scale_factor;</span>
+0087 <span class="comment">% % create DynaSim specification structure</span>
+0088 <span class="comment">% s=[];</span>
+0089 <span class="comment">% s.populations(1).name='E';</span>
+0090 <span class="comment">% s.populations(1).size=N_E;</span>
+0091 <span class="comment">% s.populations(1).mechanism_list={'iNa','iK'};</span>
+0092 <span class="comment">% s.populations(1).parameters={'Iapp',5,'gNa',120,'gK',36,'noise',0};</span>
+0093 <span class="comment">% s.populations(2).name='I';</span>
+0094 <span class="comment">% s.populations(2).size=N_I;</span>
+0095 <span class="comment">% s.populations(2).mechanism_list={'iNa','iK'};</span>
+0096 <span class="comment">% s.populations(2).parameters={'Iapp',0,'gNa',120,'gK',36,'noise',0};</span>
+0097 <span class="comment">% s.connections(1).direction='I-&gt;E';</span>
+0098 <span class="comment">% s.connections(1).mechanism_list={'iGABAa'};</span>
+0099 <span class="comment">% s.connections(1).parameters={'tauD',10,'gSYN',.1,'netcon','ones(N_pre,N_post)'};</span>
+0100 <span class="comment">% s.connections(2).direction='E-&gt;I';</span>
+0101 <span class="comment">% s.connections(2).mechanism_list={'iAMPA'};</span>
+0102 <span class="comment">% s.connections(2).parameters={'tauD',2,'gSYN',.1,'netcon',ones(N_E,N_I)};</span>
+0103 <span class="comment">%</span>
+0104 <span class="comment">% % Simulate Sparse Pyramidal-Interneuron-Network-Gamma (sPING)</span>
+0105 <span class="comment">% s.populations(1).equations=eqns1;</span>
+0106 <span class="comment">% s.populations(2).equations=eqns1;</span>
+0107 <span class="comment">% tic; data1=dsSimulate(s,'tspan',[0 200]); toc;</span>
+0108 <span class="comment">%</span>
+0109 <span class="comment">% % Re-simulate without monitor functions</span>
+0110 <span class="comment">% s.populations(1).equations=eqns2;</span>
+0111 <span class="comment">% s.populations(2).equations=eqns2;</span>
+0112 <span class="comment">% tic; data2=dsSimulate(s,'tspan',[0 100]); toc;</span>
+0113 <span class="comment">%</span>
+0114 <span class="comment">% % Add synaptic currents to data2</span>
+0115 <span class="comment">%     mechanism_prefix = 'I_E_iAMPA';</span>
+0116 <span class="comment">%     additional_constants = struct;</span>
+0117 <span class="comment">%     additional_constants.ESYN = 0;                    % From mech file, iAMPA.mech</span>
+0118 <span class="comment">%     additional_constants.gSYN = 0.1;                  % From mech file, iAMPA.mech</span>
+0119 <span class="comment">%     additional_constants.netcon = ones(N_E,N_I);      % From mech file, iAMPA.mech</span>
+0120 <span class="comment">%     current_string = '(gSYN.*(s*netcon).*(I_v-ESYN))';% Adapted from mech file, iAMPA.mech</span>
+0121 <span class="comment">%                                                       % s is state variables with prefix matching mechanism_prefix (I_E_iAMPA)</span>
+0122 <span class="comment">%                                                       % I_v is the presynaptic voltage. calCurrentPostdoc knows to look for it in data</span>
+0123 <span class="comment">%                                                       %         because we specified it as &quot;additional_fields&quot; (see below)</span>
+0124 <span class="comment">%                                                       % gSYN and ESYN are supplied as additional constants and hence will be recognized</span>
+0125 <span class="comment">%</span>
+0126 <span class="comment">%     additional_fields = {'I_v'};</span>
+0127 <span class="comment">%     data2b = dsCalcCurrentPosthoc(data2,mechanism_prefix, current_string, additional_fields, additional_constants, 'ISYN');</span>
+0128 <span class="comment">%</span>
+0129 <span class="comment">%     figure; plot(data1.I_E_iAMPA_ISYN,data1.I_v); xlabel('iAMPA'); ylabel('Vm'); title('Vm vs iAMPA with monitor functions');</span>
+0130 <span class="comment">%     figure; plot(data2b.I_E_iAMPA_ISYN,data2b.I_v); xlabel('iAMPA'); ylabel('Vm'); title('Vm vs iAMPA with posthoc calculation');</span>
+0131 <span class="comment">%</span>
+0132 <span class="comment">%</span>
+0133 <span class="comment">% Note: This could ultimately be built into the core dynasim solver,</span>
+0134 <span class="comment">% as a way of circumventing monitor functions running on the fly; instead,</span>
+0135 <span class="comment">% all monitors could be calculated posthoc.</span>
+0136 <span class="comment">%</span>
+0137 <span class="comment">% Author: Dave Stanley, Boston University, 2017</span>
+0138 <span class="comment">%</span>
+0139 <span class="comment">% See also: thevEquiv</span>
+0140 
+0141 <span class="comment">%%Code%%</span>
+0142 
+0143 
+0144 <span class="comment">%% localfn output</span>
+0145 <span class="keyword">if</span> ~nargin
+0146     fout1 = localfunctions;
+0147     <span class="keyword">return</span>
+0148 <span class="keyword">end</span>
+0149 
+0150 <span class="comment">%% auto_gen_test_data_flag argin</span>
+0151 options = <a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
+0152 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0153     <span class="comment">% specific to this function</span>
+0154     varargs = varargin;
+0155     varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0156     argin = [{fin1},{fin2}, varargs];
+0157 <span class="keyword">end</span>
+0158 
+0159 <span class="comment">%% main fn body here</span>
+0160 <span class="keyword">if</span> nargin &lt;= 3
+0161     error(<span class="string">'Need to supply at least the first 3 arguments. Remainders are optional'</span>);
+0162 <span class="keyword">end</span>
+0163 
+0164 
+0165 <span class="comment">% Pull supplied constants into workspace, if any</span>
+0166 <span class="keyword">if</span> nargin &gt;= 4
+0167     <span class="keyword">if</span> isempty(additional_constants); additional_constants = struct; <span class="keyword">end</span>
+0168     vars_pull(additional_constants);
+0169 <span class="keyword">end</span>
+0170 
+0171 ac_bool = false;
+0172 <span class="keyword">if</span> nargin &gt;= 5
+0173     ac_bool = true;         <span class="comment">% boolean for instructions to pull in additional constants</span>
+0174     <span class="keyword">if</span> ischar(additional_fields); additional_fields = {additional_fields}; <span class="keyword">end</span>
+0175     <span class="keyword">if</span> ~iscellstr(additional_fields); error(<span class="string">'additional_fields must be a char array or cell array of chars'</span>); <span class="keyword">end</span>
+0176 <span class="keyword">end</span>
+0177 
+0178 <span class="keyword">if</span> nargin &lt; 6
+0179     current_suffix = <span class="string">'posthoc'</span>;
+0180 <span class="keyword">end</span>
+0181 
+0182 <span class="keyword">if</span> ~isempty(strfind(current_suffix,<span class="string">'_'</span>))
+0183     warning(<span class="string">'Suffix should not contain underscores (_). Removing'</span>);
+0184     current_suffix = strrep(current_suffix,<span class="string">'_'</span>,<span class="string">''</span>);
+0185 <span class="keyword">end</span>
+0186 
+0187 <span class="keyword">if</span> strcmp(mechanism_prefix(end),<span class="string">'_'</span>)
+0188     warning(<span class="string">'Mechnaism_prefix should not contain a trailing underscore (e.g. RS_). Removing'</span>);
+0189     mechanism_prefix = mechanism_prefix(1:end-1);
+0190 <span class="keyword">end</span>
+0191 
+0192 new_fieldname = [mechanism_prefix <span class="string">'_'</span> current_suffix];
+0193 
+0194 
+0195 N = length(data);
+0196 <span class="keyword">for</span> i = 1:N
+0197     <span class="comment">% Pull state variables into workspace, if any</span>
+0198     myfield = fieldnames(data(1));
+0199     ind = strfind(myfield,mechanism_prefix);  <span class="comment">% Get set of state variables matching the current mechanism prefix</span>
+0200     ind2 = ~cellfun(@isempty,ind);
+0201     chosen_fields = myfield(ind2);
+0202     vars_pull(data,chosen_fields);   <span class="comment">% Pull in the variables</span>
+0203     
+0204     <span class="comment">% For each state variable, mechanism_prefix portion of the variable name</span>
+0205     <span class="keyword">for</span> j = 1:length(chosen_fields)
+0206         curr_varname = chosen_fields{j};
+0207         curr_varname_shortened = strrep(curr_varname,[mechanism_prefix <span class="string">'_'</span>],<span class="string">''</span>);
+0208         eval([curr_varname_shortened <span class="string">' = '</span> curr_varname <span class="string">';'</span>]);
+0209     <span class="keyword">end</span>
+0210     
+0211     <span class="comment">% Pull additional variables into the workspace</span>
+0212     <span class="keyword">if</span> ac_bool
+0213         vars_pull(data,additional_fields)
+0214     <span class="keyword">end</span>
+0215     
+0216     <span class="comment">% Evaluate the expression for calculating the current</span>
+0217     eval([<span class="string">'temp = '</span> current_equation <span class="string">';'</span>]);
+0218     
+0219     <span class="comment">% Store this in the data structure</span>
+0220     data(i).(new_fieldname) = temp;
+0221     <span class="keyword">if</span> isempty(strcmp(data(1).labels,new_fieldname))
+0222         data(i).labels(end+1) = {new_fieldname};
+0223     <span class="keyword">end</span>
+0224 <span class="keyword">end</span>
+0225 
+0226 <span class="comment">%% auto_gen_test_data_flag argout</span>
+0227 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0228     <span class="comment">% specific to this function</span>
+0229     argout = {output, fout2};
+0230     
+0231     dsSaveAutoGenTestData(argin, argout);
+0232 <span class="keyword">end</span>
+0233 
+0234 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

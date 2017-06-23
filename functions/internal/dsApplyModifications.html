@@ -1,0 +1,560 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of dsApplyModifications</title>
+  <meta name="keywords" content="dsApplyModifications">
+  <meta name="description" content="APPLYMODIFICATIONS - Apply modifications to DynaSim specification or model structure">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html functions --><!-- menu.html internal -->
+<h1>dsApplyModifications
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>APPLYMODIFICATIONS - Apply modifications to DynaSim specification or model structure</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [output,modifications] = dsApplyModifications(model, modifications, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">APPLYMODIFICATIONS - Apply modifications to DynaSim specification or model structure
+
+ dsApplyModifications returns the same kind of structure with
+ modifications applied. In all cases it first modifies the specification
+ (model.specification if input is a model structure). Then it returns
+ the modified specification or regenerates the model using the new
+ specification.
+
+ Inputs:
+   - model: DynaSim model or specification structure
+     - see dsCheckModel and dsCheckSpecification for details
+   - modifications: modifications to make to specification structure
+       {X,Y,Z; X,Y,Z; ...}
+       X = population name or connection source-&gt;target
+       Y = thing to modify ('name', 'size', or parameter name)
+       set Y=Z if Y = name, size, or value
+       Note: (X1,X2) or (Y1,Y2): modify these simultaneously in the same way
+
+ Outputs:
+   - TODO
+
+ Examples:
+   - modifying population size and parameters:
+       modifications={'E','size',5; 'E','gNa',120};
+       model=dsApplyModifications(model,modifications);
+
+   - modifying mechanism_list:
+       m=dsApplyModifications('dv/dt=10+@current; {iNa,iK}',...
+                            {'pop1','mechanism_list','-iNa'});
+       m.populations.mechanism_list
+       m=dsApplyModifications('dv/dt=10+@current; {iNa,iK}',...
+                            {'pop1','mechanism_list','+iCa'});
+       m.populations.mechanism_list
+       m=dsApplyModifications('dv/dt=10+@current; {iNa,iK}',...
+                            {'pop1','mechanism_list','+(iCa,iCan,CaBuffer)'});
+       m.populations.mechanism_list
+
+   - modifying equations (using special &quot;cat()&quot; operator or direct substitution)
+       m=dsApplyModifications('dv/dt=10+@current; {iNa,iK}',...
+                            {'pop1','equations','cat(dv/dt,+I)'});
+       m.populations.equations
+       m=dsApplyModifications('dv/dt=I(t)+@current; I(t)=10; {iNa,iK}',...
+                            {'pop1','equations','cat(I(t),+sin(2*pi*t))'});
+       m.populations.equations
+       m=dsApplyModifications('dv/dt=I(t)+@current; I(t)=10; {iNa,iK}',...
+                            {'pop1','equations','dv/dt=10+@current'});
+       m.populations.equations
+       m.populations.mechanism_list
+
+   - modifying equations with reserved keywords &quot;ODEn&quot; and &quot;FUNCTIONn&quot;
+     - Note:
+       'ODEn' = reserved keyword referencing the n-th ODE in equations
+       'ODE' = aliases ODE1
+       similarly: 'FUNCTIONn' and 'FUNCTION'
+
+       m=dsApplyModifications('dv/dt=10+@current; {iNa,iK}',...
+                            {'pop1','equations','cat(ODE,+I)'});
+       m.populations.equations
+       m=dsApplyModifications('dv/dt=10+@current; du/dt=-u; {iNa,iK}',...
+                            {'pop1','equations','cat(ODE2,+I)'});
+       m.populations.equations
+       m=dsApplyModifications('dv/dt=I(t)+@current; I(t)=10; {iNa,iK}',...
+                            {'pop1','equations','cat(FUNCTION,+sin(2*pi*t))'});
+       m.populations.equations
+
+ See also: <a href="dsGenerateModel.html" class="code" title="function [model,name_map] = dsGenerateModel(specification, varargin)">dsGenerateModel</a>, dsSimulate, <a href="dsVary2Modifications.html" class="code" title="function modifications_set = dsVary2Modifications(vary,model)">dsVary2Modifications</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>	CHECKOPTIONS - organize key/value pairs in structure with default or user-supplied values according to a schema</li><li><a href="dsCheckSpecification.html" class="code" title="function spec = dsCheckSpecification(specification, varargin)">dsCheckSpecification</a>	CHECKSPECIFICATION - standardize specification structure and auto-populate missing fields</li><li><a href="dsGenerateModel.html" class="code" title="function [model,name_map] = dsGenerateModel(specification, varargin)">dsGenerateModel</a>	GENERATEMODEL - Parse DynaSim specification and organize model data in DynaSim model structure</li><li><a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>	Inputs:</li><li><a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestDataLocalFn.html" class="code" title="function dsUnitSaveAutoGenTestDataLocalFn(argin, argout)">dsUnitSaveAutoGenTestDataLocalFn</a>	% saveAutoGenTestDataLocalFn(argin, argout)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../functions/dsSimulate.html" class="code" title="function [data,studyinfo,result] = dsSimulate(model,varargin)">dsSimulate</a>	% data=dsSimulate(model,'option',value,...)</li><li><a href="dsGenerateModel.html" class="code" title="function [model,name_map] = dsGenerateModel(specification, varargin)">dsGenerateModel</a>	GENERATEMODEL - Parse DynaSim specification and organize model data in DynaSim model structure</li><li><a href="dsProbeCellProperties.html" class="code" title="function data = dsProbeCellProperties(model,varargin)">dsProbeCellProperties</a>	data = dsProbeCellProperties(model,'option1',option1,...)</li><li><a href="dsProbeFI.html" class="code" title="function data = dsProbeFI(model,varargin)">dsProbeFI</a>	% data=dsProbeFI(model,varargin)</li><li><a href="dsWriteDynaSimSolver.html" class="code" title="function [outfile,options] = dsWriteDynaSimSolver(model,varargin)">dsWriteDynaSimSolver</a>	WRITEDYNASIMSOLVER - write m-file that numerically inteegrates the model</li><li><a href="dsWriteMatlabSolver.html" class="code" title="function solve_ode_filepath = dsWriteMatlabSolver(model,varargin)">dsWriteMatlabSolver</a>	WRITEMATLABSOLVER - write m-file that numerically inteegrates the model</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function modifications = standardize_modifications(modifications,specification, varargin)</a></li><li><a href="#_sub2" class="code">function spec = modify_specification(spec,mods, varargin)</a></li><li><a href="#_sub3" class="code">function modifications=backward_compatibility(modifications)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [output,modifications] = dsApplyModifications(model, modifications, varargin)</a>
+0002 <span class="comment">%APPLYMODIFICATIONS - Apply modifications to DynaSim specification or model structure</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% dsApplyModifications returns the same kind of structure with</span>
+0005 <span class="comment">% modifications applied. In all cases it first modifies the specification</span>
+0006 <span class="comment">% (model.specification if input is a model structure). Then it returns</span>
+0007 <span class="comment">% the modified specification or regenerates the model using the new</span>
+0008 <span class="comment">% specification.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Inputs:</span>
+0011 <span class="comment">%   - model: DynaSim model or specification structure</span>
+0012 <span class="comment">%     - see dsCheckModel and dsCheckSpecification for details</span>
+0013 <span class="comment">%   - modifications: modifications to make to specification structure</span>
+0014 <span class="comment">%       {X,Y,Z; X,Y,Z; ...}</span>
+0015 <span class="comment">%       X = population name or connection source-&gt;target</span>
+0016 <span class="comment">%       Y = thing to modify ('name', 'size', or parameter name)</span>
+0017 <span class="comment">%       set Y=Z if Y = name, size, or value</span>
+0018 <span class="comment">%       Note: (X1,X2) or (Y1,Y2): modify these simultaneously in the same way</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Outputs:</span>
+0021 <span class="comment">%   - TODO</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% Examples:</span>
+0024 <span class="comment">%   - modifying population size and parameters:</span>
+0025 <span class="comment">%       modifications={'E','size',5; 'E','gNa',120};</span>
+0026 <span class="comment">%       model=dsApplyModifications(model,modifications);</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">%   - modifying mechanism_list:</span>
+0029 <span class="comment">%       m=dsApplyModifications('dv/dt=10+@current; {iNa,iK}',...</span>
+0030 <span class="comment">%                            {'pop1','mechanism_list','-iNa'});</span>
+0031 <span class="comment">%       m.populations.mechanism_list</span>
+0032 <span class="comment">%       m=dsApplyModifications('dv/dt=10+@current; {iNa,iK}',...</span>
+0033 <span class="comment">%                            {'pop1','mechanism_list','+iCa'});</span>
+0034 <span class="comment">%       m.populations.mechanism_list</span>
+0035 <span class="comment">%       m=dsApplyModifications('dv/dt=10+@current; {iNa,iK}',...</span>
+0036 <span class="comment">%                            {'pop1','mechanism_list','+(iCa,iCan,CaBuffer)'});</span>
+0037 <span class="comment">%       m.populations.mechanism_list</span>
+0038 <span class="comment">%</span>
+0039 <span class="comment">%   - modifying equations (using special &quot;cat()&quot; operator or direct substitution)</span>
+0040 <span class="comment">%       m=dsApplyModifications('dv/dt=10+@current; {iNa,iK}',...</span>
+0041 <span class="comment">%                            {'pop1','equations','cat(dv/dt,+I)'});</span>
+0042 <span class="comment">%       m.populations.equations</span>
+0043 <span class="comment">%       m=dsApplyModifications('dv/dt=I(t)+@current; I(t)=10; {iNa,iK}',...</span>
+0044 <span class="comment">%                            {'pop1','equations','cat(I(t),+sin(2*pi*t))'});</span>
+0045 <span class="comment">%       m.populations.equations</span>
+0046 <span class="comment">%       m=dsApplyModifications('dv/dt=I(t)+@current; I(t)=10; {iNa,iK}',...</span>
+0047 <span class="comment">%                            {'pop1','equations','dv/dt=10+@current'});</span>
+0048 <span class="comment">%       m.populations.equations</span>
+0049 <span class="comment">%       m.populations.mechanism_list</span>
+0050 <span class="comment">%</span>
+0051 <span class="comment">%   - modifying equations with reserved keywords &quot;ODEn&quot; and &quot;FUNCTIONn&quot;</span>
+0052 <span class="comment">%     - Note:</span>
+0053 <span class="comment">%       'ODEn' = reserved keyword referencing the n-th ODE in equations</span>
+0054 <span class="comment">%       'ODE' = aliases ODE1</span>
+0055 <span class="comment">%       similarly: 'FUNCTIONn' and 'FUNCTION'</span>
+0056 <span class="comment">%</span>
+0057 <span class="comment">%       m=dsApplyModifications('dv/dt=10+@current; {iNa,iK}',...</span>
+0058 <span class="comment">%                            {'pop1','equations','cat(ODE,+I)'});</span>
+0059 <span class="comment">%       m.populations.equations</span>
+0060 <span class="comment">%       m=dsApplyModifications('dv/dt=10+@current; du/dt=-u; {iNa,iK}',...</span>
+0061 <span class="comment">%                            {'pop1','equations','cat(ODE2,+I)'});</span>
+0062 <span class="comment">%       m.populations.equations</span>
+0063 <span class="comment">%       m=dsApplyModifications('dv/dt=I(t)+@current; I(t)=10; {iNa,iK}',...</span>
+0064 <span class="comment">%                            {'pop1','equations','cat(FUNCTION,+sin(2*pi*t))'});</span>
+0065 <span class="comment">%       m.populations.equations</span>
+0066 <span class="comment">%</span>
+0067 <span class="comment">% See also: dsGenerateModel, dsSimulate, dsVary2Modifications</span>
+0068 
+0069 <span class="comment">%% localfn output</span>
+0070 <span class="keyword">if</span> ~nargin
+0071   output = localfunctions; <span class="comment">% output var name specific to this fn</span>
+0072   <span class="keyword">return</span>
+0073 <span class="keyword">end</span>
+0074 
+0075 <span class="comment">%% auto_gen_test_data_flag argin</span>
+0076 options = <a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
+0077 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0078   varargs = varargin;
+0079   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0080   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
+0081   argin = [{model},{modifications}, varargs]; <span class="comment">% specific to this function</span>
+0082 <span class="keyword">end</span>
+0083 
+0084 <span class="comment">%%</span>
+0085 <span class="comment">% check for modifications</span>
+0086 <span class="keyword">if</span> isempty(modifications)
+0087   <span class="comment">% nothing to do</span>
+0088   output = model;
+0089   <span class="keyword">return</span>;
+0090 <span class="keyword">end</span>
+0091 
+0092 <span class="comment">% check input type</span>
+0093 <span class="keyword">if</span> ~isfield(model,<span class="string">'state_variables'</span>)
+0094   ismodel = 0;
+0095 <span class="keyword">else</span>
+0096   ismodel = 1;
+0097 <span class="keyword">end</span>
+0098 
+0099 <span class="comment">% check specification</span>
+0100 <span class="keyword">if</span> ismodel
+0101   specification=<a href="dsCheckSpecification.html" class="code" title="function spec = dsCheckSpecification(specification, varargin)">dsCheckSpecification</a>(model.specification, varargin{:});
+0102 <span class="keyword">else</span>
+0103   specification=<a href="dsCheckSpecification.html" class="code" title="function spec = dsCheckSpecification(specification, varargin)">dsCheckSpecification</a>(model, varargin{:});
+0104 <span class="keyword">end</span>
+0105 
+0106 <span class="comment">% update specification with whatever is in modifications</span>
+0107 modifications = <a href="#_sub1" class="code" title="subfunction modifications = standardize_modifications(modifications,specification, varargin)">standardize_modifications</a>(modifications,specification,varargin{:});
+0108 <span class="keyword">if</span> ismodel <span class="comment">% TODO: test this</span>
+0109   specification = <a href="#_sub2" class="code" title="subfunction spec = modify_specification(spec,mods, varargin)">modify_specification</a>(specification,modifications,varargin{:});
+0110 <span class="keyword">end</span>
+0111 
+0112 <span class="comment">% update model if input was a model structure</span>
+0113 <span class="keyword">if</span> ismodel
+0114   output=<a href="dsGenerateModel.html" class="code" title="function [model,name_map] = dsGenerateModel(specification, varargin)">dsGenerateModel</a>(specification);
+0115 <span class="keyword">else</span>
+0116   output = specification;
+0117 <span class="keyword">end</span>
+0118 
+0119 
+0120 <span class="comment">%% auto_gen_test_data_flag argout</span>
+0121 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0122   argout = {output, modifications}; <span class="comment">% specific to this function</span>
+0123   
+0124   <a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>(argin, argout);
+0125 <span class="keyword">end</span>
+0126 
+0127 <span class="keyword">end</span>
+0128 
+0129 <a name="_sub1" href="#_subfunctions" class="code">function modifications = standardize_modifications(modifications,specification, varargin)</a>
+0130 <span class="comment">% convert all modifications into 3-column cell matrix format</span>
+0131 <span class="comment">% (namespace,variable,value)</span>
+0132 
+0133 <span class="comment">% 1. modifications structure</span>
+0134 <span class="comment">% 2. partial specification structure</span>
+0135 
+0136 <span class="comment">%% auto_gen_test_data_flag argin</span>
+0137 options = <a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
+0138 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0139   varargs = varargin;
+0140   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0141   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
+0142   argin = [{modifications},{specification}, varargs]; <span class="comment">% specific to this function</span>
+0143 <span class="keyword">end</span>
+0144 
+0145 <span class="keyword">if</span> isstruct(modifications)
+0146   <span class="comment">% TODO</span>
+0147   <span class="comment">% convert structure to cell matrix</span>
+0148   <span class="comment">% ...</span>
+0149 <span class="keyword">end</span>
+0150 
+0151 <span class="comment">% check backward compatibility</span>
+0152 modifications=<a href="#_sub3" class="code" title="subfunction modifications=backward_compatibility(modifications)">backward_compatibility</a>(modifications);
+0153 
+0154 <span class="comment">% check for empty object specification</span>
+0155 missing_objects=find(cellfun(@isempty,modifications(:,1)));
+0156 <span class="keyword">if</span> any(missing_objects)
+0157   <span class="comment">% set to default population name</span>
+0158   <span class="keyword">for</span> i=1:length(missing_objects)
+0159     modifications{missing_objects(i),1}=specification.populations(1).name;<span class="comment">%'pop1';</span>
+0160   <span class="keyword">end</span>
+0161 <span class="keyword">end</span>
+0162 
+0163 <span class="comment">% support modifying multiple elements (of namespace or variable) simultaneously</span>
+0164 <span class="comment">% approach -- add extra entry for each thing to modify</span>
+0165 <span class="comment">% eg) expand {'(E,I)','Cm',2} to {'E','Cm',2; 'I','Cm',2}</span>
+0166 <span class="comment">% note: should be able to support {'(E,I)','(EK,EK2)',-80}</span>
+0167 <span class="keyword">if</span> any(~cellfun(@isempty,regexp(modifications(:,1),<span class="string">'^\(.*\)$'</span>))) || <span class="keyword">...</span>
+0168    any(~cellfun(@isempty,regexp(modifications(:,2),<span class="string">'^\(.*\)$'</span>)))
+0169  
+0170   <span class="comment">% loop over modifications</span>
+0171   modifications_={};
+0172   <span class="keyword">for</span> i=1:size(modifications,1)
+0173     <span class="comment">% check namespace for ()</span>
+0174     namespaces=regexp(modifications{i,1},<span class="string">'[\w\.\-&lt;&gt;]+'</span>,<span class="string">'match'</span>);
+0175     
+0176     <span class="comment">% check variable for ()</span>
+0177     variables=regexp(modifications{i,2},<span class="string">'[\w\.-]+'</span>,<span class="string">'match'</span>);
+0178     
+0179     <span class="keyword">if</span> ischar(modifications{i,3})
+0180         
+0181         <span class="comment">% expand list of modifications</span>
+0182         <span class="keyword">for</span> j=1:length(namespaces)
+0183             <span class="keyword">for</span> k=1:length(variables)
+0184                 modifications_(end+1,1:3)={namespaces{j},variables{k},modifications{i,3}};
+0185             <span class="keyword">end</span>
+0186         <span class="keyword">end</span>
+0187         
+0188     <span class="keyword">elseif</span> isnumeric(modifications{i,3})
+0189         
+0190         <span class="comment">% check size of values matches number of namespaces, variables</span>
+0191         <span class="keyword">if</span> isscalar(modifications{i,3}) <span class="comment">% in case number of values is one</span>
+0192             modifications{i,3} = repmat(modifications{i,3},length(variables),length(namespaces));
+0193         <span class="keyword">else</span>
+0194             <span class="keyword">if</span> size(modifications{i,3},1) ~= length(variables) || size(modifications{i,3},2) ~= length(namespaces)
+0195                 <span class="comment">% in case values is number of variables x 1</span>
+0196                 <span class="keyword">if</span> size(modifications{i,3},1) == length(variables) &amp;&amp; size(modifications{i,3},2) == 1
+0197                     modifications{i,3} = repmat(modifications{i,3},1,length(namespaces));
+0198                     <span class="comment">% in case values is 1 x number of namespaces</span>
+0199                 <span class="keyword">elseif</span> size(modifications{i,3},2) == length(namespaces) &amp;&amp; size(modifications{i,3},1) == 1
+0200                     modifications{i,3} = repmat(modifications{i,3},length(variables),1);
+0201                     <span class="comment">% TODO: char inputs</span>
+0202                     <span class="comment">% elseif ischar(modifications{i,3})</span>
+0203                     <span class="comment">% string input</span>
+0204                 <span class="keyword">else</span> <span class="comment">% if ~ischar(modifications{i,3})</span>
+0205                     error([<span class="string">'Numerical values varied over must be in array format,'</span>,<span class="keyword">...</span>
+0206                         <span class="string">'where dimensions 1, 2, and 3 correspond to mechanisms, values, and populations varied over.'</span>])
+0207                 <span class="keyword">end</span>
+0208             <span class="keyword">end</span>
+0209         <span class="keyword">end</span>
+0210         
+0211         <span class="comment">% expand list of modifications</span>
+0212         <span class="keyword">for</span> j=1:length(namespaces)
+0213             <span class="keyword">for</span> k=1:length(variables)
+0214                 modifications_(end+1,1:3)={namespaces{j},variables{k},modifications{i,3}(k,j)};
+0215             <span class="keyword">end</span>
+0216         <span class="keyword">end</span>
+0217         
+0218     <span class="keyword">end</span>
+0219 
+0220   <span class="keyword">end</span>
+0221 
+0222   modifications=modifications_;
+0223 
+0224 <span class="keyword">end</span>
+0225 
+0226 <span class="comment">%% auto_gen_test_data_flag argout</span>
+0227 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0228   argout = {modifications}; <span class="comment">% specific to this function</span>
+0229   
+0230   <a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestDataLocalFn.html" class="code" title="function dsUnitSaveAutoGenTestDataLocalFn(argin, argout)">dsUnitSaveAutoGenTestDataLocalFn</a>(argin, argout); <span class="comment">% localfn</span>
+0231 <span class="keyword">end</span>
+0232 
+0233 <span class="keyword">end</span>
+0234 
+0235 
+0236 <a name="_sub2" href="#_subfunctions" class="code">function spec = modify_specification(spec,mods, varargin)</a>
+0237 <span class="comment">%% auto_gen_test_data_flag argin</span>
+0238 options = <a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
+0239 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0240   varargs = varargin;
+0241   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0242   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
+0243   argin = [{spec},{mods}, varargs]; <span class="comment">% specific to this function</span>
+0244 <span class="keyword">end</span>
+0245 
+0246 precision=8; <span class="comment">% number of digits allowed for user-supplied values</span>
+0247 predefined_variables={<span class="string">'name'</span>,<span class="string">'size'</span>,<span class="string">'parameters'</span>,<span class="string">'mechanism_list'</span>,<span class="string">'equations'</span>};
+0248 pop_names={spec.populations.name};
+0249 <span class="keyword">if</span> ~isempty(spec.connections)
+0250   con_names=arrayfun(@(x)[x.source <span class="string">'-&gt;'</span> x.target],spec.connections,<span class="string">'uni'</span>,0);
+0251 <span class="keyword">else</span>
+0252   con_names=[];
+0253 <span class="keyword">end</span>
+0254 
+0255 <span class="comment">% loop over modifications to apply</span>
+0256 <span class="keyword">for</span> i=1:size(mods,1)
+0257   obj=mods{i,1}; <span class="comment">% population name or connection source-target</span>
+0258   fld=mods{i,2}; <span class="comment">% population name, size, or parameter name</span>
+0259   
+0260   <span class="keyword">if</span> ~ischar(obj)
+0261     error(<span class="string">'modification must be applied to population name or connection source-target'</span>);
+0262   <span class="keyword">end</span>
+0263   
+0264   <span class="keyword">if</span> ~ischar(fld) <span class="comment">%|| ~ismember(fld,{'name','size','parameters','mechanism_list','equations'})</span>
+0265     error(<span class="string">'modification must be applied to population ''name'',''size'',or a parameter referenced by its name'</span>);
+0266   <span class="keyword">end</span>
+0267   
+0268   <span class="comment">% standardize connection object: convert target&lt;-source to source-&gt;target</span>
+0269   <span class="keyword">if</span> any(strfind(obj,<span class="string">'&lt;-'</span>))
+0270     ind=strfind(obj,<span class="string">'&lt;-'</span>);
+0271     obj=[obj(ind(1)+2:end) <span class="string">'-&gt;'</span> obj(1:ind(1)-1)];
+0272   <span class="keyword">end</span>
+0273   
+0274   val=mods{i,3}; <span class="comment">% value for population name or size, or parameter to modify</span>
+0275   <span class="keyword">if</span> ismember(obj,pop_names)
+0276     type=<span class="string">'populations'</span>;
+0277     names=pop_names;
+0278   <span class="keyword">elseif</span> ismember(obj,con_names)
+0279     type=<span class="string">'connections'</span>;
+0280     names=con_names;
+0281   <span class="keyword">else</span>
+0282     warning(<span class="string">'name of object to modify not found in populations or connections.'</span>);
+0283     <span class="keyword">continue</span>
+0284   <span class="keyword">end</span>
+0285   
+0286   index=ismember(names,obj);
+0287   
+0288   <span class="keyword">if</span> strcmp(fld,<span class="string">'mechanism_list'</span>)
+0289     <span class="comment">% support --</span>
+0290     <span class="comment">% 'E'    'mechanism_list'    '(iNa,iK)'</span>
+0291     <span class="comment">% 'E'    'mechanism_list'    '-(iNa,iK)'</span>
+0292     <span class="comment">% 'E'    'mechanism_list'    '+(iK)'</span>
+0293     <span class="comment">% 'E'    'mechanism_list'    '+iK'</span>
+0294     <span class="comment">% 'E'    'mechanism_list'    'iK'</span>
+0295     
+0296     elems=regexp(val,<span class="string">'[\w@]+'</span>,<span class="string">'match'</span>);
+0297     
+0298     <span class="keyword">if</span> strcmp(val(1),<span class="string">'+'</span>)
+0299       <span class="comment">% add mechanisms to existing list</span>
+0300       spec.(type)(index).mechanism_list=unique(cat(2,spec.(type)(index).mechanism_list,elems),<span class="string">'stable'</span>);
+0301     <span class="keyword">elseif</span> strcmp(val(1),<span class="string">'-'</span>)
+0302       <span class="comment">% remove mechanisms from existing list</span>
+0303       spec.(type)(index).mechanism_list=setdiff(spec.(type)(index).mechanism_list,elems,<span class="string">'stable'</span>);
+0304     <span class="keyword">else</span>
+0305       <span class="comment">% redefine mechanism list</span>
+0306       spec.(type)(index).mechanism_list=elems;
+0307     <span class="keyword">end</span>
+0308   <span class="keyword">elseif</span> strcmp(fld,<span class="string">'equations'</span>) &amp;&amp; ~isempty(regexp(val,<span class="string">'^cat('</span>,<span class="string">'once'</span>))
+0309     <span class="comment">% process special case: cat(TARGET,EXPRESSION)</span>
+0310     eqns=spec.(type)(index).equations;
+0311     args=regexp(val,<span class="string">'cat\((.+)\)'</span>,<span class="string">'tokens'</span>,<span class="string">'once'</span>);
+0312     ind=find(args{1}==<span class="string">','</span>,1,<span class="string">'first'</span>);
+0313     target=args{1}(1:ind-1);
+0314     expression=args{1}(ind+1:end);
+0315 <span class="comment">%     args=regexp(args{1},',','split');</span>
+0316 <span class="comment">%     target=args{1};</span>
+0317 <span class="comment">%     expression=args{2};</span>
+0318     <span class="comment">% support keywords: ODEn, ODE=ODE1, FUNCTIONn, FUNCTION=FUNCTION1</span>
+0319     <span class="keyword">if</span> strncmp(<span class="string">'ODE'</span>,target,3)
+0320       <span class="comment">% support target = ODEn and ODE=ODE1</span>
+0321       <span class="comment">% replace target by n-th ODE LHS</span>
+0322       lines=cellfun(@strtrim,strsplit(eqns,<span class="string">';'</span>),<span class="string">'uni'</span>,0); <span class="comment">% split equations into statements</span>
+0323       lines=lines(~cellfun(@isempty,lines)); <span class="comment">% eliminate empty elements</span>
+0324       pattern=<span class="string">'^((\w+'')|(d\w+/dt))\s*='</span>; <span class="comment">% pattern for ODEs</span>
+0325       inds=regexp(lines,pattern,<span class="string">'once'</span>); <span class="comment">% indices to ODE statements</span>
+0326       inds=find(~cellfun(@isempty,inds));
+0327       <span class="comment">% get index to the ODE statement to modify</span>
+0328       <span class="keyword">if</span> strcmp(target,<span class="string">'ODE'</span>)
+0329         ind=inds(1);
+0330       <span class="keyword">else</span>
+0331         n=str2num(target(4:end));
+0332         ind=inds(n);
+0333       <span class="keyword">end</span>
+0334       <span class="comment">% get LHS of ODE</span>
+0335       <span class="comment">%LHS=regexp(lines{ind},'^(.+)=','tokens','once');</span>
+0336       LHS=regexp(lines{ind},<span class="string">'^([^=]+)='</span>,<span class="string">'tokens'</span>,<span class="string">'once'</span>);
+0337       target=LHS{1};
+0338     <span class="keyword">elseif</span> strncmp(<span class="string">'FUNCTION'</span>,target,8)
+0339       <span class="comment">% support target = FUNCTIONn and FUNCTION=FUNCTION1</span>
+0340       <span class="comment">% replace target by n-th FUNCTION LHS</span>
+0341       lines=cellfun(@strtrim,strsplit(eqns,<span class="string">';'</span>),<span class="string">'uni'</span>,0); <span class="comment">% split equations into statements</span>
+0342       lines=lines(~cellfun(@isempty,lines)); <span class="comment">% eliminate empty elements</span>
+0343       pattern=<span class="string">'^\w+\([a-zA-Z][\w,]*\)\s*='</span>; <span class="comment">% pattern for functions</span>
+0344       inds=regexp(lines,pattern,<span class="string">'once'</span>); <span class="comment">% indices to function statements</span>
+0345       inds=find(~cellfun(@isempty,inds));
+0346       
+0347       <span class="comment">% get index to the function statement to modify</span>
+0348       <span class="keyword">if</span> strcmp(target,<span class="string">'FUNCTION'</span>)
+0349         ind=inds(1);
+0350       <span class="keyword">else</span>
+0351         n=str2num(target(9:end));
+0352         ind=inds(n);
+0353       <span class="keyword">end</span>
+0354       <span class="comment">% get LHS of ODE</span>
+0355       <span class="comment">%LHS=regexp(lines{ind},'^(.+)=','tokens','once');</span>
+0356       LHS=regexp(lines{ind},<span class="string">'^([^=]+)='</span>,<span class="string">'tokens'</span>,<span class="string">'once'</span>);
+0357       target=LHS{1};
+0358     <span class="keyword">end</span>
+0359     <span class="comment">% add escape character for using regular expression to match function statements</span>
+0360     target=strrep(target,<span class="string">'('</span>,<span class="string">'\('</span>);
+0361     target=strrep(target,<span class="string">')'</span>,<span class="string">'\)'</span>);
+0362     
+0363     <span class="comment">% modify equations</span>
+0364     old=regexp(eqns,[target <span class="string">'\s*=[^;]+'</span>],<span class="string">'match'</span>);
+0365     <span class="keyword">if</span> ~isempty(old)
+0366       eqns=strrep(eqns,old{1},[old{1} expression]);
+0367       spec.(type)(index).equations=eqns;
+0368     <span class="keyword">end</span>
+0369   <span class="keyword">elseif</span> ismember(fld,predefined_variables) <span class="comment">% not a single parameter to modify</span>
+0370     spec.(type)(index).(fld)=val;
+0371     <span class="keyword">if</span> strcmp(type,<span class="string">'populations'</span>) &amp;&amp; strcmp(fld,<span class="string">'name'</span>)
+0372       <span class="comment">% update name in connections</span>
+0373       <span class="keyword">for</span> j=1:length(spec.connections)
+0374         <span class="keyword">if</span> strcmp(pop_names{index},spec.connections(j).source)
+0375           spec.connections(j).source=val;
+0376         <span class="keyword">end</span>
+0377         
+0378         <span class="keyword">if</span> strcmp(pop_names{index},spec.connections(j).target)
+0379           spec.connections(j).target=val;
+0380         <span class="keyword">end</span>
+0381       <span class="keyword">end</span>
+0382     <span class="keyword">end</span>
+0383   <span class="keyword">else</span> <span class="comment">% modify a single parameter in the populations.parameters cell array</span>
+0384     param_names=spec.(type)(index).parameters(1:2:end);
+0385     <span class="keyword">if</span> isempty(spec.(type)(index).parameters)
+0386       <span class="comment">% no parameters set; start cell array of parameters</span>
+0387       spec.(type)(index).parameters={fld,val};<span class="comment">%toString(val2,precision)};</span>
+0388     <span class="keyword">elseif</span> ismember(fld,param_names)
+0389       <span class="comment">% parameter found in list; update its value</span>
+0390       val_pos=2*find(ismember(param_names,fld));
+0391       spec.(type)(index).parameters{val_pos}=val;<span class="comment">%toString(val2,precision);</span>
+0392     <span class="keyword">else</span>
+0393       <span class="comment">% parameter not in existing list; append to end</span>
+0394       spec.(type)(index).parameters{end+1}=fld;
+0395       spec.(type)(index).parameters{end+1}=val;<span class="comment">%toString(val2,precision);</span>
+0396     <span class="keyword">end</span>
+0397   <span class="keyword">end</span>
+0398 <span class="keyword">end</span>
+0399 
+0400 <span class="comment">%% auto_gen_test_data_flag argout</span>
+0401 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0402   argout = {spec}; <span class="comment">% specific to this function</span>
+0403   
+0404   <a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestDataLocalFn.html" class="code" title="function dsUnitSaveAutoGenTestDataLocalFn(argin, argout)">dsUnitSaveAutoGenTestDataLocalFn</a>(argin, argout); <span class="comment">% localfn</span>
+0405 <span class="keyword">end</span>
+0406 
+0407 <span class="keyword">end</span>
+0408 
+0409 
+0410 <a name="_sub3" href="#_subfunctions" class="code">function modifications=backward_compatibility(modifications)</a>
+0411 <span class="comment">% convert 2-column specification to 3-column specification with empty object name</span>
+0412 <span class="keyword">if</span> size(modifications,2)==2
+0413   tmp={};
+0414   <span class="keyword">for</span> i=1:size(modifications,1)
+0415     tmp{i,1}=<span class="string">''</span>;
+0416     tmp{i,2}=modifications{i,1};
+0417     tmp{i,3}=modifications{i,2};
+0418   <span class="keyword">end</span>
+0419   modifications=tmp;
+0420 <span class="keyword">end</span>
+0421 
+0422 <span class="comment">% convert 4-column specification to 3-column</span>
+0423 <span class="keyword">if</span> size(modifications,2)==4
+0424   <span class="keyword">for</span> i=1:size(modifications,1)
+0425     <span class="keyword">if</span> strcmp(modifications{i,2},<span class="string">'parameters'</span>)
+0426       <span class="comment">% shift parameter name to 2nd column</span>
+0427       modifications{i,2}=modifications{i,3};
+0428       
+0429       <span class="comment">% shift parameter value to 3rd column</span>
+0430       modifications{i,3}=modifications{i,4};
+0431     <span class="keyword">end</span>
+0432   <span class="keyword">end</span>
+0433   
+0434   <span class="comment">% remove fourth column</span>
+0435   modifications=modifications(:,1:3);
+0436 <span class="keyword">end</span>
+0437 
+0438 <span class="comment">% convert connection reference source-target to source-&gt;target</span>
+0439 <span class="keyword">if</span> any(~cellfun(@isempty,regexp(modifications(:,1),<span class="string">'\w-\w'</span>)))
+0440   <span class="comment">% find elements to adjust</span>
+0441   inds=find(~cellfun(@isempty,regexp(modifications(:,1),<span class="string">'\w-\w'</span>)));
+0442   <span class="keyword">for</span> i=1:length(inds)
+0443     modifications{inds(i),1}=strrep(modifications{inds(i),1},<span class="string">'-'</span>,<span class="string">'-&gt;'</span>);
+0444   <span class="keyword">end</span>
+0445 <span class="keyword">end</span>
+0446 
+0447 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

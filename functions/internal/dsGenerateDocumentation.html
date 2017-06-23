@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of dsGenerateDocumentation</title>
+  <meta name="keywords" content="dsGenerateDocumentation">
+  <meta name="description" content="GENERATEDOCUMENTATION - Build DynaSim function documentation">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- ../menu.html functions --><!-- menu.html internal -->
+<h1>dsGenerateDocumentation
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>GENERATEDOCUMENTATION - Build DynaSim function documentation</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function generateDocumentation </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">GENERATEDOCUMENTATION - Build DynaSim function documentation
+
+  This is a simple call to `m2html()` to make it easy for anyone with DynaSim
+  on their path to build the offline documentation.
+
+  HOWEVER, there is a caveat:
+     This is a custom version of m2html, in that I replaced all deprecated
+     'error(nargin(...' uses, which were giving warnings that slowed down the
+     program, into modern 'narginchk' uses, so this is NOT identical to the
+     downloadable m2html.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="dsGetConfig.html" class="code" title="function varOutput = dsGetConfig(query)">dsGetConfig</a>	GETCONFIG - returns the value of the variable specificed as string in argument</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function generateDocumentation</a>
+0002 <span class="comment">%GENERATEDOCUMENTATION - Build DynaSim function documentation</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%  This is a simple call to `m2html()` to make it easy for anyone with DynaSim</span>
+0005 <span class="comment">%  on their path to build the offline documentation.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%  HOWEVER, there is a caveat:</span>
+0008 <span class="comment">%     This is a custom version of m2html, in that I replaced all deprecated</span>
+0009 <span class="comment">%     'error(nargin(...' uses, which were giving warnings that slowed down the</span>
+0010 <span class="comment">%     program, into modern 'narginchk' uses, so this is NOT identical to the</span>
+0011 <span class="comment">%     downloadable m2html.</span>
+0012 
+0013 cwd = pwd; <span class="comment">% store current working dir</span>
+0014 
+0015 <span class="comment">% fprintf('Temporarily changing directory to dynasim root for offline documentation generation.\n\n')</span>
+0016 cd(<a href="dsGetConfig.html" class="code" title="function varOutput = dsGetConfig(query)">dsGetConfig</a>(<span class="string">'ds_root_path'</span>));
+0017 
+0018 m2html(<span class="string">'mfiles'</span>,{<span class="string">'functions'</span>},<span class="keyword">...</span>
+0019        <span class="string">'htmldir'</span>,<span class="string">'docs/offline_docs'</span>,<span class="keyword">...</span>
+0020        <span class="string">'recursive'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0021        <span class="string">'global'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0022        <span class="string">'template'</span>,<span class="string">'frame'</span>,<span class="keyword">...</span>
+0023        <span class="string">'index'</span>,<span class="string">'menu'</span>,<span class="keyword">...</span>
+0024        <span class="string">'graph'</span>,<span class="string">'on'</span>);
+0025 
+0026 <span class="comment">% fprintf('\nChanging directory back to original working directory.\n')</span>
+0027 cd(cwd);</pre></div>
+<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
