@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of dsPlot2D</title>
+  <meta name="keywords" content="dsPlot2D">
+  <meta name="description" content="Purpose: display movie of 2D simulated data.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+
+<a name="_top"></a>
+<div><a href="../../menu.html">Home</a> &gt;  <a href="../menu.html">functions</a> &gt; <a href="menu.html">internal</a> &gt; dsPlot2D.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../menu.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="menu.html">Index for functions/internal&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>dsPlot2D
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Purpose: display movie of 2D simulated data.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function dsPlot2D(data,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Purpose: display movie of 2D simulated data.
+ 
+ This is a wrapper around a visualization from Yohan John, PhD.
+
+ Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;
+ Copyright (C) 2017 Jason Sherfey, Boston University, USA</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>	CHECKOPTIONS - organize key/value pairs in structure with default or user-supplied values according to a schema</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function button2_plot(hObject,eventdata)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function dsPlot2D(data,varargin)</a>
+0002 <span class="comment">% Purpose: display movie of 2D simulated data.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% This is a wrapper around a visualization from Yohan John, PhD.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;</span>
+0007 <span class="comment">% Copyright (C) 2017 Jason Sherfey, Boston University, USA</span>
+0008 
+0009 options=<a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="keyword">...</span>
+0010   <span class="string">'input'</span>,[],[],<span class="keyword">...</span>
+0011   },false);
+0012 
+0013 s=data(1).model.specification;
+0014 
+0015 i=1;
+0016 popsize=s.populations(i).size;
+0017 <span class="keyword">if</span> isempty(options.input)
+0018   input=[];
+0019 <span class="keyword">else</span>
+0020   <span class="keyword">if</span> isfield(data,options.input)
+0021     input=data(1).(options.input);
+0022   <span class="keyword">elseif</span> isfield(data(1).model.parameters,options.input)
+0023     input=data(1).model.parameters.(options.input);
+0024   <span class="keyword">elseif</span> isfield(data(1).model.fixed_variables,options.input)
+0025     input=data(1).model.fixed_variables.(options.input);
+0026   <span class="keyword">else</span>
+0027     warning(<span class="string">'failed to find input %s'</span>,options.input);
+0028     input=[];
+0029   <span class="keyword">end</span>
+0030 <span class="keyword">end</span>
+0031 
+0032 ntime=length(data(1).time);
+0033 <span class="keyword">if</span> numel(popsize)==1
+0034   <span class="comment">% rearrange 1x(width^2) vector into (width x width) matrix</span>
+0035   width=sqrt(popsize);
+0036   X=reshape(data(1).(data(1).labels{1}),[ntime,width,width]);
+0037   <span class="keyword">if</span> ~isempty(input)
+0038     input=reshape(input,[ntime,width,width]);  
+0039   <span class="keyword">end</span>
+0040   <span class="comment">%show_2D(data(1).(data(1).labels{1}),input,width);</span>
+0041 <span class="keyword">elseif</span> numel(popsize)==2
+0042   <span class="comment">% use (width x width) matrix</span>
+0043   X=data(1).(data(1).labels{1});
+0044   width=size(X,2);
+0045 <span class="keyword">end</span>
+0046 
+0047 <span class="comment">% Plot matrix of activation at each time step using a slider</span>
+0048 <span class="comment">% Adapted from Yohan John's function show_2D.m.</span>
+0049 <span class="comment">%function show_2D(xs,Inp,aa)</span>
+0050 
+0051 scrsz = get(0,<span class="string">'ScreenSize'</span>);
+0052 <span class="keyword">if</span> ~isempty(input)
+0053   Imax = max(input(:));
+0054 <span class="keyword">else</span>
+0055   Imax=0;
+0056 <span class="keyword">end</span>
+0057 <span class="keyword">if</span> ~isempty(X)
+0058   xmax = max(X(:));
+0059 <span class="keyword">else</span>
+0060   xmax=0;
+0061 <span class="keyword">end</span>
+0062 
+0063 fh = figure(<span class="string">'Position'</span>,[10 scrsz(4)/2-500 0.5.*scrsz(3) 0.75.*scrsz(4)]);
+0064 
+0065 S.sl1 = uicontrol(<span class="string">'style'</span>,<span class="string">'slide'</span>,<span class="keyword">...</span>
+0066                   <span class="string">'String'</span>,<span class="string">'time'</span>,<span class="keyword">...</span>
+0067                  <span class="string">'unit'</span>,<span class="string">'pix'</span>,<span class="keyword">...</span>
+0068                  <span class="string">'position'</span>,[20 5 150 25],<span class="keyword">...</span>
+0069                  <span class="string">'min'</span>,1,<span class="string">'max'</span>,ntime,<span class="string">'val'</span>,1,<span class="keyword">...</span>
+0070                  <span class="string">'Callback'</span>,@<a href="#_sub1" class="code" title="subfunction button2_plot(hObject,eventdata)">button2_plot</a>);
+0071              
+0072   <a name="_sub1" href="#_subfunctions" class="code">function button2_plot(hObject,eventdata)</a>
+0073     value = get(S.sl1, <span class="string">'val'</span>);
+0074     
+0075     <span class="keyword">if</span> isempty(input)
+0076       nr=2; nc=1; xinds=[1 2];
+0077     <span class="keyword">else</span>
+0078       nr=2; nc=2; xinds=[2 4];
+0079     <span class="keyword">end</span>
+0080 
+0081     <span class="keyword">if</span> ~isempty(input)
+0082       subplot(nr,nc,xinds(1)-1)
+0083       <span class="keyword">if</span> ~isempty(input)
+0084         surf(squeeze(input(round(value),:,:)));
+0085         axis([1 width 1 width 0 Imax 0 1])
+0086         <span class="comment">%axis equal</span>
+0087         axis off
+0088       <span class="keyword">end</span>
+0089       subplot(nr,nc,xinds(2)-1)
+0090       <span class="keyword">if</span> ~isempty(input)
+0091         imagesc(squeeze(input(round(value),:,:)),[0 Imax]);
+0092         title(<span class="string">'Input'</span>)
+0093         <span class="comment">%axis([0 width 0 width 0 8 0 1])</span>
+0094         axis equal
+0095         axis off
+0096       <span class="keyword">end</span>
+0097     <span class="keyword">end</span>
+0098     
+0099     subplot(nr,nc,xinds(1))
+0100     <span class="keyword">if</span> ~isempty(X)
+0101       surf(squeeze(X(round(value),:,:)));
+0102       axis off
+0103       axis([1 width 1 width 0 xmax 0 1])
+0104     <span class="keyword">end</span>      
+0105 
+0106     sh=subplot(nr,nc,xinds(2));
+0107     <span class="keyword">if</span> ~isempty(X)
+0108       imagesc(squeeze(X(round(value),:,:)),[0 xmax]);
+0109       <span class="comment">%([0 width 0 width 0 1.2 0 1])</span>
+0110       axis equal
+0111       title(<span class="string">'Activity'</span>)
+0112       <span class="comment">%plot(1:value)</span>
+0113       axis off
+0114     <span class="keyword">end</span>
+0115     
+0116   <span class="keyword">end</span>
+0117 
+0118 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 12-Dec-2017 11:32:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

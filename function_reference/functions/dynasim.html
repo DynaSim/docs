@@ -1,0 +1,1673 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of dynasim</title>
+  <meta name="keywords" content="dynasim">
+  <meta name="description" content="DynaSim GUI">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+
+<a name="_top"></a>
+<div><a href="../menu.html">Home</a> &gt;  <a href="menu.html">functions</a> &gt; dynasim.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../menu.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="menu.html">Index for functions&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>dynasim
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>DynaSim GUI</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function dynasim(spec) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> DynaSim GUI
+ Purpose: graphical interface for DynaSim model building and exploration.
+ Usage:
+   dynasim; % load default model
+   dynasim(specification)
+ 
+ Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;
+ Copyright (C) 2016 Jason Sherfey, Boston University, USA</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="dsSimulate.html" class="code" title="function [data,studyinfo,result] = dsSimulate(model,varargin)">dsSimulate</a>	% data=dsSimulate(model,'option',value,...)</li><li><a href="dynasim.html" class="code" title="function dynasim(spec)">dynasim</a>	DynaSim GUI</li><li><a href="../functions/internal/dsCheckModel.html" class="code" title="function model = dsCheckModel(model, varargin)">dsCheckModel</a>	CHECKMODEL - Standardize model structure and auto-populate missing fields</li><li><a href="../functions/internal/dsCheckSpecification.html" class="code" title="function spec = dsCheckSpecification(specification, varargin)">dsCheckSpecification</a>	CHECKSPECIFICATION - standardize specification structure and auto-populate missing fields</li><li><a href="../functions/internal/dsDynasim2odefun.html" class="code" title="function [ODEFUN,IC,elem_names] = dsDynasim2odefun(model, varargin)">dsDynasim2odefun</a>	Purpose: prepare ODEFUN for use with built-in Matlab solvers.</li><li><a href="../functions/internal/dsGenerateModel.html" class="code" title="function [model,name_map] = dsGenerateModel(specification, varargin)">dsGenerateModel</a>	GENERATEMODEL - Parse DynaSim specification and organize model data in DynaSim model structure</li><li><a href="../functions/internal/dsPropagateParameters.html" class="code" title="function model = dsPropagateParameters(model,varargin)">dsPropagateParameters</a>	PROPAGATEPARAMETERS - substitute parameter values or prepend parameter names with prefix across all model equations.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="dynasim.html" class="code" title="function dynasim(spec)">dynasim</a>	DynaSim GUI</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function InitializeMainGUI</a></li><li><a href="#_sub2" class="code">function UpdatePopControls(src,evnt)</a></li><li><a href="#_sub3" class="code">function UpdateMechanismEditor(src,evnt)</a></li><li><a href="#_sub4" class="code">function UpdateMechanismFunctions(src,evnt,limflag)</a></li><li><a href="#_sub5" class="code">functions=eqns(idx);</a></li><li><a href="#_sub6" class="code">function UpdateConControls(src,evnt)</a></li><li><a href="#_sub7" class="code">function UpdateModel(src,evnt,aux_callback)</a></li><li><a href="#_sub8" class="code">function UpdatePopSelection(src,evnt)</a></li><li><a href="#_sub9" class="code">function UpdateViews(update_what)</a></li><li><a href="#_sub10" class="code">function UpdateEqnView(src,evnt)</a></li><li><a href="#_sub11" class="code">function InitializeSimView(src,evnt)</a></li><li><a href="#_sub12" class="code">function UpdateSimView(src,evnt)</a></li><li><a href="#_sub13" class="code">function UpdateSimPlots(src,evnt)</a></li><li><a href="#_sub14" class="code">function AutoscaleSimPlot(src,evnt,plot_index)</a></li><li><a href="#_sub15" class="code">function AutoscaleMechPlot(src,evnt)</a></li><li><a href="#_sub16" class="code">function ZoomFunction(src,evnt)</a></li><li><a href="#_sub17" class="code">function plot_Y=SelectPlotData(plot_index)</a></li><li><a href="#_sub18" class="code">function RunSim(src,evnt)</a></li><li><a href="#_sub19" class="code">function QuickSim(src,evnt)</a></li><li><a href="#_sub20" class="code">function cfg=data2cfg(data)</a></li><li><a href="#_sub21" class="code">function AddPopulation(src,evnt,base_pop_index)</a></li><li><a href="#_sub22" class="code">function RemovePopulation(src,evnt,base_pop_index)</a></li><li><a href="#_sub23" class="code">function RenamePopulation(src,evnt)</a></li><li><a href="#_sub24" class="code">function RenameMechanism(src,evnt)</a></li><li><a href="#_sub25" class="code">function SaveModel(src,evnt)</a></li><li><a href="#_sub26" class="code">function OpenModel(src,evnt)</a></li><li><a href="#_sub27" class="code">function eqns=dsExtractModelStrings(MODEL,display_mode,display_flag)</a></li><li><a href="#_sub28" class="code">function undo(src,evnt)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% DynaSim GUI</span>
+0002 <span class="comment">% Purpose: graphical interface for DynaSim model building and exploration.</span>
+0003 <span class="comment">% Usage:</span>
+0004 <span class="comment">%   dynasim; % load default model</span>
+0005 <span class="comment">%   dynasim(specification)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;</span>
+0008 <span class="comment">% Copyright (C) 2016 Jason Sherfey, Boston University, USA</span>
+0009 
+0010 <a name="_sub0" href="#_subfunctions" class="code">function dynasim(spec)</a>
+0011 
+0012 <span class="comment">% abort if not running in MATLAB</span>
+0013 <span class="keyword">if</span> ~strcmp(reportUI,<span class="string">'matlab'</span>)
+0014   warning(<span class="string">'DynaSim GUI is not supported in GNU Octave at this time.'</span>);
+0015   <span class="keyword">return</span>
+0016 <span class="keyword">end</span>
+0017 
+0018 <span class="keyword">global</span> handles SPEC MODEL cfg LASTSPEC LASTCFG
+0019 handles=[];
+0020 
+0021 <span class="keyword">if</span> nargin==0 <span class="comment">% default model</span>
+0022   <span class="comment">%SPEC=dsCheckSpecification([]);</span>
+0023   ina={
+0024     <span class="string">'INa(v,m,h) = -gNa.*m.^3.*h.*(v-50); gNa=120'</span>;  <span class="comment">% sodium current</span>
+0025     <span class="string">'dm/dt = aM(v).*(1-m)-bM(v).*m; m(0)=.1'</span>;       <span class="comment">% - activation</span>
+0026     <span class="string">'dh/dt = aH(v).*(1-h)-bH(v).*h; h(0)=.1'</span>;       <span class="comment">% - inactivation</span>
+0027     <span class="string">'aM(v) = (2.5-.1*(v+65))./(exp(2.5-.1*(v+65))-1)'</span>;
+0028     <span class="string">'bM(v) = 4*exp(-(v+65)/18)'</span>;
+0029     <span class="string">'aH(v) = .07*exp(-(v+65)/20)'</span>;
+0030     <span class="string">'bH(v) = 1./(exp(3-.1*(v+65))+1)'</span>;
+0031     <span class="string">'@current+=INa'</span>;
+0032   };
+0033   ik={
+0034     <span class="string">'IK(v,n) = -gK.*n.^4.*(v+77); gK=36'</span>;           <span class="comment">% potassium current</span>
+0035     <span class="string">'dn/dt = aN(v).*(1-n)-bN(v).*n; n(0)=0'</span>;        <span class="comment">% - activation</span>
+0036     <span class="string">'aN(v) = (.1-.01*(v+65))./(exp(1-.1*(v+65))-1)'</span>;
+0037     <span class="string">'bN(v) = .125*exp(-(v+65)/80)'</span>;  
+0038     <span class="string">'@current+=IK'</span>;
+0039   };
+0040   iampa={
+0041     <span class="string">'gSYN=0.1; ESYN=0; tauD=2; tauR=0.4'</span>;
+0042     <span class="string">'netcon=ones(N_pre,N_post)'</span>;
+0043     <span class="string">'ISYN(X,s)=(gSYN.*(s*netcon).*(X-ESYN))'</span>;
+0044     <span class="string">'ds/dt=-s./tauD+((1-s)/tauR).*(1+tanh(X_pre/10)); s(0)=.1'</span>;
+0045     <span class="string">'@isyn += -ISYN(X_post,s)'</span>;    
+0046   };
+0047   igaba={
+0048     <span class="string">'gSYN=0.25; ESYN=-80; tauD=10; tauR=0.4'</span>;
+0049     <span class="string">'netcon=ones(N_pre,N_post)'</span>;
+0050     <span class="string">'ISYN(X,s)=(gSYN.*(s*netcon).*(X-ESYN))'</span>;
+0051     <span class="string">'ds/dt=-s./tauD+((1-s)/tauR).*(1+tanh(X_pre/10)); s(0)=.1'</span>;
+0052     <span class="string">'@isyn += -ISYN(X_post,s)'</span>;
+0053   };
+0054   input=<span class="string">'Iapp=0; noise=0; @input+=Iapp+noise*randn(1,N_pop)'</span>;
+0055   master_equations=<span class="string">'dv/dt=@input+@current+@isyn; v(0)=-65'</span>;
+0056   mechanism_list={<span class="string">'ina'</span>,<span class="string">'ik'</span>,<span class="string">'input1'</span>};
+0057   <span class="comment">%master_equations='dv/dt=Iapp+@current+noise*randn(1,N_pop);';</span>
+0058   <span class="comment">%mechanism_list={'ina','ik'};</span>
+0059   s=[];
+0060   s.populations(1).name=<span class="string">'E'</span>;
+0061   s.populations(1).size=8;
+0062   s.populations(1).equations=master_equations;
+0063   s.populations(1).mechanism_list=mechanism_list;
+0064   s.populations(1).parameters={<span class="string">'Iapp'</span>,5,<span class="string">'noise'</span>,40,<span class="string">'gNa'</span>,125};
+0065   s.populations(2).name=<span class="string">'I'</span>;
+0066   s.populations(2).size=2;
+0067   s.populations(2).equations=master_equations;
+0068   s.populations(2).mechanism_list=mechanism_list;
+0069   s.populations(2).parameters={<span class="string">'Iapp'</span>,0,<span class="string">'noise'</span>,40};
+0070   s.connections(1).direction=<span class="string">'I-&gt;E'</span>;
+0071   s.connections(1).mechanism_list={<span class="string">'igaba'</span>};<span class="comment">%{'iGABAa'};</span>
+0072   s.connections(1).parameters={<span class="string">'tauD'</span>,10,<span class="string">'gSYN'</span>,.1};
+0073   s.connections(2).direction=<span class="string">'E-&gt;I'</span>;
+0074   s.connections(2).mechanism_list={<span class="string">'iampa'</span>};<span class="comment">%{'iAMPA'};</span>
+0075   s.connections(2).parameters={<span class="string">'tauD'</span>,2,<span class="string">'gSYN'</span>,.1};
+0076   s.mechanisms(1).name=<span class="string">'ina'</span>;
+0077   s.mechanisms(1).equations=ina;
+0078   s.mechanisms(2).name=<span class="string">'ik'</span>;
+0079   s.mechanisms(2).equations=ik;
+0080   s.mechanisms(3).name=<span class="string">'iampa'</span>;
+0081   s.mechanisms(3).equations=iampa;
+0082   s.mechanisms(4).name=<span class="string">'igaba'</span>;
+0083   s.mechanisms(4).equations=igaba;
+0084   s.mechanisms(5).name=<span class="string">'input1'</span>;
+0085   s.mechanisms(5).equations=input;
+0086   spec=s;
+0087   
+0088 <span class="keyword">end</span>
+0089 <span class="comment">% check specification</span>
+0090 SPEC=<a href="../functions/internal/dsCheckSpecification.html" class="code" title="function spec = dsCheckSpecification(specification, varargin)">dsCheckSpecification</a>(spec);
+0091 <span class="comment">% remove global population params (already applied to pop(#).mechanisms(#).equation)</span>
+0092 [SPEC.populations.parameters]=deal([]);
+0093 <span class="keyword">if</span> ~isempty(SPEC.connections)
+0094   [SPEC.connections.parameters]=deal([]);
+0095 <span class="keyword">end</span>
+0096 <span class="comment">% generate model</span>
+0097 MODEL=<a href="../functions/internal/dsGenerateModel.html" class="code" title="function [model,name_map] = dsGenerateModel(specification, varargin)">dsGenerateModel</a>(SPEC);
+0098 <span class="comment">% extract model ODEFUN and IC</span>
+0099 <span class="keyword">try</span>
+0100   [ODEFUN,IC,elem_names]=<a href="../functions/internal/dsDynasim2odefun.html" class="code" title="function [ODEFUN,IC,elem_names] = dsDynasim2odefun(model, varargin)">dsDynasim2odefun</a>(<a href="../functions/internal/dsPropagateParameters.html" class="code" title="function model = dsPropagateParameters(model,varargin)">dsPropagateParameters</a>(MODEL));
+0101 <span class="keyword">catch</span>
+0102   ODEFUN=<span class="string">''</span>;
+0103   IC=[];
+0104   elem_names={};
+0105 <span class="keyword">end</span>
+0106 <span class="comment">% txt=dsExtractModelStrings(MODEL,'model',0);</span>
+0107 <span class="comment">% ODEFUN=txt{1}; IC=txt{2}; elem_names=txt{3};</span>
+0108 
+0109 <span class="comment">% app configuration</span>
+0110 cfg.username=<span class="string">'anonymous'</span>;
+0111 cfg.model_text=<span class="string">'model equations ...'</span>;
+0112 cfg.V=linspace(-100,100,20e3); <span class="comment">% default xdata for auxiliary function plot</span>
+0113 cfg.linecolors  = <span class="string">'kbrgmy'</span>;
+0114 cfg.linetype  = {<span class="string">'-'</span>,<span class="string">':'</span>,<span class="string">'-.'</span>,<span class="string">'--'</span>};
+0115 cfg.max_num_plots=3;
+0116 cfg.num_xticks=5;
+0117 cfg.num_steps_per_plot=400; <span class="comment">% number sim time steps per sim view update</span>
+0118 cfg.sim_paused=-1;
+0119 cfg.sim_stopped=0;
+0120 cfg.ymin=-90*ones(1,cfg.max_num_plots);
+0121 cfg.ymax=50*ones(1,cfg.max_num_plots);
+0122 cfg.ModelFontName=<span class="string">'Monospaced'</span>; <span class="comment">% 'Courier'</span>
+0123 cfg.autoscale_charcode=5864;
+0124 
+0125 cfg.BackgroundColor=[204 204 180]/255;
+0126 cfg.ButtonColor=[0 102 153]/255/1.75; <span class="comment">% 'c',[51 204 204]/255</span>
+0127 cfg.ButtonFontColor=[240 240 240]/255; <span class="comment">% 'k'</span>
+0128 
+0129 <span class="comment">% cfg.BackgroundColor=[204 204 180]/255;</span>
+0130 <span class="comment">% cfg.ButtonColor=[0 255 255]/255/1.25;</span>
+0131 <span class="comment">% cfg.ButtonFontColor='k';</span>
+0132 
+0133 <span class="comment">% default data</span>
+0134 cfg.ODEFUN=ODEFUN;
+0135 cfg.IC=IC;
+0136 cfg.elem_names=elem_names;
+0137 cfg.ntime=20e3+1;
+0138 cfg.dt=.01;
+0139 cfg.t0=0;
+0140 cfg.tf=200;
+0141 cfg.t=(0:cfg.ntime-1)'*cfg.dt;
+0142 cfg.t_plot_indices=1:cfg.ntime;
+0143 cfg.Y=zeros(cfg.ntime,max(1,length(cfg.IC)));
+0144 cfg.xtick=linspace(cfg.t(1),cfg.t(end),cfg.num_xticks);
+0145 cfg.xticklabel=linspace(cfg.t(1),cfg.t(end),cfg.num_xticks);
+0146 
+0147 <span class="keyword">if</span> nargin==0
+0148   LASTSPEC=SPEC;
+0149   LASTCFG=cfg;
+0150 <span class="keyword">end</span>
+0151 
+0152 <span class="comment">% open figure for model designer</span>
+0153 figure_position=[245 145 1460 770]; <span class="comment">% compact</span>
+0154 handles.fig_main = figure(<span class="string">'position'</span>,figure_position,<span class="string">'color'</span>,cfg.BackgroundColor,<span class="string">'tag'</span>,<span class="string">'designer'</span>,<span class="string">'name'</span>,<span class="string">'DynaSim Model Builder'</span>,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="string">'WindowScrollWheelFcn'</span>,@<a href="#_sub16" class="code" title="subfunction ZoomFunction(src,evnt)">ZoomFunction</a>,<span class="string">'CloseRequestFcn'</span>,<span class="string">'delete(gcf); clear global H'</span>);
+0155 
+0156 <span class="comment">% #####################################</span>
+0157 <span class="comment">% MENU NEEDS WORK!!!</span>
+0158 <span class="comment">% #####################################</span>
+0159 <span class="comment">% Set up Menu</span>
+0160 set(handles.fig_main,<span class="string">'MenuBar'</span>,<span class="string">'none'</span>);
+0161 file_m = uimenu(handles.fig_main,<span class="string">'Label'</span>,<span class="string">'File'</span>);
+0162 uimenu(file_m,<span class="string">'Label'</span>,<span class="string">'New model'</span>,<span class="string">'Callback'</span>,<span class="string">'global handles; close(handles.fig_main); dynasim(dsCheckSpecification([]));'</span>);<span class="comment">%{@OpenModel,1,'file'});</span>
+0163 uimenu(file_m,<span class="string">'Label'</span>,<span class="string">'Open model'</span>,<span class="string">'Callback'</span>,@<a href="#_sub26" class="code" title="subfunction OpenModel(src,evnt)">OpenModel</a>);<span class="comment">%{@OpenModel,1,'file'});</span>
+0164 <span class="comment">% uimenu(file_m,'Label','Append model(s)','Callback',{@OpenModel,0,'file'});</span>
+0165 uimenu(file_m,<span class="string">'Label'</span>,<span class="string">'Save model'</span>,<span class="string">'Callback'</span>,@<a href="#_sub25" class="code" title="subfunction SaveModel(src,evnt)">SaveModel</a>);
+0166 <span class="comment">% uimenu(file_m,'Label','Upload model','Callback',@UploadModel);</span>
+0167 <span class="comment">% uimenu(file_m,'Label','Write solve file','Callback','global CURRSPEC; write_dnsim_script(CURRSPEC);');</span>
+0168 <span class="comment">% ws_m = uimenu(file_m,'Label','Interact');</span>
+0169 <span class="comment">% uimenu(ws_m,'Label','Pass model (''spec'') to command window','Callback','global CURRSPEC; assignin(''base'',''spec'',CURRSPEC);');</span>
+0170 <span class="comment">% uimenu(ws_m,'Label','Update model (''spec'') from base workspace','Callback',{@refresh,1});</span>
+0171 <span class="comment">% uimenu(ws_m,'Label','Pass ''sim_data'' (during interactive simulation) to command window','Callback','global cfg;cfg.publish=1;');</span>
+0172 <span class="comment">% import_m = uimenu(file_m,'Label','Import');</span>
+0173 <span class="comment">% uimenu(import_m,'Label','XPP (wip)','Callback','not implemented yet');</span>
+0174 <span class="comment">% export_m = uimenu(file_m,'Label','Export');</span>
+0175 <span class="comment">% uimenu(export_m,'Label','XPP (wip)','Callback','not implemented yet');</span>
+0176 <span class="comment">% uimenu(export_m,'Label','NEURON (wip)','Callback','not implemented yet');</span>
+0177 <span class="comment">% uimenu(export_m,'Label','CellML (wip)','Callback','not implemented yet');</span>
+0178 uimenu(file_m,<span class="string">'Label'</span>,<span class="string">'Refresh GUI'</span>,<span class="string">'Callback'</span>,<span class="string">'global SPEC handles; close(handles.fig_main); dynasim(SPEC);'</span>);
+0179 uimenu(file_m,<span class="string">'Label'</span>,<span class="string">'Exit'</span>,<span class="string">'Callback'</span>,<span class="string">'global handles cfg; close(handles.fig_main); clear handles cfg; warning on'</span>);
+0180 <span class="comment">% plot_m = uimenu(handles.fig_main,'Label','Plot');</span>
+0181 <span class="comment">% uimenu(plot_m,'Label','quick plot','Callback',['global CURRSPEC; if ismember(''sim_data'',evalin(''base'',''who'')), plotv(evalin(''base'',''sim_data''),CURRSPEC,''varlabel'',sprintf(''%s'',CURRSPEC.variables.global_oldlabel{1})); else disp(''load data to plot''); end']);</span>
+0182 <span class="comment">% uimenu(plot_m,'Label','plotpow','Callback','global CURRSPEC; if ismember(''sim_data'',evalin(''base'',''who'')), plotpow(evalin(''base'',''sim_data''),CURRSPEC,''spectrogram_flag'',0); else disp(''load data to plot''); end');</span>
+0183 <span class="comment">% uimenu(plot_m,'Label','plotspk','Callback','global CURRSPEC; if ismember(''sim_data'',evalin(''base'',''who'')), plotspk(evalin(''base'',''sim_data''),CURRSPEC,''window_size'',30/1000,''dW'',5/1000); else disp(''load data to plot''); end');</span>
+0184 <span class="comment">% uimenu(plot_m,'Label','visualizer','Callback','global CURRSPEC; if ismember(''sim_data'',evalin(''base'',''who'')), visualizer(evalin(''base'',''sim_data'')); else disp(''load data to plot''); end');</span>
+0185 
+0186 <a href="#_sub1" class="code" title="subfunction InitializeMainGUI ">InitializeMainGUI</a>;
+0187 
+0188 <span class="comment">%% Set up GUI Model Builder</span>
+0189 <a name="_sub1" href="#_subfunctions" class="code">function InitializeMainGUI </a><span class="comment">% (todo: called by GUI Launcher)</span>
+0190 <span class="keyword">global</span> handles SPEC cfg
+0191 
+0192 <span class="comment">% extract specification content necessary for setting up app controls</span>
+0193 pop_names={SPEC.populations.name};
+0194 active_model_component=SPEC.populations(1).name;
+0195 active_mechanism_list=SPEC.populations(1).mechanism_list;
+0196 <span class="keyword">if</span> isfield(SPEC.populations(1).mechanisms,<span class="string">'equations'</span>)
+0197   active_mechanism_text=SPEC.populations(1).mechanisms(1).equations;
+0198 <span class="keyword">else</span>
+0199   active_mechanism_text=<span class="string">''</span>;
+0200 <span class="keyword">end</span>
+0201 active_mechanism_userdata=[];
+0202 
+0203 bgcolor=cfg.BackgroundColor;
+0204 <span class="comment">% % open figure for model designer</span>
+0205 <span class="comment">% figure_position=[50 80 1800 900]; % 50% aspect ratio</span>
+0206 <span class="comment">% figure_position=[245 145 1460 770]; % compact</span>
+0207 <span class="comment">% handles.fig_main = figure('position',figure_position,'color',bgcolor,'tag','designer','name','DynaSim Model Builder','NumberTitle','off','WindowScrollWheelFcn',@ZoomFunction,'CloseRequestFcn','delete(gcf); clear global H');</span>
+0208 
+0209 <span class="comment">% ####################################################################</span>
+0210 <span class="comment">% Views: right panel</span>
+0211 handles.pview=uipanel(<span class="string">'parent'</span>,handles.fig_main,<span class="string">'title'</span>,<span class="string">''</span>,<span class="string">'visible'</span>,<span class="string">'on'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.5 0 .5 1]);
+0212 <span class="comment">% Simulation View</span>
+0213 handles.bsimview=uicontrol(<span class="string">'parent'</span>,handles.pview,<span class="string">'style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'tag'</span>,<span class="string">'viewtab'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[0 .95 .5 .05],<span class="string">'string'</span>,<span class="string">'Simulation View'</span>,<span class="string">'fontsize'</span>,11,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="string">'backgroundcolor'</span>,[.7 .7 .7],<span class="string">'callback'</span>,<span class="string">'set(findobj(''tag'',''viewtoggle''),''visible'',''off''); set(findobj(''tag'',''viewtab''),''backgroundcolor'',[1 1 1]); set(findobj(''userdata'',''handles.psimview''),''visible'',''on''); set(gcbo,''backgroundcolor'',[.7 .7 .7]);'</span>);
+0214 handles.psimview=uipanel(<span class="string">'parent'</span>,handles.pview,<span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>,<span class="string">'title'</span>,<span class="string">''</span>,<span class="string">'visible'</span>,<span class="string">'on'</span>,<span class="string">'tag'</span>,<span class="string">'viewtoggle'</span>,<span class="string">'userdata'</span>,<span class="string">'handles.psimview'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[0 0 1 .95]);
+0215 <span class="comment">% Equation View</span>
+0216 handles.beqnview=uicontrol(<span class="string">'parent'</span>,handles.pview,<span class="string">'style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'tag'</span>,<span class="string">'viewtab'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.5 .95 .5 .05],<span class="string">'string'</span>,<span class="string">'Equation View'</span>,<span class="string">'fontsize'</span>,11,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="string">'backgroundcolor'</span>,[1 1 1],<span class="string">'callback'</span>,<span class="string">'set(findobj(''tag'',''viewtoggle''),''visible'',''off''); set(findobj(''tag'',''viewtab''),''backgroundcolor'',[1 1 1]); set(findobj(''userdata'',''handles.peqnview''),''visible'',''on''); set(gcbo,''backgroundcolor'',[.7 .7 .7]);'</span>);
+0217 handles.peqnview=uipanel(<span class="string">'parent'</span>,handles.pview,<span class="string">'backgroundcolor'</span>,[.9 .9 .9],<span class="string">'title'</span>,<span class="string">''</span>,<span class="string">'visible'</span>,<span class="string">'off'</span>,<span class="string">'tag'</span>,<span class="string">'viewtoggle'</span>,<span class="string">'userdata'</span>,<span class="string">'handles.peqnview'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[0 0 1 .95]);
+0218 handles.txt_model = uicontrol(<span class="string">'parent'</span>,handles.peqnview,<span class="string">'style'</span>,<span class="string">'edit'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'tag'</span>,<span class="string">'modeltext'</span>,<span class="string">'position'</span>,[0 0 1 1],<span class="string">'string'</span>,cfg.model_text,<span class="string">'ForegroundColor'</span>,<span class="string">'k'</span>,<span class="string">'FontName'</span>,cfg.ModelFontName,<span class="string">'FontSize'</span>,9,<span class="string">'HorizontalAlignment'</span>,<span class="string">'Left'</span>,<span class="string">'Max'</span>,100,<span class="string">'BackgroundColor'</span>,[.95 .95 .95]);
+0219 <span class="comment">% % enable horizontal scrolling</span>
+0220 <span class="comment">%   jEdit = findjobj(txt_model);</span>
+0221 <span class="comment">%   try</span>
+0222 <span class="comment">%     jEditbox = jEdit.getViewport().getComponent(0);</span>
+0223 <span class="comment">%     jEditbox.setWrapping(false);                % turn off word-wrapping</span>
+0224 <span class="comment">%     jEditbox.setEditable(false);                % non-editable</span>
+0225 <span class="comment">%     set(jEdit,'HorizontalScrollBarPolicy',30);  % HORIZONTAL_SCROLLBAR_AS_NEEDED</span>
+0226 <span class="comment">%     % maintain horizontal scrollbar policy which reverts back on component resize</span>
+0227 <span class="comment">%     hjEdit = handle(jEdit,'CallbackProperties');</span>
+0228 <span class="comment">%     set(hjEdit, 'ComponentResizedCallback','set(gcbo,''HorizontalScrollBarPolicy'',30)')</span>
+0229 <span class="comment">%   end</span>
+0230 
+0231 <span class="comment">% ####################################################################</span>
+0232 <span class="comment">% set up global controls (i.e., always present in main figure in all views)</span>
+0233 uicontrol(<span class="string">'parent'</span>,handles.fig_main,<span class="string">'style'</span>,<span class="string">'text'</span>,<span class="string">'string'</span>,<span class="string">'DynaSim Model Designer'</span>,<span class="string">'fontsize'</span>,16,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[0 .95 .25 .04],<span class="string">'backgroundcolor'</span>,bgcolor,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="string">'ForegroundColor'</span>,[0 0 0]);
+0234 uicontrol(<span class="string">'parent'</span>,handles.fig_main,<span class="string">'style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.35 .95 .15 .05],<span class="string">'string'</span>,<span class="string">'SAVE MODEL'</span>,<span class="string">'backgroundcolor'</span>,cfg.ButtonColor,<span class="string">'ForegroundColor'</span>,cfg.ButtonFontColor,<span class="string">'ForegroundColor'</span>,cfg.ButtonFontColor,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="string">'callback'</span>,@<a href="#_sub25" class="code" title="subfunction SaveModel(src,evnt)">SaveModel</a>,<span class="string">'FontSize'</span>,14);
+0235 uicontrol(<span class="string">'parent'</span>,handles.fig_main,<span class="string">'style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.3 .97 .04 .03],<span class="string">'string'</span>,<span class="string">'undo'</span>,<span class="string">'backgroundcolor'</span>,cfg.ButtonColor,<span class="string">'ForegroundColor'</span>,cfg.ButtonFontColor,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="string">'callback'</span>,@<a href="#_sub28" class="code" title="subfunction undo(src,evnt)">undo</a>,<span class="string">'visible'</span>,<span class="string">'on'</span>);
+0236 bhistory=uicontrol(<span class="string">'parent'</span>,handles.fig_main,<span class="string">'style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[0 .01 .1 .03],<span class="string">'string'</span>,<span class="string">'View history'</span>,<span class="string">'backgroundcolor'</span>,cfg.ButtonColor,<span class="string">'ForegroundColor'</span>,cfg.ButtonFontColor,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="string">'callback'</span>,[],<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0237 bversion=uicontrol(<span class="string">'parent'</span>,handles.fig_main,<span class="string">'style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.12 .01 .08 .03],<span class="string">'string'</span>,<span class="string">'+ Version'</span>,<span class="string">'backgroundcolor'</span>,cfg.ButtonColor,<span class="string">'ForegroundColor'</span>,cfg.ButtonFontColor,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="string">'callback'</span>,[],<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0238 bsimstudy=uicontrol(<span class="string">'parent'</span>,handles.fig_main,<span class="string">'style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.4 .01 .09 .03],<span class="string">'string'</span>,<span class="string">'NEW SWEEP'</span>,<span class="string">'backgroundcolor'</span>,cfg.ButtonColor,<span class="string">'ForegroundColor'</span>,cfg.ButtonFontColor,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="string">'callback'</span>,[],<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0239 <span class="comment">% ####################################################################</span>
+0240 
+0241 <span class="comment">% Model Designer:</span>
+0242 pcreate=uipanel(<span class="string">'parent'</span>,handles.fig_main,<span class="string">'backgroundcolor'</span>,bgcolor,<span class="string">'title'</span>,<span class="string">''</span>,<span class="string">'visible'</span>,<span class="string">'on'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[0 .05 .5 .9],<span class="string">'fontweight'</span>,<span class="string">'normal'</span>);
+0243 bnet=uicontrol(<span class="string">'parent'</span>,pcreate,<span class="string">'style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'tag'</span>,<span class="string">'tab2'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.21 .65 .22 .04],<span class="string">'string'</span>,<span class="string">'connections'</span>,<span class="string">'backgroundcolor'</span>,[1 1 1],<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="string">'callback'</span>,<span class="string">'set(findobj(''tag'',''ptoggle2''),''visible'',''off''); set(findobj(''tag'',''tab2''),''backgroundcolor'',[1 1 1]); set(findobj(''userdata'',''pnet''),''visible'',''on''); set(gcbo,''backgroundcolor'',[.7 .7 .7]);'</span>);
+0244 bmech=uicontrol(<span class="string">'parent'</span>,pcreate,<span class="string">'style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'tag'</span>,<span class="string">'tab2'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.43 .65 .22 .04],<span class="string">'string'</span>,<span class="string">'mechanisms'</span>,<span class="string">'backgroundcolor'</span>,[.7 .7 .7],<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="string">'callback'</span>,<span class="string">'set(findobj(''tag'',''ptoggle2''),''visible'',''off''); set(findobj(''tag'',''tab2''),''backgroundcolor'',[1 1 1]); set(findobj(''userdata'',''pmech''),''visible'',''on''); set(gcbo,''backgroundcolor'',[.7 .7 .7]);'</span>);
+0245 bcell=uicontrol(<span class="string">'visible'</span>,<span class="string">'off'</span>,<span class="string">'parent'</span>,pcreate,<span class="string">'style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'tag'</span>,<span class="string">'tab2'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.65 .65 .22 .04],<span class="string">'string'</span>,<span class="string">'parameters'</span>,<span class="string">'backgroundcolor'</span>,[1 1 1],<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="string">'callback'</span>,<span class="string">'set(findobj(''tag'',''ptoggle2''),''visible'',''off''); set(findobj(''tag'',''tab2''),''backgroundcolor'',[1 1 1]); set(findobj(''userdata'',''pcell''),''visible'',''on''); set(gcbo,''backgroundcolor'',[.7 .7 .7]);'</span>);
+0246 pmech=uipanel(<span class="string">'parent'</span>,pcreate,<span class="string">'backgroundcolor'</span>,bgcolor,<span class="string">'title'</span>,<span class="string">'Mechanism Editor'</span>,<span class="string">'visible'</span>,<span class="string">'on'</span>,<span class="string">'tag'</span>,<span class="string">'ptoggle2'</span>,<span class="string">'userdata'</span>,<span class="string">'pmech'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[0 0 1 .65],<span class="string">'fontweight'</span>,<span class="string">'bold'</span>);
+0247 pnet=uipanel(<span class="string">'parent'</span>,pcreate,<span class="string">'backgroundcolor'</span>,bgcolor,<span class="string">'title'</span>,<span class="string">'connection mechanism lists'</span>,<span class="string">'visible'</span>,<span class="string">'off'</span>,<span class="string">'tag'</span>,<span class="string">'ptoggle2'</span>,<span class="string">'userdata'</span>,<span class="string">'pnet'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[0 0 1 .65]);
+0248 pcell=uipanel(<span class="string">'parent'</span>,pcreate,<span class="string">'backgroundcolor'</span>,bgcolor,<span class="string">'title'</span>,<span class="string">'parameters'</span>,<span class="string">'visible'</span>,<span class="string">'off'</span>,<span class="string">'tag'</span>,<span class="string">'ptoggle2'</span>,<span class="string">'userdata'</span>,<span class="string">'pcell'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[0 0 1 .65]);  
+0249 <span class="comment">% Model Designer: connections</span>
+0250 handles.p_pop_spec  = uipanel(<span class="string">'parent'</span>,pcreate,<span class="string">'BackgroundColor'</span>,bgcolor,<span class="string">'Position'</span>,[0 .7 1 .29],<span class="string">'BorderWidth'</span>,.2,<span class="string">'BorderType'</span>,<span class="string">'line'</span>); <span class="comment">% cell morphology</span>
+0251 handles.p_net_connect = uipanel(<span class="string">'parent'</span>,pnet,<span class="string">'BackgroundColor'</span>,bgcolor,<span class="string">'Position'</span>,[0 .6 1 .4],<span class="string">'BorderWidth'</span>,.2,<span class="string">'BorderType'</span>,<span class="string">'line'</span>,<span class="string">'title'</span>,<span class="string">''</span>,<span class="string">'fontweight'</span>,<span class="string">'normal'</span>); <span class="comment">% cell specification</span>
+0252 p_net_kernel  = uipanel(<span class="string">'parent'</span>,pnet,<span class="string">'BackgroundColor'</span>,bgcolor,<span class="string">'Position'</span>,[0 0 1 .6],<span class="string">'BorderWidth'</span>,.2,<span class="string">'BorderType'</span>,<span class="string">'line'</span>,<span class="string">'title'</span>,<span class="string">'view and edit connectivity matrices'</span>); <span class="comment">% cell specification</span>
+0253 <span class="comment">% Model Designer: population controls</span>
+0254 handles.list_pops = uicontrol(<span class="string">'parent'</span>,handles.p_pop_spec,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'style'</span>,<span class="string">'listbox'</span>,<span class="string">'position'</span>,[0 0 .2 .9],<span class="string">'value'</span>,1:length(pop_names),<span class="string">'string'</span>,pop_names,<span class="string">'BackgroundColor'</span>,[.9 .9 .9],<span class="string">'Max'</span>,5,<span class="string">'Min'</span>,0,<span class="string">'Callback'</span>,@<a href="#_sub8" class="code" title="subfunction UpdatePopSelection(src,evnt)">UpdatePopSelection</a>,<span class="string">'ButtonDownFcn'</span>,@<a href="#_sub23" class="code" title="subfunction RenamePopulation(src,evnt)">RenamePopulation</a>,<span class="string">'TooltipString'</span>,<span class="string">'Right-click to edit node name'</span>,<span class="string">'FontName'</span>,cfg.ModelFontName);
+0255 <span class="comment">% Model Designer: headers for cell info</span>
+0256 uicontrol(<span class="string">'parent'</span>,handles.p_pop_spec,<span class="string">'tag'</span>,<span class="string">'nodecontrols'</span>,<span class="string">'BackgroundColor'</span>,bgcolor,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'style'</span>,<span class="string">'text'</span>,<span class="string">'position'</span>,[0 .91 .25 .09],<span class="string">'string'</span>,<span class="string">'populations'</span>,<span class="string">'ListboxTop'</span>,0,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="string">'fontsize'</span>,10,<span class="string">'fontweight'</span>,<span class="string">'bold'</span>);
+0257 uicontrol(<span class="string">'parent'</span>,handles.p_pop_spec,<span class="string">'tag'</span>,<span class="string">'nodecontrols'</span>,<span class="string">'BackgroundColor'</span>,bgcolor,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'style'</span>,<span class="string">'text'</span>,<span class="string">'position'</span>,[.25 .91 .06 .09],<span class="string">'string'</span>,<span class="string">'size'</span>,<span class="string">'ListboxTop'</span>,0,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="string">'fontsize'</span>,10,<span class="string">'fontweight'</span>,<span class="string">'normal'</span>);
+0258 uicontrol(<span class="string">'parent'</span>,handles.p_pop_spec,<span class="string">'tag'</span>,<span class="string">'nodecontrols'</span>,<span class="string">'BackgroundColor'</span>,bgcolor,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'style'</span>,<span class="string">'text'</span>,<span class="string">'position'</span>,[.7 .91 .29 .09],<span class="string">'string'</span>,<span class="string">'intrinsic mechanism lists'</span>,<span class="string">'ListboxTop'</span>,0,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="string">'fontsize'</span>,10,<span class="string">'fontweight'</span>,<span class="string">'normal'</span>);
+0259 uicontrol(<span class="string">'parent'</span>,handles.p_pop_spec,<span class="string">'tag'</span>,<span class="string">'nodecontrols'</span>,<span class="string">'BackgroundColor'</span>,bgcolor,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'style'</span>,<span class="string">'text'</span>,<span class="string">'position'</span>,[.31 .91 .25 .09],<span class="string">'string'</span>,<span class="string">'master equations'</span>,<span class="string">'ListboxTop'</span>,0,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="string">'fontsize'</span>,10,<span class="string">'fontweight'</span>,<span class="string">'normal'</span>);
+0260 
+0261 <span class="comment">% Model Designer: Mechanism Editor</span>
+0262 <span class="comment">% edit box with mech info</span>
+0263 handles.list_mechs = uicontrol(<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[0 .42 .2 .58],<span class="string">'parent'</span>,pmech,<span class="string">'BackgroundColor'</span>,[.9 .9 .9],<span class="string">'style'</span>,<span class="string">'listbox'</span>,<span class="string">'value'</span>,1,<span class="string">'string'</span>,active_mechanism_list,<span class="string">'Max'</span>,1,<span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction UpdateMechanismEditor(src,evnt)">UpdateMechanismEditor</a>,<span class="string">'ButtonDownFcn'</span>,@<a href="#_sub24" class="code" title="subfunction RenameMechanism(src,evnt)">RenameMechanism</a>,<span class="string">'TooltipString'</span>,<span class="string">'Right-click to edit mechanism name'</span>,<span class="string">'FontName'</span>,cfg.ModelFontName);
+0264 handles.edit_mech_eqns = uicontrol(<span class="string">'parent'</span>,pmech,<span class="string">'style'</span>,<span class="string">'edit'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'BackgroundColor'</span>,<span class="string">'w'</span>,<span class="string">'callback'</span>,@<a href="#_sub3" class="code" title="subfunction UpdateMechanismEditor(src,evnt)">UpdateMechanismEditor</a>,<span class="string">'position'</span>,[.2 .42 .8 .58],<span class="string">'string'</span>,active_mechanism_text,<span class="string">'userdata'</span>,active_mechanism_userdata,<span class="string">'FontName'</span>,cfg.ModelFontName,<span class="string">'FontSize'</span>,12,<span class="string">'HorizontalAlignment'</span>,<span class="string">'Left'</span>,<span class="string">'Max'</span>,100);
+0265 <span class="comment">% mech plots associated w/ this compartment</span>
+0266 p_static_plots = uipanel(<span class="string">'parent'</span>,pmech,<span class="string">'Position'</span>,[0 0 1 .4],<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>,<span class="string">'BorderWidth'</span>,.2,<span class="string">'BorderType'</span>,<span class="string">'line'</span>,<span class="string">'title'</span>,<span class="string">''</span>);
+0267 handles.list_functions = uicontrol(<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[0 0 .2 .95],<span class="string">'parent'</span>,p_static_plots,<span class="string">'BackgroundColor'</span>,[.9 .9 .9],<span class="string">'style'</span>,<span class="string">'listbox'</span>,<span class="string">'value'</span>,1:5,<span class="string">'string'</span>,{},<span class="string">'Max'</span>,50,<span class="string">'Callback'</span>,@<a href="#_sub4" class="code" title="subfunction UpdateMechanismFunctions(src,evnt,limflag)">UpdateMechanismFunctions</a>,<span class="string">'FontName'</span>,cfg.ModelFontName);
+0268 handles.ax_static_plot = subplot(<span class="string">'position'</span>,[.23 .1 .75 .78],<span class="string">'parent'</span>,p_static_plots,<span class="string">'linewidth'</span>,3,<span class="string">'color'</span>,<span class="string">'w'</span>,<span class="string">'fontsize'</span>,6); box on; 
+0269 title(<span class="string">'functions of one variable'</span>);
+0270 edit_static_lims=uicontrol(<span class="string">'Style'</span>,<span class="string">'edit'</span>, <span class="string">'Units'</span>,<span class="string">'normalized'</span>,<span class="string">'Position'</span>,[0.9 0.1 0.1 0.1],<span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>,<span class="keyword">...</span>
+0271           <span class="string">'String'</span>,sprintf(<span class="string">'[%g,%g]'</span>,min(cfg.V),max(cfg.V)),<span class="string">'Callback'</span>,{@DrawAuxFunctions,1},<span class="string">'parent'</span>,p_static_plots);
+0272 btn_static_autoscale=uicontrol(<span class="string">'style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'fontsize'</span>,10,<span class="string">'string'</span>,<span class="string">'autoscale'</span>,<span class="string">'parent'</span>,p_static_plots,<span class="string">'backgroundcolor'</span>,cfg.ButtonColor,<span class="string">'ForegroundColor'</span>,cfg.ButtonFontColor,<span class="keyword">...</span>
+0273           <span class="string">'Units'</span>,<span class="string">'normalized'</span>,<span class="string">'Position'</span>,[0.9 0 0.1 0.1],<span class="string">'callback'</span>,@<a href="#_sub15" class="code" title="subfunction AutoscaleMechPlot(src,evnt)">AutoscaleMechPlot</a>);    
+0274 uicontrol(<span class="string">'style'</span>,<span class="string">'text'</span>,<span class="string">'parent'</span>,p_static_plots,<span class="string">'Units'</span>,<span class="string">'normalized'</span>,<span class="string">'Position'</span>,[0.88 .12 0.02 0.075],<span class="string">'string'</span>,<span class="string">'x'</span>,<span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>);
+0275 uicontrol(<span class="string">'style'</span>,<span class="string">'text'</span>,<span class="string">'parent'</span>,p_static_plots,<span class="string">'Units'</span>,<span class="string">'normalized'</span>,<span class="string">'Position'</span>,[0.88 .02 0.02 0.075],<span class="string">'string'</span>,<span class="string">'y'</span>,<span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>);
+0276 <span class="comment">% set up function list for active mechanism</span>
+0277 set(handles.list_functions,<span class="string">'string'</span>,{});
+0278 set(handles.list_functions,<span class="string">'value'</span>,[]);
+0279 
+0280 <a href="#_sub2" class="code" title="subfunction UpdatePopControls(src,evnt)">UpdatePopControls</a>;
+0281 <a href="#_sub6" class="code" title="subfunction UpdateConControls(src,evnt)">UpdateConControls</a>;
+0282 <a href="#_sub3" class="code" title="subfunction UpdateMechanismEditor(src,evnt)">UpdateMechanismEditor</a>;
+0283 <a href="#_sub11" class="code" title="subfunction InitializeSimView(src,evnt)">InitializeSimView</a>;
+0284 <a href="#_sub12" class="code" title="subfunction UpdateSimView(src,evnt)">UpdateSimView</a>;
+0285 <a href="#_sub10" class="code" title="subfunction UpdateEqnView(src,evnt)">UpdateEqnView</a>;
+0286 
+0287 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0288 <a name="_sub2" href="#_subfunctions" class="code">function UpdatePopControls(src,evnt)</a>
+0289 <span class="comment">% purpose: populate population controls</span>
+0290 <span class="keyword">global</span> handles SPEC cfg
+0291 c=1.5; dy=-.07*c; ht=.1;
+0292 sel = get(handles.list_pops,<span class="string">'value'</span>);
+0293 l={SPEC.populations(sel).name}; 
+0294 N=[SPEC.populations(sel).size];
+0295 mechs={SPEC.populations(sel).mechanism_list};
+0296 <span class="keyword">for</span> i=1:length(sel)
+0297   m=mechs{i};
+0298   <span class="keyword">if</span> isempty(m)
+0299     str=<span class="string">''</span>;
+0300   <span class="keyword">else</span>
+0301     [~,str]=fileparts(m{1}); 
+0302     <span class="keyword">for</span> j=2:length(m)
+0303       [~,name]=fileparts(m{j});
+0304       str=[str <span class="string">', '</span> name]; 
+0305     <span class="keyword">end</span>
+0306   <span class="keyword">end</span>
+0307   <span class="keyword">if</span> ~isempty(SPEC.populations(sel(i)).equations)
+0308     <span class="keyword">if</span> iscell(SPEC.populations(sel(i)).equations)
+0309       pop_equations=[SPEC.populations(sel(i)).equations{:}];
+0310     <span class="keyword">else</span>
+0311       pop_equations=SPEC.populations(sel(i)).equations;
+0312     <span class="keyword">end</span>
+0313   <span class="keyword">else</span>
+0314     pop_equations=<span class="string">''</span>;
+0315   <span class="keyword">end</span>
+0316   userdata.index=sel(i);
+0317   size_callback=<span class="string">'global SPEC LASTSPEC; LASTSPEC=SPEC; u=get(gcbo,''userdata''); SPEC.populations(u.index).size=str2num(get(gcbo,''string''));'</span>;
+0318   eqn_callback=<span class="string">'global SPEC LASTSPEC; LASTSPEC=SPEC; u=get(gcbo,''userdata''); SPEC.populations(u.index).equations=get(gcbo,''string'');'</span>;
+0319   <span class="comment">%mechlist_callback='global SPEC LASTSPEC; LASTSPEC=SPEC; u=get(gcbo,''userdata''); SPEC.populations(u.index).mechanism_list=strtrim(regexp(get(gcbo,''string''),'','',''split'',''once''));';</span>
+0320   mechlist_callback=<span class="string">'global SPEC LASTSPEC; LASTSPEC=SPEC; u=get(gcbo,''userdata''); tmp=strtrim(regexp(get(gcbo,''string''),'','',''split'',''once'')); if isempty(tmp{1}), tmp=[]; end; SPEC.populations(u.index).mechanism_list=tmp;'</span>;  
+0321   <span class="keyword">if</span> ~isfield(handles,<span class="string">'btn_pop_delete'</span>) || length(handles.btn_pop_delete)&lt;length(sel) || ~ishandle(handles.btn_pop_delete(i))
+0322     handles.btn_pop_delete(i) = uicontrol(<span class="string">'parent'</span>,handles.p_pop_spec,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="keyword">...</span>
+0323       <span class="string">'style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'fontsize'</span>,10,<span class="string">'string'</span>,<span class="string">'-'</span>,<span class="string">'callback'</span>,{@<a href="#_sub22" class="code" title="subfunction RemovePopulation(src,evnt,base_pop_index)">RemovePopulation</a>,sel(i)},<span class="keyword">...</span>
+0324       <span class="string">'position'</span>,[.205 .8+dy*(i-1) .03 ht],<span class="string">'TooltipString'</span>,l{i});
+0325     handles.edit_pop_size(i) = uicontrol(<span class="string">'parent'</span>,handles.p_pop_spec,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'userdata'</span>,userdata,<span class="keyword">...</span>
+0326       <span class="string">'style'</span>,<span class="string">'edit'</span>,<span class="string">'position'</span>,[.24 .8+dy*(i-1) .06 ht],<span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>,<span class="string">'string'</span>,N(i),<span class="string">'FontName'</span>,cfg.ModelFontName,<span class="keyword">...</span>
+0327       <span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="string">'Callback'</span>,{@<a href="#_sub7" class="code" title="subfunction UpdateModel(src,evnt,aux_callback)">UpdateModel</a>,size_callback},<span class="string">'TooltipString'</span>,l{i});
+0328     handles.edit_pop_equations(i) = uicontrol(<span class="string">'parent'</span>,handles.p_pop_spec,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'userdata'</span>,userdata,<span class="keyword">...</span>
+0329       <span class="string">'style'</span>,<span class="string">'edit'</span>,<span class="string">'position'</span>,[.3 .8+dy*(i-1) .4 ht],<span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>,<span class="string">'string'</span>,pop_equations,<span class="string">'FontName'</span>,cfg.ModelFontName,<span class="keyword">...</span>
+0330       <span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="string">'Callback'</span>,{@<a href="#_sub7" class="code" title="subfunction UpdateModel(src,evnt,aux_callback)">UpdateModel</a>,eqn_callback},<span class="keyword">...</span>
+0331       <span class="string">'ButtonDownFcn'</span>,{@<a href="#_sub7" class="code" title="subfunction UpdateModel(src,evnt,aux_callback)">UpdateModel</a>,eqn_callback},<span class="string">'fontsize'</span>,9,<span class="string">'TooltipString'</span>,l{i});    
+0332     handles.edit_pop_mechlist(i) = uicontrol(<span class="string">'parent'</span>,handles.p_pop_spec,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'userdata'</span>,userdata,<span class="keyword">...</span>
+0333       <span class="string">'style'</span>,<span class="string">'edit'</span>,<span class="string">'position'</span>,[.7 .8+dy*(i-1) .26 ht],<span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>,<span class="string">'string'</span>,str,<span class="string">'FontName'</span>,cfg.ModelFontName,<span class="keyword">...</span>
+0334       <span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="string">'Callback'</span>,{@<a href="#_sub7" class="code" title="subfunction UpdateModel(src,evnt,aux_callback)">UpdateModel</a>,mechlist_callback},<span class="keyword">...</span>
+0335       <span class="string">'ButtonDownFcn'</span>,{@<a href="#_sub7" class="code" title="subfunction UpdateModel(src,evnt,aux_callback)">UpdateModel</a>,mechlist_callback},<span class="string">'fontsize'</span>,9,<span class="string">'TooltipString'</span>,l{i});
+0336     handles.btn_pop_copy(i) = uicontrol(<span class="string">'parent'</span>,handles.p_pop_spec,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="keyword">...</span>
+0337       <span class="string">'style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'fontsize'</span>,10,<span class="string">'string'</span>,<span class="string">'+'</span>,<span class="string">'callback'</span>,{@<a href="#_sub21" class="code" title="subfunction AddPopulation(src,evnt,base_pop_index)">AddPopulation</a>,sel(i)},<span class="keyword">...</span>
+0338       <span class="string">'position'</span>,[.965 .8+dy*(i-1) .03 ht],<span class="string">'TooltipString'</span>,l{i});
+0339   <span class="keyword">else</span>
+0340     <span class="comment">% update properties</span>
+0341     set(handles.edit_pop_equations(i),<span class="string">'string'</span>,pop_equations,<span class="string">'visible'</span>,<span class="string">'on'</span>,<span class="string">'Callback'</span>,{@<a href="#_sub7" class="code" title="subfunction UpdateModel(src,evnt,aux_callback)">UpdateModel</a>,eqn_callback},<span class="string">'TooltipString'</span>,l{i});
+0342     set(handles.edit_pop_size(i),<span class="string">'string'</span>,N(i),<span class="string">'visible'</span>,<span class="string">'on'</span>,<span class="string">'Callback'</span>,{@<a href="#_sub7" class="code" title="subfunction UpdateModel(src,evnt,aux_callback)">UpdateModel</a>,size_callback},<span class="string">'TooltipString'</span>,l{i});
+0343     set(handles.edit_pop_mechlist(i),<span class="string">'string'</span>,str,<span class="string">'visible'</span>,<span class="string">'on'</span>,<span class="string">'Callback'</span>,{@<a href="#_sub7" class="code" title="subfunction UpdateModel(src,evnt,aux_callback)">UpdateModel</a>,mechlist_callback},<span class="string">'TooltipString'</span>,l{i});
+0344     set(handles.btn_pop_copy(i),<span class="string">'callback'</span>,{@<a href="#_sub21" class="code" title="subfunction AddPopulation(src,evnt,base_pop_index)">AddPopulation</a>,sel(i)},<span class="string">'visible'</span>,<span class="string">'on'</span>,<span class="string">'TooltipString'</span>,l{i});
+0345     set(handles.btn_pop_delete(i),<span class="string">'callback'</span>,{@<a href="#_sub22" class="code" title="subfunction RemovePopulation(src,evnt,base_pop_index)">RemovePopulation</a>,sel(i)},<span class="string">'visible'</span>,<span class="string">'on'</span>,<span class="string">'TooltipString'</span>,l{i});
+0346   <span class="keyword">end</span>
+0347   <span class="keyword">if</span> length(handles.btn_pop_delete)&gt;i
+0348     set(handles.edit_pop_equations(i+1:end),<span class="string">'visible'</span>,<span class="string">'off'</span>);
+0349     set(handles.edit_pop_size(i+1:end),<span class="string">'visible'</span>,<span class="string">'off'</span>);
+0350     set(handles.edit_pop_mechlist(i+1:end),<span class="string">'visible'</span>,<span class="string">'off'</span>);
+0351     set(handles.btn_pop_copy(i+1:end),<span class="string">'visible'</span>,<span class="string">'off'</span>);
+0352     set(handles.btn_pop_delete(i+1:end),<span class="string">'visible'</span>,<span class="string">'off'</span>);
+0353   <span class="keyword">end</span>
+0354 <span class="keyword">end</span>
+0355 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0356 <a name="_sub3" href="#_subfunctions" class="code">function UpdateMechanismEditor(src,evnt)</a>
+0357 <span class="comment">% purpose: populate mechanism list and edit box controls</span>
+0358 <span class="keyword">global</span> handles SPEC
+0359 
+0360 <span class="comment">% create list of mechanisms for editor and associated userdata</span>
+0361 fields={<span class="string">'populations'</span>,<span class="string">'connections'</span>};
+0362 userdata=[]; mech_names={}; cnt=1;
+0363 <span class="keyword">for</span> f=1:length(fields)
+0364   object=fields{f};
+0365   <span class="keyword">for</span> i=1:length(SPEC.(object))
+0366     <span class="keyword">for</span> j=1:length(SPEC.(object)(i).mechanism_list)
+0367       userdata(cnt).object_type=object;
+0368       userdata(cnt).object_index=i;
+0369       [~,mech_name]=fileparts(SPEC.(object)(i).mechanism_list{j});
+0370       userdata(cnt).mechanism_name=mech_name;
+0371       userdata(cnt).mechanism_index=j;
+0372       <span class="keyword">if</span> strcmp(object,<span class="string">'populations'</span>)
+0373         userdata(cnt).object_name=SPEC.(object)(i).name;
+0374       <span class="keyword">elseif</span> strcmp(object,<span class="string">'connections'</span>)
+0375         userdata(cnt).object_name=[SPEC.(object)(i).source <span class="string">'-&gt;'</span> SPEC.(object)(i).target];
+0376       <span class="keyword">end</span>
+0377       userdata(cnt).mechanism_list_name=sprintf(<span class="string">'%s.%s'</span>,userdata(cnt).object_name,userdata(cnt).mechanism_name);
+0378       mech_names{cnt}=userdata(cnt).mechanism_list_name;
+0379       <span class="comment">% add empty mechanism info if not found (i.e., if not defined yet, as when a new mechanism is created)</span>
+0380       <span class="keyword">if</span> ~isfield(SPEC.(object),<span class="string">'mechanisms'</span>) || isempty(SPEC.(object)(i).mechanisms) || ~ismember(mech_name,{SPEC.(object)(i).mechanisms.name})
+0381         SPEC.(object)(i).mechanisms(end+1).name=mech_name;
+0382         SPEC.(object)(i).mechanisms(end).equations=<span class="string">''</span>;
+0383       <span class="keyword">end</span>
+0384       cnt=cnt+1;
+0385     <span class="keyword">end</span>
+0386     <span class="comment">% sort *.mechanisms wrt *.mechanism_list:</span>
+0387     <span class="comment">%[~,~,sort_ind]=intersect(SPEC.(object)(i).mechanism_list,{SPEC.(object)(i).mechanisms.name});</span>
+0388     <span class="comment">%SPEC.(object)(i).mechanisms=SPEC.(object)(i).mechanisms(sort_ind);</span>
+0389   <span class="keyword">end</span>
+0390 <span class="keyword">end</span>
+0391 
+0392 <span class="comment">% callback for mechanism edit box</span>
+0393 edit_callback=<span class="string">'global SPEC handles LASTSPEC; LASTSPEC=SPEC; u=get(handles.list_mechs,''userdata''); if ~isempty(u), u=u(get(handles.list_mechs,''value'')); eqns=get(gcbo,''string''); idx=cellfun(@isempty,regexp(eqns,'';$'')); eqns(idx)=cellfun(@(x)[x '';''],eqns(idx),''uni'',0); SPEC.(u.object_type)(u.object_index).mechanisms(u.mechanism_index).equations=[eqns{:}]; end'</span>;
+0394 <span class="comment">% callback for mechanism selection listbox</span>
+0395 <span class="comment">% ... list_callback='';</span>
+0396 
+0397 <span class="comment">% update mech lists and selection index</span>
+0398 old_mech_index=get(handles.list_mechs,<span class="string">'value'</span>);
+0399 old_mech_list=get(handles.list_mechs,<span class="string">'string'</span>);
+0400 new_mech_index=old_mech_index;
+0401 new_mech_list=mech_names;
+0402 set(handles.list_mechs,<span class="string">'string'</span>,new_mech_list,<span class="string">'userdata'</span>,userdata);
+0403 
+0404 <span class="comment">% extract mechanism details for the select mechanism</span>
+0405 <span class="keyword">if</span> ~isempty(userdata)
+0406   u=userdata(new_mech_index);
+0407   <span class="keyword">if</span> ~isempty(u)
+0408     <a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>=SPEC.(u.object_type)(u.object_index).mechanisms(u.mechanism_index).equations;
+0409     <span class="comment">% add line breaks</span>
+0410     <a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>=strtrim(regexp(<a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>,<span class="string">';'</span>,<span class="string">'split'</span>));
+0411   <span class="keyword">else</span>
+0412     <a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>=<span class="string">''</span>;
+0413   <span class="keyword">end</span>
+0414   <span class="comment">% update mechanism equations in edit box</span>
+0415   set(handles.edit_mech_eqns,<span class="string">'string'</span>,<a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>,<span class="string">'Callback'</span>,{@<a href="#_sub7" class="code" title="subfunction UpdateModel(src,evnt,aux_callback)">UpdateModel</a>,edit_callback});
+0416   
+0417   <span class="comment">% update auxiliary plots of functions of one variable</span>
+0418   <a href="#_sub4" class="code" title="subfunction UpdateMechanismFunctions(src,evnt,limflag)">UpdateMechanismFunctions</a>;
+0419 <span class="keyword">else</span>
+0420   set(handles.edit_mech_eqns,<span class="string">'Callback'</span>,{@<a href="#_sub7" class="code" title="subfunction UpdateModel(src,evnt,aux_callback)">UpdateModel</a>,edit_callback});
+0421 <span class="keyword">end</span>
+0422 
+0423 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0424 <a name="_sub4" href="#_subfunctions" class="code">function UpdateMechanismFunctions(src,evnt,limflag)</a>
+0425 <span class="comment">% purpose: plot single-variable functions of select mechanism</span>
+0426 <span class="keyword">global</span> handles cfg
+0427 
+0428 <span class="comment">% get list of single-variable functions in this mechanism</span>
+0429 <span class="comment">% all equations for the active mechanism</span>
+0430 <a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>=get(handles.edit_mech_eqns,<span class="string">'string'</span>);
+0431   <span class="comment">% userdata=get(handles.edit_mech_eqns,'userdata');</span>
+0432   <span class="comment">% u=userdata(get(handles.list_mechs,'value'));</span>
+0433   <span class="comment">% eqns=SPEC.(u.object_type)(u.object_index).mechanisms(u.mechanism_index).equations;</span>
+0434 <span class="comment">% split equations into cell array of strings listing separate equations</span>
+0435 idx=cellfun(@isempty,regexp(<a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>,<span class="string">';$'</span>)); <span class="comment">% lines that need semicolons</span>
+0436 <a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>(idx)=cellfun(@(x)[x <span class="string">';'</span>],<a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>(idx),<span class="string">'uni'</span>,0);
+0437 <a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>=[<a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>{:}];
+0438 <a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>=regexp(<a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>,<span class="string">';'</span>,<span class="string">'split'</span>);
+0439 <a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>=<a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>(cellfun(@ischar,<a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>)&amp;(~cellfun(@isempty,<a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>)));
+0440 
+0441 <span class="comment">% find single-variable functions</span>
+0442 idx=(~cellfun(@isempty,regexp(<a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>,<span class="string">'^\w+\([a-zA-Z]\w*\)\s*='</span>)));
+0443 <span class="keyword">if</span> ~any(idx)
+0444   set(handles.list_functions,<span class="string">'string'</span>,{});
+0445   set(handles.list_functions,<span class="string">'value'</span>,[]);  
+0446   <span class="keyword">return</span>;
+0447 <span class="keyword">end</span>
+0448 <a name="_sub5" href="#_subfunctions" class="code">functions=eqns(idx);</a>
+0449 LHS=regexp(functions,<span class="string">'^(\w+)\('</span>,<span class="string">'tokens'</span>,<span class="string">'once'</span>);
+0450 LHS=[LHS{:}];
+0451 RHS=regexp(functions,<span class="string">'^\w+(\(.+)'</span>,<span class="string">'tokens'</span>,<span class="string">'once'</span>);
+0452 RHS=strrep([RHS{:}],<span class="string">'='</span>,<span class="string">''</span>);
+0453 <span class="comment">% update function list</span>
+0454 set(handles.list_functions,<span class="string">'string'</span>,functions);
+0455 <span class="comment">% clear axes</span>
+0456 <span class="keyword">if</span> isfield(handles,<span class="string">'static_traces'</span>)
+0457   axislimits=[get(handles.ax_static_plot,<span class="string">'xlim'</span>) get(handles.ax_static_plot,<span class="string">'ylim'</span>)];
+0458   <span class="keyword">try</span> delete(handles.static_traces); <span class="keyword">end</span>
+0459   handles=rmfield(handles,<span class="string">'static_traces'</span>); 
+0460   cla(handles.ax_static_plot);
+0461 <span class="keyword">else</span>
+0462   axislimits=<span class="string">'tight'</span>;
+0463 <span class="keyword">end</span>
+0464 <span class="comment">% evaluate function handles and plot curves</span>
+0465 X=cfg.V; cnt=1;
+0466 <span class="keyword">for</span> i=1:length(LHS)
+0467   <span class="keyword">try</span> <span class="comment">% todo: support functions with parameters and embedded functions</span>
+0468     eval(sprintf(<span class="string">'%s=@%s;'</span>,LHS{i},RHS{i}));
+0469     eval(sprintf(<span class="string">'Y=%s(X);'</span>,LHS{i}));
+0470     warning(<span class="string">'off'</span>,<span class="string">'MATLAB:hg:EraseModeIgnored'</span>);
+0471     handles.static_traces(cnt)=line(<span class="string">'parent'</span>,handles.ax_static_plot,<span class="string">'color'</span>,cfg.linecolors(max(1,mod(i,length(cfg.linecolors)))),<span class="keyword">...</span>
+0472       <span class="string">'LineStyle'</span>,cfg.linetype{max(1,mod(i,length(cfg.linetype)))},<span class="string">'xdata'</span>,X,<span class="string">'ydata'</span>,Y,<span class="string">'zdata'</span>,[]);
+0473 <span class="comment">%     handles.static_traces(cnt)=line('parent',handles.ax_static_plot,'color',cfg.linecolors(max(1,mod(i,length(cfg.linecolors)))),...</span>
+0474 <span class="comment">%       'LineStyle',cfg.linetype{max(1,mod(i,length(cfg.linetype)))},'erase','background','xdata',X,'ydata',Y,'zdata',[]);</span>
+0475     cnt=cnt+1;
+0476   <span class="keyword">end</span>
+0477 <span class="keyword">end</span>
+0478 <span class="comment">% add legend</span>
+0479 <span class="keyword">if</span> isfield(handles,<span class="string">'static_traces'</span>) &amp;&amp; ~isempty(handles.static_traces)
+0480   h=legend(handles.ax_static_plot,LHS); set(h,<span class="string">'fontsize'</span>,6,<span class="string">'location'</span>,<span class="string">'EastOutside'</span>);
+0481   <span class="keyword">if</span> strcmp(axislimits,<span class="string">'tight'</span>)
+0482     axes(handles.ax_static_plot); axis(axislimits);
+0483   <span class="keyword">else</span>
+0484     set(handles.ax_static_plot,<span class="string">'xlim'</span>,axislimits(1:2),<span class="string">'ylim'</span>,axislimits(3:4));
+0485   <span class="keyword">end</span>
+0486 <span class="keyword">end</span>
+0487 
+0488 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0489 <a name="_sub6" href="#_subfunctions" class="code">function UpdateConControls(src,evnt)</a>
+0490 <span class="comment">% purpose: populate connection controls</span>
+0491 <span class="keyword">global</span> SPEC handles cfg
+0492 
+0493 <span class="keyword">if</span> isempty(SPEC.connections)
+0494   sources={};
+0495   targets={};
+0496 <span class="keyword">else</span>
+0497   sources={SPEC.connections.source};
+0498   targets={SPEC.connections.target};
+0499 <span class="keyword">end</span>
+0500 
+0501 dx=.15; x=.13; c=1.5; dy=-.1*c; ht=.14;
+0502 sel_pop_inds = get(handles.list_pops,<span class="string">'value'</span>);
+0503 num_sel_pops = length(sel_pop_inds);
+0504 pop_names={SPEC.populations(sel_pop_inds).name};
+0505 
+0506 <span class="keyword">for</span> i=1:num_sel_pops <span class="comment">% targets</span>
+0507   <span class="keyword">for</span> j=1:num_sel_pops <span class="comment">% sources</span>
+0508     <span class="comment">% prepare string listing mechanisms connecting source to target</span>
+0509     mech_names = <span class="string">''</span>;
+0510     con_index = find(ismember(sources,pop_names{j}) &amp; ismember(targets,pop_names{i}));
+0511     <span class="keyword">if</span> ~isempty(con_index)
+0512       <span class="keyword">for</span> k=1:length(SPEC.connections(con_index).mechanism_list)
+0513         [~,mech_name]=fileparts(SPEC.connections(con_index).mechanism_list{k});
+0514         mech_names = [mech_names mech_name <span class="string">', '</span>];
+0515       <span class="keyword">end</span>
+0516       mech_names=mech_names(1:end-2);
+0517     <span class="keyword">end</span>
+0518     <span class="comment">% prepare control location and metadata</span>
+0519     pos = [x+dx*(i-1) .8+dy*(j-1) .9*dx ht];
+0520     userdata=[];
+0521     userdata.source=pop_names{j}; 
+0522     userdata.target=pop_names{i};
+0523     userdata.index=con_index;
+0524     con_name = [userdata.source <span class="string">'-&gt;'</span> userdata.target];
+0525     <span class="comment">% create/update controls</span>
+0526     arrow_right_code=8658; <span class="comment">% 8658, 8594, 9032</span>
+0527     mechlist_callback=<span class="string">'global SPEC LASTSPEC; LASTSPEC=SPEC; u=get(gcbo,''userdata''); if isempty(u.index),u.index=length(SPEC.connections)+1; end; SPEC.connections(u.index).mechanism_list=strtrim(regexp(get(gcbo,''string''),'','',''split'',''once'')); SPEC.connections(u.index).source=u.source; SPEC.connections(u.index).target=u.target;'</span>;
+0528     <span class="keyword">if</span> ~isfield(handles,<span class="string">'txt_to'</span>) || i&gt;length(handles.txt_from) || j&gt;length(handles.txt_to) || ~ishandle(handles.edit_con_mechlist(i,j)) || handles.edit_con_mechlist(i,j)==0
+0529       <span class="keyword">if</span> i==1 <span class="comment">% to</span>
+0530         this=zeros(max(sel_pop_inds),1);
+0531         this(sel_pop_inds)=j;
+0532         handles.txt_to(j) = uicontrol(<span class="string">'parent'</span>,handles.p_net_connect,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="keyword">...</span>
+0533           <span class="string">'style'</span>,<span class="string">'text'</span>,<span class="string">'position'</span>,[x+dx*(j-1) .88 .11 ht],<span class="string">'string'</span>,[char(arrow_right_code) <span class="string">' '</span> pop_names{j}],<span class="keyword">...</span>
+0534           <span class="string">'callback'</span>,{@ShowClickMechList,this,<span class="string">'connections'</span>},<span class="string">'backgroundcolor'</span>,cfg.BackgroundColor);
+0535       <span class="keyword">end</span>
+0536       <span class="keyword">if</span> j==1 <span class="comment">% from</span>
+0537         this=ones(1,max(sel_pop_inds));
+0538         this(sel_pop_inds)=i;
+0539         handles.txt_from(i) = uicontrol(<span class="string">'parent'</span>,handles.p_net_connect,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="keyword">...</span>
+0540           <span class="string">'style'</span>,<span class="string">'text'</span>,<span class="string">'position'</span>,[.01 .8+dy*(i-1) .11 ht],<span class="string">'string'</span>,[pop_names{i} <span class="string">' '</span> char(arrow_right_code)],<span class="keyword">...</span>
+0541           <span class="string">'callback'</span>,{@ShowClickMechList,this,<span class="string">'connections'</span>},<span class="string">'backgroundcolor'</span>,cfg.BackgroundColor);
+0542       <span class="keyword">end</span>
+0543       handles.edit_con_mechlist(i,j) = uicontrol(<span class="string">'parent'</span>,handles.p_net_connect,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="keyword">...</span>
+0544         <span class="string">'style'</span>,<span class="string">'edit'</span>,<span class="string">'position'</span>,pos,<span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>,<span class="string">'userdata'</span>,userdata,<span class="keyword">...</span>
+0545         <span class="string">'string'</span>,mech_names,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="string">'userdata'</span>,userdata);
+0546         set(handles.edit_con_mechlist(i,j),<span class="string">'Callback'</span>,{@<a href="#_sub7" class="code" title="subfunction UpdateModel(src,evnt,aux_callback)">UpdateModel</a>,mechlist_callback},<span class="keyword">...</span>
+0547         <span class="string">'ButtonDownFcn'</span>,@<a href="#_sub24" class="code" title="subfunction RenameMechanism(src,evnt)">RenameMechanism</a>);
+0548       handles.p_conn_mechs(i,j) = uipanel(<span class="string">'parent'</span>,handles.p_net_connect,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="keyword">...</span>
+0549       <span class="string">'position'</span>,pos,<span class="string">'visible'</span>,<span class="string">'off'</span>);
+0550     <span class="keyword">else</span>
+0551       set(handles.txt_to(i),<span class="string">'string'</span>,[<span class="string">'--&gt; '</span> pop_names{i}],<span class="string">'visible'</span>,<span class="string">'on'</span>);
+0552       set(handles.txt_from(i),<span class="string">'string'</span>,[pop_names{i} <span class="string">' --&gt;'</span>],<span class="string">'visible'</span>,<span class="string">'on'</span>);
+0553       set(handles.p_conn_mechs(i,j),<span class="string">'visible'</span>,<span class="string">'off'</span>);
+0554       set(handles.edit_con_mechlist(i,j),<span class="string">'string'</span>,mech_names,<span class="string">'userdata'</span>,userdata,<span class="string">'Callback'</span>,{@<a href="#_sub7" class="code" title="subfunction UpdateModel(src,evnt,aux_callback)">UpdateModel</a>,mechlist_callback},<span class="keyword">...</span>
+0555         <span class="string">'ButtonDownFcn'</span>,@<a href="#_sub24" class="code" title="subfunction RenameMechanism(src,evnt)">RenameMechanism</a>,<span class="string">'visible'</span>,<span class="string">'on'</span>);
+0556     <span class="keyword">end</span>
+0557   <span class="keyword">end</span>
+0558 <span class="keyword">end</span>
+0559     
+0560 <span class="keyword">if</span> isfield(handles,<span class="string">'txt_to'</span>) &amp;&amp; length(handles.txt_to)&gt;length(sel_pop_inds)
+0561   set(handles.txt_to(i+1:end),<span class="string">'visible'</span>,<span class="string">'off'</span>);
+0562   set(handles.txt_from(i+1:end),<span class="string">'visible'</span>,<span class="string">'off'</span>);
+0563   set(handles.edit_con_mechlist(i+1:<span class="keyword">end</span>,:),<span class="string">'visible'</span>,<span class="string">'off'</span>);
+0564   set(handles.edit_con_mechlist(:,i+1:end),<span class="string">'visible'</span>,<span class="string">'off'</span>);
+0565   set(handles.p_conn_mechs(i+1:<span class="keyword">end</span>,:),<span class="string">'visible'</span>,<span class="string">'off'</span>);
+0566   set(handles.p_conn_mechs(:,i+1:end),<span class="string">'visible'</span>,<span class="string">'off'</span>);
+0567 <span class="keyword">end</span>    
+0568 
+0569 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0570 <span class="comment">% Update Model</span>
+0571 <a name="_sub7" href="#_subfunctions" class="code">function UpdateModel(src,evnt,aux_callback)</a>
+0572 <span class="comment">% Purpose: update DynaSim model after modifing the DynaSim specification</span>
+0573 <span class="comment">% evaluate caller-specific auxiliary commands</span>
+0574 <span class="keyword">if</span> nargin&gt;=3
+0575   eval(aux_callback);
+0576 <span class="keyword">end</span>
+0577 
+0578 <span class="keyword">global</span> SPEC MODEL cfg LASTCFG handles
+0579 
+0580 <span class="comment">% check for special case where full model is inserted into mechanism editor</span>
+0581 <span class="keyword">if</span> nargin&gt;0 &amp;&amp; isequal(src,handles.edit_mech_eqns)
+0582   <span class="keyword">if</span> isempty(SPEC.populations(1).equations) &amp;&amp; isempty(SPEC.populations(1).mechanisms) &amp;&amp; isempty(SPEC.populations(1).mechanism_list)
+0583     <span class="comment">% prepare equation string</span>
+0584     <a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>=get(gcbo,<span class="string">'string'</span>); 
+0585     <span class="keyword">if</span> ischar(<a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>)
+0586       <a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>=cellstr(<a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>);
+0587     <span class="keyword">end</span>
+0588     idx=cellfun(@isempty,regexp(<a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>,<span class="string">';$'</span>)); 
+0589     <a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>(idx)=cellfun(@(x)[x <span class="string">';'</span>],<a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>(idx),<span class="string">'uni'</span>,0);    
+0590     <span class="comment">% add default name to mechanism</span>
+0591     SPEC.populations.mechanisms.name=<span class="string">'l'</span>;
+0592     SPEC.populations.mechanisms.equations=[<a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>{:}];
+0593     SPEC.populations(1).mechanism_list={<span class="string">'l'</span>};
+0594   <span class="keyword">end</span>
+0595 <span class="keyword">end</span>
+0596 
+0597 <span class="comment">% Execute common update operations</span>
+0598 <span class="comment">% check specification</span>
+0599 SPEC=<a href="../functions/internal/dsCheckSpecification.html" class="code" title="function spec = dsCheckSpecification(specification, varargin)">dsCheckSpecification</a>(SPEC);
+0600 [SPEC.populations.parameters]=deal([]);
+0601 <span class="keyword">if</span> ~isempty(SPEC.connections)
+0602   [SPEC.connections.parameters]=deal([]);
+0603 <span class="keyword">end</span>
+0604 <span class="comment">% generate model</span>
+0605 MODEL=<a href="../functions/internal/dsGenerateModel.html" class="code" title="function [model,name_map] = dsGenerateModel(specification, varargin)">dsGenerateModel</a>(SPEC);
+0606 <span class="comment">% extract model ODEFUN and IC</span>
+0607 <span class="keyword">try</span>
+0608   [ODEFUN,IC,elem_names]=<a href="../functions/internal/dsDynasim2odefun.html" class="code" title="function [ODEFUN,IC,elem_names] = dsDynasim2odefun(model, varargin)">dsDynasim2odefun</a>(<a href="../functions/internal/dsPropagateParameters.html" class="code" title="function model = dsPropagateParameters(model,varargin)">dsPropagateParameters</a>(MODEL));
+0609   <span class="comment">% txt=dsExtractModelStrings(MODEL,'model',0);</span>
+0610   <span class="comment">% ODEFUN=txt{1}; IC=txt{2}; elem_names=txt{3};</span>
+0611 
+0612   <span class="comment">% update model config for running simulation</span>
+0613   LASTCFG=cfg;
+0614   <span class="keyword">if</span> length(IC)~=length(cfg.IC)
+0615     cfg.Y=zeros(cfg.ntime,length(IC));
+0616   <span class="keyword">end</span>
+0617   cfg.ODEFUN=ODEFUN;
+0618   cfg.IC=IC;
+0619   cfg.elem_names=elem_names;
+0620 <span class="keyword">end</span>
+0621 
+0622 <span class="comment">% update views</span>
+0623 <a href="#_sub9" class="code" title="subfunction UpdateViews(update_what)">UpdateViews</a>(<span class="string">'model'</span>);
+0624 <a href="#_sub9" class="code" title="subfunction UpdateViews(update_what)">UpdateViews</a>(<span class="string">'selection'</span>);
+0625 <a href="#_sub3" class="code" title="subfunction UpdateMechanismEditor(src,evnt)">UpdateMechanismEditor</a>;
+0626 
+0627 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0628 <span class="comment">% Update GUI based on listbox selections in Model Designer</span>
+0629 <a name="_sub8" href="#_subfunctions" class="code">function UpdatePopSelection(src,evnt)</a>
+0630 <span class="comment">% update designer controls:</span>
+0631 <a href="#_sub2" class="code" title="subfunction UpdatePopControls(src,evnt)">UpdatePopControls</a>;
+0632 <a href="#_sub6" class="code" title="subfunction UpdateConControls(src,evnt)">UpdateConControls</a>;
+0633 <a href="#_sub3" class="code" title="subfunction UpdateMechanismEditor(src,evnt)">UpdateMechanismEditor</a>;
+0634 
+0635 <span class="comment">% update sim view</span>
+0636 <a href="#_sub9" class="code" title="subfunction UpdateViews(update_what)">UpdateViews</a>(<span class="string">'selection'</span>);
+0637 
+0638 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0639 <span class="comment">% Update Views</span>
+0640 <a name="_sub9" href="#_subfunctions" class="code">function UpdateViews(update_what)</a>
+0641 <span class="keyword">global</span> handles
+0642 <span class="comment">% Purpose: update equation and simulation views</span>
+0643 <span class="keyword">switch</span> (update_what)
+0644   <span class="keyword">case</span> <span class="string">'model'</span>
+0645     <span class="comment">%if strcmp('on',get(handles.peqnview,'visible'))</span>
+0646       <a href="#_sub10" class="code" title="subfunction UpdateEqnView(src,evnt)">UpdateEqnView</a>;
+0647     <span class="comment">%end</span>
+0648   <span class="keyword">case</span> <span class="string">'selection'</span>
+0649     <span class="keyword">if</span> strcmp(<span class="string">'on'</span>,get(handles.psimview,<span class="string">'visible'</span>))
+0650       <a href="#_sub12" class="code" title="subfunction UpdateSimView(src,evnt)">UpdateSimView</a>;
+0651     <span class="keyword">end</span>    
+0652 <span class="keyword">end</span>
+0653 
+0654 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0655 <span class="comment">% EQUATION VIEW</span>
+0656 <a name="_sub10" href="#_subfunctions" class="code">function UpdateEqnView(src,evnt)</a>
+0657 <span class="keyword">global</span> MODEL cfg handles
+0658 
+0659 <span class="comment">% get equation string to display:</span>
+0660 txt=<a href="#_sub27" class="code" title="subfunction eqns=dsExtractModelStrings(MODEL,display_mode,display_flag)">dsExtractModelStrings</a>(MODEL,<span class="string">'model'</span>,0);
+0661 
+0662 <span class="comment">% construct display text</span>
+0663 txt{end+1}=<span class="string">''</span>;
+0664 txt{end+1}=<span class="string">'% ##############################################################'</span>;
+0665 txt{end+1}=<span class="string">'% Prepare ODEFUN for use with built-in Matlab solvers:'</span>;
+0666 txt{end+1}=<span class="string">'% ##############################################################'</span>;
+0667 txt{end+1}=sprintf(<span class="string">'ODEFUN = %s;'</span>,char(cfg.ODEFUN));
+0668 txt{end+1}=sprintf(<span class="string">'IC = [%s];'</span>,num2str(cfg.IC'));
+0669 legs={}; 
+0670 <span class="keyword">for</span> i=1:length(cfg.elem_names), legs{end+1}=[<span class="string">''''</span> cfg.elem_names{i} <span class="string">''','</span>]; <span class="keyword">end</span>
+0671 legs=[legs{:}];
+0672 txt{end+1}=sprintf(<span class="string">'elem_names = {%s};'</span>,legs(1:end-1));
+0673 txt{end+1}=<span class="string">''</span>;
+0674 txt{end+1}=<span class="string">'% Solve system using built-in Matlab solver:'</span>;
+0675 txt{end+1}=<span class="string">'options=odeset(''RelTol'',1e-2,''AbsTol'',1e-4,''InitialStep'',.01);'</span>;
+0676 txt{end+1}=<span class="string">'[t,y]=ode23(ODEFUN,[0 100],IC,options);'</span>;
+0677 txt{end+1}=<span class="string">'figure; plot(t,y);'</span>;
+0678 txt{end+1}=sprintf(<span class="string">'legend(%s,''Location'',''EastOutside'');'</span>,strrep(legs(1:end-1),<span class="string">'_'</span>,<span class="string">'\_'</span>));
+0679 cfg.model_text=txt;
+0680 <span class="comment">% update equation view</span>
+0681 set(handles.txt_model,<span class="string">'string'</span>,cfg.model_text);
+0682 
+0683 <span class="comment">% todo: append other display mode options ('specification','xpp')</span>
+0684 
+0685 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0686 <span class="comment">% SIMULATION VIEW</span>
+0687 <a name="_sub11" href="#_subfunctions" class="code">function InitializeSimView(src,evnt)</a>
+0688 <span class="keyword">global</span> handles cfg
+0689 
+0690 <span class="comment">% initialize for max_num_plots rows (with 'visible','off'):</span>
+0691 <span class="comment">% panel 'p_sim_plots'</span>
+0692 <span class="comment">% - list_vars</span>
+0693 <span class="comment">% - list_cells</span>
+0694 <span class="comment">% - axes_data_trace</span>
+0695 <span class="comment">% - axes_data_image</span>
+0696 <span class="comment">% - axes_data_hist</span>
+0697 <span class="comment">% - edit_ymax</span>
+0698 <span class="comment">% - edit_ymin</span>
+0699 
+0700 <span class="comment">% initialize simulation controls:</span>
+0701 <span class="comment">% - QuickSim (panel 'p_quicksim_settings'): button and edit boxes for t0,tf</span>
+0702 <span class="comment">% - Running sims (panel 'p_runsim_settings'):</span>
+0703 <span class="comment">%   - run control buttons (Start, Reset)</span>
+0704 <span class="comment">%   - edit boxes for numerics (dt, ntime)</span>
+0705 <span class="comment">%   - ylim maxmin buttons (by_pop, across_pops)</span>
+0706 
+0707 <span class="comment">% plot options</span>
+0708 dy=-1/cfg.max_num_plots;
+0709 yp=1-1/cfg.max_num_plots+.04; <span class="comment">% .7</span>
+0710 default_visible=<span class="string">'on'</span>;
+0711 
+0712 <span class="comment">% Create panels (parent: psimview):</span>
+0713 <span class="comment">% p_sim_plots</span>
+0714 handles.p_sim_plots=uipanel(<span class="string">'parent'</span>,handles.psimview,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[0 .15 1 .85],<span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>,<span class="string">'title'</span>,<span class="string">''</span>,<span class="string">'visible'</span>,<span class="string">'on'</span>);
+0715 <span class="comment">% p_quicksim_settings</span>
+0716 handles.p_quicksim_settings=uipanel(<span class="string">'parent'</span>,handles.psimview,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[0 0 .25 .15],<span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>,<span class="string">'title'</span>,<span class="string">''</span>,<span class="string">'visible'</span>,<span class="string">'on'</span>);
+0717 <span class="comment">% p_runsim_settings</span>
+0718 handles.p_runsim_settings=uipanel(<span class="string">'parent'</span>,handles.psimview,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.25 0 .75 .15],<span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>,<span class="string">'title'</span>,<span class="string">''</span>,<span class="string">'visible'</span>,<span class="string">'on'</span>);
+0719 
+0720 <span class="comment">% Create controls for interactive plotting (parent: p_sim_plots)</span>
+0721 <span class="keyword">for</span> i=1:cfg.max_num_plots
+0722   <span class="comment">% list_vars: listbox for pop-specific variables</span>
+0723   handles.list_vars(i)=uicontrol(<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.01 yp+(i-1)*dy .14 -.8*dy],<span class="string">'parent'</span>,handles.p_sim_plots,<span class="string">'BackgroundColor'</span>,[.9 .9 .9],<span class="string">'style'</span>,<span class="string">'listbox'</span>,<span class="string">'value'</span>,1,<span class="string">'string'</span>,[],<span class="string">'Max'</span>,100,<span class="string">'Callback'</span>,@<a href="#_sub12" class="code" title="subfunction UpdateSimView(src,evnt)">UpdateSimView</a>,<span class="string">'TooltipString'</span>,<span class="string">'Left-click to select variable to plot'</span>,<span class="string">'visible'</span>,default_visible);
+0724   <span class="comment">% list_cells: listbox for pop-specific cell indices</span>
+0725   handles.list_cells(i)=uicontrol(<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.15 yp+(i-1)*dy .05 -.8*dy],<span class="string">'parent'</span>,handles.p_sim_plots,<span class="string">'BackgroundColor'</span>,[.9 .9 .9],<span class="string">'style'</span>,<span class="string">'listbox'</span>,<span class="string">'value'</span>,[],<span class="string">'string'</span>,[],<span class="string">'Max'</span>,1000,<span class="string">'Callback'</span>,@<a href="#_sub12" class="code" title="subfunction UpdateSimView(src,evnt)">UpdateSimView</a>,<span class="string">'TooltipString'</span>,<span class="string">'Left-click to select cells to plot'</span>,<span class="string">'visible'</span>,default_visible);
+0726   <span class="comment">% axes_data_image: axis for plotting images</span>
+0727   handles.axes_data_image(i)=subplot(<span class="string">'position'</span>,[.23 yp+(i-1)*dy .72 -.8*dy],<span class="string">'parent'</span>,handles.p_sim_plots,<span class="string">'visible'</span>,<span class="string">'off'</span>,<span class="string">'tag'</span>,<span class="string">'simview_image'</span>);
+0728   handles.img_data(i) = imagesc(cfg.t,1:length(cfg.IC),cfg.Y); axis xy; <span class="comment">%colorbar</span>
+0729   set(handles.img_data(i),<span class="string">'visible'</span>,<span class="string">'off'</span>,<span class="string">'tag'</span>,<span class="string">'simview_image'</span>);
+0730   <span class="comment">% axes_data_trace: axis for plotting traces</span>
+0731   handles.axes_data_trace(i)=subplot(<span class="string">'position'</span>,[.23 yp+(i-1)*dy .72 -.8*dy],<span class="string">'xdata'</span>,cfg.t,<span class="string">'ydata'</span>,cfg.Y(:,1),<span class="string">'parent'</span>,handles.p_sim_plots,<span class="string">'linewidth'</span>,3,<span class="string">'color'</span>,<span class="string">'w'</span>,<span class="string">'visible'</span>,default_visible,<span class="string">'tag'</span>,<span class="string">'simview_trace'</span>); 
+0732   <span class="comment">% edit_ymax: max y-limits</span>
+0733   callback=sprintf(<span class="string">'global handles; set(handles.axes_data_trace(%g),''ylim'',[str2double(get(handles.edit_ymin(%g),''string'')) str2double(get(gco,''string''))]); set(handles.axes_data_image(%g),''clim'',[str2double(get(handles.edit_ymin(%g),''string'')) str2double(get(gco,''string''))]); cfg.ymax(%g)=str2double(get(gco,''string''));'</span>,i,i,i,i,i);
+0734   handles.edit_ymax(i)=uicontrol(<span class="string">'style'</span>,<span class="string">'edit'</span>,<span class="string">'parent'</span>,handles.p_sim_plots,<span class="string">'tag'</span>,<span class="string">'ymax'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.955 .95+dy*(i-1)-.01 .037 .03],<span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>,<span class="string">'string'</span>,cfg.ymax(i),<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="string">'Callback'</span>,callback,<span class="string">'fontsize'</span>,8);
+0735   <span class="comment">% edit_ymin: min y-limits</span>
+0736   callback=sprintf(<span class="string">'global handles; set(handles.axes_data_trace(%g),''ylim'',[str2double(get(gco,''string'')) str2double(get(handles.edit_ymax(%g),''string''))]); set(handles.axes_data_image(%g),''clim'',[str2double(get(gco,''string'')) str2double(get(handles.edit_ymax(%g),''string''))]); cfg.ymin(%g)=str2double(get(gco,''string''));'</span>,i,i,i,i,i);
+0737   handles.edit_ymin(i)=uicontrol(<span class="string">'style'</span>,<span class="string">'edit'</span>,<span class="string">'parent'</span>,handles.p_sim_plots,<span class="string">'tag'</span>,<span class="string">'ymin'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.955 .95+dy*(i-1)+.8*dy+.03-.01 .037 .03],<span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>,<span class="string">'string'</span>,cfg.ymin(i),<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="string">'Callback'</span>,callback,<span class="string">'fontsize'</span>,8);
+0738   handles.btn_sim_autoscale(i)=uicontrol(<span class="string">'style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'parent'</span>,handles.p_sim_plots,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.96 .95+dy*(i-1)+.8*dy/2 .027 .05],<span class="string">'fontsize'</span>,12,<span class="string">'fontweight'</span>,<span class="string">'bold'</span>,<span class="string">'fontname'</span>,<span class="string">'Blue Highway'</span>,<span class="string">'String'</span>,char(cfg.autoscale_charcode),<span class="string">'callback'</span>,{@<a href="#_sub14" class="code" title="subfunction AutoscaleSimPlot(src,evnt,plot_index)">AutoscaleSimPlot</a>,i},<span class="string">'visible'</span>,default_visible);<span class="comment">%,'backgroundcolor',cfg.ButtonColor,'ForegroundColor',cfg.ButtonFontColor);</span>
+0739   <span class="comment">% ref: how to display pic on button: https://www.mathworks.com/matlabcentral/newsreader/view_thread/51230</span>
+0740     <span class="comment">% for charcode=1:10000,fprintf('%g: %s\n',charcode,char(charcode)); end</span>
+0741     <span class="comment">% up/down arrows: 5864, 8597, 8645, 8661</span>
+0742     <span class="comment">% arrow right: 8594, 8658, 9032</span>
+0743     <span class="comment">% arrow left: 8592, 8656, 9031</span>
+0744     <span class="comment">% 8592-8703: ARROWS</span>
+0745     <span class="comment">% 991: lightning bolt</span>
+0746     <span class="comment">% 9398: encircled &quot;A&quot;</span>
+0747     <span class="comment">% 9786: smiley face</span>
+0748     <span class="comment">% 9733: 5-point star</span>
+0749 <span class="comment">%   pic_arrow=imread('/home/jason/code/dynasim/functions/arrow_up_down.png');</span>
+0750 <span class="comment">%   pic_arrow=1-ind2rgb(pic_arrow,gray);</span>
+0751 <span class="comment">%   handles.btn_sim_autoscale(i)=uicontrol('style','pushbutton','parent',handles.p_sim_plots,'units','normalized','position',[.955 .95+dy*(i-1)+.8*dy/2 .037 .08],'fontsize',12,'fontweight','bold','Cdata',pic_arrow,'callback',@QuickSim);%,'backgroundcolor',cfg.ButtonColor,'ForegroundColor',cfg.ButtonFontColor);</span>
+0752 <span class="keyword">end</span>
+0753 handles.line_data=[];
+0754 <span class="comment">% Create controls with default settings for QuickSim (parent: p_quicksim_settings)</span>
+0755 <span class="comment">% btn_quicksim</span>
+0756 handles.btn_quicksim=uicontrol(<span class="string">'style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'parent'</span>,handles.p_quicksim_settings,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.15 .55 .7 .3],<span class="string">'fontsize'</span>,12,<span class="string">'fontweight'</span>,<span class="string">'bold'</span>,<span class="string">'string'</span>,<span class="string">'QuickSim'</span>,<span class="string">'callback'</span>,@<a href="#_sub19" class="code" title="subfunction QuickSim(src,evnt)">QuickSim</a>,<span class="string">'backgroundcolor'</span>,cfg.ButtonColor,<span class="string">'ForegroundColor'</span>,cfg.ButtonFontColor);
+0757 <span class="comment">% edit_t0</span>
+0758 handles.edit_t0 = uicontrol(<span class="string">'style'</span>,<span class="string">'edit'</span>,<span class="string">'parent'</span>,handles.p_quicksim_settings,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.15 .15 .3 .3],<span class="string">'fontsize'</span>,12,<span class="string">'string'</span>,<span class="string">'0'</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>,<span class="string">'callback'</span>,<span class="string">'global cfg; cfg.t0=str2num(get(gcbo,''string''));'</span>);
+0759 uicontrol(<span class="string">'style'</span>,<span class="string">'text'</span>,<span class="string">'parent'</span>,handles.p_quicksim_settings,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.05 .1 .1 .3],<span class="string">'fontsize'</span>,10,<span class="string">'string'</span>,<span class="string">'t0'</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'center'</span>,<span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>,<span class="string">'callback'</span>,<span class="string">'global cfg; cfg.dt=str2num(get(gcbo,''string''));'</span>);
+0760 <span class="comment">% edit_tf</span>
+0761 handles.edit_tf = uicontrol(<span class="string">'style'</span>,<span class="string">'edit'</span>,<span class="string">'parent'</span>,handles.p_quicksim_settings,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.55 .15 .3 .3],<span class="string">'fontsize'</span>,12,<span class="string">'string'</span>,<span class="string">'200'</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>,<span class="string">'callback'</span>,<span class="string">'global cfg; cfg.tf=str2num(get(gcbo,''string''));'</span>);
+0762 uicontrol(<span class="string">'style'</span>,<span class="string">'text'</span>,<span class="string">'parent'</span>,handles.p_quicksim_settings,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.45 .1 .1 .3],<span class="string">'fontsize'</span>,10,<span class="string">'string'</span>,<span class="string">'tf'</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'center'</span>,<span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>,<span class="string">'callback'</span>,<span class="string">'global cfg; cfg.dt=str2num(get(gcbo,''string''));'</span>);
+0763 handles.check_compile = uicontrol(<span class="string">'style'</span>,<span class="string">'checkbox'</span>,<span class="string">'parent'</span>,handles.p_quicksim_settings,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.15 .05 .85 .1],<span class="string">'string'</span>,<span class="string">'compile'</span>,<span class="string">'value'</span>,0,<span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>);
+0764 
+0765 <span class="comment">% Create controls with default settings for running sims (parent: p_runsim_settings)</span>
+0766 <span class="comment">% btn_start (string: start/pause/resume)</span>
+0767 handles.btn_start=uicontrol(<span class="string">'style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'parent'</span>,handles.p_runsim_settings,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.05 .55 .15 .3],<span class="string">'fontsize'</span>,12,<span class="string">'fontweight'</span>,<span class="string">'bold'</span>,<span class="string">'string'</span>,<span class="string">'Start'</span>,<span class="string">'callback'</span>,@<a href="#_sub18" class="code" title="subfunction RunSim(src,evnt)">RunSim</a>,<span class="string">'backgroundcolor'</span>,cfg.ButtonColor,<span class="string">'ForegroundColor'</span>,cfg.ButtonFontColor);
+0768 <span class="comment">% btn_pause</span>
+0769 handles.btn_pause=uicontrol(<span class="string">'style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'parent'</span>,handles.p_runsim_settings,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.05 .55 .15 .3],<span class="string">'fontsize'</span>,12,<span class="string">'fontweight'</span>,<span class="string">'bold'</span>,<span class="string">'string'</span>,<span class="string">'Pause'</span>,<span class="string">'callback'</span>,<span class="string">'global cfg; cfg.sim_paused=-cfg.sim_paused;'</span>,<span class="string">'visible'</span>,<span class="string">'off'</span>,<span class="string">'backgroundcolor'</span>,cfg.ButtonColor,<span class="string">'ForegroundColor'</span>,cfg.ButtonFontColor);
+0770 <span class="comment">% btn_stop</span>
+0771 handles.btn_stop=uicontrol(<span class="string">'style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'parent'</span>,handles.p_runsim_settings,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.05 .15 .15 .3],<span class="string">'fontsize'</span>,12,<span class="string">'fontweight'</span>,<span class="string">'bold'</span>,<span class="string">'string'</span>,<span class="string">'Stop'</span>,<span class="string">'callback'</span>,<span class="string">'global cfg; cfg.sim_stopped=1; cfg.sim_paused=-1;'</span>,<span class="string">'visible'</span>,<span class="string">'off'</span>,<span class="string">'backgroundcolor'</span>,cfg.ButtonColor,<span class="string">'ForegroundColor'</span>,cfg.ButtonFontColor);
+0772 <span class="comment">% edit_dt</span>
+0773 handles.edit_dt = uicontrol(<span class="string">'style'</span>,<span class="string">'edit'</span>,<span class="string">'parent'</span>,handles.p_runsim_settings,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.23 .55 .07 .3],<span class="string">'fontsize'</span>,12,<span class="string">'string'</span>,<span class="string">'.01'</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>,<span class="string">'callback'</span>,<span class="string">'global cfg; cfg.dt=str2num(get(gcbo,''string''));'</span>);
+0774 uicontrol(<span class="string">'style'</span>,<span class="string">'text'</span>,<span class="string">'parent'</span>,handles.p_runsim_settings,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.23 .4 .07 .15],<span class="string">'fontsize'</span>,10,<span class="string">'string'</span>,<span class="string">'dt'</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'center'</span>,<span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>,<span class="string">'callback'</span>,<span class="string">'global cfg; cfg.dt=str2num(get(gcbo,''string''));'</span>);
+0775 <span class="comment">% edit_ntime</span>
+0776 handles.edit_ntime = uicontrol(<span class="string">'style'</span>,<span class="string">'edit'</span>,<span class="string">'parent'</span>,handles.p_runsim_settings,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.32 .55 .15 .3],<span class="string">'fontsize'</span>,12,<span class="string">'string'</span>,<span class="string">'20001'</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>,<span class="string">'callback'</span>,<span class="string">'global cfg; cfg.ntime=str2num(get(gcbo,''string''));'</span>);
+0777 uicontrol(<span class="string">'style'</span>,<span class="string">'text'</span>,<span class="string">'parent'</span>,handles.p_runsim_settings,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.32 .4 .15 .15],<span class="string">'fontsize'</span>,10,<span class="string">'string'</span>,<span class="string">'# times'</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'center'</span>,<span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>,<span class="string">'callback'</span>,<span class="string">'global cfg; cfg.dt=str2num(get(gcbo,''string''));'</span>);
+0778 <span class="comment">% btn_auto_ylim_by_pop</span>
+0779 handles.btn_auto_ylim_by_pop=uicontrol(<span class="string">'style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'parent'</span>,handles.p_runsim_settings,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.75 .55 .23 .3],<span class="string">'fontsize'</span>,10,<span class="string">'fontweight'</span>,<span class="string">'bold'</span>,<span class="string">'string'</span>,<span class="string">'auto_by_pop'</span>,<span class="string">'callback'</span>,@<a href="#_sub12" class="code" title="subfunction UpdateSimView(src,evnt)">UpdateSimView</a>,<span class="string">'visible'</span>,<span class="string">'off'</span>,<span class="string">'backgroundcolor'</span>,cfg.ButtonColor,<span class="string">'ForegroundColor'</span>,cfg.ButtonFontColor);
+0780 <span class="comment">% btn_auto_ylim_across_pops</span>
+0781 handles.btn_auto_ylim_by_pop=uicontrol(<span class="string">'style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'parent'</span>,handles.p_runsim_settings,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.75 .15 .23 .3],<span class="string">'fontsize'</span>,10,<span class="string">'fontweight'</span>,<span class="string">'bold'</span>,<span class="string">'string'</span>,<span class="string">'auto_all_pops'</span>,<span class="string">'callback'</span>,@<a href="#_sub12" class="code" title="subfunction UpdateSimView(src,evnt)">UpdateSimView</a>,<span class="string">'visible'</span>,<span class="string">'off'</span>,<span class="string">'backgroundcolor'</span>,cfg.ButtonColor,<span class="string">'ForegroundColor'</span>,cfg.ButtonFontColor);
+0782 <span class="comment">% edit_max_num_plots</span>
+0783 <span class="comment">% ...</span>
+0784 
+0785 <span class="comment">% radio buttons to select kind of plot</span>
+0786 handles.radio_plot_type=uibuttongroup(<span class="string">'visible'</span>,<span class="string">'off'</span>,<span class="string">'SelectionChangeFcn'</span>,@<a href="#_sub12" class="code" title="subfunction UpdateSimView(src,evnt)">UpdateSimView</a>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'Position'</span>,[.55 .07 .15 .85],<span class="string">'parent'</span>,handles.p_runsim_settings,<span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>,<span class="string">'title'</span>,<span class="string">'Display'</span>);
+0787 handles.radio_plot_type_trace=uicontrol(<span class="string">'style'</span>,<span class="string">'radiobutton'</span>,<span class="string">'string'</span>,<span class="string">'trace'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'pos'</span>,[.1 .6 .9 .3],<span class="string">'userdata'</span>,<span class="string">'simview_trace'</span>,<span class="string">'parent'</span>,handles.radio_plot_type,<span class="string">'HandleVisibility'</span>,<span class="string">'on'</span>,<span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>);
+0788 handles.radio_plot_type_image=uicontrol(<span class="string">'style'</span>,<span class="string">'radiobutton'</span>,<span class="string">'string'</span>,<span class="string">'image'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'pos'</span>,[.1 .2 .9 .3],<span class="string">'userdata'</span>,<span class="string">'simview_image'</span>,<span class="string">'parent'</span>,handles.radio_plot_type,<span class="string">'HandleVisibility'</span>,<span class="string">'on'</span>,<span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>);
+0789 set(handles.radio_plot_type,<span class="string">'SelectedObject'</span>,handles.radio_plot_type_trace,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0790 
+0791 <span class="comment">% special plot options</span>
+0792 <span class="comment">% handles.check_compile  = uibuttongroup('visible','off','SelectionChangeFcn',@UpdateSimView,'units','normalized','Position',[.55 .07 .15 .85],'parent',handles.p_runsim_settings,'backgroundcolor','w','title','Display');</span>
+0793 handles.check_zscore = uicontrol(<span class="string">'style'</span>,<span class="string">'checkbox'</span>,<span class="string">'parent'</span>,handles.p_runsim_settings,<span class="string">'callback'</span>,@<a href="#_sub12" class="code" title="subfunction UpdateSimView(src,evnt)">UpdateSimView</a>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'position'</span>,[.75 .5 .2 .15],<span class="string">'string'</span>,<span class="string">'zscore'</span>,<span class="string">'value'</span>,0,<span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>);
+0794 
+0795 <span class="comment">% autoscale simview</span>
+0796 uicontrol(<span class="string">'style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'parent'</span>,handles.p_runsim_settings,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'Position'</span>,[.94 .35 .04 .3],<span class="string">'fontsize'</span>,12,<span class="string">'fontweight'</span>,<span class="string">'bold'</span>,<span class="string">'fontname'</span>,<span class="string">'Blue Highway'</span>,<span class="string">'String'</span>,char(cfg.autoscale_charcode),<span class="string">'callback'</span>,{@<a href="#_sub14" class="code" title="subfunction AutoscaleSimPlot(src,evnt,plot_index)">AutoscaleSimPlot</a>,0},<span class="string">'visible'</span>,<span class="string">'on'</span>);
+0797 
+0798 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0799 <a name="_sub12" href="#_subfunctions" class="code">function UpdateSimView(src,evnt)</a>
+0800 <span class="comment">% Purpose: update Sim View controls (except plotted data)</span>
+0801 <span class="keyword">global</span> handles cfg MODEL
+0802 <span class="comment">% update plot type</span>
+0803 <span class="keyword">if</span> nargin&gt;0 &amp;&amp; isequal(src,handles.radio_plot_type)
+0804   <span class="comment">% hide all sim view plot objects</span>
+0805   Children=get(handles.radio_plot_type,<span class="string">'Children'</span>);
+0806   <span class="keyword">for</span> i=1:length(Children)
+0807     set(findobj(<span class="string">'tag'</span>,get(Children(i),<span class="string">'userdata'</span>)),<span class="string">'visible'</span>,<span class="string">'off'</span>);
+0808   <span class="keyword">end</span>
+0809   <span class="comment">% show plot objects for the select type</span>
+0810   SelectedObject=get(handles.radio_plot_type,<span class="string">'SelectedObject'</span>);
+0811   set(findobj(<span class="string">'tag'</span>,get(SelectedObject,<span class="string">'userdata'</span>)),<span class="string">'visible'</span>,<span class="string">'on'</span>);
+0812 <span class="keyword">end</span>
+0813 <span class="comment">% get selection info</span>
+0814 pop_names=get(handles.list_pops,<span class="string">'string'</span>);
+0815 sel_pop_inds=get(handles.list_pops,<span class="string">'value'</span>);
+0816 sel_pop_names=pop_names(sel_pop_inds);
+0817 num_plots=min(length(sel_pop_inds),cfg.max_num_plots);
+0818 all_state_vars=MODEL.state_variables;
+0819 <span class="keyword">if</span> ~isempty(MODEL.monitors)
+0820   all_state_vars=cat(2,all_state_vars,fieldnames(MODEL.monitors)');
+0821 <span class="keyword">end</span>
+0822 <span class="comment">%</span>
+0823 <span class="keyword">for</span> plot_index=1:num_plots
+0824   pop_name=sel_pop_names{plot_index};
+0825   <span class="comment">% get vars for this pop</span>
+0826   pat=[<span class="string">'^'</span> pop_name <span class="string">'_'</span>];
+0827   sel_state_vars=all_state_vars(~cellfun(@isempty,regexp(all_state_vars,pat,<span class="string">'once'</span>)));
+0828   <span class="comment">% get cell indices for this pop</span>
+0829   num_cells=MODEL.parameters.([pop_name <span class="string">'_Npop'</span>]);
+0830   str_cell_inds=cellfun(@num2str,num2cell(1:num_cells),<span class="string">'uni'</span>,0);
+0831   sel_cell_inds=1:length(str_cell_inds);
+0832   <span class="comment">% update controls</span>
+0833   set(handles.list_vars(plot_index),<span class="string">'string'</span>,sel_state_vars);
+0834   set(handles.list_cells(plot_index),<span class="string">'string'</span>,str_cell_inds);
+0835   val=get(handles.list_vars(plot_index),<span class="string">'value'</span>);
+0836   <span class="keyword">if</span> isempty(val) || max(val)&gt;length(sel_state_vars)
+0837     set(handles.list_vars(plot_index),<span class="string">'value'</span>,1);
+0838   <span class="keyword">end</span>
+0839   val=get(handles.list_cells(plot_index),<span class="string">'value'</span>);
+0840   <span class="keyword">if</span> isempty(val) || max(val)&gt;length(str_cell_inds)
+0841     set(handles.list_cells(plot_index),<span class="string">'value'</span>,sel_cell_inds);
+0842   <span class="keyword">end</span>
+0843 <span class="keyword">end</span>
+0844 <span class="comment">% display all axes with select pops to plot</span>
+0845 <span class="keyword">for</span> plot_index=1:num_plots
+0846   <span class="keyword">switch</span> get(get(handles.radio_plot_type,<span class="string">'SelectedObject'</span>),<span class="string">'String'</span>)
+0847     <span class="keyword">case</span> <span class="string">'trace'</span>
+0848       set(handles.axes_data_trace(plot_index),<span class="string">'visible'</span>,<span class="string">'on'</span>);
+0849       <span class="keyword">if</span> size(handles.line_data,1)&gt;=plot_index
+0850         ind=handles.line_data(plot_index,:)~=0;
+0851         set(handles.line_data(plot_index,ind),<span class="string">'visible'</span>,<span class="string">'on'</span>);
+0852       <span class="keyword">end</span>
+0853     <span class="keyword">case</span> <span class="string">'image'</span>
+0854       set(handles.axes_data_image(plot_index),<span class="string">'visible'</span>,<span class="string">'on'</span>);    
+0855       set(handles.img_data(plot_index),<span class="string">'visible'</span>,<span class="string">'on'</span>);  
+0856   <span class="keyword">end</span>
+0857   set(handles.edit_ymax(plot_index),<span class="string">'visible'</span>,<span class="string">'on'</span>);
+0858   set(handles.edit_ymin(plot_index),<span class="string">'visible'</span>,<span class="string">'on'</span>);
+0859   set(handles.list_vars(plot_index),<span class="string">'visible'</span>,<span class="string">'on'</span>);
+0860   set(handles.list_cells(plot_index),<span class="string">'visible'</span>,<span class="string">'on'</span>);
+0861   set(handles.btn_sim_autoscale(plot_index),<span class="string">'visible'</span>,<span class="string">'on'</span>);
+0862 <span class="keyword">end</span>
+0863 <span class="comment">% hide all available axes without select pops to plot</span>
+0864 <span class="keyword">for</span> plot_index=num_plots+1:cfg.max_num_plots
+0865   set(handles.edit_ymax(plot_index),<span class="string">'visible'</span>,<span class="string">'off'</span>);
+0866   set(handles.edit_ymin(plot_index),<span class="string">'visible'</span>,<span class="string">'off'</span>);
+0867   set(handles.list_vars(plot_index),<span class="string">'visible'</span>,<span class="string">'off'</span>);
+0868   set(handles.list_cells(plot_index),<span class="string">'visible'</span>,<span class="string">'off'</span>);
+0869   set(handles.axes_data_trace(plot_index),<span class="string">'visible'</span>,<span class="string">'off'</span>);
+0870   <span class="keyword">if</span> size(handles.line_data,1)&gt;=plot_index
+0871     ind=find(handles.line_data(plot_index,:)~=0);    
+0872     set(handles.line_data(plot_index,ind),<span class="string">'visible'</span>,<span class="string">'off'</span>);
+0873   <span class="keyword">end</span>
+0874   set(handles.axes_data_image(plot_index),<span class="string">'visible'</span>,<span class="string">'off'</span>);
+0875   set(handles.img_data(plot_index),<span class="string">'visible'</span>,<span class="string">'off'</span>);
+0876   set(handles.btn_sim_autoscale(plot_index),<span class="string">'visible'</span>,<span class="string">'off'</span>);
+0877 <span class="keyword">end</span>
+0878 <span class="comment">% update plotted data</span>
+0879 <a href="#_sub13" class="code" title="subfunction UpdateSimPlots(src,evnt)">UpdateSimPlots</a>;
+0880 
+0881 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0882 <a name="_sub13" href="#_subfunctions" class="code">function UpdateSimPlots(src,evnt)</a>
+0883 <span class="comment">% Purpose: update plotted data (from cfg.Y given listbox selections)</span>
+0884 <span class="keyword">global</span> handles cfg
+0885 sel_pop_inds=get(handles.list_pops,<span class="string">'value'</span>);
+0886 num_plots=min(length(sel_pop_inds),cfg.max_num_plots);
+0887 <span class="comment">% what kind of plot? (trace, image)</span>
+0888 plot_type=get(get(handles.radio_plot_type,<span class="string">'SelectedObject'</span>),<span class="string">'String'</span>);
+0889 <span class="comment">% loop over populations to plot</span>
+0890 <span class="keyword">for</span> plot_index=1:num_plots
+0891   <span class="comment">% select data to plot for this population</span>
+0892   plot_Y=<a href="#_sub17" class="code" title="subfunction plot_Y=SelectPlotData(plot_index)">SelectPlotData</a>(plot_index);
+0893   num_elems=size(plot_Y,2);
+0894   <span class="comment">% update plots for this population</span>
+0895   <span class="keyword">switch</span> plot_type
+0896     <span class="keyword">case</span> <span class="string">'trace'</span>
+0897       <span class="comment">% loop over cells to update</span>
+0898       <span class="keyword">for</span> line_index=1:num_elems
+0899         <span class="comment">% lines in handles.axes_data_trace(plot_index)</span>
+0900         <span class="keyword">if</span> size(handles.line_data,1)&gt;=plot_index &amp;&amp; size(handles.line_data,2)&gt;=line_index &amp;&amp; ishandle(handles.line_data(plot_index,line_index)) &amp;&amp; handles.line_data(plot_index,line_index)&gt;0
+0901           set(handles.line_data(plot_index,line_index),<span class="string">'ydata'</span>,plot_Y(:,line_index),<span class="string">'xdata'</span>,(0:cfg.ntime-1)*cfg.dt,<span class="string">'visible'</span>,<span class="string">'on'</span>);
+0902         <span class="keyword">else</span>
+0903           <span class="keyword">try</span>
+0904             warning(<span class="string">'off'</span>,<span class="string">'MATLAB:hg:EraseModeIgnored'</span>);
+0905             handles.line_data(plot_index,line_index)=line(<span class="string">'parent'</span>,handles.axes_data_trace(plot_index),<span class="string">'color'</span>,cfg.linecolors(max(1,mod(line_index,length(cfg.linecolors)))),<span class="string">'LineStyle'</span>,cfg.linetype{max(1,mod(line_index,length(cfg.linetype)))},<span class="string">'erase'</span>,<span class="string">'background'</span>,<span class="string">'xdata'</span>,(0:cfg.ntime-1)*cfg.dt,<span class="string">'ydata'</span>,plot_Y(:,line_index),<span class="string">'zdata'</span>,[],<span class="string">'tag'</span>,<span class="string">'simview_trace'</span>);
+0906           <span class="keyword">catch</span>
+0907             handles.line_data(plot_index,line_index)=line(<span class="string">'parent'</span>,handles.axes_data_trace(plot_index),<span class="string">'color'</span>,cfg.linecolors(max(1,mod(line_index,length(cfg.linecolors)))),<span class="string">'LineStyle'</span>,cfg.linetype{max(1,mod(line_index,length(cfg.linetype)))},<span class="string">'xdata'</span>,(0:cfg.ntime-1)*cfg.dt,<span class="string">'ydata'</span>,plot_Y(:,line_index),<span class="string">'zdata'</span>,[],<span class="string">'tag'</span>,<span class="string">'simview_trace'</span>);
+0908           <span class="keyword">end</span>
+0909         <span class="keyword">end</span>
+0910       <span class="keyword">end</span>
+0911       ax=handles.axes_data_trace(plot_index);
+0912       ylims=[cfg.ymin(plot_index) cfg.ymax(plot_index)];
+0913       <span class="comment">% hide other lines</span>
+0914       <span class="keyword">if</span> size(handles.line_data,2)&gt;num_elems
+0915         ind=num_elems+1:size(handles.line_data,2);
+0916         ind=ind(handles.line_data(plot_index,ind)~=0);
+0917         set(handles.line_data(plot_index,ind),<span class="string">'visible'</span>,<span class="string">'off'</span>);
+0918       <span class="keyword">end</span>
+0919     <span class="keyword">case</span> <span class="string">'image'</span>
+0920       set(handles.img_data(plot_index),<span class="string">'cdata'</span>,plot_Y',<span class="string">'ydata'</span>,1:num_elems,<span class="string">'xdata'</span>,(0:cfg.ntime-1)*cfg.dt);
+0921       ax=handles.axes_data_image(plot_index);
+0922       set(ax,<span class="string">'clim'</span>,[cfg.ymin(plot_index) cfg.ymax(plot_index)]);
+0923       <span class="keyword">if</span> num_elems&gt;1, ylims=[.5 num_elems+.5]; <span class="keyword">else</span> ylims=[.5 1.5]; <span class="keyword">end</span>
+0924   <span class="keyword">end</span>
+0925   <span class="comment">% generic axis settings (todo: move to UpdateSimView?)</span>
+0926   <span class="comment">% y-limits:</span>
+0927   <span class="keyword">if</span> ylims(1)~=ylims(2)
+0928     set(ax,<span class="string">'ylim'</span>,ylims);
+0929   <span class="keyword">end</span>
+0930   <span class="comment">% x-limits:</span>
+0931   set(ax,<span class="string">'xlim'</span>,[0 cfg.ntime*cfg.dt]);
+0932   <span class="comment">% xticks:</span>
+0933   set(handles.axes_data_trace(plot_index),<span class="string">'xticklabel'</span>,cfg.xticklabel,<span class="string">'xtick'</span>,cfg.xtick);
+0934   set(handles.axes_data_image(plot_index),<span class="string">'xticklabel'</span>,cfg.xticklabel,<span class="string">'xtick'</span>,cfg.xtick);  
+0935 <span class="comment">% end</span>
+0936 <span class="keyword">end</span>
+0937 
+0938 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0939 <a name="_sub14" href="#_subfunctions" class="code">function AutoscaleSimPlot(src,evnt,plot_index)</a>
+0940 <span class="keyword">global</span> handles cfg
+0941 
+0942 <span class="comment">% get max/min</span>
+0943 <span class="keyword">if</span> plot_index==0
+0944   <span class="comment">% autoscale all plots based on max/min of current limits across individual plots</span>
+0945   datmax=-inf;
+0946   datmin=inf;
+0947   <span class="keyword">for</span> i=1:length(handles.edit_ymin)
+0948     <span class="keyword">if</span> strcmp(<span class="string">'on'</span>,get(handles.axes_data_trace(i),<span class="string">'visible'</span>))
+0949       plot_Y=<a href="#_sub17" class="code" title="subfunction plot_Y=SelectPlotData(plot_index)">SelectPlotData</a>(i);
+0950       datmax=max(datmax,max(plot_Y(:)));
+0951       datmin=min(datmin,min(plot_Y(:)));
+0952     <span class="keyword">end</span>
+0953   <span class="keyword">end</span>
+0954   plot_index=1:length(handles.edit_ymin);
+0955   <span class="comment">%datmax=max(str2double(get(handles.edit_ymin,'string')));</span>
+0956   <span class="comment">%datmin=min(str2double(get(handles.edit_ymax,'string')));</span>
+0957 <span class="keyword">else</span>
+0958   <span class="comment">% autoscale individual plot based on max/min of current data in the plot</span>
+0959   plot_Y=<a href="#_sub17" class="code" title="subfunction plot_Y=SelectPlotData(plot_index)">SelectPlotData</a>(plot_index);
+0960   datmax=max(plot_Y(:));
+0961   datmin=min(plot_Y(:));  
+0962 <span class="keyword">end</span>
+0963 <span class="comment">% update plots</span>
+0964 <span class="keyword">for</span> i=1:length(plot_index)
+0965   <span class="comment">% what kind of plot? (trace, image)</span>
+0966   <span class="keyword">switch</span> get(get(handles.radio_plot_type,<span class="string">'SelectedObject'</span>),<span class="string">'String'</span>)
+0967     <span class="keyword">case</span> <span class="string">'trace'</span>
+0968       <span class="comment">% if phaseplot</span>
+0969         <span class="comment">% scale xlim and ylim</span>
+0970       <span class="comment">% else</span>
+0971         set(handles.axes_data_trace(plot_index(i)),<span class="string">'ylim'</span>,[datmin datmax]);
+0972       <span class="comment">% end</span>
+0973     <span class="keyword">case</span> <span class="string">'image'</span>
+0974       set(handles.axes_data_image(plot_index(i)),<span class="string">'clim'</span>,[datmin datmax]);
+0975   <span class="keyword">end</span>
+0976   set(handles.edit_ymin(plot_index(i)),<span class="string">'string'</span>,datmin);
+0977   set(handles.edit_ymax(plot_index(i)),<span class="string">'string'</span>,datmax);
+0978   cfg.ymin(plot_index(i))=datmin;
+0979   cfg.ymax(plot_index(i))=datmax;
+0980 <span class="keyword">end</span>
+0981 
+0982 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0983 <a name="_sub15" href="#_subfunctions" class="code">function AutoscaleMechPlot(src,evnt)</a>
+0984 <span class="keyword">global</span> handles
+0985 ymin=inf;
+0986 ymax=-inf;
+0987 <span class="keyword">if</span> isfield(handles,<span class="string">'static_traces'</span>)
+0988   <span class="keyword">for</span> i=1:length(handles.static_traces)
+0989     ymin=min(ymin,min(get(handles.static_traces(i),<span class="string">'ydata'</span>)));
+0990     ymax=max(ymax,max(get(handles.static_traces(i),<span class="string">'ydata'</span>)));
+0991   <span class="keyword">end</span>
+0992   set(handles.ax_static_plot,<span class="string">'ylim'</span>,[ymin ymax]);
+0993 <span class="keyword">end</span>
+0994 
+0995 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0996 <a name="_sub16" href="#_subfunctions" class="code">function ZoomFunction(src,evnt)</a>
+0997 <span class="keyword">global</span> handles cfg
+0998 <span class="comment">% get info on caller plot</span>
+0999 <span class="keyword">if</span> ismember(gco,handles.axes_data_trace)
+1000   plot_index=find(gco==handles.axes_data_trace);
+1001   hplot=handles.axes_data_trace(plot_index);
+1002   LIM=[cfg.ymin(plot_index) cfg.ymax(plot_index)];
+1003   property=<span class="string">'ylim'</span>;
+1004 <span class="keyword">elseif</span> ismember(gco,handles.img_data)
+1005   disp(<span class="string">'asdf'</span>)
+1006   plot_index=find(gco==handles.img_data);
+1007   hplot=handles.axes_data_image(plot_index);
+1008   LIM=[cfg.ymin(plot_index) cfg.ymax(plot_index)];
+1009   property=<span class="string">'clim'</span>;
+1010 <span class="keyword">elseif</span> isequal(gco,handles.ax_static_plot)
+1011   hplot=handles.ax_static_plot;
+1012   LIM=get(hplot,<span class="string">'ylim'</span>);
+1013   property=<span class="string">'ylim'</span>;
+1014 <span class="keyword">else</span> 
+1015   LIM=[];
+1016 <span class="keyword">end</span>
+1017 <span class="comment">% get new limits</span>
+1018 <span class="keyword">if</span> isempty(LIM) || LIM(1)&gt;=LIM(2) || any(isnan(LIM)) || any(isinf(LIM)), <span class="keyword">return</span>; <span class="keyword">end</span>
+1019 <span class="keyword">if</span> evnt.VerticalScrollCount &lt; 0           <span class="comment">% zoom in</span>
+1020   <span class="keyword">if</span> LIM(1)&gt;0, LIM(1)=LIM(1)*1.5; <span class="keyword">else</span> LIM(1)=LIM(1)/1.5; <span class="keyword">end</span>
+1021   <span class="keyword">if</span> LIM(2)&gt;0, LIM(2)=LIM(2)/1.5; <span class="keyword">else</span> LIM(1)=LIM(1)*1.5; <span class="keyword">end</span>  
+1022 <span class="keyword">else</span>                                      <span class="comment">% zoom out</span>
+1023   <span class="keyword">if</span> LIM(1)&gt;0, LIM(1)=LIM(1)/1.5; <span class="keyword">else</span> LIM(1)=LIM(1)*1.5; <span class="keyword">end</span>
+1024   <span class="keyword">if</span> LIM(2)&gt;0, LIM(2)=LIM(2)*1.5; <span class="keyword">else</span> LIM(1)=LIM(1)/1.5; <span class="keyword">end</span>
+1025 <span class="keyword">end</span>
+1026 <span class="comment">% update plots and cfg</span>
+1027 set(hplot,property,LIM);
+1028 <span class="keyword">if</span> ismember(gco,handles.axes_data_trace) || ismember(gco,handles.img_data)
+1029   set(handles.edit_ymin(plot_index),<span class="string">'string'</span>,LIM(1));
+1030   set(handles.edit_ymax(plot_index),<span class="string">'string'</span>,LIM(2));
+1031   cfg.ymin(plot_index)=LIM(1);
+1032   cfg.ymax(plot_index)=LIM(2);
+1033 <span class="keyword">end</span>
+1034 
+1035 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+1036 <a name="_sub17" href="#_subfunctions" class="code">function plot_Y=SelectPlotData(plot_index)</a>
+1037 <span class="comment">% purpose: select sim data (from cfg.Y) to plot</span>
+1038 <span class="keyword">global</span> cfg handles
+1039 <span class="comment">% collect listbox info</span>
+1040 all_var_names=get(handles.list_vars(plot_index),<span class="string">'string'</span>);
+1041 <span class="keyword">if</span> ~isempty(all_var_names)
+1042   sel_var_names=all_var_names(get(handles.list_vars(plot_index),<span class="string">'value'</span>));
+1043 <span class="keyword">else</span>
+1044   sel_var_names=all_var_names;
+1045 <span class="keyword">end</span>
+1046 sel_cell_inds=get(handles.list_cells(plot_index),<span class="string">'value'</span>);
+1047 
+1048 <span class="comment">% get list of elements for select variables in this pop</span>
+1049 vind=find(ismember(cfg.elem_names,sel_var_names));
+1050 elem_names=cfg.elem_names(vind);
+1051 
+1052 <span class="comment">% get indices into Y (elem_names) for select cells in this pop</span>
+1053 yind=[]; 
+1054 <span class="keyword">for</span> i=1:length(sel_var_names)
+1055   cind=find(strcmp(sel_var_names{i},elem_names)); <span class="comment">% all indices to this var</span>
+1056   <span class="keyword">if</span> max(sel_cell_inds)&gt;length(cind)    
+1057     sel_cell_inds=sel_cell_inds(sel_cell_inds&lt;=length(cind));
+1058   <span class="keyword">end</span>
+1059   yind=[yind vind(cind(sel_cell_inds))];
+1060 <span class="keyword">end</span>
+1061 plot_Y=cfg.Y(cfg.t_plot_indices,yind);
+1062 sel_elem_names=cfg.elem_names(yind);
+1063 
+1064 <span class="comment">% calculate zscore</span>
+1065 <span class="keyword">if</span> get(handles.check_zscore,<span class="string">'value'</span>)==1
+1066   uniq_elem_names=unique(sel_elem_names);
+1067   <span class="keyword">for</span> i=1:length(uniq_elem_names)
+1068     idx=ismember(sel_elem_names,uniq_elem_names{i});
+1069     tmp=plot_Y(:,idx);
+1070     plot_Y(:,idx)=(tmp-mean(tmp(:)))/std(tmp(:));
+1071   <span class="keyword">end</span>
+1072 <span class="keyword">end</span>
+1073 
+1074 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+1075 <a name="_sub18" href="#_subfunctions" class="code">function RunSim(src,evnt)</a>
+1076 <span class="comment">% Purpose: control ongoing simulation that updates cfg.Y and cfg.t</span>
+1077 <span class="keyword">global</span> cfg handles t
+1078 set(handles.btn_start,<span class="string">'visible'</span>,<span class="string">'off'</span>);
+1079 set(handles.btn_pause,<span class="string">'visible'</span>,<span class="string">'on'</span>);
+1080 set(handles.btn_stop,<span class="string">'visible'</span>,<span class="string">'on'</span>);
+1081 set(handles.btn_quicksim,<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+1082 set(handles.btn_start,<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+1083 <span class="comment">% Initialize data for simulation</span>
+1084 <span class="comment">% cfg.ntime=str2num(get(handles.edit_ntime,'string'));</span>
+1085 cfg.Y=nan(cfg.ntime,length(cfg.IC));
+1086 cfg.Y(1,:)=cfg.IC;
+1087 cfg.t=(0:cfg.ntime-1)'*cfg.dt;
+1088 X=cfg.IC;
+1089 t=0;
+1090 t_pointer=2;
+1091 cfg.xtick=linspace(cfg.t(1),cfg.t(end),cfg.num_xticks);
+1092 cfg.xticklabel=linspace(cfg.t(1),cfg.t(end),cfg.num_xticks);
+1093 
+1094 <span class="comment">% Run simulation</span>
+1095 <span class="keyword">while</span> cfg.sim_stopped~=1
+1096   <span class="comment">% Pause simulation</span>
+1097   <span class="keyword">if</span> cfg.sim_paused==1
+1098     set(handles.btn_pause,<span class="string">'string'</span>,<span class="string">'Resume'</span>);
+1099     <span class="keyword">while</span> cfg.sim_paused==1
+1100       pause(.1);
+1101       <span class="comment">%drawnow</span>
+1102     <span class="keyword">end</span>
+1103     set(handles.btn_pause,<span class="string">'string'</span>,<span class="string">'Pause'</span>);
+1104   <span class="keyword">end</span>
+1105   <span class="comment">% Integration</span>
+1106   t=t+cfg.dt;
+1107   X=X+cfg.dt*cfg.ODEFUN(t,X);
+1108   <span class="comment">% store new state</span>
+1109   cfg.Y(t_pointer,:)=X;
+1110   cfg.t=cfg.t+cfg.dt;
+1111   <span class="comment">% increment time index</span>
+1112   t_pointer=t_pointer+1;
+1113   <span class="keyword">if</span> t_pointer&gt;cfg.ntime
+1114     t_pointer=1;
+1115   <span class="keyword">end</span>
+1116   <span class="comment">% draw sim data</span>
+1117   <span class="keyword">if</span> mod(t_pointer,cfg.num_steps_per_plot)==0
+1118     <span class="comment">% update indices to select chronological cfg.Y to plot</span>
+1119     <span class="keyword">if</span> t&lt;(cfg.ntime*cfg.dt)
+1120       cfg.t_plot_indices=1:cfg.ntime;
+1121     <span class="keyword">else</span>
+1122       cfg.xticklabel=cfg.xticklabel+cfg.dt*cfg.num_steps_per_plot;
+1123       cfg.t_plot_indices=[t_pointer:cfg.ntime 1:t_pointer-1];
+1124     <span class="keyword">end</span>
+1125     <span class="comment">% update plots</span>
+1126     <a href="#_sub13" class="code" title="subfunction UpdateSimPlots(src,evnt)">UpdateSimPlots</a>;
+1127     drawnow;
+1128   <span class="keyword">end</span>
+1129 <span class="keyword">end</span>
+1130 cfg.sim_stopped=0;
+1131 set(handles.btn_start,<span class="string">'visible'</span>,<span class="string">'on'</span>);
+1132 set(handles.btn_pause,<span class="string">'visible'</span>,<span class="string">'off'</span>);
+1133 set(handles.btn_stop,<span class="string">'visible'</span>,<span class="string">'off'</span>);
+1134 set(handles.btn_quicksim,<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+1135 set(handles.btn_start,<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+1136 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+1137 <a name="_sub19" href="#_subfunctions" class="code">function QuickSim(src,evnt)</a>
+1138 <span class="comment">% purpose: quick simulation using dsSimulate, display results in GUI</span>
+1139 <span class="keyword">global</span> DATA SPEC cfg handles MODEL
+1140 set(handles.btn_quicksim,<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+1141 set(handles.btn_start,<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+1142 <span class="comment">% start quick simulation</span>
+1143 <span class="comment">% if get(handles.check_compile,'value')</span>
+1144   verbose_flag=1;
+1145 <span class="comment">% else</span>
+1146 <span class="comment">%   verbose_flag=0;</span>
+1147 <span class="comment">% end</span>
+1148 <span class="keyword">try</span>
+1149   DATA=<a href="dsSimulate.html" class="code" title="function [data,studyinfo,result] = dsSimulate(model,varargin)">dsSimulate</a>(SPEC,<span class="string">'time_limits'</span>,[cfg.t0 cfg.tf],<span class="string">'dt'</span>,cfg.dt,<span class="string">'solver'</span>,<span class="string">'euler'</span>,<span class="string">'compile_flag'</span>,get(handles.check_compile,<span class="string">'value'</span>),<span class="string">'verbose_flag'</span>,verbose_flag);
+1150 <span class="keyword">catch</span>
+1151   set(handles.btn_quicksim,<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+1152   set(handles.btn_start,<span class="string">'Enable'</span>,<span class="string">'on'</span>);  
+1153 <span class="keyword">end</span>
+1154 <span class="comment">% convert data to GUI state for updating sim view plots</span>
+1155 cfg=<a href="#_sub20" class="code" title="subfunction cfg=data2cfg(data)">data2cfg</a>(DATA);
+1156 MODEL=<a href="../functions/internal/dsGenerateModel.html" class="code" title="function [model,name_map] = dsGenerateModel(specification, varargin)">dsGenerateModel</a>(SPEC);
+1157 <a href="#_sub12" class="code" title="subfunction UpdateSimView(src,evnt)">UpdateSimView</a>;
+1158 set(handles.btn_quicksim,<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+1159 set(handles.btn_start,<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+1160 set(handles.edit_ntime,<span class="string">'string'</span>,num2str(cfg.ntime));
+1161 
+1162 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+1163 <a name="_sub20" href="#_subfunctions" class="code">function cfg=data2cfg(data)</a>
+1164 <span class="keyword">global</span> cfg
+1165 elem_names={};
+1166 Y=[]; <span class="comment">% TODO: speed up by preallocating full data matrix</span>
+1167 <span class="keyword">for</span> i=1:length(data.labels)
+1168   Y=cat(2,Y,data.(data.labels{i}));
+1169   elem_names=cat(2,elem_names,repmat(data.labels(i),[1 size(data.(data.labels{i}),2)]));
+1170 <span class="keyword">end</span>
+1171 cfg.t=data.time;
+1172 cfg.Y=Y;
+1173 cfg.elem_names=elem_names;
+1174 cfg.ntime=length(data.time);
+1175 cfg.t_plot_indices=1:cfg.ntime;
+1176 cfg.dt=data.simulator_options.dt;
+1177 cfg.xtick=linspace(cfg.t(1),cfg.t(end),cfg.num_xticks);
+1178 cfg.xticklabel=linspace(cfg.t(1),cfg.t(end),cfg.num_xticks);
+1179 
+1180 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+1181 <span class="comment">% function data=cfg2data(cfg)</span>
+1182 <span class="comment">% ...</span>
+1183 <span class="comment">% if nargin==0, global cfg; end</span>
+1184 <span class="comment">% data.labels=unique(cfg.elem_names);</span>
+1185 
+1186 <span class="comment">% Menu Callback usage: PlotData(cfg2data,'plot_type','__');</span>
+1187 
+1188 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+1189 <a name="_sub21" href="#_subfunctions" class="code">function AddPopulation(src,evnt,base_pop_index)</a>
+1190 <span class="keyword">global</span> SPEC LASTSPEC handles
+1191 LASTSPEC=SPEC;
+1192 <span class="comment">% create new population based on the one associated with the clicked &quot;+&quot; button</span>
+1193 SPEC.populations(end+1)=SPEC.populations(base_pop_index);
+1194 <span class="comment">% give a unique name to the new population</span>
+1195 name=sprintf(<span class="string">'%s%g'</span>,SPEC.populations(end).name,length(SPEC.populations));
+1196 SPEC.populations(end).name=name;
+1197 <span class="comment">% update population controls</span>
+1198 val = get(handles.list_pops,<span class="string">'value'</span>);
+1199 str = get(handles.list_pops,<span class="string">'string'</span>);
+1200 set(handles.list_pops,<span class="string">'value'</span>,[val length(SPEC.populations)]);
+1201 set(handles.list_pops,<span class="string">'string'</span>,{str{:} name});
+1202 <span class="comment">% update GUI models/views</span>
+1203 <a href="#_sub7" class="code" title="subfunction UpdateModel(src,evnt,aux_callback)">UpdateModel</a>;
+1204 <a href="#_sub8" class="code" title="subfunction UpdatePopSelection(src,evnt)">UpdatePopSelection</a>;
+1205 
+1206 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+1207 <a name="_sub22" href="#_subfunctions" class="code">function RemovePopulation(src,evnt,base_pop_index)</a>
+1208 <span class="keyword">global</span> SPEC LASTSPEC handles
+1209 LASTSPEC=SPEC;
+1210 name=SPEC.populations(base_pop_index).name;
+1211 <span class="comment">% remove population</span>
+1212 SPEC.populations(base_pop_index)=[];
+1213 <span class="comment">% remove associated connections</span>
+1214 <span class="keyword">if</span> ~isempty(SPEC.connections)
+1215   idx=ismember({SPEC.connections.source},name) | ismember({SPEC.connections.target},name);
+1216   SPEC.connections(idx)=[];
+1217   <span class="keyword">if</span> isempty(SPEC.connections)
+1218     SPEC.connections=[];
+1219   <span class="keyword">end</span>
+1220 <span class="keyword">end</span>
+1221 <span class="comment">% update population controls</span>
+1222 val = get(handles.list_pops,<span class="string">'value'</span>);
+1223 str = get(handles.list_pops,<span class="string">'string'</span>);
+1224 new_str=setdiff(str,name,<span class="string">'stable'</span>);
+1225 new_val=find(ismember(new_str,str(val)));
+1226 set(handles.list_pops,<span class="string">'value'</span>,new_val);
+1227 set(handles.list_pops,<span class="string">'string'</span>,new_str);
+1228 <span class="comment">% update GUI models/views</span>
+1229 <a href="#_sub7" class="code" title="subfunction UpdateModel(src,evnt,aux_callback)">UpdateModel</a>;
+1230 <a href="#_sub8" class="code" title="subfunction UpdatePopSelection(src,evnt)">UpdatePopSelection</a>;
+1231 
+1232 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+1233 <a name="_sub23" href="#_subfunctions" class="code">function RenamePopulation(src,evnt)</a>
+1234 <span class="keyword">global</span> SPEC handles
+1235 val = get(handles.list_pops,<span class="string">'value'</span>);
+1236 str = get(handles.list_pops,<span class="string">'string'</span>);
+1237 <span class="keyword">if</span> length(val)&gt;1
+1238   <span class="comment">% cannot rename populations &gt;1 are selected</span>
+1239   <span class="keyword">return</span>;
+1240 <span class="keyword">end</span>
+1241 new_name=inputdlg([<span class="string">'Rename Population: '</span> str{val}],<span class="string">'New name'</span>);
+1242 drawnow; pause(0.05);  <span class="comment">% this innocent line prevents the Matlab hang</span>
+1243 <span class="keyword">if</span> isempty(new_name), <span class="keyword">return</span>; <span class="keyword">end</span>
+1244 new_name=new_name{1};
+1245 old_name=str{val};
+1246 <span class="comment">% update population name</span>
+1247 idx=ismember({SPEC.populations.name},old_name);
+1248 SPEC.populations(idx).name=new_name;
+1249 <span class="comment">% update name in connections</span>
+1250 <span class="keyword">if</span> ~isempty(SPEC.connections)
+1251   idx=ismember({SPEC.connections.source},old_name);
+1252   [SPEC.connections(idx).source]=deal(new_name);
+1253   idx=ismember({SPEC.connections.target},old_name);
+1254   [SPEC.connections(idx).target]=deal(new_name);
+1255 <span class="keyword">end</span>
+1256 <span class="comment">% update population list</span>
+1257 str{val}=new_name;
+1258 set(handles.list_pops,<span class="string">'string'</span>,str);
+1259 <span class="comment">% update GUI models/views</span>
+1260 <a href="#_sub7" class="code" title="subfunction UpdateModel(src,evnt,aux_callback)">UpdateModel</a>;
+1261 <a href="#_sub8" class="code" title="subfunction UpdatePopSelection(src,evnt)">UpdatePopSelection</a>;
+1262 
+1263 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+1264 <a name="_sub24" href="#_subfunctions" class="code">function RenameMechanism(src,evnt)</a>
+1265 <span class="keyword">global</span> SPEC handles
+1266 ud=get(src,<span class="string">'userdata'</span>);
+1267 v=get(src,<span class="string">'value'</span>);
+1268 s=get(src,<span class="string">'string'</span>);
+1269 <span class="keyword">if</span> length(v)&gt;1, <span class="keyword">return</span>; <span class="keyword">end</span>
+1270 this=ud(v);
+1271 newname=inputdlg([<span class="string">'Rename Mechanism: '</span> s{v}],<span class="string">'New name'</span>);
+1272 drawnow; pause(0.05);  <span class="comment">% this innocent line prevents the Matlab hang</span>
+1273 <span class="keyword">if</span> isempty(newname), <span class="keyword">return</span>; <span class="keyword">end</span>
+1274 newname=newname{1};
+1275 
+1276 <span class="comment">% edit ().mechanisms and ().mechanism_list</span>
+1277 SPEC.(this.object_type)(this.object_index).mechanism_list{this.mechanism_index}=newname;
+1278 idx=ismember({SPEC.(this.object_type)(this.object_index).mechanisms.name},this.mechanism_name);
+1279 SPEC.(this.object_type)(this.object_index).mechanisms(idx).name=newname;
+1280 
+1281 <span class="comment">% copy to .mechanisms</span>
+1282 <span class="keyword">if</span> ~isfield(SPEC,<span class="string">'mechanisms'</span>) || isempty(SPEC.mechanisms)
+1283   SPEC.mechanisms=SPEC.(this.object_type)(this.object_index).mechanisms(idx);
+1284 <span class="keyword">elseif</span> ~ismember(newname,{SPEC.mechanisms.name})
+1285   SPEC.mechanisms(end+1)=SPEC.(this.object_type)(this.object_index).mechanisms(idx);
+1286 <span class="keyword">end</span>
+1287   
+1288 <span class="comment">% update mech editor listbox</span>
+1289 s{v}=[this.object_name <span class="string">'.'</span> newname];
+1290 set(src,<span class="string">'string'</span>,s);
+1291 
+1292 <span class="comment">% update mech editor userdata</span>
+1293 this.mechanism_name=newname;
+1294 this.mechanism_list_name = [this.object_name <span class="string">'.'</span> newname];
+1295 ud(v)=this;
+1296 set(src,<span class="string">'userdata'</span>,ud);
+1297 
+1298 <span class="comment">% update intrinsic mechanism list</span>
+1299 m=SPEC.(this.object_type)(this.object_index).mechanism_list;
+1300 [~,str]=fileparts(m{1}); 
+1301 <span class="keyword">for</span> j=2:length(m)
+1302   [~,name]=fileparts(m{j});
+1303   str=[str <span class="string">', '</span> name]; 
+1304 <span class="keyword">end</span>    
+1305 <span class="keyword">if</span> strcmp(this.object_type,<span class="string">'populations'</span>)
+1306   set(handles.edit_pop_mechlist(this.object_index),<span class="string">'string'</span>,str);
+1307 <span class="keyword">else</span>
+1308   <span class="comment">% get (i,j) index into con mech controls from source/target of object_index</span>
+1309   <span class="comment">% ...</span>
+1310   
+1311 <span class="keyword">end</span>
+1312 
+1313 <a href="#_sub7" class="code" title="subfunction UpdateModel(src,evnt,aux_callback)">UpdateModel</a>;
+1314 
+1315 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+1316 <a name="_sub25" href="#_subfunctions" class="code">function SaveModel(src,evnt)</a>
+1317 <span class="comment">% function Save_Spec(src,evnt)</span>
+1318 [filename,pathname] = uiputfile({<span class="string">'*.mat;'</span>},<span class="string">'Save as'</span>,<span class="string">'model-specification.mat'</span>);
+1319 <span class="keyword">if</span> isequal(filename,0) || isequal(pathname,0)
+1320   <span class="keyword">return</span>;
+1321 <span class="keyword">end</span>
+1322 outfile = fullfile(pathname,filename);
+1323 [fpath,fname,fext] = fileparts(outfile);
+1324 <span class="keyword">global</span> SPEC
+1325 specification=SPEC;
+1326 fprintf(<span class="string">'Saving model ''specification'': %s\n'</span>,outfile);
+1327 save(outfile,<span class="string">'specification'</span>);
+1328 
+1329 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+1330 <a name="_sub26" href="#_subfunctions" class="code">function OpenModel(src,evnt)</a>
+1331 <span class="comment">% Load and/or Append models</span>
+1332 
+1333 [filename,pathname] = uigetfile({<span class="string">'*.mat'</span>},<span class="string">'Pick a model specification file.'</span>,<span class="string">'MultiSelect'</span>,<span class="string">'off'</span>);
+1334 
+1335 <span class="keyword">if</span> isequal(filename,0) || isequal(pathname,0), <span class="keyword">return</span>; <span class="keyword">end</span>
+1336 <span class="keyword">if</span> iscell(filename)
+1337   datafile = cellfun(@(x)fullfile(pathname,x),filename,<span class="string">'uniformoutput'</span>,false);
+1338   filename = filename{1};
+1339 <span class="keyword">else</span>
+1340   datafile = [pathname filename];
+1341 <span class="keyword">end</span>
+1342 <span class="keyword">if</span> exist(datafile,<span class="string">'file'</span>)
+1343   fprintf(<span class="string">'Loading file: %s\n'</span>,datafile);
+1344   <span class="keyword">try</span>
+1345     o=load(datafile); <span class="comment">% load file</span>
+1346     fprintf(<span class="string">'Looking for ''specification'' structure...\n'</span>);
+1347     <span class="keyword">if</span> isfield(o,<span class="string">'specification'</span>)
+1348       fprintf(<span class="string">'specification found.\n'</span>);
+1349       <span class="keyword">global</span> SPEC handles
+1350       SPEC=o.specification;
+1351       close(handles.fig_main); 
+1352       <a href="dynasim.html" class="code" title="function dynasim(spec)">dynasim</a>(SPEC);
+1353       <span class="comment">%InitializeMainGUI;</span>
+1354       <span class="comment">%UpdateModel;</span>
+1355     <span class="keyword">else</span>
+1356       fprintf(<span class="string">'specification not found\n'</span>);
+1357     <span class="keyword">end</span>
+1358   <span class="keyword">catch</span>
+1359     fprintf(<span class="string">'failed to load file. check that it is a valid matlab file: %s\n'</span>,datafile);
+1360     <span class="keyword">return</span>;
+1361   <span class="keyword">end</span>
+1362 <span class="keyword">end</span>
+1363 <span class="comment">%</span>
+1364 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+1365 <a name="_sub27" href="#_subfunctions" class="code">function eqns=dsExtractModelStrings(MODEL,display_mode,display_flag)</a>
+1366 <span class="comment">% Purpose: construct string to display DynaSim model equations:</span>
+1367 <span class="comment">%   ODEs</span>
+1368 <span class="comment">%   ICs</span>
+1369 <span class="comment">%   conditionals</span>
+1370 <span class="comment">%   functions</span>
+1371 <span class="comment">%   fixed_variables</span>
+1372 <span class="comment">%   parameters</span>
+1373 <span class="comment">%   monitors</span>
+1374 <span class="comment">%   comments</span>
+1375 <span class="comment">%</span>
+1376 <span class="comment">% display_mode {'model' (default),'specification','odefun','xpp'}</span>
+1377 <span class="comment">% OPTIONS (todo: add options 2 and 3):</span>
+1378 <span class="comment">% 1. Display resulting model equations from DynaSim model structure</span>
+1379 <span class="comment">% 2. Display ODEFUN (function handle string for ODE system: @(X,t)...)</span>
+1380 <span class="comment">%     tip: use fun=str2func(eqns{1}) to obtain function handle from output</span>
+1381 <span class="comment">%          and ic=eval(eqns{2}) to obtain initial condition vector.</span>
+1382 <span class="comment">% 3. Display script defining the DynaSim specification structure</span>
+1383 <span class="comment">% 4. Display XPP .ode model implementation (see notes below)</span>
+1384 <span class="comment">%</span>
+1385 <span class="comment">% Example: display DynaSim model equations</span>
+1386 <span class="comment">% dsExtractModelStrings(MODEL,'model',1);</span>
+1387 <span class="comment">%</span>
+1388 <span class="comment">% Example: display and use script defining DynaSim specification structure</span>
+1389 <span class="comment">% eqns=dsExtractModelStrings(MODEL,'specification',1);</span>
+1390 <span class="comment">% spec=eval(eqns); % note: equivalent to MODEL.specification</span>
+1391 <span class="comment">%</span>
+1392 <span class="comment">% Example: integrate system using built-in Matlab solver</span>
+1393 <span class="comment">%   eqns=dsExtractModelStrings(MODEL,'odefun',0);</span>
+1394 <span class="comment">%   fun=eval(eqns{1});</span>
+1395 <span class="comment">%   ic=eqns{2};</span>
+1396 <span class="comment">%   [t,y]=ode23(fun,[0 100],ic);</span>
+1397 <span class="comment">%   figure; plot(t,y);</span>
+1398 
+1399 <span class="keyword">if</span> nargin&lt;3
+1400   display_flag=0;
+1401 <span class="keyword">end</span>
+1402 <span class="keyword">if</span> nargin&lt;2 || isempty(display_mode)
+1403   display_mode=<span class="string">'model'</span>;
+1404 <span class="keyword">end</span>
+1405 
+1406 <a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>={};
+1407 <span class="keyword">switch</span> lower(display_mode)
+1408   <span class="keyword">case</span> <span class="string">'model'</span> <span class="comment">% Display resulting model equations from DynaSim model structure</span>
+1409     <span class="comment">% standardize DynaSim model structure</span>
+1410     MODEL=<a href="../functions/internal/dsCheckModel.html" class="code" title="function model = dsCheckModel(model, varargin)">dsCheckModel</a>(MODEL);
+1411     <span class="comment">% ODEs and ICs:</span>
+1412     <span class="keyword">if</span> ~isempty(MODEL.state_variables)
+1413       <a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>{end+1}=<span class="string">'% DIFFERENTIAL EQUATIONS:'</span>;
+1414       vars=MODEL.state_variables;
+1415       <span class="keyword">for</span> i=1:length(vars)
+1416         <a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>{end+1}=sprintf(<span class="string">'%%  %s'' = %s'</span>,vars{i},MODEL.ODEs.(vars{i}));
+1417       <span class="keyword">end</span>
+1418       <a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>{end+1}=<span class="string">'%'</span>;
+1419       <a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>{end+1}=<span class="string">'% Initial conditions:'</span>;
+1420       <span class="keyword">for</span> i=1:length(vars)
+1421         <a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>{end+1}=sprintf(<span class="string">'%%  %s(0) = %s'</span>,vars{i},MODEL.ICs.(vars{i}));
+1422       <span class="keyword">end</span>
+1423       <a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>{end+1}=<span class="string">''</span>;
+1424     <span class="keyword">end</span>
+1425     <span class="comment">% conditionals</span>
+1426     <span class="keyword">if</span> ~isempty(MODEL.conditionals)
+1427       <a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>{end+1}=<span class="string">'% CONDITIONALS:'</span>;
+1428       <span class="keyword">for</span> i=1:length(MODEL.conditionals)
+1429         str=sprintf(<span class="string">'  if(%s)then(%s)'</span>,MODEL.conditionals(i).condition,MODEL.conditionals(i).action);
+1430         <span class="keyword">if</span> ~isempty(MODEL.conditionals(i).else)
+1431           str=sprintf(<span class="string">'%selse(%s)'</span>,str,MODEL.conditionals(i).else);
+1432         <span class="keyword">end</span>
+1433         <a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>{end+1}=sprintf(<span class="string">'\t%s'</span>,str);
+1434       <span class="keyword">end</span>
+1435       <a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>{end+1}=<span class="string">''</span>;
+1436     <span class="keyword">end</span>
+1437     types={<span class="string">'parameters'</span>,<span class="string">'fixed_variables'</span>,<span class="string">'functions'</span>};<span class="comment">%,'monitors'</span>
+1438     type_headers={<span class="string">'% PARAMETERS:'</span>,<span class="string">'% FIXED VARIABLES:'</span>,<span class="string">'% FUNCTIONS:'</span>,<span class="string">'% MONITORS:'</span>};
+1439     <span class="keyword">for</span> p=1:length(types)
+1440       type=types{p};
+1441       header=type_headers{p};
+1442       <span class="keyword">if</span> ~isempty(MODEL.(type))
+1443         <a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>{end+1}=header;
+1444         fields=fieldnames(MODEL.(type));
+1445         <span class="keyword">for</span> i=1:length(fields)
+1446           val=MODEL.(type).(fields{i});
+1447           <span class="keyword">if</span> ~ischar(val)
+1448             val=toString(val,<span class="string">'compact'</span>);
+1449           <span class="keyword">end</span>
+1450           <a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>{end+1}=sprintf(<span class="string">'  %s = %s'</span>,fields{i},val);
+1451         <span class="keyword">end</span>
+1452       <span class="keyword">end</span>
+1453       <a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>{end+1}=<span class="string">''</span>;
+1454     <span class="keyword">end</span>
+1455   <span class="keyword">case</span> <span class="string">'odefun'</span> <span class="comment">% Display ODEFUN (function handle string for ODE system: @(X,t)...)</span>
+1456     <span class="comment">% Approach:</span>
+1457     <span class="comment">% 1. evaluate params -&gt; fixed_vars -&gt; funcs</span>
+1458     <span class="comment">% 2. evaluate ICs to get (# elems) per state var</span>
+1459     <span class="comment">% 3. prepare state vector X</span>
+1460     <span class="comment">% 4. replace state vars in ODEs by X</span>
+1461     <span class="comment">% 5. combine X ODEs into ODEFUN</span>
+1462 
+1463     <span class="comment">% evaluate params -&gt; fixed_vars -&gt; funcs</span>
+1464     types={<span class="string">'parameters'</span>,<span class="string">'fixed_variables'</span>,<span class="string">'functions'</span>};
+1465     <span class="keyword">for</span> p=1:length(types)
+1466       type=types{p};
+1467       <span class="keyword">if</span> ~isempty(MODEL.(type))
+1468         fields=fieldnames(MODEL.(type));
+1469         <span class="keyword">for</span> i=1:length(fields)
+1470           val=MODEL.(type).(fields{i});
+1471           <span class="keyword">if</span> ~ischar(val)
+1472             val=toString(val,<span class="string">'compact'</span>);
+1473           <span class="keyword">end</span>
+1474           <span class="comment">% evaluate</span>
+1475           eval(sprintf(<span class="string">'%s = %s;'</span>,fields{i},val));
+1476         <span class="keyword">end</span>
+1477       <span class="keyword">end</span>
+1478     <span class="keyword">end</span>
+1479     
+1480     <span class="comment">% evaluate ICs to get (# elems) per state var and set up generic state var X</span>
+1481     num_vars=length(MODEL.state_variables);
+1482     num_elems=zeros(1,num_vars);
+1483     old_vars=MODEL.state_variables;
+1484     new_vars=cell(1,num_vars);
+1485     new_inds=cell(1,num_vars);
+1486     all_ICs=cell(1,num_vars);
+1487     IC_names={};
+1488     state_var_index=0;
+1489     <span class="keyword">for</span> i=1:num_vars
+1490       var=MODEL.state_variables{i};
+1491       <span class="comment">% evaluate ICs to get (# elems) per state var</span>
+1492       ic=eval([MODEL.ICs.(var) <span class="string">';'</span>]);
+1493       num_elems(i)=length(ic);
+1494       <span class="comment">% set state var indices a variables for generic state vector X</span>
+1495       all_ICs{i}=ic;
+1496       IC_names{i}=repmat({var},[1 num_elems(i)]);
+1497       new_inds{i}=state_var_index+(1:length(ic));
+1498       new_vars{i}=sprintf(<span class="string">'X(%g:%g)'</span>,new_inds{i}(1),new_inds{i}(end));
+1499       state_var_index=state_var_index+length(ic);
+1500     <span class="keyword">end</span>
+1501 
+1502     <span class="comment">% prepare ODE system (comma-separated ODEs)</span>
+1503     ODEs=strtrim(struct2cell(MODEL.ODEs));
+1504     idx=cellfun(@isempty,regexp(ODEs,<span class="string">';$'</span>)); <span class="comment">% lines that need semicolons</span>
+1505     ODEs(idx)=cellfun(@(x)[x <span class="string">';'</span>],ODEs(idx),<span class="string">'uni'</span>,0);
+1506     ODEs=[ODEs{:}]; <span class="comment">% concatenate ODEs into a single string</span>
+1507     ODEs=strrep(ODEs,<span class="string">';'</span>,<span class="string">','</span>); <span class="comment">% replace semicolons by commas</span>
+1508     
+1509     <span class="comment">% substitute in generic state vector X</span>
+1510     <span class="keyword">for</span> i=1:num_vars
+1511       ODEs=dynasim_strrep(ODEs,old_vars{i},new_vars{i});
+1512     <span class="keyword">end</span>
+1513 
+1514     <span class="comment">% prepare outputs (function handle string, ICs, and element names for</span>
+1515     <span class="comment">% mapping each X(i) to a particular state variable):</span>
+1516     ODEFUN = eval([<span class="string">'@(t,X) ['</span> ODEs <span class="string">'];'</span>]);
+1517     IC=cat(2,all_ICs{:});
+1518     elem_names=cat(2,IC_names{:});
+1519     
+1520     <a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>{1}=ODEFUN;
+1521     <a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>{2}=IC;
+1522     <a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>{3}=elem_names;
+1523     
+1524     <span class="comment">%{</span>
+1525       <span class="comment">% usage:</span>
+1526     
+1527       <a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>=<a href="#_sub27" class="code" title="subfunction eqns=dsExtractModelStrings(MODEL,display_mode,display_flag)">dsExtractModelStrings</a>(MODEL,<span class="string">'odefun'</span>,0);
+1528       ODEFUN=<a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>{1};
+1529       IC=<a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>{2};
+1530       elem_names=<a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>{3};
+1531     
+1532       dt=.01; t=0:dt:100;
+1533       y=zeros(length(t),length(IC));
+1534       y(1,:)=IC;
+1535       <span class="keyword">for</span> i=2:length(t)
+1536         y(i,:)=y(i-1,:)+dt*ODEFUN(t,y(i-1,:));
+1537       <span class="keyword">end</span>
+1538       figure; plot(t,y); legend(elem_names{:},<span class="string">'Location'</span>,<span class="string">'EastOutside'</span>);
+1539 
+1540       y=IC; 
+1541       <span class="keyword">for</span> i=1:1e4
+1542         y=y+dt*ODEFUN(0,y);
+1543       <span class="keyword">end</span>;
+1544     
+1545     <span class="comment">%}</span>
+1546     
+1547   <span class="keyword">otherwise</span>
+1548     error(<span class="string">'options ''specification'' and ''xpp'' not implemented yet.'</span>);
+1549 <span class="keyword">end</span>
+1550 
+1551 <span class="keyword">if</span> display_flag
+1552   cellfun(@disp,<a href="#_sub5" class="code" title="subfunctions=eqns(idx);">eqns</a>);
+1553 <span class="keyword">end</span>
+1554 
+1555 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+1556 <a name="_sub28" href="#_subfunctions" class="code">function undo(src,evnt)</a>
+1557 <span class="keyword">global</span> SPEC LASTSPEC cfg LASTCFG handles MODEL
+1558 s=SPEC; 
+1559 SPEC=LASTSPEC; 
+1560 LASTSPEC=s; 
+1561 c=cfg;
+1562 cfg=LASTCFG;
+1563 LASTCFG=c;
+1564 MODEL=<a href="../functions/internal/dsGenerateModel.html" class="code" title="function [model,name_map] = dsGenerateModel(specification, varargin)">dsGenerateModel</a>(SPEC);
+1565 
+1566 <a href="#_sub1" class="code" title="subfunction InitializeMainGUI ">InitializeMainGUI</a>;
+1567 <a href="#_sub7" class="code" title="subfunction UpdateModel(src,evnt,aux_callback)">UpdateModel</a>; 
+1568 
+1569 <span class="comment">% close(handles.fig_main);</span>
+1570 <span class="comment">% dynasim(SPEC);</span>
+1571 
+1572 
+1573 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+1574 <span class="comment">% SWEEPS</span>
+1575 <span class="comment">% ...</span>
+1576 
+1577 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+1578 <span class="comment">% function SPEC=ApplyPopulationParameters(spec)</span>
+1579 <span class="comment">% % apply global population parameters to pop-specific mechanism equations</span>
+1580 <span class="comment">% fields={'populations','connections'};</span>
+1581 <span class="comment">% % update population and connection mechanism lists</span>
+1582 <span class="comment">% for f=1:length(fields)</span>
+1583 <span class="comment">%   object=fields{f};</span>
+1584 <span class="comment">%   for i=1:length(spec.(object))</span>
+1585 <span class="comment">%     for j=1:length(spec.(object)(i).mechanism_list)</span>
+1586 <span class="comment">%       if ~isempty(spec.(object)(i).parameters)</span>
+1587 <span class="comment">%         % approach: set key=val for all keys in eqns</span>
+1588 <span class="comment">%         eqns=spec.(object)(i).mechanisms(j).equations;</span>
+1589 <span class="comment">%         keys=spec.(object)(i).parameters(1:2:end);</span>
+1590 <span class="comment">%         vals=spec.(object)(i).parameters(2:2:end);</span>
+1591 <span class="comment">%         % get list of parameters/variables/functions in population equations</span>
+1592 <span class="comment">%         words=unique(regexp(eqns,'[a-zA-Z]+\w*','match'));</span>
+1593 <span class="comment">%         % find words in user-supplied parameters (keys)</span>
+1594 <span class="comment">%         found_words=words(ismember(words,keys));</span>
+1595 <span class="comment">%         if ~isempty(found_words)</span>
+1596 <span class="comment">%           for ff=1:length(found_words)</span>
+1597 <span class="comment">%             found_word=found_words{ff};</span>
+1598 <span class="comment">%             % new parameter assignment</span>
+1599 <span class="comment">%             precision=8; % number of digits allowed for user-supplied values</span>
+1600 <span class="comment">%             found_value=toString(vals{strcmp(found_word,keys)},precision);</span>
+1601 <span class="comment">%             rep=sprintf(' %s=%s;',found_word,found_value);</span>
+1602 <span class="comment">%             % replace old parameter assignment in the middle of equations</span>
+1603 <span class="comment">%             pat=['([^\w]{1})' found_word '\s*=\s*\w+;']; % find in the middle</span>
+1604 <span class="comment">%             eqns=regexprep(eqns,pat,['$1' rep]);</span>
+1605 <span class="comment">%             % replace old parameter assignment at the beginning of equations</span>
+1606 <span class="comment">%             pat=['^' found_word '\s*=\s*\w+;']; % find at the beginning</span>
+1607 <span class="comment">%             eqns=regexprep(eqns,pat,rep);</span>
+1608 <span class="comment">%           end</span>
+1609 <span class="comment">%         end</span>
+1610 <span class="comment">%         spec.(object)(i).mechanisms(j).equations=eqns;</span>
+1611 <span class="comment">%         % remove global population parameters: spec.(object)(#).parameters=[];</span>
+1612 <span class="comment">%         spec.(object)(i).parameters=[];</span>
+1613 <span class="comment">%       end</span>
+1614 <span class="comment">%     end</span>
+1615 <span class="comment">%   end</span>
+1616 <span class="comment">% end</span></pre></div>
+<hr><address>Generated on Tue 12-Dec-2017 11:32:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

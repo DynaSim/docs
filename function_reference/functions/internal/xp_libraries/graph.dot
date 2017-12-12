@@ -1,0 +1,7 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  xp_PlotData [URL="xp_PlotData.html"];
+  xp_PlotFR2 [URL="xp_PlotFR2.html"];
+  xp_PlotFRpanel [URL="xp_PlotFRpanel.html"];
+}

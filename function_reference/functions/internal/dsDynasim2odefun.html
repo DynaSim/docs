@@ -6,16 +6,18 @@
   <meta name="keywords" content="dsDynasim2odefun">
   <meta name="description" content="Purpose: prepare ODEFUN for use with built-in Matlab solvers.">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
-  <script type="text/javascript">
-    if (top.frames.length == 0) { top.location = "../../index.html"; };
-  </script>
 </head>
 <body>
+
 <a name="_top"></a>
-<!-- ../menu.html functions --><!-- menu.html internal -->
+<div><a href="../../menu.html">Home</a> &gt;  <a href="../menu.html">functions</a> &gt; <a href="menu.html">internal</a> &gt; dsDynasim2odefun.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../menu.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="menu.html">Index for functions/internal&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
 <h1>dsDynasim2odefun
 </h1>
 
@@ -60,7 +62,10 @@
  ([y]=time x cells). In contrast, DynaSim ODEs/functions and output state
  vectors have cells along columns. Therefore, for DynaSim models to be
  compatible with built-in solvers, all state vectors must be transposed in
- ODEFUN. This slows down simulation but cannot be avoided easily.</pre></div>
+ ODEFUN. This slows down simulation but cannot be avoided easily.
+ 
+ Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;
+ Copyright (C) 2016 Jason Sherfey, Boston University, USA</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
@@ -69,7 +74,7 @@ This function calls:
 <li><a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>	CHECKOPTIONS - organize key/value pairs in structure with default or user-supplied values according to a schema</li><li><a href="dsStrrep.html" class="code" title="function str = dsStrrep(str,oldstr,newstr,lpad,rpad, varargin)">dsStrrep</a>	STRREP - replace full words by new character strings, ignoring matches that appear as sub-strings.</li><li><a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>	Inputs:</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="../../functions/dsSimulate.html" class="code" title="function [data,studyinfo,result] = dsSimulate(model,varargin)">dsSimulate</a>	% data=dsSimulate(model,'option',value,...)</li><li><a href="dsWriteMatlabSolver.html" class="code" title="function solve_ode_filepath = dsWriteMatlabSolver(model,varargin)">dsWriteMatlabSolver</a>	WRITEMATLABSOLVER - write m-file that numerically inteegrates the model</li></ul>
+<li><a href="../../functions/dsSimulate.html" class="code" title="function [data,studyinfo,result] = dsSimulate(model,varargin)">dsSimulate</a>	% data=dsSimulate(model,'option',value,...)</li><li><a href="../../functions/dynasim.html" class="code" title="function dynasim(spec)">dynasim</a>	DynaSim GUI</li><li><a href="dsWriteMatlabSolver.html" class="code" title="function solve_ode_filepath = dsWriteMatlabSolver(model,varargin)">dsWriteMatlabSolver</a>	WRITEMATLABSOLVER - write m-file that numerically integrates the model</li></ul>
 <!-- crossreference -->
 
 
@@ -111,118 +116,121 @@ This function is called by:
 0034 <span class="comment">% vectors have cells along columns. Therefore, for DynaSim models to be</span>
 0035 <span class="comment">% compatible with built-in solvers, all state vectors must be transposed in</span>
 0036 <span class="comment">% ODEFUN. This slows down simulation but cannot be avoided easily.</span>
-0037  
-0038 <span class="comment">% Approach:</span>
-0039 <span class="comment">% 1. evaluate params -&gt; fixed_vars -&gt; funcs</span>
-0040 <span class="comment">% 2. evaluate ICs to get (# elems) per state var</span>
-0041 <span class="comment">% 3. prepare state vector X</span>
-0042 <span class="comment">% 4. replace state vars in ODEs by X</span>
-0043 <span class="comment">% 5. combine X ODEs into ODEFUN</span>
-0044 
-0045 options=<a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="keyword">...</span>
-0046   <span class="string">'odefun_output'</span>,<span class="string">'func_handle'</span>,{<span class="string">'func_handle'</span>,<span class="string">'anonymous_func_string'</span>,<span class="string">'func_body'</span>},<span class="keyword">...</span>
-0047   <span class="string">'auto_gen_test_data_flag'</span>,0,{0,1},<span class="keyword">...</span>
-0048   },false);
-0049   
-0050 <span class="keyword">if</span> options.auto_gen_test_data_flag
-0051   varargs = varargin;
-0052   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
-0053   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
-0054   argin = [{model}, varargs]; <span class="comment">% specific to this function</span>
-0055 <span class="keyword">end</span>
-0056 
-0057 <span class="comment">% % evaluate params -&gt; fixed_vars -&gt; funcs</span>
-0058 <span class="comment">% types={'parameters','fixed_variables','functions'};</span>
-0059 <span class="comment">% for p=1:length(types)</span>
-0060 <span class="comment">%   type=types{p};</span>
-0061 <span class="comment">%   if ~isempty(model.(type))</span>
-0062 <span class="comment">%     fields=fieldnames(model.(type));</span>
-0063 <span class="comment">%     for i=1:length(fields)</span>
-0064 <span class="comment">%       val=model.(type).(fields{i});</span>
-0065 <span class="comment">%       if ~ischar(val)</span>
-0066 <span class="comment">%         val=toString(val,'compact');</span>
-0067 <span class="comment">%       end</span>
-0068 <span class="comment">%       % evaluate</span>
-0069 <span class="comment">%       eval(sprintf('%s = %s;',fields{i},val));</span>
-0070 <span class="comment">% %       evalin('caller',sprintf('%s = %s;',fields{i},val));</span>
-0071 <span class="comment">% %       assignin('caller',fields{i},val);</span>
-0072 <span class="comment">%     end</span>
-0073 <span class="comment">%   end</span>
-0074 <span class="comment">% end</span>
-0075 
-0076 <span class="comment">% evaluate ICs to get (# elems) per state var and set up generic state var X</span>
-0077 num_vars=length(model.state_variables);
-0078 num_elems=zeros(1,num_vars);
-0079 old_vars=model.state_variables;
-0080 new_vars=cell(1,num_vars);
-0081 new_inds=cell(1,num_vars);
-0082 all_ICs=cell(1,num_vars);
-0083 IC_names={};
-0084 state_var_index=0;
-0085 
-0086 <span class="keyword">for</span> i=1:num_vars
-0087   var=model.state_variables{i};
-0088   
-0089   <span class="comment">% check ICs for use of inital state_var value and put in proper starting value</span>
-0090   <span class="keyword">if</span> regexp(model.ICs.(var), <span class="string">'_last'</span>)
-0091     stateVars = regexp(model.ICs.(var), <span class="string">'([\w_]+)_last'</span>, <span class="string">'tokens'</span>);
-0092     model.ICs.(var) = regexprep(model.ICs.(var), <span class="string">'_last'</span>, <span class="string">''</span>);
-0093     
-0094     <span class="keyword">for</span> iSVar = 1:length(stateVars)
-0095       thisSvar = stateVars{iSVar}{1};
-0096       model.ICs.(var) = regexprep(model.ICs.(var), thisSvar, model.ICs.(thisSvar));
-0097     <span class="keyword">end</span>
-0098   <span class="keyword">end</span>
-0099   
-0100   <span class="comment">% evaluate ICs to get (# elems) per state var</span>
-0101   ic=eval([model.ICs.(var) <span class="string">';'</span>]);
-0102   num_elems(i)=length(ic);
-0103   
-0104   <span class="comment">% set state var indices a variables for generic state vector X</span>
-0105   all_ICs{i}=ic;
-0106   IC_names{i}=repmat({var},[1 num_elems(i)]);
-0107   new_inds{i}=state_var_index+(1:length(ic));
-0108   new_vars{i}=sprintf(<span class="string">'X(%g:%g)'''</span>,new_inds{i}(1),new_inds{i}(end));
-0109   state_var_index=state_var_index+length(ic);
-0110 <span class="keyword">end</span>
-0111 
-0112 <span class="comment">% prepare ODE system (comma-separated ODEs)</span>
-0113 ODEs=strtrim(struct2cell(model.ODEs));
-0114 idx=cellfun(@isempty,regexp(ODEs,<span class="string">';$'</span>)); <span class="comment">% lines that need semicolons</span>
-0115 ODEs(idx)=cellfun(@(x)[x <span class="string">'&amp;'</span>],ODEs(idx),<span class="string">'uni'</span>,0);
-0116 ODEs=[ODEs{:}]; <span class="comment">% concatenate ODEs into a single string</span>
-0117 
-0118 <span class="comment">% substitute in generic state vector X</span>
-0119 <span class="keyword">for</span> i=1:num_vars
-0120   ODEs=<a href="dsStrrep.html" class="code" title="function str = dsStrrep(str,oldstr,newstr,lpad,rpad, varargin)">dsStrrep</a>(ODEs,old_vars{i},new_vars{i}, <span class="string">''</span>,<span class="string">''</span>, varargin{:});
-0121 <span class="keyword">end</span>
-0122 
-0123 <span class="comment">% prepare outputs (function handle string, ICs, and element names for</span>
-0124 <span class="comment">% mapping each X(i) to a particular state variable):</span>
-0125 elem_names=cat(2,IC_names{:});
-0126 
-0127 <span class="keyword">switch</span> options.odefun_output
-0128   <span class="keyword">case</span> <span class="string">'func_handle'</span>
-0129     ODEs=strrep(ODEs,<span class="string">'&amp;'</span>,<span class="string">','</span>); <span class="comment">% replace semicolons by commas</span>
-0130     ODEs(end) = []; <span class="comment">%remove trailing comma</span>
-0131     ODEFUN = eval([<span class="string">'@(t,X) ['</span> ODEs <span class="string">']'';'</span>]);
-0132   <span class="keyword">case</span> <span class="string">'anonymous_func_string'</span>
-0133     ODEs=strrep(ODEs,<span class="string">'&amp;'</span>,<span class="string">','</span>); <span class="comment">% replace semicolons by commas</span>
-0134     ODEs(end) = []; <span class="comment">%remove trailing comma</span>
-0135     ODEFUN = [<span class="string">'@(t,X) ['</span> ODEs <span class="string">']'';'</span>];
-0136   <span class="keyword">case</span> <span class="string">'func_body'</span>
-0137     ODEs=strrep(ODEs,<span class="string">'&amp;'</span>,<span class="string">',...\n'</span>); <span class="comment">% replace semicolons by commas with newline</span>
-0138     ODEFUN = ODEs;
-0139 <span class="keyword">end</span>
-0140 
-0141 IC=cat(2,all_ICs{:})';
-0142 
-0143 <span class="comment">%% auto_gen_test_data_flag argout</span>
-0144 <span class="keyword">if</span> options.auto_gen_test_data_flag
-0145   argout = {ODEFUN, IC, elem_names}; <span class="comment">% specific to this function</span>
-0146   
-0147   <a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>(argin, argout);
-0148 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+0037 <span class="comment">%</span>
+0038 <span class="comment">% Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;</span>
+0039 <span class="comment">% Copyright (C) 2016 Jason Sherfey, Boston University, USA</span>
+0040 
+0041 <span class="comment">% Approach:</span>
+0042 <span class="comment">% 1. evaluate params -&gt; fixed_vars -&gt; funcs</span>
+0043 <span class="comment">% 2. evaluate ICs to get (# elems) per state var</span>
+0044 <span class="comment">% 3. prepare state vector X</span>
+0045 <span class="comment">% 4. replace state vars in ODEs by X</span>
+0046 <span class="comment">% 5. combine X ODEs into ODEFUN</span>
+0047 
+0048 options=<a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="keyword">...</span>
+0049   <span class="string">'odefun_output'</span>,<span class="string">'func_handle'</span>,{<span class="string">'func_handle'</span>,<span class="string">'anonymous_func_string'</span>,<span class="string">'func_body'</span>},<span class="keyword">...</span>
+0050   <span class="string">'auto_gen_test_data_flag'</span>,0,{0,1},<span class="keyword">...</span>
+0051   },false);
+0052   
+0053 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0054   varargs = varargin;
+0055   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0056   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
+0057   argin = [{model}, varargs]; <span class="comment">% specific to this function</span>
+0058 <span class="keyword">end</span>
+0059 
+0060 <span class="comment">% evaluate params -&gt; fixed_vars -&gt; funcs</span>
+0061 types={<span class="string">'parameters'</span>,<span class="string">'fixed_variables'</span>,<span class="string">'functions'</span>};
+0062 <span class="keyword">for</span> p=1:length(types)
+0063   type=types{p};
+0064   <span class="keyword">if</span> ~isempty(model.(type))
+0065     fields=fieldnames(model.(type));
+0066     <span class="keyword">for</span> i=1:length(fields)
+0067       val=model.(type).(fields{i});
+0068       <span class="keyword">if</span> ~ischar(val)
+0069         val=toString(val,<span class="string">'compact'</span>);
+0070       <span class="keyword">end</span>
+0071       <span class="comment">% evaluate</span>
+0072       eval(sprintf(<span class="string">'%s = %s;'</span>,fields{i},val));
+0073 <span class="comment">%       evalin('caller',sprintf('%s = %s;',fields{i},val));</span>
+0074 <span class="comment">%       assignin('caller',fields{i},val);</span>
+0075     <span class="keyword">end</span>
+0076   <span class="keyword">end</span>
+0077 <span class="keyword">end</span>
+0078 
+0079 <span class="comment">% evaluate ICs to get (# elems) per state var and set up generic state var X</span>
+0080 num_vars=length(model.state_variables);
+0081 num_elems=zeros(1,num_vars);
+0082 old_vars=model.state_variables;
+0083 new_vars=cell(1,num_vars);
+0084 new_inds=cell(1,num_vars);
+0085 all_ICs=cell(1,num_vars);
+0086 IC_names={};
+0087 state_var_index=0;
+0088 
+0089 <span class="keyword">for</span> i=1:num_vars
+0090   var=model.state_variables{i};
+0091   
+0092   <span class="comment">% check ICs for use of inital state_var value and put in proper starting value</span>
+0093   <span class="keyword">if</span> regexp(model.ICs.(var), <span class="string">'_last'</span>)
+0094     stateVars = regexp(model.ICs.(var), <span class="string">'([\w_]+)_last'</span>, <span class="string">'tokens'</span>);
+0095     model.ICs.(var) = regexprep(model.ICs.(var), <span class="string">'_last'</span>, <span class="string">''</span>);
+0096     
+0097     <span class="keyword">for</span> iSVar = 1:length(stateVars)
+0098       thisSvar = stateVars{iSVar}{1};
+0099       model.ICs.(var) = regexprep(model.ICs.(var), thisSvar, model.ICs.(thisSvar));
+0100     <span class="keyword">end</span>
+0101   <span class="keyword">end</span>
+0102   
+0103   <span class="comment">% evaluate ICs to get (# elems) per state var</span>
+0104   ic=eval([model.ICs.(var) <span class="string">';'</span>]);
+0105   num_elems(i)=length(ic);
+0106   
+0107   <span class="comment">% set state var indices a variables for generic state vector X</span>
+0108   all_ICs{i}=ic;
+0109   IC_names{i}=repmat({var},[1 num_elems(i)]);
+0110   new_inds{i}=state_var_index+(1:length(ic));
+0111   new_vars{i}=sprintf(<span class="string">'X(%g:%g)'''</span>,new_inds{i}(1),new_inds{i}(end));
+0112   state_var_index=state_var_index+length(ic);
+0113 <span class="keyword">end</span>
+0114 
+0115 <span class="comment">% prepare ODE system (comma-separated ODEs)</span>
+0116 ODEs=strtrim(struct2cell(model.ODEs));
+0117 idx=cellfun(@isempty,regexp(ODEs,<span class="string">';$'</span>)); <span class="comment">% lines that need semicolons</span>
+0118 ODEs(idx)=cellfun(@(x)[x <span class="string">'&amp;'</span>],ODEs(idx),<span class="string">'uni'</span>,0);
+0119 ODEs=[ODEs{:}]; <span class="comment">% concatenate ODEs into a single string</span>
+0120 
+0121 <span class="comment">% substitute in generic state vector X</span>
+0122 <span class="keyword">for</span> i=1:num_vars
+0123   ODEs=<a href="dsStrrep.html" class="code" title="function str = dsStrrep(str,oldstr,newstr,lpad,rpad, varargin)">dsStrrep</a>(ODEs,old_vars{i},new_vars{i}, <span class="string">''</span>,<span class="string">''</span>, varargin{:});
+0124 <span class="keyword">end</span>
+0125 
+0126 <span class="comment">% prepare outputs (function handle string, ICs, and element names for</span>
+0127 <span class="comment">% mapping each X(i) to a particular state variable):</span>
+0128 elem_names=cat(2,IC_names{:});
+0129 
+0130 <span class="keyword">switch</span> options.odefun_output
+0131   <span class="keyword">case</span> <span class="string">'func_handle'</span>
+0132     ODEs=strrep(ODEs,<span class="string">'&amp;'</span>,<span class="string">','</span>); <span class="comment">% replace semicolons by commas</span>
+0133     ODEs(end) = []; <span class="comment">%remove trailing comma</span>
+0134     ODEFUN = eval([<span class="string">'@(t,X) ['</span> ODEs <span class="string">']'';'</span>]);
+0135   <span class="keyword">case</span> <span class="string">'anonymous_func_string'</span>
+0136     ODEs=strrep(ODEs,<span class="string">'&amp;'</span>,<span class="string">','</span>); <span class="comment">% replace semicolons by commas</span>
+0137     ODEs(end) = []; <span class="comment">%remove trailing comma</span>
+0138     ODEFUN = [<span class="string">'@(t,X) ['</span> ODEs <span class="string">']'';'</span>];
+0139   <span class="keyword">case</span> <span class="string">'func_body'</span>
+0140     ODEs=strrep(ODEs,<span class="string">'&amp;'</span>,<span class="string">',...\n'</span>); <span class="comment">% replace semicolons by commas with newline</span>
+0141     ODEFUN = ODEs;
+0142 <span class="keyword">end</span>
+0143 
+0144 IC=cat(2,all_ICs{:})';
+0145 
+0146 <span class="comment">%% auto_gen_test_data_flag argout</span>
+0147 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0148   argout = {ODEFUN, IC, elem_names}; <span class="comment">% specific to this function</span>
+0149   
+0150   <a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>(argin, argout);
+0151 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 12-Dec-2017 11:32:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

@@ -3,6 +3,7 @@ digraph m2html {
   dsAnalyze -> dsImport;
   dsAnalyze -> dsCheckOptions;
   dsAnalyze -> dsCheckStudyinfo;
+  dsAnalyze -> dsNameFromVaried;
   dsImport -> dsImport;
   dsImport -> dsSelect;
   dsImport -> dsCheckOptions;
@@ -23,6 +24,10 @@ digraph m2html {
   dsPlot2 -> dsCheckOptions;
   dsPlot2 -> dsGet_variables_from_meta;
   dsPlot2 -> dsImportPlots;
+  dsPlot2 -> dsPlotFR;
+  dsPlot2 -> xp_PlotData;
+  dsPlot2 -> xp_PlotFR2;
+  dsPlot2 -> xp_PlotFRpanel;
   dsSelect -> dsCheckData;
   dsSelect -> dsCheckOptions;
   dsSimulate -> dsAnalyze;
@@ -35,6 +40,7 @@ digraph m2html {
   dsSimulate -> dsCreateBatch;
   dsSimulate -> dsDynasim2odefun;
   dsSimulate -> dsExportData;
+  dsSimulate -> dsGetConfig;
   dsSimulate -> dsGetOutputCounts;
   dsSimulate -> dsGetSolveFile;
   dsSimulate -> dsModifications2Vary;
@@ -46,6 +52,13 @@ digraph m2html {
   dsSimulate -> dsUpdateStudy;
   dsSimulate -> dsVary2Modifications;
   dsSimulate -> dsUnitSaveAutoGenTestDir;
+  dynasim -> dsSimulate;
+  dynasim -> dynasim;
+  dynasim -> dsCheckModel;
+  dynasim -> dsCheckSpecification;
+  dynasim -> dsDynasim2odefun;
+  dynasim -> dsGenerateModel;
+  dynasim -> dsPropagateParameters;
   ds2mdd -> dsAutoMergeVarieds;
   ds2mdd -> dsCheckData;
   ds2mdd -> dsData2Table;
@@ -131,6 +144,7 @@ digraph m2html {
   dsCheckSpecification -> dsCheckOptions;
   dsCheckSpecification -> dsLocateModelFiles;
   dsCheckSpecification -> dsParseModelEquations;
+  dsCheckSpecification -> dsReadText;
   dsCheckSpecification -> dsUnitSaveAutoGenTestData;
   dsCheckSpecification -> dsUnitSaveAutoGenTestDataLocalFn;
   dsCheckStudyinfo -> dsCheckOptions;
@@ -175,12 +189,13 @@ digraph m2html {
   dsGetConfig -> dsGetRootPath;
   dsGetConfig -> dsMakeDefaultConfig;
   dsGetLinearIndependentDs -> dsCheckOptions;
-  dsGetLinearIndependentDs -> dsGetLinearIndependentCell;
   dsGetLinearIndependentDs -> dsUnitSaveAutoGenTestDataLocalFn;
+  dsGetOutputCounts -> dsGetPopSizeFromName;
   dsGetParentNamespace -> dsCheckOptions;
   dsGetParentNamespace -> dsUnitSaveAutoGenTestData;
   dsGetSolveFile -> dsCheckOptions;
   dsGetSolveFile -> dsCompareSolveFiles;
+  dsGetSolveFile -> dsGetConfig;
   dsGetSolveFile -> dsOptions2Keyval;
   dsGetSolveFile -> dsPrepareMEX;
   dsGetSolveFile -> dsWriteDynaSimSolver;
@@ -196,20 +211,26 @@ digraph m2html {
   dsImportPlots -> dsModifications2Vary;
   dsImportResults -> dsCheckStudyinfo;
   dsIsDevMode -> dsGetRootPath;
+  dsLocateModelFiles -> dsGetRootPath;
   dsMdd2ds -> dsCheckData;
   dsMdd2ds -> dsGet_populations_from_meta;
   dsMdd2ds -> dsGet_variables_from_meta;
   dsMergeData -> dsAll2mdd;
   dsMergeData -> dsMdd2ds;
   dsMergeData -> dsMdd2dsImage;
+  dsMergeVarieds -> dsCheckOptions;
+  dsMergeVarieds -> dsUnitSaveAutoGenTestDataLocalFn;
   dsMonitorStudy -> dsCheckOptions;
   dsMonitorStudy -> dsCheckStudyinfo;
   dsParseModelEquations -> dsCheckOptions;
   dsParseModelEquations -> dsClassifyEquation;
   dsParseModelEquations -> dsLocateModelFiles;
+  dsParseModelEquations -> dsReadText;
   dsParseModelEquations -> dsUnitSaveAutoGenTestData;
+  dsPlot2D -> dsCheckOptions;
   dsPlotFR -> dsCalcFR;
   dsPlotFR -> dsCheckData;
+  dsPlotFR -> dsCheckOptions;
   dsPlotFR2 -> dsCalcFR;
   dsPlotFR2 -> dsCheckData;
   dsPlotFR2 -> dsCheckOptions;
@@ -219,6 +240,7 @@ digraph m2html {
   dsPlotWaveforms -> dsCheckOptions;
   dsPlotWaveforms -> dsSelectVariables;
   dsPrepareMEX -> dsCheckOptions;
+  dsPrepareMEX -> dsGetConfig;
   dsPrepareMEX -> dsOptions2Keyval;
   dsProbeCellProperties -> dsSimulate;
   dsProbeCellProperties -> dsApplyModifications;
@@ -238,6 +260,7 @@ digraph m2html {
   dsPropagateFunctions -> dsUnitSaveAutoGenTestDataLocalFn;
   dsPropagateNamespaces -> dsCheckModel;
   dsPropagateNamespaces -> dsCheckOptions;
+  dsPropagateNamespaces -> dsGetNamespaces;
   dsPropagateNamespaces -> dsGetParentNamespace;
   dsPropagateNamespaces -> dsStrrep;
   dsPropagateNamespaces -> dsUnitSaveAutoGenTestData;
@@ -259,6 +282,7 @@ digraph m2html {
   dsStrrep2 -> dsCheckOptions;
   dsStrrep2 -> dsUnitSaveAutoGenTestData;
   dsThevEquiv -> dsCheckData;
+  dsUnzipDemoData -> dsDownloadFiles;
   dsUnzipDemoData -> dsGetConfig;
   dsUpdateStudy -> dsCheckOptions;
   dsUpdateStudy -> dsCheckStudyinfo;
@@ -268,6 +292,7 @@ digraph m2html {
   dsWriteDynaSimSolver -> dsCheckOptions;
   dsWriteDynaSimSolver -> dsCheckSolverOptions;
   dsWriteDynaSimSolver -> dsGetOutputCounts;
+  dsWriteDynaSimSolver -> dsGetPopSizeFromName;
   dsWriteDynaSimSolver -> dsPropagateFunctions;
   dsWriteDynaSimSolver -> dsPropagateParameters;
   dsWriteDynaSimSolver -> dsStrrep;
@@ -320,6 +345,12 @@ digraph m2html {
   dsUnitTest_strrep -> dsUnitTest_strrep;
   dsUnitTest_strrep2 -> dsStrrep2;
   dsUnitTest_strrep2 -> dsUnitTest_strrep2;
+  xp_PlotData -> dsPlot;
+  xp_PlotData -> dsMdd2ds;
+  xp_PlotFR2 -> dsMdd2ds;
+  xp_PlotFR2 -> dsPlotFR2;
+  xp_PlotFRpanel -> dsMdd2ds;
+  xp_PlotFRpanel -> dsPlotFR;
 
   dsAnalyze [URL="functions/dsAnalyze.html"];
   dsImport [URL="functions/dsImport.html"];
@@ -327,6 +358,7 @@ digraph m2html {
   dsPlot2 [URL="functions/dsPlot2.html"];
   dsSelect [URL="functions/dsSelect.html"];
   dsSimulate [URL="functions/dsSimulate.html"];
+  dynasim [URL="functions/dynasim.html"];
   ds2mdd [URL="functions/internal/ds2mdd.html"];
   dsAll2mdd [URL="functions/internal/dsAll2mdd.html"];
   dsAnalyzeStudy [URL="functions/internal/dsAnalyzeStudy.html"];
@@ -362,16 +394,18 @@ digraph m2html {
   dsData2Table [URL="functions/internal/dsData2Table.html"];
   dsDataField2Table [URL="functions/internal/dsDataField2Table.html"];
   dsDecimateData [URL="functions/internal/dsDecimateData.html"];
+  dsDownloadFiles [URL="functions/internal/dsDownloadFiles.html"];
   dsDynasim2odefun [URL="functions/internal/dsDynasim2odefun.html"];
   dsEditModelFiles [URL="functions/internal/dsEditModelFiles.html"];
   dsExportData [URL="functions/internal/dsExportData.html"];
   dsGenerateDocumentation [URL="functions/internal/dsGenerateDocumentation.html"];
   dsGenerateModel [URL="functions/internal/dsGenerateModel.html"];
   dsGetConfig [URL="functions/internal/dsGetConfig.html"];
-  dsGetLinearIndependentCell [URL="functions/internal/dsGetLinearIndependentCell.html"];
   dsGetLinearIndependentDs [URL="functions/internal/dsGetLinearIndependentDs.html"];
+  dsGetNamespaces [URL="functions/internal/dsGetNamespaces.html"];
   dsGetOutputCounts [URL="functions/internal/dsGetOutputCounts.html"];
   dsGetParentNamespace [URL="functions/internal/dsGetParentNamespace.html"];
+  dsGetPopSizeFromName [URL="functions/internal/dsGetPopSizeFromName.html"];
   dsGetRootPath [URL="functions/internal/dsGetRootPath.html"];
   dsGetSolveFile [URL="functions/internal/dsGetSolveFile.html"];
   dsGet_populations_from_meta [URL="functions/internal/dsGet_populations_from_meta.html"];
@@ -395,6 +429,7 @@ digraph m2html {
   dsNameFromVaried [URL="functions/internal/dsNameFromVaried.html"];
   dsOptions2Keyval [URL="functions/internal/dsOptions2Keyval.html"];
   dsParseModelEquations [URL="functions/internal/dsParseModelEquations.html"];
+  dsPlot2D [URL="functions/internal/dsPlot2D.html"];
   dsPlotFR [URL="functions/internal/dsPlotFR.html"];
   dsPlotFR2 [URL="functions/internal/dsPlotFR2.html"];
   dsPlotStudy [URL="functions/internal/dsPlotStudy.html"];
@@ -405,6 +440,7 @@ digraph m2html {
   dsPropagateFunctions [URL="functions/internal/dsPropagateFunctions.html"];
   dsPropagateNamespaces [URL="functions/internal/dsPropagateNamespaces.html"];
   dsPropagateParameters [URL="functions/internal/dsPropagateParameters.html"];
+  dsReadText [URL="functions/internal/dsReadText.html"];
   dsRearrangeStudies2Neurons [URL="functions/internal/dsRearrangeStudies2Neurons.html"];
   dsRemoveKeyval [URL="functions/internal/dsRemoveKeyval.html"];
   dsSelectVariables [URL="functions/internal/dsSelectVariables.html"];
@@ -445,4 +481,7 @@ digraph m2html {
   dsUnitTest_checkModel [URL="functions/internal/unit-test/dsUnitTest_checkModel.html"];
   dsUnitTest_strrep [URL="functions/internal/unit-test/dsUnitTest_strrep.html"];
   dsUnitTest_strrep2 [URL="functions/internal/unit-test/dsUnitTest_strrep2.html"];
+  xp_PlotData [URL="functions/internal/xp_libraries/xp_PlotData.html"];
+  xp_PlotFR2 [URL="functions/internal/xp_libraries/xp_PlotFR2.html"];
+  xp_PlotFRpanel [URL="functions/internal/xp_libraries/xp_PlotFRpanel.html"];
 }

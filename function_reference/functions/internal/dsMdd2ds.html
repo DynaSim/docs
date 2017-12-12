@@ -6,16 +6,18 @@
   <meta name="keywords" content="dsMdd2ds">
   <meta name="description" content="% data=MDD2ds(obj,varargin)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
-  <script type="text/javascript">
-    if (top.frames.length == 0) { top.location = "../../index.html"; };
-  </script>
 </head>
 <body>
+
 <a name="_top"></a>
-<!-- ../menu.html functions --><!-- menu.html internal -->
+<div><a href="../../menu.html">Home</a> &gt;  <a href="../menu.html">functions</a> &gt; <a href="menu.html">internal</a> &gt; dsMdd2ds.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../menu.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="menu.html">Index for functions/internal&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
 <h1>dsMdd2ds
 </h1>
 
@@ -39,7 +41,7 @@ This function calls:
 <li><a href="dsCheckData.html" class="code" title="function data = dsCheckData(data, varargin)">dsCheckData</a>	CHECKDATA - Standardize data structure and auto-populate missing fields</li><li><a href="dsGet_populations_from_meta.html" class="code" title="function poplabels = dsGet_populations_from_meta(xp)">dsGet_populations_from_meta</a>	</li><li><a href="dsGet_variables_from_meta.html" class="code" title="function varlabels = dsGet_variables_from_meta(xp)">dsGet_variables_from_meta</a>	</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="dsMergeData.html" class="code" title="function data_merged = dsMergeData(data1,data2)">dsMergeData</a>	MERGEDATA - Merge two Dynasim structures created from different simulations</li></ul>
+<li><a href="dsMergeData.html" class="code" title="function data_merged = dsMergeData(data1,data2)">dsMergeData</a>	MERGEDATA - Merge two Dynasim structures created from different simulations</li><li><a href="../../functions/internal/xp_libraries/xp_PlotData.html" class="code" title="function hxp = xp_PlotData (xp, op)">xp_PlotData</a>	xp must be 1x1 (e.g. 0 dimensional)</li><li><a href="../../functions/internal/xp_libraries/xp_PlotFR2.html" class="code" title="function hxp = xp_PlotFR2 (xp, op)">xp_PlotFR2</a>	xp must be 1x1 (e.g. 0 dimensional)</li><li><a href="../../functions/internal/xp_libraries/xp_PlotFRpanel.html" class="code" title="function hxp = xp_PlotFRpanel (xp, op)">xp_PlotFRpanel</a>	xp must be 1x1 (e.g. 0 dimensional)</li></ul>
 <!-- crossreference -->
 
 <h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
@@ -267,36 +269,48 @@ This function is called by:
 0218     labels_curr = labels_curr(ind_remove);
 0219     labels = {labels_orig{:} labels_curr{:}};
 0220     
-0221     labels = labels(:)';
-0222 <span class="keyword">end</span>
-0223 
-0224 
-0225 <a name="_sub4" href="#_subfunctions" class="code">function out = guess_variable_name(obj)</a>
-0226     <span class="comment">% The first population's state variable should always be the 1st one</span>
-0227     <span class="comment">% according to DynaSim conventions</span>
-0228 
-0229     out = <a href="dsGet_variables_from_meta.html" class="code" title="function varlabels = dsGet_variables_from_meta(xp)">dsGet_variables_from_meta</a>(obj);
-0230     out = out{1};
-0231     <span class="keyword">if</span> isempty(out)
-0232         out = <span class="string">'v'</span>;
-0233     <span class="keyword">end</span>
-0234 
-0235 <span class="keyword">end</span>
+0221     <span class="comment">% Make sure 'time' is not the first entry (sometimes this can happen if</span>
+0222     <span class="comment">% all the labels before &quot;time&quot; get stripped away) by the above</span>
+0223     <span class="comment">% operations. Having &quot;time&quot; come first causes errors in certain DynaSim</span>
+0224     <span class="comment">% functions, which use the 1st label to get the variable name, so best</span>
+0225     <span class="comment">% to avoid this.</span>
+0226     <span class="keyword">if</span> strcmp(labels{1},<span class="string">'time'</span>)
+0227         labels = circshift(labels,-1);       <span class="comment">% Move to back</span>
+0228     <span class="keyword">end</span>
+0229     
+0230     labels = labels(:)';
+0231     
+0232     
+0233     
+0234 <span class="keyword">end</span>
+0235 
 0236 
-0237 
-0238 
-0239 <a name="_sub5" href="#_subfunctions" class="code">function out = guess_population_name(obj)</a>
-0240     <span class="comment">% The first population should always be the 1st label</span>
-0241     <span class="comment">% according to DynaSim conventions</span>
-0242     
-0243     out = <a href="dsGet_populations_from_meta.html" class="code" title="function poplabels = dsGet_populations_from_meta(xp)">dsGet_populations_from_meta</a>(obj);
-0244     out = out{1};
-0245 
-0246     <span class="keyword">if</span> isempty(out)
-0247         out = <span class="string">'E'</span>;
-0248     <span class="keyword">end</span>
-0249     
-0250 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+0237 <a name="_sub4" href="#_subfunctions" class="code">function out = guess_variable_name(obj)</a>
+0238     <span class="comment">% The first population's state variable should always be the 1st one</span>
+0239     <span class="comment">% according to DynaSim conventions</span>
+0240 
+0241     out = <a href="dsGet_variables_from_meta.html" class="code" title="function varlabels = dsGet_variables_from_meta(xp)">dsGet_variables_from_meta</a>(obj);
+0242     out = out{1};
+0243     <span class="keyword">if</span> isempty(out)
+0244         out = <span class="string">'v'</span>;
+0245     <span class="keyword">end</span>
+0246 
+0247 <span class="keyword">end</span>
+0248 
+0249 
+0250 
+0251 <a name="_sub5" href="#_subfunctions" class="code">function out = guess_population_name(obj)</a>
+0252     <span class="comment">% The first population should always be the 1st label</span>
+0253     <span class="comment">% according to DynaSim conventions</span>
+0254     
+0255     out = <a href="dsGet_populations_from_meta.html" class="code" title="function poplabels = dsGet_populations_from_meta(xp)">dsGet_populations_from_meta</a>(obj);
+0256     out = out{1};
+0257 
+0258     <span class="keyword">if</span> isempty(out)
+0259         out = <span class="string">'E'</span>;
+0260     <span class="keyword">end</span>
+0261     
+0262 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 12-Dec-2017 11:32:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

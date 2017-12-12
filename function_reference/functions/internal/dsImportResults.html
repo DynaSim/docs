@@ -6,16 +6,18 @@
   <meta name="keywords" content="dsImportResults">
   <meta name="description" content="IMPORTRESULTS - Import analysis result of a simulation">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
-  <script type="text/javascript">
-    if (top.frames.length == 0) { top.location = "../../index.html"; };
-  </script>
 </head>
 <body>
+
 <a name="_top"></a>
-<!-- ../menu.html functions --><!-- menu.html internal -->
+<div><a href="../../menu.html">Home</a> &gt;  <a href="../menu.html">functions</a> &gt; <a href="menu.html">internal</a> &gt; dsImportResults.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../menu.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="menu.html">Index for functions/internal&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
 <h1>dsImportResults
 </h1>
 
@@ -43,7 +45,10 @@
    (dave, Feb 2017). Does not know how to &quot;load&quot; an image, nor does it
    recognize the image extensions. I wrote &quot;dsImportPlots&quot; as a way around this,
    but there might be better solutions for differentiating &quot;plots&quot; from other
-   &quot;results&quot;</pre></div>
+   &quot;results&quot;
+ 
+ Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;
+ Copyright (C) 2016 Jason Sherfey, Boston University, USA</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
@@ -77,60 +82,64 @@ This function is called by:
 0017 <span class="comment">%   recognize the image extensions. I wrote &quot;dsImportPlots&quot; as a way around this,</span>
 0018 <span class="comment">%   but there might be better solutions for differentiating &quot;plots&quot; from other</span>
 0019 <span class="comment">%   &quot;results&quot;</span>
-0020 
-0021 <span class="keyword">if</span> ischar(studyinfo) &amp;&amp; isdir(studyinfo) <span class="comment">% study directory</span>
-0022   study_dir=studyinfo;
-0023   clear studyinfo
-0024   studyinfo.study_dir=study_dir;
-0025 <span class="keyword">end</span>
-0026 
-0027 <span class="keyword">if</span> isstruct(studyinfo) &amp;&amp; isfield(studyinfo,<span class="string">'study_dir'</span>)
-0028   <span class="comment">% retrieve most up-to-date studyinfo structure from studyinfo.mat file</span>
-0029   studyinfo=<a href="dsCheckStudyinfo.html" class="code" title="function studyinfo = dsCheckStudyinfo(studyinfo, varargin)">dsCheckStudyinfo</a>(studyinfo.study_dir, varargin{:});
-0030   <span class="keyword">if</span> exist(<span class="string">'study_dir'</span>,<span class="string">'var'</span>)
-0031     studyinfo.study_dir=study_dir;
-0032   <span class="keyword">end</span>
-0033   
-0034   <span class="comment">% get list of data_files from studyinfo</span>
-0035   result_functions=studyinfo.simulations(1).result_functions;
-0036   matches=cellfun(@(x) strcmp(func2str(x), func2str(func)),result_functions);
-0037   <span class="keyword">if</span> ~any(matches)
-0038     wprintf(<span class="string">'Didnt find match for result function parameter'</span>)
-0039     <span class="keyword">return</span>
-0040   <span class="keyword">end</span>
-0041   result_files=cellfun(@(x)x(matches),{studyinfo.simulations.result_files},<span class="string">'uni'</span>,0);
-0042   num_instances=cellfun(@length,result_files);
-0043   num_sims=length(studyinfo.simulations);
-0044   
-0045 <span class="comment">%   result_files_exist=cellfun(@(x) cellfun(@exist, x),result_files)==2;</span>
-0046 <span class="comment">%   if ~any(result_files_exist)</span>
-0047 <span class="comment">%     % convert original absolute paths to paths relative to study_dir</span>
-0048 <span class="comment">%     for s=1:num_sims</span>
-0049 <span class="comment">%       for i=1:num_instances(s)</span>
-0050 <span class="comment">%         [~,fname,fext]=fileparts2(result_files{s}{i});</span>
-0051 <span class="comment">%         result_files{s}{i}=fullfile(studyinfo.study_dir,'data',[fname fext]);</span>
-0052 <span class="comment">%       end</span>
-0053 <span class="comment">%     end</span>
-0054 <span class="comment">%   end</span>
-0055   
-0056   <span class="keyword">for</span> s=1:num_sims
-0057     <span class="keyword">for</span> i=1:num_instances(s)
-0058       <span class="comment">%check absolute path</span>
-0059       <span class="keyword">if</span> exist(result_files{s}{i},<span class="string">'file'</span>)
-0060         load(result_files{s}{i},<span class="string">'result'</span>);
-0061         results(s,i)=result;
-0062       <span class="keyword">else</span>
-0063         <span class="comment">%check relative path</span>
-0064         [~,fname,fext]=fileparts2(result_files{s}{i});
-0065         result_files{s}{i}=fullfile(studyinfo.study_dir,<span class="string">'data'</span>,[fname fext]);
-0066         <span class="keyword">if</span> exist(result_files{s}{i},<span class="string">'file'</span>)
-0067           load(result_files{s}{i},<span class="string">'result'</span>);
-0068           results(s,i)=result;
-0069         <span class="keyword">end</span>
-0070       <span class="keyword">end</span>
-0071     <span class="keyword">end</span>
-0072   <span class="keyword">end</span>
-0073 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;</span>
+0022 <span class="comment">% Copyright (C) 2016 Jason Sherfey, Boston University, USA</span>
+0023 
+0024 
+0025 <span class="keyword">if</span> ischar(studyinfo) &amp;&amp; isdir(studyinfo) <span class="comment">% study directory</span>
+0026   study_dir=studyinfo;
+0027   clear studyinfo
+0028   studyinfo.study_dir=study_dir;
+0029 <span class="keyword">end</span>
+0030 
+0031 <span class="keyword">if</span> isstruct(studyinfo) &amp;&amp; isfield(studyinfo,<span class="string">'study_dir'</span>)
+0032   <span class="comment">% retrieve most up-to-date studyinfo structure from studyinfo.mat file</span>
+0033   studyinfo=<a href="dsCheckStudyinfo.html" class="code" title="function studyinfo = dsCheckStudyinfo(studyinfo, varargin)">dsCheckStudyinfo</a>(studyinfo.study_dir, varargin{:});
+0034   <span class="keyword">if</span> exist(<span class="string">'study_dir'</span>,<span class="string">'var'</span>)
+0035     studyinfo.study_dir=study_dir;
+0036   <span class="keyword">end</span>
+0037   
+0038   <span class="comment">% get list of data_files from studyinfo</span>
+0039   result_functions=studyinfo.simulations(1).result_functions;
+0040   matches=cellfun(@(x) strcmp(func2str(x), func2str(func)),result_functions);
+0041   <span class="keyword">if</span> ~any(matches)
+0042     wprintf(<span class="string">'Didnt find match for result function parameter'</span>)
+0043     <span class="keyword">return</span>
+0044   <span class="keyword">end</span>
+0045   result_files=cellfun(@(x)x(matches),{studyinfo.simulations.result_files},<span class="string">'uni'</span>,0);
+0046   num_instances=cellfun(@length,result_files);
+0047   num_sims=length(studyinfo.simulations);
+0048   
+0049 <span class="comment">%   result_files_exist=cellfun(@(x) cellfun(@exist, x),result_files)==2;</span>
+0050 <span class="comment">%   if ~any(result_files_exist)</span>
+0051 <span class="comment">%     % convert original absolute paths to paths relative to study_dir</span>
+0052 <span class="comment">%     for s=1:num_sims</span>
+0053 <span class="comment">%       for i=1:num_instances(s)</span>
+0054 <span class="comment">%         [~,fname,fext]=fileparts2(result_files{s}{i});</span>
+0055 <span class="comment">%         result_files{s}{i}=fullfile(studyinfo.study_dir,'data',[fname fext]);</span>
+0056 <span class="comment">%       end</span>
+0057 <span class="comment">%     end</span>
+0058 <span class="comment">%   end</span>
+0059   
+0060   <span class="keyword">for</span> s=1:num_sims
+0061     <span class="keyword">for</span> i=1:num_instances(s)
+0062       <span class="comment">%check absolute path</span>
+0063       <span class="keyword">if</span> exist(result_files{s}{i},<span class="string">'file'</span>)
+0064         load(result_files{s}{i},<span class="string">'result'</span>);
+0065         results(s,i)=result;
+0066       <span class="keyword">else</span>
+0067         <span class="comment">%check relative path</span>
+0068         [~,fname,fext]=fileparts2(result_files{s}{i});
+0069         result_files{s}{i}=fullfile(studyinfo.study_dir,<span class="string">'data'</span>,[fname fext]);
+0070         <span class="keyword">if</span> exist(result_files{s}{i},<span class="string">'file'</span>)
+0071           load(result_files{s}{i},<span class="string">'result'</span>);
+0072           results(s,i)=result;
+0073         <span class="keyword">end</span>
+0074       <span class="keyword">end</span>
+0075     <span class="keyword">end</span>
+0076   <span class="keyword">end</span>
+0077 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 12-Dec-2017 11:32:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

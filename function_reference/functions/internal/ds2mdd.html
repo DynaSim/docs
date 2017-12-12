@@ -6,16 +6,18 @@
   <meta name="keywords" content="ds2mdd">
   <meta name="description" content="Convert DynaSim data structure to xp format">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
-  <script type="text/javascript">
-    if (top.frames.length == 0) { top.location = "../../index.html"; };
-  </script>
 </head>
 <body>
+
 <a name="_top"></a>
-<!-- ../menu.html functions --><!-- menu.html internal -->
+<div><a href="../../menu.html">Home</a> &gt;  <a href="../menu.html">functions</a> &gt; <a href="menu.html">internal</a> &gt; ds2mdd.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../menu.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="menu.html">Index for functions/internal&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
 <h1>ds2mdd
 </h1>
 
@@ -32,7 +34,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="dsAutoMergeVarieds.html" class="code" title="function [data, variedname_merged, varied_vals ] = dsAutoMergeVarieds(data,strategy,verbose_on,varargin)">dsAutoMergeVarieds</a>	[data_new, variedname_merged, varied_vals ] = mergeVarieds(data,varied_fields)</li><li><a href="dsCheckData.html" class="code" title="function data = dsCheckData(data, varargin)">dsCheckData</a>	CHECKDATA - Standardize data structure and auto-populate missing fields</li><li><a href="dsData2Table.html" class="code" title="function [data_table,column_titles,time] = dsData2Table(data,verbose_flag,maxrows)">dsData2Table</a>	Converts DynaSim structure to 1D cell array format. Later can use to</li><li><a href="dsGetLinearIndependentDs.html" class="code" title="function [Abasis, Abasisi, Asubs] = dsGetLinearIndependentDs(data,ignore_constant_shift,varargin)">dsGetLinearIndependentDs</a>	[Asubs, Abasis, Abasisi] = getLinearIndependentDs(data,ignore_constant_shift,varargin)</li><li><a href="dsMergeVarieds.html" class="code" title="function [data_new, variedname_merged, varied_vals ] = dsMergeVarieds(data,varied_fields)">dsMergeVarieds</a>	[data_new, variedname_merged, varied_vals ] = mergeVarieds(data,varied_fields)</li></ul>
+<li><a href="dsAutoMergeVarieds.html" class="code" title="function [data, variedname_merged, varied_vals ] = dsAutoMergeVarieds(data,strategy,verbose_on,varargin)">dsAutoMergeVarieds</a>	[data_new, variedname_merged, varied_vals ] = mergeVarieds(data,varied_fields)</li><li><a href="dsCheckData.html" class="code" title="function data = dsCheckData(data, varargin)">dsCheckData</a>	CHECKDATA - Standardize data structure and auto-populate missing fields</li><li><a href="dsData2Table.html" class="code" title="function [data_table,column_titles,time] = dsData2Table(data,verbose_flag,maxrows)">dsData2Table</a>	Converts DynaSim structure to 1D cell array format. Later can use to</li><li><a href="dsGetLinearIndependentDs.html" class="code" title="function [Abasis, Abasisi, Asubs] = dsGetLinearIndependentDs(data,ignore_constant_shift,varargin)">dsGetLinearIndependentDs</a>	[Asubs, Abasis, Abasisi] = getLinearIndependentDs(data,ignore_constant_shift,varargin)</li><li><a href="dsMergeVarieds.html" class="code" title="function [data_new, variedname_merged, varied_vals ] = dsMergeVarieds(data,varied_fields,maxchars,varargin)">dsMergeVarieds</a>	[data_new, variedname_merged, varied_vals ] = mergeVarieds(data,varied_fields)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 <li><a href="dsAll2mdd.html" class="code" title="function [xp,is_image] = dsAll2mdd(data,varargin)">dsAll2mdd</a>	</li></ul>
@@ -45,19 +47,19 @@ This function is called by:
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 <div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function xp = ds2mdd(data,merge_covaried_axes,merge_sparse_axes,varargin)</a>
 0002     <span class="comment">% Convert DynaSim data structure to xp format</span>
-0003     
-0004     
-0005     <span class="keyword">if</span> nargin &lt; 2
-0006         merge_covaried_axes = false;
-0007     <span class="keyword">end</span>
-0008     
-0009     <span class="keyword">if</span> nargin &lt; 3
-0010         merge_sparse_axes = false;
-0011     <span class="keyword">end</span>
-0012 
-0013     data = <a href="dsCheckData.html" class="code" title="function data = dsCheckData(data, varargin)">dsCheckData</a>(data, varargin{:});
-0014     
-0015 <span class="comment">% % % % % % % % % % % % % % %</span>
+0003 
+0004     data = <a href="dsCheckData.html" class="code" title="function data = dsCheckData(data, varargin)">dsCheckData</a>(data, varargin{:});
+0005     
+0006     <span class="keyword">if</span> nargin &lt; 2
+0007         merge_covaried_axes = true;
+0008     <span class="keyword">end</span>
+0009     
+0010     <span class="keyword">if</span> nargin &lt; 3
+0011         merge_sparse_axes = true;
+0012     <span class="keyword">end</span>
+0013 
+0014 
+0015 <span class="comment">% % % % % % % % % % % % % % %  Merge data varied statements if necessary % % % % %</span>
 0016     <span class="keyword">if</span> merge_covaried_axes &amp;&amp; isfield(data(1),<span class="string">'varied'</span>)
 0017         <span class="comment">% Remove any data in data(1...N) that is empty (e.g. skipped by</span>
 0018         <span class="comment">% the simulator)</span>
@@ -81,7 +83,7 @@ This function is called by:
 0036         variedname_merged = cell(1,Nlinked);
 0037         varied_vals = cell(1,Nlinked);
 0038         <span class="keyword">for</span> j = 1:Nlinked
-0039             [data, variedname_merged{j}, varied_vals{j} ] = <a href="dsMergeVarieds.html" class="code" title="function [data_new, variedname_merged, varied_vals ] = dsMergeVarieds(data,varied_fields)">dsMergeVarieds</a>(data,vary_labels(Asubs{j}));
+0039             [data, variedname_merged{j}, varied_vals{j} ] = <a href="dsMergeVarieds.html" class="code" title="function [data_new, variedname_merged, varied_vals ] = dsMergeVarieds(data,varied_fields,maxchars,varargin)">dsMergeVarieds</a>(data,vary_labels(Asubs{j}));
 0040         <span class="keyword">end</span>
 0041         
 0042         <span class="comment">% Automerge any additional dimensions based on analysis of</span>
@@ -90,10 +92,10 @@ This function is called by:
 0045     <span class="keyword">end</span>
 0046     
 0047     <span class="keyword">if</span> merge_sparse_axes &amp;&amp; isfield(data(1),<span class="string">'varied'</span>)
-0048         [data] = <a href="dsAutoMergeVarieds.html" class="code" title="function [data, variedname_merged, varied_vals ] = dsAutoMergeVarieds(data,strategy,verbose_on,varargin)">dsAutoMergeVarieds</a>(data);
+0048         [data, variedname_merged, varied_vals ] = <a href="dsAutoMergeVarieds.html" class="code" title="function [data, variedname_merged, varied_vals ] = dsAutoMergeVarieds(data,strategy,verbose_on,varargin)">dsAutoMergeVarieds</a>(data);
 0049     <span class="keyword">end</span>
 0050     
-0051 <span class="comment">% % % % % % % % % % % % % % %</span>
+0051 <span class="comment">% % % % % % % % % % % % % % % Merging is complete % % % % % % % %</span>
 0052     
 0053     <span class="comment">% Extract the data in a linear table format</span>
 0054     [data_table,column_titles,time] = <a href="dsData2Table.html" class="code" title="function [data_table,column_titles,time] = dsData2Table(data,verbose_flag,maxrows)">dsData2Table</a> (data);
@@ -135,23 +137,25 @@ This function is called by:
 0090     
 0091     <span class="comment">% Adding pre-merged info so we can un-merge it later if needed!</span>
 0092     <span class="keyword">if</span> merge_covaried_axes &amp;&amp; isfield(data(1),<span class="string">'varied'</span>)
-0093         <span class="keyword">for</span> j = 1:length(variedname_merged)
-0094             ax_ind = xp.findaxis(variedname_merged{j});
-0095             xp.axis(ax_ind).axismeta.premerged_names = vary_labels(Asubs{j});
-0096             
-0097             var = varied_vals{j};
-0098             var2 = <a href="#_sub1" class="code" title="subfunction var2 = convert_cell2D_to_nested1D(var)">convert_cell2D_to_nested1D</a>(var);
-0099             xp.axis(ax_ind).axismeta.premerged_values = var2;
-0100             
-0101         <span class="keyword">end</span>
-0102     <span class="keyword">end</span>
-0103 <span class="keyword">end</span>
-0104 
-0105 <a name="_sub1" href="#_subfunctions" class="code">function var2 = convert_cell2D_to_nested1D(var)</a>
-0106     <span class="keyword">for</span> k = 1:size(var,2)
-0107         var2{k} = cell2mat(var(:,k));
-0108     <span class="keyword">end</span>
-0109 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+0093 <span class="comment">%         % This does not work properly when both merge_covaried_axes and</span>
+0094 <span class="comment">%         % merge_sparse_axes are true. Disabling for now.</span>
+0095 <span class="comment">%         for j = 1:length(variedname_merged)</span>
+0096 <span class="comment">%             ax_ind = xp.findaxis(variedname_merged{j});</span>
+0097 <span class="comment">%             xp.axis(ax_ind).axismeta.premerged_names = vary_labels(Asubs{j});</span>
+0098 <span class="comment">%</span>
+0099 <span class="comment">%             var = varied_vals{j};</span>
+0100 <span class="comment">%             var2 = convert_cell2D_to_nested1D(var);</span>
+0101 <span class="comment">%             xp.axis(ax_ind).axismeta.premerged_values = var2;</span>
+0102 <span class="comment">%</span>
+0103 <span class="comment">%         end</span>
+0104     <span class="keyword">end</span>
+0105 <span class="keyword">end</span>
+0106 
+0107 <a name="_sub1" href="#_subfunctions" class="code">function var2 = convert_cell2D_to_nested1D(var)</a>
+0108     <span class="keyword">for</span> k = 1:size(var,2)
+0109         var2{k} = cell2mat(var(:,k));
+0110     <span class="keyword">end</span>
+0111 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 12-Dec-2017 11:32:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

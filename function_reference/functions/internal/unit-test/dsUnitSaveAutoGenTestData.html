@@ -6,16 +6,18 @@
   <meta name="keywords" content="dsUnitSaveAutoGenTestData">
   <meta name="description" content="Inputs:">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../../m2html.css">
-  <script type="text/javascript">
-    if (top.frames.length == 0) { top.location = "../../../index.html"; };
-  </script>
 </head>
 <body>
+
 <a name="_top"></a>
-<!-- ../../menu.html functions --><!-- ../menu.html internal --><!-- menu.html unit-test -->
+<div><a href="../../../menu.html">Home</a> &gt;  <a href="../../menu.html">functions</a> &gt; <a href="../menu.html">internal</a> &gt; <a href="menu.html">unit-test</a> &gt; dsUnitSaveAutoGenTestData.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../menu.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="menu.html">Index for functions/internal/unit-test&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
 <h1>dsUnitSaveAutoGenTestData
 </h1>
 
@@ -64,24 +66,15 @@ This function is called by:
 0018   fnName = [fnNameStack <span class="string">'__'</span> stack(3).name];
 0019 <span class="keyword">end</span>
 0020 
-0021 <span class="comment">% check package namespace</span>
-0022 <span class="keyword">if</span> ~isfunction(fnNameStack) || strcmp(fnNameStack, <span class="string">'strrep'</span>)
-0023   <span class="keyword">if</span> isfunction([<span class="string">'ds.'</span> fnNameStack])
-0024     fnName = [<span class="string">'ds.'</span> fnName];
-0025   <span class="keyword">elseif</span> isfunction([<span class="string">'dsUnit.'</span> fnNameStack])
-0026     fnName = [<span class="string">'dsUnit.'</span> fnName];
-0027   <span class="keyword">end</span>
-0028 <span class="keyword">end</span>
-0029 
-0030 hash = DataHash(argin);
-0031 
-0032 testFileName = sprintf(<span class="string">'%s_autogen_%s.mat'</span>, fnName, hash);
-0033 testFileDir = fullfile(<a href="../../../functions/internal/dsGetConfig.html" class="code" title="function varOutput = dsGetConfig(query)">dsGetConfig</a>(<span class="string">'ds_unitTestData_path'</span>), <span class="string">'autogen_newSave'</span>);
-0034 mkdirSilent(testFileDir);
-0035 testFilePath = fullfile(testFileDir, testFileName);
-0036 save(testFilePath, <span class="string">'argin'</span>, <span class="string">'argout'</span>)
-0037 
-0038 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+0021 hash = DataHash(argin);
+0022 
+0023 testFileName = sprintf(<span class="string">'%s_autogen_%s.mat'</span>, fnName, hash);
+0024 testFileDir = fullfile(<a href="../../../functions/internal/dsGetConfig.html" class="code" title="function varOutput = dsGetConfig(query)">dsGetConfig</a>(<span class="string">'ds_unitTestData_path'</span>), <span class="string">'autogen_newSave'</span>);
+0025 mkdirSilent(testFileDir);
+0026 testFilePath = fullfile(testFileDir, testFileName);
+0027 save(testFilePath, <span class="string">'argin'</span>, <span class="string">'argout'</span>)
+0028 
+0029 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 12-Dec-2017 11:32:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

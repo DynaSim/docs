@@ -6,16 +6,18 @@
   <meta name="keywords" content="dsMergeVarieds">
   <meta name="description" content="[data_new, variedname_merged, varied_vals ] = mergeVarieds(data,varied_fields)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
-  <script type="text/javascript">
-    if (top.frames.length == 0) { top.location = "../../index.html"; };
-  </script>
 </head>
 <body>
+
 <a name="_top"></a>
-<!-- ../menu.html functions --><!-- menu.html internal -->
+<div><a href="../../menu.html">Home</a> &gt;  <a href="../menu.html">functions</a> &gt; <a href="menu.html">internal</a> &gt; dsMergeVarieds.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../menu.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="menu.html">Index for functions/internal&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
 <h1>dsMergeVarieds
 </h1>
 
@@ -23,7 +25,7 @@
 <div class="box"><strong>[data_new, variedname_merged, varied_vals ] = mergeVarieds(data,varied_fields)</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="box"><strong>function [data_new, variedname_merged, varied_vals ] = dsMergeVarieds(data,varied_fields) </strong></div>
+<div class="box"><strong>function [data_new, variedname_merged, varied_vals ] = dsMergeVarieds(data,varied_fields,maxchars,varargin) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 <div class="fragment"><pre class="comment"> [data_new, variedname_merged, varied_vals ] = mergeVarieds(data,varied_fields)
@@ -60,7 +62,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-</ul>
+<li><a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>	CHECKOPTIONS - organize key/value pairs in structure with default or user-supplied values according to a schema</li><li><a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestDataLocalFn.html" class="code" title="function dsUnitSaveAutoGenTestDataLocalFn(argin, argout)">dsUnitSaveAutoGenTestDataLocalFn</a>	% saveAutoGenTestDataLocalFn(argin, argout)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 <li><a href="ds2mdd.html" class="code" title="function xp = ds2mdd(data,merge_covaried_axes,merge_sparse_axes,varargin)">ds2mdd</a>	Convert DynaSim data structure to xp format</li><li><a href="dsAutoMergeVarieds.html" class="code" title="function [data, variedname_merged, varied_vals ] = dsAutoMergeVarieds(data,strategy,verbose_on,varargin)">dsAutoMergeVarieds</a>	[data_new, variedname_merged, varied_vals ] = mergeVarieds(data,varied_fields)</li><li><a href="dsImg2mdd.html" class="code" title="function xp = dsImg2mdd(data_img,merge_covaried_axes,merge_sparse_axes,varargin)">dsImg2mdd</a>	</li></ul>
@@ -68,10 +70,10 @@ This function is called by:
 
 <h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="#_sub1" class="code">function str_out = cat_with_underscores(cellstr_in)</a></li></ul>
+<li><a href="#_sub1" class="code">function str_out = cat_with_underscores(cellstr_in)</a></li><li><a href="#_sub2" class="code">function out = cropname(in, maxchars)</a></li></ul>
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [data_new, variedname_merged, varied_vals ] = dsMergeVarieds(data,varied_fields)</a>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [data_new, variedname_merged, varied_vals ] = dsMergeVarieds(data,varied_fields,maxchars,varargin)</a>
 0002     <span class="comment">% [data_new, variedname_merged, varied_vals ] = mergeVarieds(data,varied_fields)</span>
 0003     <span class="comment">%</span>
 0004     <span class="comment">% Purpose: This function takes in the current DynaSim datastructure, data, and</span>
@@ -102,46 +104,76 @@ This function is called by:
 0029     <span class="comment">%</span>
 0030     <span class="comment">% See also: unmergeVarieds, modifications2Vary, vary2Modifications</span>
 0031     <span class="comment">%</span>
-0032 
-0033     varied_vals = cell(length(data),length(varied_fields));
-0034     <span class="keyword">for</span> i = 1:length(data)
-0035         data_temp = data(i);
-0036         variedname_merged = <a href="#_sub1" class="code" title="subfunction str_out = cat_with_underscores(cellstr_in)">cat_with_underscores</a>(varied_fields);
-0037         variedname_merged = strcat(<span class="string">'Covaried_'</span>,variedname_merged);
-0038         
-0039         <span class="keyword">for</span> j = 1:length(varied_fields)
-0040             
-0041             varied_vals{i,j} = data_temp.(varied_fields{j});       <span class="comment">% Store varied value. Storead as varied x sim number</span>
-0042             data_temp = rmfield(data_temp,varied_fields{j});         <span class="comment">% Remove original fields</span>
-0043         <span class="keyword">end</span>
-0044         
-0045         varied_str{i} = cellfun(@(x) num2str(x),varied_vals(i,:),<span class="string">'UniformOutput'</span>,0);
-0046         varied_str{i} = <a href="#_sub1" class="code" title="subfunction str_out = cat_with_underscores(cellstr_in)">cat_with_underscores</a>(varied_str{i});
-0047         data_temp.(variedname_merged) = varied_str{i};
-0048         
-0049         [~, inds] = intersect(data_temp.varied,varied_fields);
-0050         inds2 = true(1,length(data_temp.varied));
-0051         inds2(inds) = false;
-0052         data_temp.varied = data_temp.varied(inds2);
-0053         data_temp.varied{end+1} = variedname_merged;
-0054         
-0055         data_new(i) = data_temp;
-0056     <span class="keyword">end</span>
-0057     
-0058     
-0059     
-0060 
-0061 <span class="keyword">end</span>
-0062 
-0063 <a name="_sub1" href="#_subfunctions" class="code">function str_out = cat_with_underscores(cellstr_in)</a>
-0064 <span class="comment">% Takes in a cell array of chars and concatenates them together with</span>
-0065 <span class="comment">% underscores separating the original divisions between cells. E.g.</span>
-0066 <span class="comment">% {'cat','dog'} becomes 'cat_dog'</span>
-0067     
-0068     temp = vertcat(cellstr_in(:)', repmat({<span class="string">'_'</span>},1,length(cellstr_in)));
-0069     temp = temp(:)';
-0070     str_out = horzcat(temp{1:end-1});
-0071 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+0032     
+0033     <span class="comment">% auto_gen_test_data_flag argin</span>
+0034     options = <a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
+0035     <span class="keyword">if</span> options.auto_gen_test_data_flag
+0036         varargs = varargin;
+0037         varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0038         varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
+0039         argin = [{vary_lengths}, {data_length}, varargs]; <span class="comment">% specific to this function</span>
+0040     <span class="keyword">end</span>
+0041 
+0042     
+0043     <span class="keyword">if</span> nargin &lt; 3
+0044         maxchars = 25;      <span class="comment">% Warnimg - max char length for field name is 63; so this needs to be &lt;= 63</span>
+0045     <span class="keyword">end</span>
+0046 
+0047     varied_vals = cell(length(data),length(varied_fields));
+0048     <span class="keyword">for</span> i = 1:length(data)
+0049         data_temp = data(i);
+0050         variedname_merged = <a href="#_sub1" class="code" title="subfunction str_out = cat_with_underscores(cellstr_in)">cat_with_underscores</a>(varied_fields);
+0051         variedname_merged = strcat(<span class="string">'C_'</span>,variedname_merged);
+0052         variedname_merged = <a href="#_sub2" class="code" title="subfunction out = cropname(in, maxchars)">cropname</a>(variedname_merged, maxchars);
+0053         
+0054         <span class="keyword">for</span> j = 1:length(varied_fields)
+0055             
+0056             varied_vals{i,j} = data_temp.(varied_fields{j});       <span class="comment">% Store varied value. Storead as varied x sim number</span>
+0057             data_temp = rmfield(data_temp,varied_fields{j});         <span class="comment">% Remove original fields</span>
+0058         <span class="keyword">end</span>
+0059         
+0060         varied_str{i} = cellfun(@(x) num2str(x),varied_vals(i,:),<span class="string">'UniformOutput'</span>,0);
+0061         varied_str{i} = <a href="#_sub1" class="code" title="subfunction str_out = cat_with_underscores(cellstr_in)">cat_with_underscores</a>(varied_str{i});
+0062         varied_str{i} = varied_str{i}(1:min(<span class="keyword">end</span>,maxchars));
+0063         data_temp.(variedname_merged) = varied_str{i};
+0064         
+0065         [~, inds] = intersect(data_temp.varied,varied_fields);
+0066         inds2 = true(1,length(data_temp.varied));
+0067         inds2(inds) = false;
+0068         data_temp.varied = data_temp.varied(inds2);
+0069         data_temp.varied{end+1} = variedname_merged;
+0070         
+0071         data_new(i) = data_temp;
+0072     <span class="keyword">end</span>
+0073     
+0074     
+0075     <span class="comment">% auto_gen_test_data_flag argout</span>
+0076     <span class="keyword">if</span> options.auto_gen_test_data_flag
+0077         argout = {data_new, variedname_merged, varied_vals}; <span class="comment">% specific to this function</span>
+0078         <a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestDataLocalFn.html" class="code" title="function dsUnitSaveAutoGenTestDataLocalFn(argin, argout)">dsUnitSaveAutoGenTestDataLocalFn</a>(argin, argout); <span class="comment">% localfn</span>
+0079     <span class="keyword">end</span>
+0080 
+0081 <span class="keyword">end</span>
+0082 
+0083 <a name="_sub1" href="#_subfunctions" class="code">function str_out = cat_with_underscores(cellstr_in)</a>
+0084 <span class="comment">% Takes in a cell array of chars and concatenates them together with</span>
+0085 <span class="comment">% underscores separating the original divisions between cells. E.g.</span>
+0086 <span class="comment">% {'cat','dog'} becomes 'cat_dog'</span>
+0087     
+0088     temp = vertcat(cellstr_in(:)', repmat({<span class="string">'_'</span>},1,length(cellstr_in)));
+0089     temp = temp(:)';
+0090     str_out = horzcat(temp{1:end-1});
+0091 <span class="keyword">end</span>
+0092 
+0093 <a name="_sub2" href="#_subfunctions" class="code">function out = cropname(in, maxchars)</a>
+0094 
+0095     <span class="keyword">if</span> length(in) &gt; maxchars
+0096         out = strcat(in(1:maxchars-3),<span class="string">'___'</span>);
+0097     <span class="keyword">else</span>
+0098         out = in;
+0099     <span class="keyword">end</span>
+0100     
+0101 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 12-Dec-2017 11:32:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

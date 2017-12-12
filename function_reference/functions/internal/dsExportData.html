@@ -6,16 +6,18 @@
   <meta name="keywords" content="dsExportData">
   <meta name="description" content="EXPORTDATA - export DynaSim data structure in various formats.">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
-  <script type="text/javascript">
-    if (top.frames.length == 0) { top.location = "../../index.html"; };
-  </script>
 </head>
 <body>
+
 <a name="_top"></a>
-<!-- ../menu.html functions --><!-- menu.html internal -->
+<div><a href="../../menu.html">Home</a> &gt;  <a href="../menu.html">functions</a> &gt; <a href="menu.html">internal</a> &gt; dsExportData.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../menu.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="menu.html">Index for functions/internal&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
 <h1>dsExportData
 </h1>
 
@@ -23,7 +25,7 @@
 <div class="box"><strong>EXPORTDATA - export DynaSim data structure in various formats.</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="box"><strong>function exportData(data,varargin) </strong></div>
+<div class="box"><strong>function dsExportData(data,varargin) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 <div class="fragment"><pre class="comment">EXPORTDATA - export DynaSim data structure in various formats.
@@ -37,8 +39,11 @@
      'filename'    : name of output data file (default: 'data.mat')
      'format'      : mat. todo: csv, HDF. (default: 'mat')
      'verbose_flag': whether to print log info (default: 0)
- 
- See also: dsImport, <a href="dsCheckData.html" class="code" title="function data = dsCheckData(data, varargin)">dsCheckData</a>, dsSimulate</pre></div>
+
+ See also: dsImport, <a href="dsCheckData.html" class="code" title="function data = dsCheckData(data, varargin)">dsCheckData</a>, dsSimulate
+
+ Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;
+ Copyright (C) 2016 Jason Sherfey, Boston University, USA</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
@@ -53,7 +58,7 @@ This function is called by:
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function exportData(data,varargin)</a>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function dsExportData(data,varargin)</a>
 0002 <span class="comment">%EXPORTDATA - export DynaSim data structure in various formats.</span>
 0003 <span class="comment">%</span>
 0004 <span class="comment">% Usage:</span>
@@ -67,38 +72,78 @@ This function is called by:
 0012 <span class="comment">%     'verbose_flag': whether to print log info (default: 0)</span>
 0013 <span class="comment">%</span>
 0014 <span class="comment">% See also: dsImport, dsCheckData, dsSimulate</span>
-0015 
-0016 options=<a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="keyword">...</span>
-0017   <span class="string">'filename'</span>,<span class="string">'data.mat'</span>,[],<span class="keyword">...</span><span class="comment"> % name of output data file</span>
-0018   <span class="string">'format'</span>,<span class="string">'mat'</span>,[],<span class="keyword">...</span><span class="comment"> % mat. todo: csv, HDF</span>
-0019   <span class="string">'verbose_flag'</span>,0,{0,1},<span class="keyword">...</span><span class="comment"> % whether to print log info</span>
-0020   },false);
-0021 
-0022 <span class="keyword">switch</span> lower(options.format)
-0023   <span class="keyword">case</span> <span class="string">'mat'</span>
-0024     <span class="keyword">if</span> numel(data)==1
-0025       <span class="comment">% split DynaSim data structure into separate variables saved to a</span>
-0026       <span class="comment">% v7.3 mat-file for subsequent HDF-style loading with matfile()</span>
-0027       vars=fieldnames(data);
-0028       <span class="keyword">for</span> i=1:length(vars)
-0029         eval(sprintf(<span class="string">'%s=data.%s;'</span>,vars{i},vars{i}));
-0030       <span class="keyword">end</span>
-0031       save(options.filename,vars{:},<span class="string">'-v7.3'</span>);
-0032     <span class="keyword">else</span>
-0033       save(options.filename,<span class="string">'data'</span>,<span class="string">'-v7.3'</span>);
-0034     <span class="keyword">end</span>
-0035   <span class="keyword">case</span> <span class="string">'csv'</span>
-0036     <span class="comment">% write csv file</span>
-0037     <span class="comment">% ExportCSV(data,options.filename);</span>
-0038   <span class="keyword">case</span> <span class="string">'hdf'</span>
-0039     <span class="comment">% ExportHDF(data,options.filename);</span>
-0040   <span class="keyword">otherwise</span>
-0041     <span class="comment">% not recognized</span>
-0042 <span class="keyword">end</span>
-0043 
-0044 <span class="keyword">if</span> options.verbose_flag
-0045   fprintf(<span class="string">'\tData saved to %s\n'</span>,options.filename);
-0046 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;</span>
+0017 <span class="comment">% Copyright (C) 2016 Jason Sherfey, Boston University, USA</span>
+0018 
+0019 options=<a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="keyword">...</span>
+0020   <span class="string">'filename'</span>,<span class="string">'data.mat'</span>,[],<span class="keyword">...</span><span class="comment"> % name of output data file</span>
+0021   <span class="string">'format'</span>,<span class="string">'mat'</span>,[],<span class="keyword">...</span><span class="comment"> % mat. todo: csv, HDF</span>
+0022   <span class="string">'matCompatibility_flag'</span>,1,{0,1},<span class="keyword">...</span><span class="comment"> % whether to save mat files in compatible mode, or to prioritize &gt; 2GB VARs</span>
+0023   <span class="string">'verbose_flag'</span>,0,{0,1},<span class="keyword">...</span><span class="comment"> % whether to print log info</span>
+0024   },false);
+0025 
+0026 <span class="keyword">switch</span> lower(options.format)
+0027   <span class="keyword">case</span> <span class="string">'mat'</span>
+0028     <span class="keyword">if</span> numel(data)==1
+0029       <span class="comment">% split DynaSim data structure into separate variables saved to a</span>
+0030       <span class="comment">% mat-file for subsequent loading with matfile()</span>
+0031       vars=fieldnames(data);
+0032       <span class="keyword">for</span> i=1:length(vars)
+0033         eval(sprintf(<span class="string">'%s=data.%s;'</span>,vars{i},vars{i}));
+0034       <span class="keyword">end</span>
+0035       <span class="keyword">if</span> options.matCompatibility_flag
+0036         <span class="keyword">try</span>
+0037           save(options.filename,vars{:},<span class="string">'-v7'</span>);
+0038         <span class="keyword">catch</span>
+0039           fprintf(<span class="string">'Data is not ''-v7'' compatible. Setting ''matCompatibility_flag'' to 0.\n'</span>)
+0040           options.matCompatibility_flag = 0;
+0041           <span class="keyword">if</span> strcmp(reportUI,<span class="string">'matlab'</span>)
+0042             save(options.filename,vars{:},<span class="string">'-v7.3'</span>);
+0043           <span class="keyword">else</span>
+0044             save(options.filename,vars{:},<span class="string">'-hdf5'</span>); <span class="comment">% hdf5 format in Octave</span>
+0045           <span class="keyword">end</span>
+0046         <span class="keyword">end</span>
+0047       <span class="keyword">else</span>
+0048         <span class="keyword">if</span> strcmp(reportUI,<span class="string">'matlab'</span>)
+0049           save(options.filename,vars{:},<span class="string">'-v7.3'</span>);
+0050         <span class="keyword">else</span>
+0051           save(options.filename,vars{:},<span class="string">'-hdf5'</span>); <span class="comment">% hdf5 format in Octave</span>
+0052         <span class="keyword">end</span>
+0053       <span class="keyword">end</span>
+0054     <span class="keyword">else</span>
+0055       <span class="keyword">if</span> options.matCompatibility_flag
+0056         <span class="keyword">try</span>
+0057           save(options.filename,<span class="string">'data'</span>,<span class="string">'-v7'</span>);
+0058         <span class="keyword">catch</span>
+0059           fprintf(<span class="string">'Data is not ''-v7'' compatible. Setting ''matCompatibility_flag'' to 0.\n'</span>)
+0060           options.matCompatibility_flag = 0;
+0061           <span class="keyword">if</span> strcmp(reportUI,<span class="string">'matlab'</span>)
+0062             save(options.filename,<span class="string">'data'</span>,<span class="string">'-v7.3'</span>);
+0063           <span class="keyword">else</span>
+0064             save(options.filename,<span class="string">'data'</span>,<span class="string">'-hdf5'</span>); <span class="comment">% hdf5 format in Octave</span>
+0065           <span class="keyword">end</span>
+0066         <span class="keyword">end</span>
+0067       <span class="keyword">else</span>
+0068         <span class="keyword">if</span> strcmp(reportUI,<span class="string">'matlab'</span>)
+0069           save(options.filename,<span class="string">'data'</span>,<span class="string">'-v7.3'</span>);
+0070         <span class="keyword">else</span>
+0071           save(options.filename,<span class="string">'data'</span>,<span class="string">'-hdf5'</span>); <span class="comment">% hdf5 format in Octave</span>
+0072         <span class="keyword">end</span>
+0073       <span class="keyword">end</span>
+0074     <span class="keyword">end</span>
+0075   <span class="keyword">case</span> <span class="string">'csv'</span>
+0076     <span class="comment">% write csv file</span>
+0077     <span class="comment">% ExportCSV(data,options.filename);</span>
+0078   <span class="keyword">case</span> <span class="string">'hdf'</span>
+0079     <span class="comment">% ExportHDF(data,options.filename);</span>
+0080   <span class="keyword">otherwise</span>
+0081     <span class="comment">% not recognized</span>
+0082 <span class="keyword">end</span>
+0083 
+0084 <span class="keyword">if</span> options.verbose_flag
+0085   fprintf(<span class="string">'\tData saved to %s\n'</span>,options.filename);
+0086 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 12-Dec-2017 11:32:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

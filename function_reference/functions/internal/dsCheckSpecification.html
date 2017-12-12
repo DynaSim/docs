@@ -6,16 +6,18 @@
   <meta name="keywords" content="dsCheckSpecification">
   <meta name="description" content="CHECKSPECIFICATION - standardize specification structure and auto-populate missing fields">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
-  <script type="text/javascript">
-    if (top.frames.length == 0) { top.location = "../../index.html"; };
-  </script>
 </head>
 <body>
+
 <a name="_top"></a>
-<!-- ../menu.html functions --><!-- menu.html internal -->
+<div><a href="../../menu.html">Home</a> &gt;  <a href="../menu.html">functions</a> &gt; <a href="menu.html">internal</a> &gt; dsCheckSpecification.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../menu.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="menu.html">Index for functions/internal&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
 <h1>dsCheckSpecification
 </h1>
 
@@ -128,22 +130,28 @@
    - Example 6: standardize specification with everything in equation string
        s.pops.equations='E:dv[10]/dt=@M+I; {iNa,iK}@M; I=10';
        s=dsCheckSpecification(s)
+ 
+     Example 7: standardize equations from predefined population model
+       specification=dsCheckSpecification('HH');
 
- See also: <a href="dsGenerateModel.html" class="code" title="function [model,name_map] = dsGenerateModel(specification, varargin)">dsGenerateModel</a>, <a href="dsCheckModel.html" class="code" title="function model = dsCheckModel(model, varargin)">dsCheckModel</a></pre></div>
+ See also: <a href="dsGenerateModel.html" class="code" title="function [model,name_map] = dsGenerateModel(specification, varargin)">dsGenerateModel</a>, <a href="dsCheckModel.html" class="code" title="function model = dsCheckModel(model, varargin)">dsCheckModel</a>
+
+ Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;
+ Copyright (C) 2016 Jason Sherfey, Boston University, USA</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>	CHECKOPTIONS - organize key/value pairs in structure with default or user-supplied values according to a schema</li><li><a href="dsLocateModelFiles.html" class="code" title="function [paths,files] = dsLocateModelFiles(input)">dsLocateModelFiles</a>	LOCATEMODELFILES - locate mechanism files associated with DynaSim specifications.</li><li><a href="dsParseModelEquations.html" class="code" title="function [model,name_map] = dsParseModelEquations(text,varargin)">dsParseModelEquations</a>	PARSEMODELEQUATIONS - parse equations and organize model data in DynaSim model structure</li><li><a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>	Inputs:</li><li><a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestDataLocalFn.html" class="code" title="function dsUnitSaveAutoGenTestDataLocalFn(argin, argout)">dsUnitSaveAutoGenTestDataLocalFn</a>	% saveAutoGenTestDataLocalFn(argin, argout)</li></ul>
+<li><a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>	CHECKOPTIONS - organize key/value pairs in structure with default or user-supplied values according to a schema</li><li><a href="dsLocateModelFiles.html" class="code" title="function [paths,files] = dsLocateModelFiles(input)">dsLocateModelFiles</a>	LOCATEMODELFILES - locate mechanism files associated with DynaSim specifications.</li><li><a href="dsParseModelEquations.html" class="code" title="function [model,name_map] = dsParseModelEquations(text,varargin)">dsParseModelEquations</a>	PARSEMODELEQUATIONS - parse equations and organize model data in DynaSim model structure</li><li><a href="dsReadText.html" class="code" title="function text = dsReadText(file)">dsReadText</a>	Purpose: read equations for DynaSim model from .mech, .eqns, or .m file.</li><li><a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>	Inputs:</li><li><a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestDataLocalFn.html" class="code" title="function dsUnitSaveAutoGenTestDataLocalFn(argin, argout)">dsUnitSaveAutoGenTestDataLocalFn</a>	% saveAutoGenTestDataLocalFn(argin, argout)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="dsApplyModifications.html" class="code" title="function [output,modifications] = dsApplyModifications(model, modifications, varargin)">dsApplyModifications</a>	APPLYMODIFICATIONS - Apply modifications to DynaSim specification or model structure</li><li><a href="dsGenerateModel.html" class="code" title="function [model,name_map] = dsGenerateModel(specification, varargin)">dsGenerateModel</a>	GENERATEMODEL - Parse DynaSim specification and organize model data in DynaSim model structure</li></ul>
+<li><a href="../../functions/dynasim.html" class="code" title="function dynasim(spec)">dynasim</a>	DynaSim GUI</li><li><a href="dsApplyModifications.html" class="code" title="function [output,modifications] = dsApplyModifications(model, modifications, varargin)">dsApplyModifications</a>	APPLYMODIFICATIONS - Apply modifications to DynaSim specification or model structure</li><li><a href="dsGenerateModel.html" class="code" title="function [model,name_map] = dsGenerateModel(specification, varargin)">dsGenerateModel</a>	GENERATEMODEL - Parse DynaSim specification and organize model data in DynaSim model structure</li></ul>
 <!-- crossreference -->
 
 <h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="#_sub1" class="code">function list = expand_list(list, varargin)</a></li><li><a href="#_sub2" class="code">function spec = backward_compatibility(spec, varargin)</a></li></ul>
+<li><a href="#_sub1" class="code">function txt=read_mechanism_file(file)</a></li><li><a href="#_sub2" class="code">function list = expand_list(list, varargin)</a></li><li><a href="#_sub3" class="code">function spec = backward_compatibility(spec, varargin)</a></li></ul>
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 <div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function spec = dsCheckSpecification(specification, varargin)</a>
@@ -250,570 +258,752 @@ This function is called by:
 0102 <span class="comment">%       s.pops.equations='E:dv[10]/dt=@M+I; {iNa,iK}@M; I=10';</span>
 0103 <span class="comment">%       s=dsCheckSpecification(s)</span>
 0104 <span class="comment">%</span>
-0105 <span class="comment">% See also: dsGenerateModel, dsCheckModel</span>
-0106 
-0107 <span class="comment">%% localfn output</span>
-0108 <span class="keyword">if</span> ~nargin
-0109   spec = localfunctions; <span class="comment">% output var name specific to this fn</span>
-0110   <span class="keyword">return</span>
-0111 <span class="keyword">end</span>
+0105 <span class="comment">%     Example 7: standardize equations from predefined population model</span>
+0106 <span class="comment">%       specification=dsCheckSpecification('HH');</span>
+0107 <span class="comment">%</span>
+0108 <span class="comment">% See also: dsGenerateModel, dsCheckModel</span>
+0109 <span class="comment">%</span>
+0110 <span class="comment">% Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;</span>
+0111 <span class="comment">% Copyright (C) 2016 Jason Sherfey, Boston University, USA</span>
 0112 
-0113 <span class="comment">%% auto_gen_test_data_flag argin</span>
-0114 options = <a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
-0115 <span class="keyword">if</span> options.auto_gen_test_data_flag
-0116   varargs = varargin;
-0117   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
-0118   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
-0119   argin = [{specification}, varargs]; <span class="comment">% specific to this function</span>
-0120 <span class="keyword">end</span>
-0121 
-0122 <span class="comment">% check if input is a string or cell with equations and package in spec structure</span>
-0123 <span class="keyword">if</span> ischar(specification) || iscell(specification)
-0124   spec.populations.equations=specification;
-0125 <span class="keyword">elseif</span> isstruct(specification)
-0126   spec=specification;
-0127 <span class="keyword">elseif</span> isempty(specification)
-0128   spec=struct;
-0129 <span class="keyword">else</span>
-0130   error(<span class="string">'specification must be a DynaSim specification structure or a string with equations or sub-model filename.'</span>);
-0131 <span class="keyword">end</span>
-0132 
-0133 spec=<a href="#_sub2" class="code" title="subfunction spec = backward_compatibility(spec, varargin)">backward_compatibility</a>(spec, varargin{:});
-0134 pop_field_order={<span class="string">'name'</span>,<span class="string">'size'</span>,<span class="string">'equations'</span>,<span class="string">'mechanism_list'</span>,<span class="string">'parameters'</span>,<span class="keyword">...</span>
-0135   <span class="string">'conditionals'</span>,<span class="string">'monitors'</span>,<span class="string">'model'</span>};
-0136 con_field_order={<span class="string">'source'</span>,<span class="string">'target'</span>,<span class="string">'mechanism_list'</span>,<span class="string">'parameters'</span>};
-0137 
-0138 <span class="keyword">if</span> ~isfield(spec,<span class="string">'populations'</span>)
-0139   spec.populations.name=<span class="string">'pop1'</span>;
-0140 <span class="keyword">end</span>
-0141 
-0142 <span class="keyword">if</span> ~isfield(spec,<span class="string">'connections'</span>)
-0143   spec.connections=[];
-0144 <span class="keyword">end</span>
-0145 
-0146 <span class="comment">% 1.0 standardize populations</span>
-0147 <span class="keyword">if</span> ~isfield(spec.populations,<span class="string">'name'</span>)
-0148   spec.populations(1).name=<span class="string">'pop1'</span>;
-0149 <span class="keyword">end</span>
-0150 
-0151 <span class="keyword">if</span> ~isfield(spec.populations,<span class="string">'size'</span>)
-0152   spec.populations(1).size=1;
-0153 <span class="keyword">end</span>
-0154 
-0155 <span class="keyword">if</span> ~isfield(spec.populations,<span class="string">'equations'</span>)
-0156   spec.populations(1).equations=[];
-0157 <span class="keyword">end</span>
-0158 
-0159 <span class="keyword">if</span> ~isfield(spec.populations,<span class="string">'mechanism_list'</span>)
-0160   spec.populations(1).mechanism_list=[];
-0161 <span class="keyword">end</span>
-0162 
-0163 <span class="keyword">if</span> ~isfield(spec.populations,<span class="string">'parameters'</span>)
-0164   spec.populations(1).parameters={};
-0165 <span class="keyword">end</span>
-0166 
-0167 <span class="keyword">if</span> ~isfield(spec.populations,<span class="string">'conditionals'</span>)
-0168   spec.populations(1).conditionals=[];
-0169 <span class="keyword">end</span>
-0170 
-0171 <span class="keyword">if</span> ~isfield(spec.populations,<span class="string">'monitors'</span>)
-0172   spec.populations(1).monitors=[];
-0173 <span class="keyword">end</span>
-0174 
-0175 <span class="keyword">if</span> ~isfield(spec.populations,<span class="string">'model'</span>)
-0176   spec.populations(1).model=[];
-0177 <span class="keyword">end</span>
-0178 
-0179 <span class="comment">% special case: split equations with '[...][...]...[...]' into multiple populations</span>
-0180 <span class="keyword">for</span> i=1:length(spec.populations)
-0181   eqn=spec.populations(i).equations;
-0182   <span class="keyword">if</span> ~isempty(eqn) &amp;&amp; ischar(eqn)
-0183     <span class="keyword">if</span> ~isempty(regexp(eqn,<span class="string">'\[[a-z_A-Z].*\]'</span>,<span class="string">'match'</span>,<span class="string">'once'</span>))
-0184       <span class="comment">% create extra population</span>
-0185       tmp=regexp(eqn(2:end-1),<span class="string">'\],?\s*\['</span>,<span class="string">'split'</span>);
-0186       spec.populations(i).equations=tmp{1};
-0187       <span class="keyword">for</span> j=2:length(tmp)
-0188         spec.populations(end+1)=spec.populations(i);
-0189         spec.populations(end).equations=tmp{j};
-0190         spec.populations(end).name=sprintf(<span class="string">'pop%g'</span>,length(spec.populations));
-0191       <span class="keyword">end</span>
-0192     <span class="keyword">end</span>
-0193   <span class="keyword">end</span>
-0194 <span class="keyword">end</span>
-0195 
-0196 <span class="comment">% standardize each population separately</span>
-0197 <span class="keyword">for</span> i=1:length(spec.populations)
-0198   <span class="comment">% population names</span>
-0199   <span class="keyword">if</span> isempty(spec.populations(i).name)
-0200     spec.populations(i).name=sprintf(<span class="string">'pop%g'</span>,i);
+0113 <span class="comment">%% localfn output</span>
+0114 <span class="keyword">if</span> ~nargin
+0115   spec = localfunctions; <span class="comment">% output var name specific to this fn</span>
+0116   <span class="keyword">return</span>
+0117 <span class="keyword">end</span>
+0118 
+0119 <span class="comment">%% auto_gen_test_data_flag argin</span>
+0120 options = <a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
+0121 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0122   varargs = varargin;
+0123   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0124   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
+0125   argin = [{specification}, varargs]; <span class="comment">% specific to this function</span>
+0126 <span class="keyword">end</span>
+0127 
+0128 <span class="comment">% check if input is a string or cell with equations and package in spec structure</span>
+0129 <span class="keyword">if</span> ischar(specification) || iscell(specification)
+0130   spec.populations.equations=specification;
+0131 <span class="keyword">elseif</span> isstruct(specification)
+0132   spec=specification;
+0133 <span class="keyword">elseif</span> isempty(specification)
+0134   spec=struct;
+0135 <span class="keyword">else</span>
+0136   error(<span class="string">'specification must be a DynaSim specification structure or a string with equations or sub-model filename.'</span>);
+0137 <span class="keyword">end</span>
+0138 
+0139 spec=<a href="#_sub3" class="code" title="subfunction spec = backward_compatibility(spec, varargin)">backward_compatibility</a>(spec, varargin{:});
+0140 pop_field_order={<span class="string">'name'</span>,<span class="string">'size'</span>,<span class="string">'equations'</span>,<span class="string">'mechanism_list'</span>,<span class="string">'mechanisms'</span>,<span class="string">'parameters'</span>,<span class="keyword">...</span>
+0141   <span class="string">'conditionals'</span>,<span class="string">'monitors'</span>,<span class="string">'model'</span>};
+0142 con_field_order={<span class="string">'source'</span>,<span class="string">'target'</span>,<span class="string">'mechanism_list'</span>,<span class="string">'mechanisms'</span>,<span class="string">'parameters'</span>};
+0143 
+0144 <span class="keyword">if</span> ~isfield(spec,<span class="string">'populations'</span>)
+0145   spec.populations.name=<span class="string">'pop1'</span>;
+0146 <span class="keyword">end</span>
+0147 
+0148 <span class="keyword">if</span> ~isfield(spec,<span class="string">'connections'</span>)
+0149   spec.connections=[];
+0150 <span class="keyword">end</span>
+0151 
+0152 <span class="keyword">if</span> ~isfield(spec,<span class="string">'mechanisms'</span>)
+0153   spec.mechanisms=[];
+0154 <span class="keyword">end</span>
+0155 
+0156 <span class="comment">% 1.0 standardize populations</span>
+0157 <span class="keyword">if</span> ~isfield(spec.populations,<span class="string">'name'</span>)
+0158   spec.populations(1).name=<span class="string">'pop1'</span>;
+0159 <span class="keyword">end</span>
+0160 
+0161 <span class="keyword">if</span> ~isfield(spec.populations,<span class="string">'size'</span>)
+0162   spec.populations(1).size=1;
+0163 <span class="keyword">end</span>
+0164 
+0165 <span class="keyword">if</span> ~isfield(spec.populations,<span class="string">'equations'</span>)
+0166   spec.populations(1).equations=[];
+0167 <span class="keyword">end</span>
+0168 
+0169 <span class="keyword">if</span> ~isfield(spec.populations,<span class="string">'mechanism_list'</span>)
+0170   spec.populations(1).mechanism_list=[];
+0171 <span class="keyword">end</span>
+0172 
+0173 <span class="keyword">if</span> ~isfield(spec.populations,<span class="string">'mechanisms'</span>)
+0174   spec.populations(1).mechanisms=[];
+0175 <span class="keyword">end</span>
+0176 
+0177 <span class="keyword">if</span> ~isfield(spec.populations,<span class="string">'parameters'</span>)
+0178   spec.populations(1).parameters={};
+0179 <span class="keyword">end</span>
+0180 
+0181 <span class="keyword">if</span> ~isfield(spec.populations,<span class="string">'conditionals'</span>)
+0182   spec.populations(1).conditionals=[];
+0183 <span class="keyword">end</span>
+0184 
+0185 <span class="keyword">if</span> ~isfield(spec.populations,<span class="string">'monitors'</span>)
+0186   spec.populations(1).monitors=[];
+0187 <span class="keyword">end</span>
+0188 
+0189 <span class="keyword">if</span> ~isfield(spec.populations,<span class="string">'model'</span>)
+0190   spec.populations(1).model=[];
+0191 <span class="keyword">end</span>
+0192 
+0193 <span class="comment">% move compartments into populations if present</span>
+0194 <span class="keyword">if</span> isfield(spec,<span class="string">'compartments'</span>)
+0195   npops=length(spec.populations);
+0196   fields=fieldnames(spec.compartments);
+0197   <span class="keyword">for</span> i=1:length(spec.compartments)
+0198     <span class="keyword">for</span> f=1:length(fields)
+0199       spec.populations(npops+i).(fields{f})=spec.compartments(i).(fields{f});
+0200     <span class="keyword">end</span>
 0201   <span class="keyword">end</span>
-0202   
-0203   <span class="comment">% population sizes</span>
-0204   <span class="keyword">if</span> isempty(spec.populations(i).size)
-0205     spec.populations(i).size=1;
-0206   <span class="keyword">end</span>
-0207   
-0208   <span class="comment">% make mechanism list a cell array of mechanism names</span>
-0209   <span class="keyword">if</span> ischar(spec.populations(i).mechanism_list)
-0210     spec.populations(i).mechanism_list={spec.populations(i).mechanism_list};
-0211   <span class="keyword">end</span>
-0212   
-0213   <span class="comment">% parameter cell arrays</span>
-0214   <span class="keyword">if</span> ~iscell(spec.populations(i).parameters)
-0215     spec.populations(i).parameters={};
-0216   <span class="keyword">end</span>
-0217   
-0218   <span class="comment">% standardize equations</span>
-0219   <span class="keyword">if</span> ~isempty(spec.populations(i).equations)
-0220     <span class="comment">% convert cell array of equations into character array</span>
-0221     <span class="keyword">if</span> iscell(spec.populations(i).equations)
-0222       eqns=spec.populations(i).equations;
-0223       <span class="keyword">for</span> k=1:length(eqns)
-0224         eqn=eqns{k};
-0225         <span class="keyword">if</span> ~isempty(eqn) &amp;&amp; ~strcmp(eqn(end),<span class="string">';'</span>)
-0226           eqns{k}(end+1)=<span class="string">';'</span>;
-0227         <span class="keyword">end</span>
-0228       <span class="keyword">end</span>
-0229       spec.populations(i).equations=[eqns{:}];
-0230     <span class="keyword">end</span>
-0231     
-0232     <span class="comment">% extract name from equations (e.g., TC:...)</span>
-0233     eqn=spec.populations(i).equations;
-0234     name=regexp(eqn,<span class="string">'^\w+:'</span>,<span class="string">'match'</span>,<span class="string">'once'</span>);
-0235     <span class="keyword">if</span> ~isempty(name)
-0236       <span class="comment">% remove name indicator from equation</span>
-0237       eqn=strrep(eqn,name,<span class="string">''</span>);
-0238       
-0239       <span class="comment">% store name in specification</span>
-0240       name=regexp(name,<span class="string">'^(\w+):'</span>,<span class="string">'tokens'</span>,<span class="string">'once'</span>);
-0241       spec.populations(i).name=name{1};
-0242       spec.populations(i).equations=eqn;
-0243     <span class="keyword">end</span>
-0244     
-0245     <span class="comment">% extract size from equations if present (eg, v[4]'=.., dv[4]/dt=...)</span>
-0246     eqn=spec.populations(i).equations;
-0247     pattern=<span class="string">'((\w+(\[\d+\])'')|(d\w+(\[\d+\])/dt))\s*='</span>; <span class="comment">% support size spec, dv[4]/dt</span>
-0248     
-0249     <span class="comment">% extract all differentials with size specification</span>
-0250     LHSs=regexp(eqn,pattern,<span class="string">'match'</span>);
-0251     <span class="keyword">if</span> ~isempty(LHSs)
-0252       <span class="comment">% extract sizes from all differentials (eg, 4 from v[4] or dv[4]/dt)</span>
-0253       szs=nan(1,length(LHSs));
-0254       <span class="keyword">for</span> k=1:length(LHSs)
-0255         tmp=regexp(LHSs{k},<span class="string">'\w+\[(\d+)\]'''</span>,<span class="string">'tokens'</span>,<span class="string">'once'</span>);
-0256         <span class="keyword">if</span> isempty(tmp)
-0257           tmp=regexp(LHSs{k},<span class="string">'d\w+\[(\d+)\]/dt'</span>,<span class="string">'tokens'</span>,<span class="string">'once'</span>);
-0258         <span class="keyword">end</span>
-0259         szs(k)=str2num(tmp{1});
-0260         
-0261         <span class="comment">% remove size from ODE in population equations</span>
-0262         old=LHSs{k};
-0263         new=strrep(LHSs{k},[<span class="string">'['</span> tmp{1} <span class="string">']'</span>],<span class="string">''</span>);
-0264         eqn=strrep(eqn,old,new);
-0265       <span class="keyword">end</span>
-0266       
-0267       <span class="comment">% check that all vars in same population have same size</span>
-0268       <span class="keyword">if</span> ~all(szs==szs(1))
-0269         error(<span class="string">'all variables in same population must have same size. split ODEs with different sizes into different populations.'</span>);
-0270       <span class="keyword">end</span>
-0271       
-0272       spec.populations(i).equations=eqn;
-0273       spec.populations(i).size=szs(1);
-0274     <span class="keyword">end</span>
-0275     
-0276     <span class="comment">% add mechanisms embedded in equations to mechanism_list ({M1,M2,...})</span>
-0277     <span class="comment">% ----------</span>
-0278     <span class="comment">% todo: make the following a subfunction and apply it also to connection</span>
-0279     <span class="comment">% mechanism lists (eg, for cons.mechanism_list='{AMPA,NMDA}@M')</span>
-0280     <span class="comment">% ----------</span>
-0281     <span class="comment">% extract mechanism list from equations</span>
-0282     <span class="comment">%mech_lists=regexp(spec.populations(i).equations,'\s*{.*}\s*;?\s*','match');</span>
-0283     <span class="comment">%mech_lists=regexp(spec.populations(i).equations,'\s*(\w+:)?{.*}\s*(@\w+)?;?\s*','match');</span>
-0284      mech_lists=regexp(spec.populations(i).equations,<span class="string">'\s*(\w+:)?{[\w\d@:,]*}\s*(@\w+)?;?\s*'</span>,<span class="string">'match'</span>);
-0285     <span class="comment">% test: mech_list=regexp('v''=@M+sin(2*pi*t); {iNa, iK}','{.*}','match');</span>
-0286     <span class="keyword">if</span> ~isempty(mech_lists)
-0287       <span class="keyword">for</span> k=1:length(mech_lists)
-0288         mech_list=strtrim(mech_lists{k});
-0289         
-0290         <span class="comment">% remove mechanism list from equations</span>
-0291         spec.populations(i).equations=strtrim(strrep(spec.populations(i).equations,mech_list,<span class="string">''</span>));
-0292         
-0293         <span class="comment">% append external link alias to each internal mechanism name (eg, {a,b}@M, alias @M)</span>
-0294         external_link=regexp(mech_list,<span class="string">'}(@[\w\d]+;?)'</span>,<span class="string">'tokens'</span>);
-0295         <span class="keyword">if</span> ~isempty(external_link)
-0296           <span class="comment">% get external link alias</span>
-0297           external_link=[external_link{:}];
-0298           
-0299           <span class="comment">% remove external link alias from mech_list</span>
-0300           mech_list=strrep(mech_list,external_link{1},<span class="string">''</span>);
-0301           
-0302           <span class="comment">% remove ';' from alias before appending to mech names</span>
-0303           external_link=strrep(external_link{1},<span class="string">';'</span>,<span class="string">''</span>);
-0304           
-0305           <span class="comment">% get list of mechanism names in cell array</span>
-0306           <span class="comment">%words=regexp(mech_list,'[a-zA-Z]+[\w:]*','match');</span>
-0307           words=regexp(mech_list(2:end-1),<span class="string">','</span>,<span class="string">'split'</span>);
-0308           
-0309           <span class="comment">% append external link alias to each mechanism name</span>
-0310           <span class="keyword">for</span> w=1:length(words)
-0311             mech_list=strrep(mech_list,words{w},[words{w} external_link]);
-0312           <span class="keyword">end</span>
-0313         <span class="keyword">end</span>
-0314         <span class="comment">% prepend host name to each internal mechanism name (eg,</span>
-0315         <span class="comment">% infbrain:{a,b} -&gt; {infbrain:a,infbrain:b}</span>
-0316         host_name=regexp(mech_list,<span class="string">';?\s*([\w\d]+):{'</span>,<span class="string">'tokens'</span>,<span class="string">'once'</span>);
-0317         <span class="keyword">if</span> ~isempty(host_name)
-0318           <span class="comment">% get external link alias</span>
-0319           host_name=[host_name{:}];
-0320           
-0321           <span class="comment">% remove external link alias from mech_list</span>
-0322           mech_list=strrep(mech_list,[host_name <span class="string">':'</span>],<span class="string">''</span>);
-0323           
-0324           <span class="comment">% get list of mechanism names in cell array</span>
-0325           words=regexp(mech_list(2:end-1),<span class="string">','</span>,<span class="string">'split'</span>);
-0326           
-0327           <span class="comment">% append external link alias to each mechanism name</span>
-0328           <span class="keyword">for</span> w=1:length(words)
-0329             mech_list=strrep(mech_list,words{w},[host_name <span class="string">':'</span> words{w}]);
-0330           <span class="keyword">end</span>
-0331         <span class="keyword">end</span>
-0332         <span class="comment">% split into list of mechanism names</span>
-0333         mechanisms=regexp(mech_list,<span class="string">'[\w:@]+'</span>,<span class="string">'match'</span>);
-0334         
-0335         <span class="comment">% append mechanism from equations to mechanism_list</span>
-0336         <span class="keyword">if</span> iscell(spec.populations(i).mechanism_list)
-0337           spec.populations(i).mechanism_list=cat(2,mechanisms,spec.populations(i).mechanism_list);
-0338         <span class="keyword">else</span>
-0339           spec.populations(i).mechanism_list=mechanisms;
-0340         <span class="keyword">end</span>
-0341       <span class="keyword">end</span>
-0342     <span class="keyword">end</span>
-0343     <span class="comment">% extract population-level parameters from equations</span>
-0344     eqn=spec.populations(i).equations;
-0345     p=getfield(<a href="dsParseModelEquations.html" class="code" title="function [model,name_map] = dsParseModelEquations(text,varargin)">dsParseModelEquations</a>(eqn, varargin{:}),<span class="string">'parameters'</span>);
-0346     <span class="keyword">if</span> ~isempty(p)
-0347       param_name=fieldnames(p);
-0348       param_value=struct2cell(p);
-0349       <span class="keyword">for</span> l=1:length(param_name)
-0350         value=eval(param_value{l});
-0351         <span class="keyword">if</span> isempty(spec.populations(i).parameters)
-0352           spec.populations(i).parameters={param_name{l},value};
-0353         <span class="keyword">elseif</span> ~ismember(param_name{l},spec.populations(i).parameters(1:2:end))
-0354           spec.populations(i).parameters{end+1}=param_name{l};
-0355           spec.populations(i).parameters{end+1}=value;
-0356         <span class="keyword">end</span>
-0357       <span class="keyword">end</span>
-0358     <span class="keyword">end</span>
-0359     
-0360     <span class="comment">% incorporate user-supplied parameters in pop equations if used in them</span>
-0361     <span class="keyword">if</span> ~isempty(spec.populations(i).parameters)
-0362       keys=spec.populations(i).parameters(1:2:end);
-0363       vals=spec.populations(i).parameters(2:2:end);
-0364       
-0365       <span class="comment">% add user-supplied params to pop equations if present in them</span>
-0366       <span class="comment">% approach: look for populations.parameters in population.equations that are not explicitly</span>
-0367       <span class="comment">% defined in population.equations and append their definition explicitly to pop.eqns</span>
-0368       eqn=spec.populations(i).equations;
-0369      
-0370       <span class="comment">% get list of parameters/variables/functions in population equations</span>
-0371       words=unique(regexp(eqn,<span class="string">'[a-zA-Z]+\w*'</span>,<span class="string">'match'</span>));
-0372       
-0373       <span class="comment">% find those in user-supplied parameters</span>
-0374       found_words=words(ismember(words,keys));
-0375       <span class="keyword">if</span> ~isempty(found_words)
-0376         <span class="comment">% set in population equations if not already defined there</span>
-0377         <span class="keyword">for</span> ff=1:length(found_words)
-0378           found_word=found_words{ff};
-0379           
-0380           <span class="comment">% check if not explicitly set in population equations</span>
-0381           <span class="keyword">if</span> isempty(regexp(eqn,[<span class="string">';\s*'</span> found_word <span class="string">'\s*='</span>],<span class="string">'once'</span>)) &amp;&amp; <span class="keyword">...</span><span class="comment"> % not in middle or at end</span>
-0382              isempty(regexp(eqn,[<span class="string">'^'</span> found_word <span class="string">'\s*='</span>],<span class="string">'once'</span>)) <span class="comment">% not at beginning</span>
-0383             
-0384             <span class="comment">% explicitly set in population equations</span>
-0385             <span class="keyword">if</span> eqn(end)~=<span class="string">';'</span>, eqn(end+1)=<span class="string">';'</span>; <span class="keyword">end</span> <span class="comment">% add semicolon if necessary</span>
-0386             precision=8; <span class="comment">% number of digits allowed for user-supplied values</span>
-0387             found_value = toString(vals{strcmp(found_word,keys)},precision);
-0388             eqn=[eqn sprintf(<span class="string">' %s=%s;'</span>,found_word,found_value)];
-0389           <span class="keyword">end</span>
-0390         <span class="keyword">end</span>
-0391         spec.populations(i).equations=eqn;
-0392       <span class="keyword">end</span>
-0393     <span class="keyword">end</span>
-0394   <span class="keyword">end</span>
-0395   <span class="comment">% expand mechanism list if any element is itself a list of mechanisms (eg, {'iCa','{CaBuffer,iCan}'} or '{CaBuffer,iCan}')</span>
-0396   spec.populations(i).mechanism_list=<a href="#_sub1" class="code" title="subfunction list = expand_list(list, varargin)">expand_list</a>(spec.populations(i).mechanism_list, varargin{:});
-0397 <span class="keyword">end</span>
-0398 
-0399 <span class="comment">% 2.0 standardize connections</span>
-0400 <span class="keyword">if</span> ~isempty(spec.connections)
-0401   <span class="comment">% check for proper fields in connections substructure</span>
-0402   <span class="keyword">if</span> ~isfield(spec.connections,<span class="string">'source'</span>)
-0403     spec.connections(1).source=[];
-0404   <span class="keyword">end</span>
-0405   
-0406   <span class="keyword">if</span> ~isfield(spec.connections,<span class="string">'target'</span>)
-0407     spec.connections(1).target=[];
-0408   <span class="keyword">end</span>
-0409   
-0410   <span class="keyword">if</span> ~isfield(spec.connections,<span class="string">'mechanism_list'</span>)
-0411     spec.connections(1).mechanism_list=[];
-0412   <span class="keyword">end</span>
-0413   
-0414   <span class="keyword">if</span> ~isfield(spec.connections,<span class="string">'parameters'</span>)
-0415     spec.connections(1).parameters={};
-0416   <span class="keyword">end</span>
-0417 <span class="keyword">end</span>
-0418 <span class="keyword">for</span> i=1:length(spec.connections)
-0419   <span class="keyword">if</span> isempty(spec.connections(i).source) &amp;&amp; length(spec.populations)==1
-0420     spec.connections(i).source=spec.populations(1).name;
-0421     spec.connections(i).target=spec.populations(1).name;
-0422   <span class="keyword">elseif</span> isempty(spec.connections(i).source) &amp;&amp; length(spec.populations)&gt;1
-0423     error(<span class="string">'connection source and target populations must be specified in specification.connections when the model contains more than one population.'</span>);
-0424   <span class="keyword">end</span>
-0425   
-0426   <span class="comment">% make mechanism list a cell array of mechanism names</span>
-0427   <span class="keyword">if</span> ischar(spec.connections(i).mechanism_list)
-0428     spec.connections(i).mechanism_list={spec.connections(i).mechanism_list};
-0429   <span class="keyword">end</span>
-0430   
-0431   <span class="comment">% expand mechanism list if any element is itself a list of mechanisms (eg, {'AMPA','{GABAa,GABAb}'} or '{GABAa,GABAb}')</span>
-0432   spec.connections(i).mechanism_list=<a href="#_sub1" class="code" title="subfunction list = expand_list(list, varargin)">expand_list</a>(spec.connections(i).mechanism_list, varargin{:});
-0433   
-0434   <span class="comment">% parameter cell arrays</span>
-0435   <span class="keyword">if</span> ~iscell(spec.connections(i).parameters)
-0436     spec.connections(i).parameters={};
-0437   <span class="keyword">end</span>
-0438 <span class="keyword">end</span>
-0439 
-0440 <span class="comment">% remove populations with size==0</span>
-0441 sizes=[spec.populations.size];
-0442 <span class="keyword">if</span> any(sizes==0)
-0443   <span class="comment">% find null populations</span>
-0444   null_pops=find(sizes==0);
-0445   null_names={spec.populations(null_pops).name};
-0446   
-0447   <span class="comment">% remove from .populations</span>
-0448   spec.populations(null_pops)=[];
-0449   
-0450   <span class="comment">% remove from connections</span>
-0451   <span class="keyword">if</span> ~isempty(spec.connections)
-0452     sources={spec.connections.source};
-0453     targets={spec.connections.target};
-0454     null_conns=ismember(sources,null_names) | ismember(targets,null_names);
-0455     spec.connections(null_conns)=[];
-0456   <span class="keyword">end</span>
-0457 <span class="keyword">end</span>
-0458 
-0459 <span class="comment">% 3.0 sort fields</span>
-0460 <span class="comment">% remove extra fields</span>
-0461 otherfields=setdiff(fieldnames(spec.populations),pop_field_order);
-0462 spec.populations=rmfield(spec.populations,otherfields);
-0463 
-0464 <span class="comment">% sort standardized fields</span>
-0465 spec.populations=orderfields(spec.populations,pop_field_order);
-0466 <span class="keyword">if</span> isstruct(spec.connections)
-0467   otherfields=setdiff(fieldnames(spec.connections),con_field_order);
-0468   spec.connections=rmfield(spec.connections,otherfields);
-0469   spec.connections=orderfields(spec.connections,con_field_order);
-0470 <span class="keyword">end</span>
-0471 
-0472 <span class="comment">% 4.0 replace mechanism names by full file names</span>
-0473 <span class="comment">% this is necessary so that regenerated models will use the same mechanism</span>
-0474 <span class="comment">% files to recreate the model (e.g., when a cluster job simulates a</span>
-0475 <span class="comment">% modified version of an original base model).</span>
-0476 [~,files]=<a href="dsLocateModelFiles.html" class="code" title="function [paths,files] = dsLocateModelFiles(input)">dsLocateModelFiles</a>(spec);
-0477 <span class="keyword">if</span> ~isempty(files)
-0478   fnames={};
-0479   <span class="keyword">for</span> f=1:length(files)
-0480     [~,name]=fileparts2(files{f});
-0481     fnames{f}=name;
-0482   <span class="keyword">end</span>
-0483   
-0484   <span class="comment">% update population and connection mechanism lists</span>
-0485   fields={<span class="string">'populations'</span>,<span class="string">'connections'</span>};
-0486   <span class="keyword">for</span> f=1:length(fields)
-0487     object=fields{f};
-0488     <span class="keyword">for</span> i=1:length(spec.(object))
-0489       <span class="keyword">for</span> j=1:length(spec.(object)(i).mechanism_list)
-0490         mech=spec.(object)(i).mechanism_list{j};
-0491         <span class="keyword">if</span> ismember(mech,fnames)
-0492           spec.(object)(i).mechanism_list{j}=files{find(ismember(fnames,mech),1,<span class="string">'first'</span>)};
-0493         <span class="keyword">end</span>
-0494       <span class="keyword">end</span>
-0495     <span class="keyword">end</span>
-0496   <span class="keyword">end</span>
-0497 <span class="keyword">end</span>
-0498 
-0499 <span class="comment">%% auto_gen_test_data_flag argout</span>
-0500 <span class="keyword">if</span> options.auto_gen_test_data_flag
-0501   argout = {spec}; <span class="comment">% specific to this function</span>
-0502   
-0503   <a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>(argin, argout);
+0202   spec=rmfield(spec,<span class="string">'compartments'</span>);
+0203 <span class="keyword">end</span>
+0204 
+0205 <span class="comment">% special cases of equation specification:</span>
+0206 <span class="keyword">for</span> i=1:length(spec.populations)
+0207   eqn=spec.populations(i).equations;
+0208   <span class="keyword">if</span> ~isempty(eqn) &amp;&amp; ischar(eqn)
+0209     <span class="comment">% check for predefined population equations</span>
+0210     <span class="keyword">if</span> exist([eqn <span class="string">'.eqns'</span>],<span class="string">'file'</span>)
+0211       eqn=[eqn <span class="string">'.eqns'</span>];
+0212     <span class="keyword">elseif</span> exist([eqn <span class="string">'.pop'</span>],<span class="string">'file'</span>)
+0213       eqn=[eqn <span class="string">'.pop'</span>];
+0214     <span class="keyword">end</span>
+0215     <span class="keyword">if</span> exist(eqn,<span class="string">'file'</span>)
+0216       <span class="comment">% load equations from file</span>
+0217       spec.populations(i).equations=<a href="dsReadText.html" class="code" title="function text = dsReadText(file)">dsReadText</a>(eqn);
+0218     <span class="keyword">elseif</span> ~isempty(regexp(eqn,<span class="string">'\[[a-z_A-Z].*\]'</span>,<span class="string">'match'</span>,<span class="string">'once'</span>))
+0219       <span class="comment">% split equations with '[...][...]...[...]' into multiple populations</span>
+0220       <span class="comment">% create extra population</span>
+0221       tmp=regexp(eqn(2:end-1),<span class="string">'\],?\s*\['</span>,<span class="string">'split'</span>);
+0222       spec.populations(i).equations=tmp{1};
+0223       <span class="keyword">for</span> j=2:length(tmp)
+0224         spec.populations(end+1)=spec.populations(i);
+0225         spec.populations(end).equations=tmp{j};
+0226         spec.populations(end).name=sprintf(<span class="string">'pop%g'</span>,length(spec.populations));
+0227       <span class="keyword">end</span>
+0228     <span class="keyword">end</span>
+0229   <span class="keyword">end</span>
+0230 <span class="keyword">end</span>
+0231 
+0232 <span class="comment">% standardize each population separately</span>
+0233 <span class="keyword">for</span> i=1:length(spec.populations)
+0234   <span class="comment">% population names</span>
+0235   <span class="keyword">if</span> isempty(spec.populations(i).name)
+0236     spec.populations(i).name=sprintf(<span class="string">'pop%g'</span>,i);
+0237   <span class="keyword">end</span>
+0238   
+0239   <span class="comment">% population sizes</span>
+0240   <span class="keyword">if</span> isempty(spec.populations(i).size)
+0241     spec.populations(i).size=1;
+0242   <span class="keyword">end</span>
+0243   
+0244   <span class="comment">% make mechanism list a cell array of mechanism names</span>
+0245   <span class="keyword">if</span> ischar(spec.populations(i).mechanism_list)
+0246     spec.populations(i).mechanism_list={spec.populations(i).mechanism_list};
+0247   <span class="keyword">end</span>
+0248   
+0249   <span class="comment">% parameter cell arrays</span>
+0250   <span class="keyword">if</span> ~iscell(spec.populations(i).parameters)
+0251     spec.populations(i).parameters={};
+0252   <span class="keyword">end</span>
+0253   
+0254   <span class="comment">% standardize equations</span>
+0255   <span class="keyword">if</span> ~isempty(spec.populations(i).equations)
+0256     <span class="comment">% convert cell array of equations into character array</span>
+0257     <span class="keyword">if</span> iscell(spec.populations(i).equations)
+0258       eqns=spec.populations(i).equations;
+0259       <span class="keyword">for</span> k=1:length(eqns)
+0260         eqn=eqns{k};
+0261         <span class="keyword">if</span> ~isempty(eqn) &amp;&amp; ~strcmp(eqn(end),<span class="string">';'</span>)
+0262           eqns{k}(end+1)=<span class="string">';'</span>;
+0263         <span class="keyword">end</span>
+0264       <span class="keyword">end</span>
+0265       spec.populations(i).equations=[eqns{:}];
+0266     <span class="keyword">end</span>
+0267     
+0268     <span class="comment">% extract name from equations (e.g., TC:...)</span>
+0269     eqn=spec.populations(i).equations;
+0270     name=regexp(eqn,<span class="string">'^\w+:'</span>,<span class="string">'match'</span>,<span class="string">'once'</span>);
+0271     <span class="keyword">if</span> ~isempty(name)
+0272       <span class="comment">% remove name indicator from equation</span>
+0273       eqn=strrep(eqn,name,<span class="string">''</span>);
+0274       
+0275       <span class="comment">% store name in specification</span>
+0276       name=regexp(name,<span class="string">'^(\w+):'</span>,<span class="string">'tokens'</span>,<span class="string">'once'</span>);
+0277       spec.populations(i).equations=eqn;
+0278       <span class="keyword">if</span> strcmp(spec.populations(i).name,sprintf(<span class="string">'pop%g'</span>,i))
+0279         <span class="comment">% replace default name with the name from equations</span>
+0280         spec.populations(i).name=name{1};
+0281       <span class="keyword">end</span>      
+0282     <span class="keyword">end</span>
+0283     
+0284     <span class="comment">% extract size from equations if present (eg, v[4]'=.., dv[4]/dt=...)</span>
+0285     eqn=spec.populations(i).equations;
+0286     <span class="comment">%pattern='((\w+(\[\d+\])'')|(d\w+(\[\d+\])/dt))\s*='; % support size spec, dv[4]/dt</span>
+0287     pattern=<span class="string">'((\w+(\[[\d,]+\])'')|(d\w+(\[[\d,]+\])/dt))\s*='</span>; <span class="comment">% support size spec, dv[4]/dt and dv[4,5]/dt</span>
+0288     
+0289     <span class="comment">% extract all differentials with size specification</span>
+0290     LHSs=regexp(eqn,pattern,<span class="string">'match'</span>);
+0291     <span class="keyword">if</span> ~isempty(LHSs)
+0292       <span class="comment">% extract sizes from all differentials (eg, 4 from v[4] or dv[4]/dt)</span>
+0293       <span class="keyword">for</span> k=1:length(LHSs)
+0294         tmp=regexp(LHSs{k},<span class="string">'\w+\[([\d,]+)\]'''</span>,<span class="string">'tokens'</span>,<span class="string">'once'</span>);
+0295         <span class="keyword">if</span> isempty(tmp)
+0296           tmp=regexp(LHSs{k},<span class="string">'d\w+\[([\d,]+)\]/dt'</span>,<span class="string">'tokens'</span>,<span class="string">'once'</span>);
+0297         <span class="keyword">end</span>
+0298         sz=cellfun(@str2double,regexp(tmp{1},<span class="string">','</span>,<span class="string">'split'</span>));
+0299         <span class="comment">% check that all vars in same population have same size</span>
+0300         <span class="keyword">if</span> k==1
+0301           sz_first=sz;
+0302         <span class="keyword">elseif</span> sz~=sz_first
+0303           error(<span class="string">'all variables in same population must have same size. split ODEs with different sizes into different populations.'</span>);
+0304         <span class="keyword">end</span>        
+0305         <span class="comment">% remove size from ODE in population equations</span>
+0306         old=LHSs{k};
+0307         new=strrep(LHSs{k},[<span class="string">'['</span> tmp{1} <span class="string">']'</span>],<span class="string">''</span>);
+0308         eqn=strrep(eqn,old,new);
+0309       <span class="keyword">end</span>      
+0310       spec.populations(i).equations=eqn;
+0311       spec.populations(i).size=sz;
+0312     <span class="keyword">end</span>
+0313     
+0314     <span class="comment">% add mechanisms embedded in equations to mechanism_list ({M1,M2,...})</span>
+0315     <span class="comment">% ----------</span>
+0316     <span class="comment">% todo: make the following a subfunction and apply it also to connection</span>
+0317     <span class="comment">% mechanism lists (eg, for cons.mechanism_list='{AMPA,NMDA}@M')</span>
+0318     <span class="comment">% ----------</span>
+0319     <span class="comment">% extract mechanism list from equations</span>
+0320      mech_lists=regexp(spec.populations(i).equations,<span class="string">'\s*(\w+:)?{[\w\d@:,]*}\s*(@\w+)?;?\s*'</span>,<span class="string">'match'</span>);
+0321     <span class="comment">% test: mech_list=regexp('v''=@M+sin(2*pi*t); {iNa, iK}','{.*}','match');</span>
+0322     <span class="keyword">if</span> ~isempty(mech_lists)
+0323       <span class="keyword">for</span> k=1:length(mech_lists)
+0324         mech_list=strtrim(mech_lists{k});
+0325         
+0326         <span class="comment">% remove mechanism list from equations</span>
+0327         spec.populations(i).equations=strtrim(strrep(spec.populations(i).equations,mech_list,<span class="string">''</span>));
+0328         
+0329         <span class="comment">% append external link alias to each internal mechanism name (eg, {a,b}@M, alias @M)</span>
+0330         external_link=regexp(mech_list,<span class="string">'}(@[\w\d]+;?)'</span>,<span class="string">'tokens'</span>);
+0331         <span class="keyword">if</span> ~isempty(external_link)
+0332           <span class="comment">% get external link alias</span>
+0333           external_link=[external_link{:}];
+0334           
+0335           <span class="comment">% remove external link alias from mech_list</span>
+0336           mech_list=strrep(mech_list,external_link{1},<span class="string">''</span>);
+0337           
+0338           <span class="comment">% remove ';' from alias before appending to mech names</span>
+0339           external_link=strrep(external_link{1},<span class="string">';'</span>,<span class="string">''</span>);
+0340           
+0341           <span class="comment">% get list of mechanism names in cell array</span>
+0342           words=regexp(mech_list(2:end-1),<span class="string">','</span>,<span class="string">'split'</span>);
+0343           
+0344           <span class="comment">% append external link alias to each mechanism name</span>
+0345           <span class="keyword">for</span> w=1:length(words)
+0346             mech_list=strrep(mech_list,words{w},[words{w} external_link]);
+0347           <span class="keyword">end</span>
+0348         <span class="keyword">end</span>
+0349         <span class="comment">% prepend host name to each internal mechanism name (eg,</span>
+0350         <span class="comment">% infbrain:{a,b} -&gt; {infbrain:a,infbrain:b}</span>
+0351         host_name=regexp(mech_list,<span class="string">';?\s*([\w\d]+):{'</span>,<span class="string">'tokens'</span>,<span class="string">'once'</span>);
+0352         <span class="keyword">if</span> ~isempty(host_name)
+0353           <span class="comment">% get external link alias</span>
+0354           host_name=[host_name{:}];
+0355           
+0356           <span class="comment">% remove external link alias from mech_list</span>
+0357           mech_list=strrep(mech_list,[host_name <span class="string">':'</span>],<span class="string">''</span>);
+0358           
+0359           <span class="comment">% get list of mechanism names in cell array</span>
+0360           words=regexp(mech_list(2:end-1),<span class="string">','</span>,<span class="string">'split'</span>);
+0361           
+0362           <span class="comment">% append external link alias to each mechanism name</span>
+0363           <span class="keyword">for</span> w=1:length(words)
+0364             mech_list=strrep(mech_list,words{w},[host_name <span class="string">':'</span> words{w}]);
+0365           <span class="keyword">end</span>
+0366         <span class="keyword">end</span>
+0367         <span class="comment">% split into list of mechanism names</span>
+0368         mechanisms=regexp(mech_list,<span class="string">'[\w:@]+'</span>,<span class="string">'match'</span>);
+0369         
+0370         <span class="comment">% append mechanism from equations to mechanism_list</span>
+0371         <span class="keyword">if</span> iscell(spec.populations(i).mechanism_list)
+0372           spec.populations(i).mechanism_list=cat(2,mechanisms,spec.populations(i).mechanism_list);
+0373         <span class="keyword">else</span>
+0374           spec.populations(i).mechanism_list=mechanisms;
+0375         <span class="keyword">end</span>
+0376       <span class="keyword">end</span>
+0377     <span class="keyword">end</span>
+0378     <span class="comment">% extract population-level parameters from equations</span>
+0379     param_name={};
+0380     param_value={};
+0381     eqn=spec.populations(i).equations;
+0382     p=getfield(<a href="dsParseModelEquations.html" class="code" title="function [model,name_map] = dsParseModelEquations(text,varargin)">dsParseModelEquations</a>(eqn, varargin{:}),<span class="string">'parameters'</span>);
+0383     <span class="keyword">if</span> ~isempty(p)
+0384       param_name=cat(1,param_name,fieldnames(p));
+0385       param_value=cat(1,param_value,struct2cell(p));
+0386     <span class="keyword">end</span>
+0387     <span class="comment">% extract mechanism-specific parameters defined in master equations</span>
+0388     <span class="comment">% eg) eqn='dv/dt=@current+10; monitor iAMPA.functions; iNa.IC_noise=10; iK.g=g; g=3';</span>
+0389     o=regexp(eqn,<span class="string">';\s*[a-zA-Z]+\w*\.[a-zA-Z]+\w*\s*=[a-z_A-Z0-9\.]+'</span>,<span class="string">'match'</span>); 
+0390       <span class="comment">% eg) '; MECH.PARAM=VALUE', assumes param is not defined at start of equation string</span>
+0391     <span class="comment">% add mechanism-specific keys (MECH.PARAM) and vals to p</span>
+0392     <span class="keyword">if</span> ~isempty(o)
+0393       <span class="comment">% remove leading semicolons</span>
+0394       oo=regexprep(o,<span class="string">';'</span>,<span class="string">''</span>); <span class="comment">% {'MECH1.PARAM1=VAL1','MECH2.PARAM2=VAL2',..}</span>
+0395       <span class="keyword">for</span> l=1:length(oo)
+0396         tmp=strtrim(regexp(oo{l},<span class="string">'='</span>,<span class="string">'split'</span>)); <span class="comment">% {'MECH1.PARAM1','VAL1'}</span>
+0397         param_name{end+1}=tmp{1}; <span class="comment">% 'MECH1.PARAM1'</span>
+0398         param_value{end+1}=tmp{2}; <span class="comment">% 'VAL1'</span>
+0399         <span class="comment">% remove from equations</span>
+0400         eqn=strrep(eqn,o{l},<span class="string">''</span>);
+0401       <span class="keyword">end</span>
+0402       spec.populations(i).equations=eqn;
+0403     <span class="keyword">end</span>    
+0404     <span class="comment">% move user-defined parameters from equations to the parameters field</span>
+0405 <span class="comment">%     if ~isempty(p)</span>
+0406 <span class="comment">%       param_name=fieldnames(p);</span>
+0407 <span class="comment">%       param_value=struct2cell(p);</span>
+0408     <span class="keyword">if</span> ~isempty(param_name)
+0409       <span class="keyword">for</span> l=1:length(param_name)
+0410         <span class="keyword">try</span>
+0411           value=eval(param_value{l});
+0412         <span class="keyword">catch</span>
+0413           error(<span class="string">'Values of this type are not supported for parameters set in equations.'</span>);
+0414         <span class="keyword">end</span>
+0415         <span class="keyword">if</span> isempty(spec.populations(i).parameters)
+0416           spec.populations(i).parameters={param_name{l},value};
+0417         <span class="keyword">elseif</span> ~ismember(param_name{l},spec.populations(i).parameters(1:2:end))
+0418           spec.populations(i).parameters{end+1}=param_name{l};
+0419           spec.populations(i).parameters{end+1}=value;
+0420         <span class="keyword">end</span>
+0421       <span class="keyword">end</span>
+0422     <span class="keyword">end</span>    
+0423     <span class="comment">% TODO: remove support for MECH.PARAM from dsParseModelEquations,</span>
+0424     <span class="comment">% because that returns MECH_PARAM, whereas we now support MECH.PARAM.</span>
+0425     
+0426     <span class="comment">% incorporate user-supplied parameters in pop equations if used in them</span>
+0427     <span class="comment">% note: this is necessary for proper substitution when the master</span>
+0428     <span class="comment">% equations are parsed in dsGenerateModel.</span>
+0429     <span class="keyword">if</span> ~isempty(spec.populations(i).parameters)
+0430       keys=spec.populations(i).parameters(1:2:end);
+0431       vals=spec.populations(i).parameters(2:2:end);
+0432       
+0433       <span class="comment">% add user-supplied params to pop equations if present in them</span>
+0434       <span class="comment">% approach: look for populations.parameters in population.equations that are not explicitly</span>
+0435       <span class="comment">% defined in population.equations and append their definition explicitly to pop.eqns</span>
+0436       eqn=spec.populations(i).equations;
+0437      
+0438       <span class="comment">% get list of parameters/variables/functions in population equations</span>
+0439       words=unique(regexp(eqn,<span class="string">'[a-zA-Z]+\w*'</span>,<span class="string">'match'</span>));
+0440       
+0441       <span class="comment">% find those in user-supplied parameters</span>
+0442       found_words=words(ismember(words,keys));
+0443       <span class="keyword">if</span> ~isempty(found_words)
+0444         <span class="comment">% set in population equations if not already defined there</span>
+0445         <span class="keyword">for</span> ff=1:length(found_words)
+0446           found_word=found_words{ff};
+0447           precision=8; <span class="comment">% number of digits allowed for user-supplied values</span>
+0448           found_value = toString(vals{strcmp(found_word,keys)},precision);
+0449           
+0450           <span class="comment">% check if not explicitly set in population equations</span>
+0451           <span class="keyword">if</span> isempty(regexp(eqn,[<span class="string">';\s*'</span> found_word <span class="string">'\s*='</span>],<span class="string">'once'</span>)) &amp;&amp; <span class="keyword">...</span><span class="comment"> % not in middle or at end</span>
+0452              isempty(regexp(eqn,[<span class="string">'^'</span> found_word <span class="string">'\s*='</span>],<span class="string">'once'</span>)) <span class="comment">% not at beginning</span>
+0453             <span class="comment">% append and explicitly set in population equations</span>
+0454             <span class="keyword">if</span> eqn(end)~=<span class="string">';'</span>, eqn(end+1)=<span class="string">';'</span>; <span class="keyword">end</span> <span class="comment">% add semicolon if necessary</span>
+0455             eqn=[eqn sprintf(<span class="string">' %s=%s;'</span>,found_word,found_value)];
+0456           <span class="keyword">else</span>
+0457             <span class="comment">% update values in population equations</span>
+0458             old=regexp(eqn,[<span class="string">';\s*'</span> found_word <span class="string">'\s*=\s*[\w\.'']+'</span>],<span class="string">'match'</span>,<span class="string">'once'</span>); <span class="comment">% in middle or at end</span>
+0459             <span class="keyword">if</span> ~isempty(old)
+0460 <span class="comment">%               % remove semicolon for proper substitution using dsStrrep</span>
+0461 <span class="comment">%               old=old(2:end);</span>
+0462               <span class="comment">% replace value in middle or at end</span>
+0463               new=[<span class="string">'; '</span> found_word <span class="string">'='</span> found_value];
+0464 <span class="comment">%               new=[' ' found_word '=' found_value];</span>
+0465             <span class="keyword">else</span>
+0466               <span class="comment">% replace value at the beginning</span>
+0467               old=regexp(eqn,[<span class="string">'^'</span> found_word <span class="string">'\s*=\s*[\w\.'']+'</span>],<span class="string">'match'</span>,<span class="string">'once'</span>);
+0468               new=[found_word <span class="string">'='</span> found_value];
+0469             <span class="keyword">end</span>
+0470             eqn=strrep(eqn,old,new); <span class="comment">% update value in equations</span>
+0471 <span class="comment">%             eqn=dsStrrep(eqn,old,new); % update value in equations</span>
+0472           <span class="keyword">end</span>
+0473         <span class="keyword">end</span>
+0474         spec.populations(i).equations=eqn;
+0475       <span class="keyword">end</span>
+0476     <span class="keyword">end</span>
+0477   <span class="keyword">end</span>
+0478   <span class="comment">% expand mechanism list if any element is itself a list of mechanisms (eg, {'iCa','{CaBuffer,iCan}'} or '{CaBuffer,iCan}')</span>
+0479   spec.populations(i).mechanism_list=<a href="#_sub2" class="code" title="subfunction list = expand_list(list, varargin)">expand_list</a>(spec.populations(i).mechanism_list, varargin{:});
+0480 <span class="keyword">end</span>
+0481 
+0482 <span class="comment">% 2.0 standardize connections</span>
+0483 <span class="keyword">if</span> ~isempty(spec.connections)
+0484   <span class="comment">% check for proper fields in connections substructure</span>
+0485   <span class="keyword">if</span> ~isfield(spec.connections,<span class="string">'source'</span>)
+0486     spec.connections(1).source=[];
+0487   <span class="keyword">end</span>
+0488   
+0489   <span class="keyword">if</span> ~isfield(spec.connections,<span class="string">'target'</span>)
+0490     spec.connections(1).target=[];
+0491   <span class="keyword">end</span>
+0492   
+0493   <span class="keyword">if</span> ~isfield(spec.connections,<span class="string">'mechanism_list'</span>)
+0494     spec.connections(1).mechanism_list=[];
+0495   <span class="keyword">end</span>
+0496 
+0497   <span class="keyword">if</span> ~isfield(spec.connections,<span class="string">'mechanisms'</span>)
+0498     spec.connections(1).mechanisms=[];
+0499   <span class="keyword">end</span>
+0500 
+0501   <span class="keyword">if</span> ~isfield(spec.connections,<span class="string">'parameters'</span>)
+0502     spec.connections(1).parameters={};
+0503   <span class="keyword">end</span>
 0504 <span class="keyword">end</span>
-0505 
-0506 <span class="keyword">end</span> <span class="comment">% main fn</span>
-0507 
-0508 
-0509 <span class="comment">%% local fns</span>
-0510 <a name="_sub1" href="#_subfunctions" class="code">function list = expand_list(list, varargin)</a>
-0511 <span class="comment">%% auto_gen_test_data_flag argin</span>
-0512 options = <a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
-0513 <span class="keyword">if</span> options.auto_gen_test_data_flag
-0514   varargs = varargin;
-0515   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
-0516   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
-0517   argin = [{list}, varargs];
-0518 <span class="keyword">end</span>
-0519 
-0520 <span class="comment">% expand mechanism list if any element is itself a list of mechanisms (eg, {'AMPA','{GABAa,GABAb}'} or '{GABAa,GABAb}')</span>
-0521 <span class="keyword">if</span> isempty(list)
-0522   <span class="keyword">return</span>;
-0523 <span class="keyword">end</span>
-0524 
-0525 <span class="keyword">if</span> any(~cellfun(@isempty,regexp(list,<span class="string">'[{,}]+'</span>)))
-0526   mechs={};
-0527   <span class="keyword">for</span> k=1:length(list)
-0528     tmp=regexp(list{k},<span class="string">'\w+'</span>,<span class="string">'match'</span>);
-0529     mechs=cat(2,mechs,tmp{:});
-0530   <span class="keyword">end</span>
-0531   list=mechs;
-0532 <span class="keyword">end</span>
-0533 
-0534 <span class="comment">%% auto_gen_test_data_flag argout</span>
-0535 <span class="keyword">if</span> options.auto_gen_test_data_flag
-0536   argout = {list};
-0537   
-0538   <a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestDataLocalFn.html" class="code" title="function dsUnitSaveAutoGenTestDataLocalFn(argin, argout)">dsUnitSaveAutoGenTestDataLocalFn</a>(argin, argout); <span class="comment">% localfn</span>
-0539 <span class="keyword">end</span>
-0540 
-0541 <span class="keyword">end</span>
-0542 
-0543 
-0544 <a name="_sub2" href="#_subfunctions" class="code">function spec = backward_compatibility(spec, varargin)</a>
-0545 <span class="comment">% purpose: change name of fields from old to new convention</span>
-0546 <span class="comment">% rename &quot;nodes&quot; or &quot;entities&quot; to &quot;populations&quot;</span>
-0547 
-0548 <span class="comment">%% auto_gen_test_data_flag argin</span>
-0549 options = <a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
-0550 <span class="keyword">if</span> options.auto_gen_test_data_flag
-0551   varargs = varargin;
-0552   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
-0553   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
-0554   argin = [{spec}, varargs];
-0555 <span class="keyword">end</span>
-0556 
-0557 <span class="keyword">if</span> isfield(spec,<span class="string">'nodes'</span>)
-0558   spec.populations=spec.nodes;
-0559   spec=rmfield(spec,<span class="string">'nodes'</span>);
-0560 <span class="keyword">end</span>
-0561 
-0562 <span class="keyword">if</span> isfield(spec,<span class="string">'cells'</span>)
-0563   spec.populations=spec.cells;
-0564   spec=rmfield(spec,<span class="string">'cells'</span>);
-0565 <span class="keyword">end</span>
-0566 
-0567 <span class="keyword">if</span> isfield(spec,<span class="string">'entities'</span>)
-0568   spec.populations=spec.entities;
-0569   spec=rmfield(spec,<span class="string">'entities'</span>);
-0570 <span class="keyword">end</span>
-0571 
-0572 <span class="keyword">if</span> isfield(spec,<span class="string">'pops'</span>)
-0573   spec.populations=spec.pops;
-0574   spec=rmfield(spec,<span class="string">'pops'</span>);
-0575 <span class="keyword">end</span>
-0576 
-0577 <span class="keyword">if</span> isfield(spec,<span class="string">'cons'</span>)
-0578   spec.connections=spec.cons;
-0579   spec=rmfield(spec,<span class="string">'cons'</span>);
-0580 <span class="keyword">end</span>
-0581 
-0582 <span class="keyword">if</span> isfield(spec,<span class="string">'populations'</span>)
-0583   <span class="comment">% rename population &quot;label&quot; to &quot;name&quot;</span>
-0584   <span class="keyword">if</span> isfield(spec.populations,<span class="string">'label'</span>)
-0585     <span class="keyword">for</span> i=1:length(spec.populations)
-0586       spec.populations(i).name=spec.populations(i).label;
-0587     <span class="keyword">end</span>
-0588     spec.populations=rmfield(spec.populations,<span class="string">'label'</span>);
-0589   <span class="keyword">end</span>
-0590   
-0591   <span class="comment">% rename population &quot;multiplicity&quot; to &quot;size&quot;</span>
-0592   <span class="keyword">if</span> isfield(spec.populations,<span class="string">'multiplicity'</span>)
-0593     <span class="keyword">for</span> i=1:length(spec.populations)
-0594       spec.populations(i).size=spec.populations(i).multiplicity;
-0595     <span class="keyword">end</span>
-0596     spec.populations=rmfield(spec.populations,<span class="string">'multiplicity'</span>);
-0597   <span class="keyword">end</span>
-0598   
-0599   <span class="comment">% rename population &quot;dynamics&quot; to &quot;equations&quot;</span>
-0600   <span class="keyword">if</span> isfield(spec.populations,<span class="string">'dynamics'</span>)
-0601     <span class="keyword">for</span> i=1:length(spec.populations)
-0602       spec.populations(i).equations=spec.populations(i).dynamics;
-0603     <span class="keyword">end</span>
-0604     spec.populations=rmfield(spec.populations,<span class="string">'dynamics'</span>);
-0605   <span class="keyword">end</span>
-0606   
-0607   <span class="comment">% rename population &quot;mechanisms&quot; to &quot;mechanism_list&quot;</span>
-0608   <span class="keyword">if</span> isfield(spec.populations,<span class="string">'mechanisms'</span>)
-0609     <span class="keyword">for</span> i=1:length(spec.populations)
-0610       spec.populations(i).mechanism_list=spec.populations(i).mechanisms;
-0611     <span class="keyword">end</span>
-0612     spec.populations=rmfield(spec.populations,<span class="string">'mechanisms'</span>);
-0613   <span class="keyword">end</span>
-0614 <span class="keyword">end</span>
-0615 
-0616 <span class="comment">% check for old (pre,post) organization of connections substructure</span>
-0617 <span class="keyword">if</span> isfield(spec,<span class="string">'connections'</span>) &amp;&amp; size(spec.connections,1)&gt;1
-0618   <span class="comment">% convert to linear connections structure array</span>
-0619   old=spec.connections;
-0620   spec=rmfield(spec,<span class="string">'connections'</span>);
-0621   index=1;
-0622   <span class="keyword">for</span> i=1:size(old,1)
-0623     <span class="keyword">for</span> j=1:size(old,2)
-0624       <span class="keyword">if</span> ~isempty(old(i,j).mechanisms)
-0625         spec.connections(index).source=spec.populations(i).name;
-0626         spec.connections(index).target=spec.populations(j).name;
-0627         
-0628         <span class="keyword">if</span> isfield(old,<span class="string">'mechanisms'</span>)
-0629           spec.connections(index).mechanism_list=old(i,j).mechanisms;
-0630         <span class="keyword">elseif</span> isfield(old,<span class="string">'mechanism_list'</span>)
-0631           spec.connections(index).mechanism_list=old(i,j).mechanism_list;
-0632         <span class="keyword">end</span>
-0633         
-0634         <span class="keyword">if</span> isfield(old,<span class="string">'parameters'</span>)
-0635           spec.connections(index).parameters=old(i,j).parameters;
-0636         <span class="keyword">end</span>
-0637         index=index+1;
-0638       <span class="keyword">end</span>
-0639     <span class="keyword">end</span>
-0640   <span class="keyword">end</span>
-0641 <span class="keyword">end</span>
-0642 
-0643 <span class="keyword">if</span> isfield(spec,<span class="string">'connections'</span>) &amp;&amp; isfield(spec.connections,<span class="string">'direction'</span>)
-0644   <span class="keyword">for</span> i=1:length(spec.connections)
-0645     <span class="keyword">if</span> ischar(spec.connections(i).direction)
-0646       str=spec.connections(i).direction;
-0647       <span class="keyword">if</span> any(regexp(str,<span class="string">'-&gt;'</span>,<span class="string">'once'</span>))
-0648         pops=regexp(str,<span class="string">'-&gt;'</span>,<span class="string">'split'</span>);
-0649         spec.connections(i).source=pops{1};
-0650         spec.connections(i).target=pops{2};
-0651       <span class="keyword">elseif</span> any(regexp(str,<span class="string">'&lt;-'</span>,<span class="string">'once'</span>))
-0652         pops=regexp(str,<span class="string">'&lt;-'</span>,<span class="string">'split'</span>);
-0653         spec.connections(i).source=pops{2};
-0654         spec.connections(i).target=pops{1};
-0655       <span class="keyword">end</span>
-0656     <span class="keyword">end</span>
-0657   <span class="keyword">end</span>
-0658   spec.connections=rmfield(spec.connections,<span class="string">'direction'</span>);
-0659 <span class="keyword">end</span>
-0660 
-0661 <span class="comment">%% auto_gen_test_data_flag argout</span>
-0662 <span class="keyword">if</span> options.auto_gen_test_data_flag
-0663   argout = {spec};
-0664   
-0665   <a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestDataLocalFn.html" class="code" title="function dsUnitSaveAutoGenTestDataLocalFn(argin, argout)">dsUnitSaveAutoGenTestDataLocalFn</a>(argin, argout); <span class="comment">% localfn</span>
-0666 <span class="keyword">end</span>
-0667 
-0668 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+0505 <span class="keyword">for</span> i=1:length(spec.connections)
+0506   <span class="keyword">if</span> isempty(spec.connections(i).source) &amp;&amp; length(spec.populations)==1
+0507     spec.connections(i).source=spec.populations(1).name;
+0508     spec.connections(i).target=spec.populations(1).name;
+0509   <span class="keyword">elseif</span> isempty(spec.connections(i).source) &amp;&amp; length(spec.populations)&gt;1
+0510     error(<span class="string">'connection source and target populations must be specified in specification.connections when the model contains more than one population.'</span>);
+0511   <span class="keyword">end</span>
+0512   
+0513   <span class="comment">% make mechanism list a cell array of mechanism names</span>
+0514   <span class="keyword">if</span> ischar(spec.connections(i).mechanism_list)
+0515     spec.connections(i).mechanism_list={spec.connections(i).mechanism_list};
+0516   <span class="keyword">end</span>
+0517   
+0518   <span class="comment">% expand mechanism list if any element is itself a list of mechanisms (eg, {'AMPA','{GABAa,GABAb}'} or '{GABAa,GABAb}')</span>
+0519   spec.connections(i).mechanism_list=<a href="#_sub2" class="code" title="subfunction list = expand_list(list, varargin)">expand_list</a>(spec.connections(i).mechanism_list, varargin{:});
+0520   
+0521   <span class="comment">% parameter cell arrays</span>
+0522   <span class="keyword">if</span> ~iscell(spec.connections(i).parameters)
+0523     spec.connections(i).parameters={};
+0524   <span class="keyword">end</span>
+0525 <span class="keyword">end</span>
+0526 
+0527 <span class="comment">% remove populations with size==0</span>
+0528 sizes=[spec.populations.size];
+0529 <span class="keyword">if</span> any(sizes==0)
+0530   <span class="comment">% find null populations</span>
+0531   null_pops=find(sizes==0);
+0532   null_names={spec.populations(null_pops).name};
+0533   
+0534   <span class="comment">% remove from .populations</span>
+0535   spec.populations(null_pops)=[];
+0536   
+0537   <span class="comment">% remove from connections</span>
+0538   <span class="keyword">if</span> ~isempty(spec.connections)
+0539     sources={spec.connections.source};
+0540     targets={spec.connections.target};
+0541     null_conns=ismember(sources,null_names) | ismember(targets,null_names);
+0542     spec.connections(null_conns)=[];
+0543   <span class="keyword">end</span>
+0544 <span class="keyword">end</span>
+0545 
+0546 <span class="comment">% 3.0 sort fields</span>
+0547 <span class="comment">% remove extra fields</span>
+0548 otherfields=setdiff(fieldnames(spec.populations),pop_field_order);
+0549 spec.populations=rmfield(spec.populations,otherfields);
+0550 
+0551 <span class="comment">% sort standardized fields</span>
+0552 spec.populations=orderfields(spec.populations,pop_field_order);
+0553 <span class="keyword">if</span> isstruct(spec.connections)
+0554   otherfields=setdiff(fieldnames(spec.connections),con_field_order);
+0555   spec.connections=rmfield(spec.connections,otherfields);
+0556   spec.connections=orderfields(spec.connections,con_field_order);
+0557 <span class="keyword">end</span>
+0558 spec=orderfields(spec,{<span class="string">'populations'</span>,<span class="string">'connections'</span>,<span class="string">'mechanisms'</span>});
+0559 
+0560 <span class="comment">% 4.0 standardize mechanism equations</span>
+0561 [~,files]=<a href="dsLocateModelFiles.html" class="code" title="function [paths,files] = dsLocateModelFiles(input)">dsLocateModelFiles</a>(spec);
+0562 <span class="comment">% read mechanism files</span>
+0563 <span class="keyword">for</span> f=1:length(files)
+0564   [~,name]=fileparts(files{f}); <span class="comment">% name of mechanism</span>
+0565   <span class="keyword">if</span> isempty(spec.mechanisms) || ~ismember(name,{spec.mechanisms.name})
+0566     spec.mechanisms(end+1).name=name;
+0567     spec.mechanisms(end).equations=<a href="#_sub1" class="code" title="subfunction txt=read_mechanism_file(file)">read_mechanism_file</a>(files{f});
+0568   <span class="keyword">end</span>
+0569 <span class="keyword">end</span>
+0570 <span class="comment">% make sure equations are all in a single string</span>
+0571 <span class="keyword">for</span> m=1:length(spec.mechanisms)
+0572   <span class="keyword">if</span> iscellstr(spec.mechanisms(m).equations)
+0573     <span class="comment">% make sure each line ends with a semicolon and space</span>
+0574     eqn=spec.mechanisms(m).equations;
+0575     idx=cellfun(@isempty,regexp(eqn,<span class="string">';$'</span>)); <span class="comment">% lines that need semicolons</span>
+0576     eqn(idx)=cellfun(@(x)[x <span class="string">';'</span>],eqn(idx),<span class="string">'uni'</span>,0);
+0577     idx=cellfun(@isempty,regexp(eqn,<span class="string">'\s$'</span>)); <span class="comment">% lines that need a space</span>
+0578     eqn(idx)=cellfun(@(x)[x <span class="string">' '</span>],eqn(idx),<span class="string">'uni'</span>,0);
+0579     <span class="comment">% concatenate lines into a single string</span>
+0580     spec.mechanisms(m).equations=[eqn{:}];
+0581   <span class="keyword">end</span>
+0582 <span class="keyword">end</span>
+0583 
+0584 <span class="comment">% 4.1 replace mechanism names by full file names</span>
+0585 <span class="comment">% this is necessary so that regenerated models will use the same mechanism</span>
+0586 <span class="comment">% files to recreate the model (e.g., when a cluster job simulates a</span>
+0587 <span class="comment">% modified version of an original base model).</span>
+0588 <span class="comment">% also: add mech equations to pop specification, and apply global population</span>
+0589 <span class="comment">% parameters to pop-specific mechanism equations.</span>
+0590 
+0591 fnames={};
+0592 <span class="keyword">if</span> ~isempty(files)
+0593   <span class="keyword">for</span> f=1:length(files)
+0594     [~,name]=fileparts2(files{f});
+0595     fnames{f}=name;
+0596   <span class="keyword">end</span>
+0597 <span class="keyword">end</span>
+0598 <span class="keyword">if</span> ~isempty(spec.mechanisms)
+0599   mnames={spec.mechanisms.name};
+0600 <span class="keyword">else</span>
+0601   mnames={};
+0602 <span class="keyword">end</span>
+0603 fields={<span class="string">'populations'</span>,<span class="string">'connections'</span>};
+0604 <span class="comment">% update population and connection mechanism lists</span>
+0605 <span class="keyword">for</span> f=1:length(fields)
+0606   object=fields{f};
+0607   <span class="keyword">for</span> i=1:length(spec.(object))
+0608     <span class="keyword">for</span> j=1:length(spec.(object)(i).mechanism_list)
+0609       mech=spec.(object)(i).mechanism_list{j};
+0610       <span class="keyword">if</span> ismember(mech,fnames)
+0611         <span class="comment">% replace mechanism names by full file names</span>
+0612         <span class="comment">% this is necessary so that regenerated models will use the same mechanism</span>
+0613         <span class="comment">% files to recreate the model (e.g., when a cluster job simulates a</span>
+0614         <span class="comment">% modified version of an original base model).</span>
+0615         index=find(ismember(fnames,mech),1,<span class="string">'first'</span>);
+0616         spec.(object)(i).mechanism_list{j}=files{index};
+0617       <span class="keyword">end</span>
+0618       <span class="keyword">if</span> ismember(<span class="string">'@'</span>,mech) <span class="comment">% remove linker alias</span>
+0619         mech=regexp(mech,<span class="string">'@'</span>,<span class="string">'split'</span>);
+0620         mech=mech{1};
+0621       <span class="keyword">end</span>
+0622       <span class="keyword">if</span> isfield(spec.(object),<span class="string">'mechanisms'</span>) &amp;&amp; ~isempty(spec.(object)(i).mechanisms) &amp;&amp; ismember(mech,{spec.(object)(i).mechanisms.name})
+0623         <span class="comment">% mechanism already defined for this population, nothing else to do</span>
+0624         <span class="keyword">continue</span>;
+0625       <span class="keyword">end</span>
+0626       <span class="keyword">if</span> ismember(mech,mnames)
+0627         <span class="comment">% store mechanism equations in object-level specification</span>
+0628         index=find(ismember(mnames,mech),1,<span class="string">'first'</span>);
+0629         <span class="keyword">if</span> isempty(spec.(object)(i).mechanisms)
+0630           spec.(object)(i).mechanisms=spec.mechanisms(index);
+0631         <span class="keyword">elseif</span> ~ismember(mech,{spec.(object)(i).mechanisms.name})
+0632           <span class="comment">% store if mechanism is not already defined at population-level</span>
+0633           spec.(object)(i).mechanisms(j)=spec.mechanisms(index);
+0634         <span class="keyword">end</span>
+0635         <span class="comment">% apply global population parameters to pop-specific mechanism equations</span>
+0636         <span class="keyword">if</span> ~isempty(spec.(object)(i).parameters)
+0637           <span class="comment">% approach: set key=val for all keys in eqns</span>
+0638           eqns=spec.(object)(i).mechanisms(j).equations;
+0639           keys=spec.(object)(i).parameters(1:2:end);
+0640           vals=spec.(object)(i).parameters(2:2:end);
+0641           <span class="comment">% get list of parameters/variables/functions in population equations</span>
+0642           words=unique(regexp(eqns,<span class="string">'[a-zA-Z]+\w*'</span>,<span class="string">'match'</span>));
+0643           <span class="comment">% find words in user-supplied parameters (keys)</span>
+0644           found_words=words(ismember(words,keys));
+0645           <span class="keyword">if</span> ~isempty(found_words)
+0646             <span class="keyword">for</span> ff=1:length(found_words)
+0647               found_word=found_words{ff};
+0648               <span class="comment">% new parameter assignment</span>
+0649               precision=8; <span class="comment">% number of digits allowed for user-supplied values</span>
+0650               found_value=toString(vals{strcmp(found_word,keys)},precision);
+0651               rep=sprintf(<span class="string">' %s=%s;'</span>,found_word,found_value);
+0652               <span class="comment">% replace old parameter assignment in the middle of equations</span>
+0653               pat=[<span class="string">'([^\w]{1})'</span> found_word <span class="string">'\s*=\s*\w+;'</span>]; <span class="comment">% find in the middle</span>
+0654               eqns=regexprep(eqns,pat,[<span class="string">'$1'</span> rep]);
+0655               <span class="comment">% replace old parameter assignment at the beginning of equations</span>
+0656               pat=[<span class="string">'^'</span> found_word <span class="string">'\s*=\s*\w+;'</span>]; <span class="comment">% find at the beginning</span>
+0657               eqns=regexprep(eqns,pat,rep);
+0658             <span class="keyword">end</span>
+0659           <span class="keyword">end</span>
+0660           spec.(object)(i).mechanisms(j).equations=eqns;
+0661         <span class="keyword">end</span>        
+0662       <span class="keyword">end</span>
+0663     <span class="keyword">end</span>
+0664   <span class="keyword">end</span>
+0665 <span class="keyword">end</span>
+0666 
+0667 <span class="comment">%% auto_gen_test_data_flag argout</span>
+0668 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0669   argout = {spec}; <span class="comment">% specific to this function</span>
+0670   
+0671   <a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>(argin, argout);
+0672 <span class="keyword">end</span>
+0673 
+0674 <span class="keyword">end</span> <span class="comment">% main fn</span>
+0675 
+0676 
+0677 <span class="comment">%% local fns</span>
+0678 <a name="_sub1" href="#_subfunctions" class="code">function txt=read_mechanism_file(file)</a>
+0679   fid=fopen(file,<span class="string">'rt'</span>);
+0680   <span class="comment">% read all text</span>
+0681   txt=textscan(fid,<span class="string">'%s'</span>,<span class="string">'Delimiter'</span>,<span class="string">'\n'</span>);
+0682   <span class="keyword">if</span> ~isempty(txt)
+0683     <span class="comment">% remove empty lines</span>
+0684     txt=txt{1}(~cellfun(@isempty,txt{1}));
+0685     <span class="comment">% remove comments</span>
+0686     txt=txt(~cellfun(@isempty,regexp(txt,<span class="string">'^[^#%]'</span>)));
+0687     txt=regexp(txt,<span class="string">'^[^%#]*'</span>,<span class="string">'match'</span>);
+0688     txt=[txt{:}];
+0689     <span class="comment">% remove leading/trailing white space</span>
+0690     txt=strtrim(txt);
+0691     <span class="comment">% make sure each line ends with a semicolon and space</span>
+0692     idx=cellfun(@isempty,regexp(txt,<span class="string">';$'</span>)); <span class="comment">% lines that need semicolons</span>
+0693     txt(idx)=cellfun(@(x)[x <span class="string">';'</span>],txt(idx),<span class="string">'uni'</span>,0);
+0694     idx=cellfun(@isempty,regexp(txt,<span class="string">'\s$'</span>)); <span class="comment">% lines that need a space</span>
+0695     txt(idx)=cellfun(@(x)[x <span class="string">' '</span>],txt(idx),<span class="string">'uni'</span>,0);
+0696     <span class="comment">% concatenate lines into a single string</span>
+0697     txt=[txt{:}];
+0698   <span class="keyword">end</span>
+0699   <span class="comment">% close text file</span>
+0700   fclose(fid);
+0701 <span class="keyword">end</span>
+0702 
+0703 <a name="_sub2" href="#_subfunctions" class="code">function list = expand_list(list, varargin)</a>
+0704   <span class="comment">%% auto_gen_test_data_flag argin</span>
+0705   options = <a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
+0706   <span class="keyword">if</span> options.auto_gen_test_data_flag
+0707     varargs = varargin;
+0708     varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0709     varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
+0710     argin = [{list}, varargs];
+0711   <span class="keyword">end</span>
+0712 
+0713   <span class="comment">% expand mechanism list if any element is itself a list of mechanisms (eg, {'AMPA','{GABAa,GABAb}'} or '{GABAa,GABAb}')</span>
+0714   <span class="keyword">if</span> isempty(list)
+0715     <span class="keyword">return</span>;
+0716   <span class="keyword">end</span>
+0717 
+0718   <span class="keyword">if</span> any(~cellfun(@isempty,regexp(list,<span class="string">'[{,}]+'</span>)))
+0719     mechs={};
+0720     <span class="keyword">for</span> k=1:length(list)
+0721       tmp=regexp(list{k},<span class="string">'\w+'</span>,<span class="string">'match'</span>);
+0722       mechs=cat(2,mechs,tmp{:});
+0723     <span class="keyword">end</span>
+0724     list=mechs;
+0725   <span class="keyword">end</span>
+0726 
+0727   <span class="comment">%% auto_gen_test_data_flag argout</span>
+0728   <span class="keyword">if</span> options.auto_gen_test_data_flag
+0729     argout = {list};
+0730 
+0731     <a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestDataLocalFn.html" class="code" title="function dsUnitSaveAutoGenTestDataLocalFn(argin, argout)">dsUnitSaveAutoGenTestDataLocalFn</a>(argin, argout); <span class="comment">% localfn</span>
+0732   <span class="keyword">end</span>
+0733 
+0734 <span class="keyword">end</span>
+0735 
+0736 
+0737 <a name="_sub3" href="#_subfunctions" class="code">function spec = backward_compatibility(spec, varargin)</a>
+0738   <span class="comment">% purpose: change name of fields from old to new convention</span>
+0739   <span class="comment">% rename &quot;nodes&quot; or &quot;entities&quot; to &quot;populations&quot;</span>
+0740 
+0741   <span class="comment">%% auto_gen_test_data_flag argin</span>
+0742   options = <a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
+0743   <span class="keyword">if</span> options.auto_gen_test_data_flag
+0744     varargs = varargin;
+0745     varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0746     varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
+0747     argin = [{spec}, varargs];
+0748   <span class="keyword">end</span>
+0749 
+0750   <span class="keyword">if</span> isfield(spec,<span class="string">'nodes'</span>)
+0751     spec.populations=spec.nodes;
+0752     spec=rmfield(spec,<span class="string">'nodes'</span>);
+0753   <span class="keyword">end</span>
+0754 
+0755   <span class="keyword">if</span> isfield(spec,<span class="string">'cells'</span>)
+0756     spec.populations=spec.cells;
+0757     spec=rmfield(spec,<span class="string">'cells'</span>);
+0758   <span class="keyword">end</span>
+0759 
+0760   <span class="keyword">if</span> isfield(spec,<span class="string">'entities'</span>)
+0761     spec.populations=spec.entities;
+0762     spec=rmfield(spec,<span class="string">'entities'</span>);
+0763   <span class="keyword">end</span>
+0764 
+0765   <span class="keyword">if</span> isfield(spec,<span class="string">'pops'</span>)
+0766     spec.populations=spec.pops;
+0767     spec=rmfield(spec,<span class="string">'pops'</span>);
+0768   <span class="keyword">end</span>
+0769 
+0770   <span class="keyword">if</span> isfield(spec,<span class="string">'cons'</span>)
+0771     spec.connections=spec.cons;
+0772     spec=rmfield(spec,<span class="string">'cons'</span>);
+0773   <span class="keyword">end</span>
+0774   <span class="keyword">if</span> isfield(spec,<span class="string">'links'</span>)
+0775     spec.connections=spec.links;
+0776     spec=rmfield(spec,<span class="string">'links'</span>);
+0777   <span class="keyword">end</span>
+0778   <span class="keyword">if</span> isfield(spec,<span class="string">'edges'</span>)
+0779     spec.connections=spec.edges;
+0780     spec=rmfield(spec,<span class="string">'edges'</span>);
+0781   <span class="keyword">end</span>
+0782 
+0783   <span class="keyword">if</span> isfield(spec,<span class="string">'edges'</span>)
+0784     spec.connections=spec.edges;
+0785     spec=rmfield(spec,<span class="string">'edges'</span>);
+0786   <span class="keyword">end</span>
+0787   
+0788   <span class="keyword">if</span> isfield(spec,<span class="string">'links'</span>)
+0789     spec.connections=spec.links;
+0790     spec=rmfield(spec,<span class="string">'links'</span>);
+0791   <span class="keyword">end</span>
+0792   
+0793   <span class="keyword">if</span> isfield(spec,<span class="string">'comps'</span>)
+0794     spec.compartments=spec.comps;
+0795     spec=rmfield(spec,<span class="string">'comps'</span>);
+0796   <span class="keyword">end</span>
+0797   
+0798   <span class="keyword">if</span> isfield(spec,<span class="string">'populations'</span>)
+0799     <span class="comment">% rename population &quot;label&quot; to &quot;name&quot;</span>
+0800     <span class="keyword">if</span> isfield(spec.populations,<span class="string">'label'</span>)
+0801       <span class="keyword">for</span> i=1:length(spec.populations)
+0802         spec.populations(i).name=spec.populations(i).label;
+0803       <span class="keyword">end</span>
+0804       spec.populations=rmfield(spec.populations,<span class="string">'label'</span>);
+0805     <span class="keyword">end</span>
+0806 
+0807     <span class="comment">% rename population &quot;multiplicity&quot; to &quot;size&quot;</span>
+0808     <span class="keyword">if</span> isfield(spec.populations,<span class="string">'multiplicity'</span>)
+0809       <span class="keyword">for</span> i=1:length(spec.populations)
+0810         spec.populations(i).size=spec.populations(i).multiplicity;
+0811       <span class="keyword">end</span>
+0812       spec.populations=rmfield(spec.populations,<span class="string">'multiplicity'</span>);
+0813     <span class="keyword">end</span>
+0814 
+0815     <span class="comment">% rename population &quot;dynamics&quot; to &quot;equations&quot;</span>
+0816     <span class="keyword">if</span> isfield(spec.populations,<span class="string">'dynamics'</span>)
+0817       <span class="keyword">for</span> i=1:length(spec.populations)
+0818         spec.populations(i).equations=spec.populations(i).dynamics;
+0819       <span class="keyword">end</span>
+0820       spec.populations=rmfield(spec.populations,<span class="string">'dynamics'</span>);
+0821     <span class="keyword">end</span>
+0822 
+0823   <span class="keyword">end</span>
+0824 
+0825   <span class="keyword">if</span> isfield(spec,<span class="string">'connections'</span>) &amp;&amp; isfield(spec.connections,<span class="string">'direction'</span>)
+0826     <span class="keyword">for</span> i=1:length(spec.connections)
+0827       <span class="keyword">if</span> ischar(spec.connections(i).direction)
+0828         str=spec.connections(i).direction;
+0829         <span class="keyword">if</span> any(regexp(str,<span class="string">'-&gt;'</span>,<span class="string">'once'</span>))
+0830           pops=regexp(str,<span class="string">'-&gt;'</span>,<span class="string">'split'</span>);
+0831           spec.connections(i).source=pops{1};
+0832           spec.connections(i).target=pops{2};
+0833         <span class="keyword">elseif</span> any(regexp(str,<span class="string">'&lt;-'</span>,<span class="string">'once'</span>))
+0834           pops=regexp(str,<span class="string">'&lt;-'</span>,<span class="string">'split'</span>);
+0835           spec.connections(i).source=pops{2};
+0836           spec.connections(i).target=pops{1};
+0837         <span class="keyword">end</span>
+0838       <span class="keyword">end</span>
+0839     <span class="keyword">end</span>
+0840     spec.connections=rmfield(spec.connections,<span class="string">'direction'</span>);
+0841   <span class="keyword">end</span>
+0842 
+0843   <span class="comment">%% auto_gen_test_data_flag argout</span>
+0844   <span class="keyword">if</span> options.auto_gen_test_data_flag
+0845     argout = {spec};
+0846 
+0847     <a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestDataLocalFn.html" class="code" title="function dsUnitSaveAutoGenTestDataLocalFn(argin, argout)">dsUnitSaveAutoGenTestDataLocalFn</a>(argin, argout); <span class="comment">% localfn</span>
+0848   <span class="keyword">end</span>
+0849 
+0850 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 12-Dec-2017 11:32:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

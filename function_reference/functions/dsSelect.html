@@ -6,16 +6,18 @@
   <meta name="keywords" content="dsSelect">
   <meta name="description" content="DSSELECT -  select subset of data">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../m2html.css">
-  <script type="text/javascript">
-    if (top.frames.length == 0) { top.location = "../index.html"; };
-  </script>
 </head>
 <body>
+
 <a name="_top"></a>
-<!-- menu.html functions -->
+<div><a href="../menu.html">Home</a> &gt;  <a href="menu.html">functions</a> &gt; dsSelect.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../menu.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="menu.html">Index for functions&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
 <h1>dsSelect
 </h1>
 
@@ -70,7 +72,10 @@
    - Possible format for specifying range_varied:
      {'E','gNa',[.1 .3]; 'I-&gt;E','tauI',[15 25]; 'I','mechanism_list','+iM'}
 
- See also: <a href="dsSimulate.html" class="code" title="function [data,studyinfo,result] = dsSimulate(model,varargin)">dsSimulate</a>, dsVary2Modifications, <a href="dsImport.html" class="code" title="function [data,studyinfo] = dsImport(file,varargin)">dsImport</a></pre></div>
+ See also: <a href="dsSimulate.html" class="code" title="function [data,studyinfo,result] = dsSimulate(model,varargin)">dsSimulate</a>, dsVary2Modifications, <a href="dsImport.html" class="code" title="function [data,studyinfo] = dsImport(file,varargin)">dsImport</a>
+
+ Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;
+ Copyright (C) 2016 Jason Sherfey, Boston University, USA</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
@@ -131,104 +136,107 @@ This function is called by:
 0044 <span class="comment">%     {'E','gNa',[.1 .3]; 'I-&gt;E','tauI',[15 25]; 'I','mechanism_list','+iM'}</span>
 0045 <span class="comment">%</span>
 0046 <span class="comment">% See also: dsSimulate, dsVary2Modifications, dsImport</span>
-0047 
-0048 <span class="comment">% check inputs</span>
-0049 data=<a href="../functions/internal/dsCheckData.html" class="code" title="function data = dsCheckData(data, varargin)">dsCheckData</a>(data, varargin{:});
+0047 <span class="comment">%</span>
+0048 <span class="comment">% Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;</span>
+0049 <span class="comment">% Copyright (C) 2016 Jason Sherfey, Boston University, USA</span>
 0050 
-0051 options=<a href="../functions/internal/dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="keyword">...</span>
-0052   <span class="string">'time_limits'</span>,[-inf inf],[],<span class="keyword">...</span>
-0053   <span class="string">'varied'</span>,[],[],<span class="keyword">...</span>
-0054   <span class="string">'roi'</span>,[],[],<span class="keyword">...</span>
-0055   },false);
-0056 
-0057 <span class="comment">% select data sets based on range of varied model components</span>
-0058 <span class="keyword">if</span> ~isempty(options.varied) &amp;&amp; isfield(data,<span class="string">'varied'</span>)
-0059   <span class="keyword">if</span> size(options.varied,2)==3
-0060     <span class="comment">% convert into field name (set in dsSimulate:prepare_varied_metadata)</span>
-0061     <span class="comment">% NOTE: this code is redundant with dsSimulate and dsAnalyze.</span>
-0062     <span class="comment">% TODO: eliminate redundancy</span>
-0063     varied={};
-0064     <span class="keyword">for</span> i=1:size(options.varied,1)
-0065       <span class="comment">% prepare valid field name for thing varied:</span>
-0066       fld=[options.varied{i,1} <span class="string">'_'</span> options.varied{i,2}];
-0067       <span class="comment">% convert arrows and periods to underscores</span>
-0068       fld=regexprep(fld,<span class="string">'(-&gt;)|(&lt;-)|(-)|(\.)'</span>,<span class="string">'_'</span>);
-0069       <span class="comment">% remove brackets and parentheses</span>
-0070       fld=regexprep(fld,<span class="string">'[\[\]\(\)\{\}]'</span>,<span class="string">''</span>);
-0071       varied{end+1,1}=fld;
-0072     <span class="keyword">end</span>
-0073     options.varied=cat(2,varied,options.varied(:,3));
-0074   <span class="keyword">end</span>
-0075   <span class="keyword">if</span> size(options.varied,1)&gt;1
-0076     error(<span class="string">'at present, a range on only one varied parameter can be specified per call to dsSelect.'</span>);
+0051 <span class="comment">% check inputs</span>
+0052 data=<a href="../functions/internal/dsCheckData.html" class="code" title="function data = dsCheckData(data, varargin)">dsCheckData</a>(data, varargin{:});
+0053 
+0054 options=<a href="../functions/internal/dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="keyword">...</span>
+0055   <span class="string">'time_limits'</span>,[-inf inf],[],<span class="keyword">...</span>
+0056   <span class="string">'varied'</span>,[],[],<span class="keyword">...</span>
+0057   <span class="string">'roi'</span>,[],[],<span class="keyword">...</span>
+0058   },false);
+0059 
+0060 <span class="comment">% select data sets based on range of varied model components</span>
+0061 <span class="keyword">if</span> ~isempty(options.varied) &amp;&amp; isfield(data,<span class="string">'varied'</span>)
+0062   <span class="keyword">if</span> size(options.varied,2)==3
+0063     <span class="comment">% convert into field name (set in dsSimulate:prepare_varied_metadata)</span>
+0064     <span class="comment">% NOTE: this code is redundant with dsSimulate and dsAnalyze.</span>
+0065     <span class="comment">% TODO: eliminate redundancy</span>
+0066     varied={};
+0067     <span class="keyword">for</span> i=1:size(options.varied,1)
+0068       <span class="comment">% prepare valid field name for thing varied:</span>
+0069       fld=[options.varied{i,1} <span class="string">'_'</span> options.varied{i,2}];
+0070       <span class="comment">% convert arrows and periods to underscores</span>
+0071       fld=regexprep(fld,<span class="string">'(-&gt;)|(&lt;-)|(-)|(\.)'</span>,<span class="string">'_'</span>);
+0072       <span class="comment">% remove brackets and parentheses</span>
+0073       fld=regexprep(fld,<span class="string">'[\[\]\(\)\{\}]'</span>,<span class="string">''</span>);
+0074       varied{end+1,1}=fld;
+0075     <span class="keyword">end</span>
+0076     options.varied=cat(2,varied,options.varied(:,3));
 0077   <span class="keyword">end</span>
-0078   <span class="keyword">if</span> ~ismember(options.varied{1,1},data(1).varied)
-0079     error(<span class="string">'varied parameter not found in data.varied'</span>);
+0078   <span class="keyword">if</span> size(options.varied,1)&gt;1
+0079     error(<span class="string">'at present, a range on only one varied parameter can be specified per call to dsSelect.'</span>);
 0080   <span class="keyword">end</span>
-0081   <span class="comment">% collect info on parameters varied in data</span>
-0082   varied=data(1).varied;
-0083   num_varied=length(varied); <span class="comment">% number of model components varied across simulations</span>
-0084   num_sims=length(data);
-0085   <span class="comment">% collect info on parameters varied</span>
-0086   param_mat=zeros(num_sims,num_varied); <span class="comment">% values for each simulation</span>
-0087   <span class="keyword">for</span> j=1:num_varied
-0088     <span class="keyword">if</span> isnumeric(data(1).(varied{j}))
-0089       param_mat(:,j)=[data.(varied{j})]; <span class="comment">% sims x varied</span>
-0090     <span class="keyword">else</span>
-0091       <span class="comment">% TODO: handle sims varying non-numeric model components</span>
-0092       <span class="comment">% (eg, mechanisms) (also in dsPlot)</span>
-0093     <span class="keyword">end</span>
-0094   <span class="keyword">end</span>
-0095   <span class="comment">% find element of 'varied' whose range has been requested</span>
-0096   desired_param=options.varied{1,1};
-0097   desired_range=options.varied{1,2};
-0098   index=find(ismember(data(1).varied,desired_param));
-0099   <span class="comment">% find simulations with varied values in desired range</span>
-0100   <span class="keyword">if</span> length(desired_range)==2
-0101     sel=find(param_mat(:,index)&gt;=desired_range(1)&amp;param_mat(:,index)&lt;=desired_range(2));
-0102   <span class="keyword">else</span>
-0103     sel=find(ismember(param_mat(:,index),desired_range));
-0104   <span class="keyword">end</span>
-0105   <span class="comment">% select the desired subset of data sets</span>
-0106   data=data(sel);
-0107 <span class="keyword">end</span>
-0108 
-0109 <span class="comment">% % recursively call dsSelect if more than one data set</span>
-0110 <span class="comment">% if length(data)&gt;1</span>
-0111 <span class="comment">%   for i=1:length(data)</span>
-0112 <span class="comment">%     data(i)=dsSelect(data(i));</span>
-0113 <span class="comment">%   end</span>
-0114 <span class="comment">%   return;</span>
-0115 <span class="comment">% end</span>
-0116 
-0117 <span class="keyword">for</span> s=1:length(data)
-0118   <span class="comment">% select time subset from state variables and monitors</span>
-0119   time=data(s).time;
-0120   seltime=time&gt;=options.time_limits(1) &amp; time&lt;=options.time_limits(2);
-0121   <span class="keyword">for</span> i=1:length(data(s).labels)
-0122     data(s).(data(s).labels{i})=data(s).(data(s).labels{i})(seltime,:);
-0123   <span class="keyword">end</span>
-0124   <span class="comment">% select cell subset</span>
-0125   <span class="keyword">if</span> iscell(options.roi)
-0126     <span class="keyword">for</span> i=1:size(options.roi,1)
-0127       <span class="keyword">if</span> isfield(data,options.roi{i,1})
-0128         dat=data(s).(options.roi{i,1});
-0129         inds=1:size(dat,2);
-0130         borders=options.roi{i,2};
-0131         sel=inds&gt;=borders(1)&amp;inds&lt;=borders(end);
-0132         data(s).(options.roi{i,1})=dat(:,sel);
-0133       <span class="keyword">end</span>
-0134     <span class="keyword">end</span>
-0135   <span class="keyword">end</span>
-0136 <span class="keyword">end</span>
-0137 
-0138 <span class="comment">% TODO: select subset from time-varying post-processed results</span>
-0139 <span class="keyword">if</span> isfield(data,<span class="string">'results'</span>)
-0140   <span class="comment">% get time vectors: time_(*) with * matching matching names in data.results</span>
-0141   <span class="comment">% ...</span>
-0142   
-0143 <span class="keyword">end</span>
-0144</pre></div>
-<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+0081   <span class="keyword">if</span> ~ismember(options.varied{1,1},data(1).varied)
+0082     error(<span class="string">'varied parameter not found in data.varied'</span>);
+0083   <span class="keyword">end</span>
+0084   <span class="comment">% collect info on parameters varied in data</span>
+0085   varied=data(1).varied;
+0086   num_varied=length(varied); <span class="comment">% number of model components varied across simulations</span>
+0087   num_sims=length(data);
+0088   <span class="comment">% collect info on parameters varied</span>
+0089   param_mat=zeros(num_sims,num_varied); <span class="comment">% values for each simulation</span>
+0090   <span class="keyword">for</span> j=1:num_varied
+0091     <span class="keyword">if</span> isnumeric(data(1).(varied{j}))
+0092       param_mat(:,j)=[data.(varied{j})]; <span class="comment">% sims x varied</span>
+0093     <span class="keyword">else</span>
+0094       <span class="comment">% TODO: handle sims varying non-numeric model components</span>
+0095       <span class="comment">% (eg, mechanisms) (also in dsPlot)</span>
+0096     <span class="keyword">end</span>
+0097   <span class="keyword">end</span>
+0098   <span class="comment">% find element of 'varied' whose range has been requested</span>
+0099   desired_param=options.varied{1,1};
+0100   desired_range=options.varied{1,2};
+0101   index=find(ismember(data(1).varied,desired_param));
+0102   <span class="comment">% find simulations with varied values in desired range</span>
+0103   <span class="keyword">if</span> length(desired_range)==2
+0104     sel=find(param_mat(:,index)&gt;=desired_range(1)&amp;param_mat(:,index)&lt;=desired_range(2));
+0105   <span class="keyword">else</span>
+0106     sel=find(ismember(param_mat(:,index),desired_range));
+0107   <span class="keyword">end</span>
+0108   <span class="comment">% select the desired subset of data sets</span>
+0109   data=data(sel);
+0110 <span class="keyword">end</span>
+0111 
+0112 <span class="comment">% % recursively call dsSelect if more than one data set</span>
+0113 <span class="comment">% if length(data)&gt;1</span>
+0114 <span class="comment">%   for i=1:length(data)</span>
+0115 <span class="comment">%     data(i)=dsSelect(data(i));</span>
+0116 <span class="comment">%   end</span>
+0117 <span class="comment">%   return;</span>
+0118 <span class="comment">% end</span>
+0119 
+0120 <span class="keyword">for</span> s=1:length(data)
+0121   <span class="comment">% select time subset from state variables and monitors</span>
+0122   time=data(s).time;
+0123   seltime=time&gt;=options.time_limits(1) &amp; time&lt;=options.time_limits(2);
+0124   <span class="keyword">for</span> i=1:length(data(s).labels)
+0125     data(s).(data(s).labels{i})=data(s).(data(s).labels{i})(seltime,:);
+0126   <span class="keyword">end</span>
+0127   <span class="comment">% select cell subset</span>
+0128   <span class="keyword">if</span> iscell(options.roi)
+0129     <span class="keyword">for</span> i=1:size(options.roi,1)
+0130       <span class="keyword">if</span> isfield(data,options.roi{i,1})
+0131         dat=data(s).(options.roi{i,1});
+0132         inds=1:size(dat,2);
+0133         borders=options.roi{i,2};
+0134         sel=inds&gt;=borders(1)&amp;inds&lt;=borders(end);
+0135         data(s).(options.roi{i,1})=dat(:,sel);
+0136       <span class="keyword">end</span>
+0137     <span class="keyword">end</span>
+0138   <span class="keyword">end</span>
+0139 <span class="keyword">end</span>
+0140 
+0141 <span class="comment">% TODO: select subset from time-varying post-processed results</span>
+0142 <span class="keyword">if</span> isfield(data,<span class="string">'results'</span>)
+0143   <span class="comment">% get time vectors: time_(*) with * matching matching names in data.results</span>
+0144   <span class="comment">% ...</span>
+0145   
+0146 <span class="keyword">end</span>
+0147</pre></div>
+<hr><address>Generated on Tue 12-Dec-2017 11:32:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

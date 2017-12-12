@@ -6,16 +6,18 @@
   <meta name="keywords" content="dsUnzipDemoData">
   <meta name="description" content="dsUnzipDemoData - Unzips demo data (utility function)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
-  <script type="text/javascript">
-    if (top.frames.length == 0) { top.location = "../../index.html"; };
-  </script>
 </head>
 <body>
+
 <a name="_top"></a>
-<!-- ../menu.html functions --><!-- menu.html internal -->
+<div><a href="../../menu.html">Home</a> &gt;  <a href="../menu.html">functions</a> &gt; <a href="menu.html">internal</a> &gt; dsUnzipDemoData.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../menu.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="menu.html">Index for functions/internal&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
 <h1>dsUnzipDemoData
 </h1>
 
@@ -35,7 +37,7 @@
    study_dir = dsUnzipDemoData(zipfname,overwrite_flag)
 
  Inputs:
-   zipfname: string with name of zipped file. Can be either full path or
+   zipfname: string with name of zipped file. Can be either a full path or
        just the filename, since DynaSim knows where to look for its
        demo zip files.
    overwrite_flag: {0,1} - Flag to force overwrite if directory already
@@ -59,7 +61,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="dsGetConfig.html" class="code" title="function varOutput = dsGetConfig(query)">dsGetConfig</a>	GETCONFIG - returns the value of the variable specificed as string in argument</li></ul>
+<li><a href="dsDownloadFiles.html" class="code" title="function destinationFile = dsDownloadFiles(requestedFile,destinationFile,overwrite_flag,verbose_flag)">dsDownloadFiles</a>	dsDownloadFiles - Downloads data from the web (utility function)</li><li><a href="dsGetConfig.html" class="code" title="function varOutput = dsGetConfig(query)">dsGetConfig</a>	GETCONFIG - returns the value of the variable specificed as string in argument</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 </ul>
@@ -78,7 +80,7 @@ This function is called by:
 0008 <span class="comment">%   study_dir = dsUnzipDemoData(zipfname,overwrite_flag)</span>
 0009 <span class="comment">%</span>
 0010 <span class="comment">% Inputs:</span>
-0011 <span class="comment">%   zipfname: string with name of zipped file. Can be either full path or</span>
+0011 <span class="comment">%   zipfname: string with name of zipped file. Can be either a full path or</span>
 0012 <span class="comment">%       just the filename, since DynaSim knows where to look for its</span>
 0013 <span class="comment">%       demo zip files.</span>
 0014 <span class="comment">%   overwrite_flag: {0,1} - Flag to force overwrite if directory already</span>
@@ -117,21 +119,29 @@ This function is called by:
 0047     [path, zipfilename_only, ext] = fileparts(zipfname);
 0048     zipfname = [zipfilename_only, <span class="string">'.zip'</span>];
 0049     
-0050     <span class="comment">% Get the destination directory</span>
-0051     study_dir = fullfile(demos_path,zipfilename_only);
-0052 
-0053     <span class="comment">% Unzip</span>
-0054     <span class="keyword">if</span> ~exist(study_dir,<span class="string">'dir'</span>)
-0055         unzip(fullfile(demo_zips_path,zipfname),demos_path);
-0056     <span class="keyword">elseif</span> exist(study_dir,<span class="string">'dir'</span>) &amp;&amp; overwrite_flag
-0057         <span class="keyword">if</span> verbose_flag; fprintf(<span class="string">'Demo data folder %s already exists. Overwriting \n'</span>,demos_path); <span class="keyword">end</span>
-0058         unzip(fullfile(demo_zips_path,zipfname),demos_path);
-0059     <span class="keyword">else</span>
-0060         <span class="keyword">if</span> verbose_flag; fprintf(<span class="string">'Failed to create demo data folder: %s \n'</span>,demos_path);<span class="keyword">end</span>
-0061     <span class="keyword">end</span>
-0062     
-0063     
-0064 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+0050     <span class="comment">% Verify the source (zip file) exists; if not, download it from web!</span>
+0051     <span class="keyword">if</span> ~exist(fullfile(demo_zips_path,zipfname),<span class="string">'file'</span>)
+0052      
+0053         <a href="dsDownloadFiles.html" class="code" title="function destinationFile = dsDownloadFiles(requestedFile,destinationFile,overwrite_flag,verbose_flag)">dsDownloadFiles</a>(fullfile(demo_zips_path,zipfname));
+0054 
+0055     <span class="keyword">end</span>
+0056     
+0057     <span class="comment">% Get the destination directory</span>
+0058     study_dir = fullfile(demos_path,zipfilename_only);
+0059 
+0060     <span class="comment">% Unzip</span>
+0061     <span class="keyword">if</span> ~exist(study_dir,<span class="string">'dir'</span>)
+0062         <span class="keyword">if</span> verbose_flag; fprintf(<span class="string">'Unzipping demo data to %s.\n'</span>,study_dir); <span class="keyword">end</span>
+0063         unzip(fullfile(demo_zips_path,zipfname),demos_path);
+0064     <span class="keyword">elseif</span> exist(study_dir,<span class="string">'dir'</span>) &amp;&amp; overwrite_flag
+0065         <span class="keyword">if</span> verbose_flag; fprintf(<span class="string">'Demo data folder %s already exists. Overwriting \n'</span>,study_dir); <span class="keyword">end</span>
+0066         unzip(fullfile(demo_zips_path,zipfname),demos_path);
+0067     <span class="keyword">else</span>
+0068         <span class="keyword">if</span> verbose_flag; fprintf(<span class="string">'Demo data folder %s already exists. Skipping \n'</span>,study_dir); <span class="keyword">end</span>
+0069     <span class="keyword">end</span>
+0070     
+0071     
+0072 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 12-Dec-2017 11:32:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

@@ -6,16 +6,18 @@
   <meta name="keywords" content="dsProbeCellProperties">
   <meta name="description" content="data = dsProbeCellProperties(model,'option1',option1,...)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
-  <script type="text/javascript">
-    if (top.frames.length == 0) { top.location = "../../index.html"; };
-  </script>
 </head>
 <body>
+
 <a name="_top"></a>
-<!-- ../menu.html functions --><!-- menu.html internal -->
+<div><a href="../../menu.html">Home</a> &gt;  <a href="../menu.html">functions</a> &gt; <a href="menu.html">internal</a> &gt; dsProbeCellProperties.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../menu.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="menu.html">Index for functions/internal&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
 <h1>dsProbeCellProperties
 </h1>
 
@@ -110,89 +112,92 @@ This function is called by:
 0036 <span class="comment">% Analysis: input data sets for all step levels, output one stat structure</span>
 0037 <span class="comment">%           per experiment call with ephys properties for each cell in each</span>
 0038 <span class="comment">%           population of the model.</span>
-0039 
-0040 <span class="comment">% Check inputs</span>
-0041 options=<a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="keyword">...</span>
-0042   <span class="string">'target_equation'</span>,<span class="string">'ODE1'</span>,[],<span class="keyword">...</span>
-0043   <span class="string">'amplitudes'</span>,-30:5:180,[],<span class="keyword">...</span><span class="comment"> % pA. typically: 0-500pA (0-.5nA)</span>
-0044   <span class="string">'membrane_area'</span>,1500,[],<span class="keyword">...</span><span class="comment">     % um^2. typically: 1000-2000 um2</span>
-0045   <span class="string">'tspan'</span>,[0 1500],[],<span class="keyword">...</span>
-0046   <span class="string">'num_repetitions'</span>,1,[],<span class="keyword">...</span>
-0047   <span class="string">'onset'</span>,250,[],<span class="keyword">...</span>
-0048   <span class="string">'offset'</span>,1250,[],<span class="keyword">...</span>
-0049   <span class="string">'equivalent_cells_flag'</span>,0,[],<span class="keyword">...</span><span class="comment"> % if true, only simulate one cell per pop</span>
-0050   <span class="string">'remove_connections_flag'</span>,1,[],<span class="keyword">...</span>
-0051   },false);
-0052 
-0053 model=<a href="dsCheckModel.html" class="code" title="function model = dsCheckModel(model, varargin)">dsCheckModel</a>(model, varargin{:});
-0054 
-0055 <span class="comment">% check that amplitude=0 is present (for RMP calculation)</span>
-0056 <span class="keyword">if</span> ~ismember(0,options.amplitudes)
-0057   options.amplitudes(end+1)=0;
-0058 <span class="keyword">end</span>
-0059 <span class="comment">% convert current from pA to uA/cm^2</span>
-0060 CF = (1e-6)/(1e-8);   <span class="comment">% pA/um^2 =&gt; uA/cm^2. note: 1um2=1e-8cm2, 1pA=1e-6uA</span>
-0061 options.effective_amplitudes=CF*options.amplitudes/options.membrane_area;
-0062 <span class="comment">% options.effective_amplitudes=repmat(options.effective_amplitudes,[1 options.num_repetitions]);</span>
-0063 <span class="comment">% options.amplitudes=repmat(options.amplitudes,[1 options.num_repetitions]);</span>
-0064 
-0065 <span class="comment">% Remove connections from the model specification and regenerate the model</span>
-0066 <span class="keyword">if</span> ~isempty(model.specification.connections) &amp;&amp; options.remove_connections_flag
-0067   specification=model.specification;
-0068   specification.connections=[];
-0069   model=<a href="dsGenerateModel.html" class="code" title="function [model,name_map] = dsGenerateModel(specification, varargin)">dsGenerateModel</a>(specification);
-0070 <span class="keyword">end</span>
-0071 
-0072 <span class="comment">% Extract population info</span>
-0073 num_pops=length(model.specification.populations);
-0074 pop_names={model.specification.populations.name};
-0075 
-0076 <span class="comment">% Prepare list of modifications to add input pulses</span>
-0077 modifications={};
-0078 <span class="keyword">for</span> i=1:num_pops
-0079   <span class="keyword">if</span> isfield(model.parameters,[pop_names{i} <span class="string">'_Cm'</span>])
-0080     modifications(end+1,:)={pop_names{i},<span class="string">'equations'</span>,[<span class="string">'cat('</span> options.target_equation <span class="string">',+pulse(t)/Cm; pulse(t)=TONIC*(t&gt;=onset&amp;t&lt;=offset); monitor pulse)'</span>]};
-0081   <span class="keyword">else</span>
-0082     modifications(end+1,:)={pop_names{i},<span class="string">'equations'</span>,[<span class="string">'cat('</span> options.target_equation <span class="string">',+pulse(t); pulse(t)=TONIC*(t&gt;=onset&amp;t&lt;=offset); monitor pulse)'</span>]};
-0083   <span class="keyword">end</span>
-0084   modifications(end+1,:)={pop_names{i},<span class="string">'onset'</span>,options.onset};
-0085   modifications(end+1,:)={pop_names{i},<span class="string">'offset'</span>,options.offset};
-0086   <span class="keyword">if</span> options.equivalent_cells_flag
-0087     <span class="comment">% Reduce each population to a single cell if homogeneous</span>
-0088     modifications(end+1,:)={pop_names{i},<span class="string">'size'</span>,1};
-0089   <span class="keyword">end</span>
-0090   <span class="keyword">if</span> options.remove_connections_flag==1
-0091     <span class="comment">% only add input to the first population</span>
-0092     <span class="keyword">break</span>
-0093   <span class="keyword">end</span>
-0094 <span class="keyword">end</span>
-0095 
-0096 <span class="comment">% Prepare 'vary' specification to adjust pulse amplitudes in all populations</span>
-0097 <span class="comment">% simultaneously: {'(pop1,pop2,...)','TONIC',amplitudes}</span>
-0098 objects=<span class="string">'('</span>;
-0099 <span class="keyword">for</span> i=1:num_pops
-0100   objects=[objects pop_names{i} <span class="string">','</span>];
-0101   <span class="keyword">if</span> options.remove_connections_flag==1
-0102     <span class="comment">% only add input to the first population</span>
-0103     <span class="keyword">break</span>
-0104   <span class="keyword">end</span>
-0105 <span class="keyword">end</span>
-0106 objects=[objects(1:end-1) <span class="string">')'</span>];
-0107 vary={objects,<span class="string">'TONIC'</span>,options.effective_amplitudes;<span class="keyword">...</span>
-0108       objects,<span class="string">'repetition'</span>,1:options.num_repetitions};
-0109 
-0110 <span class="comment">% apply modifications to effectively add experimental apparatus to model</span>
-0111 model=<a href="dsApplyModifications.html" class="code" title="function [output,modifications] = dsApplyModifications(model, modifications, varargin)">dsApplyModifications</a>(model,modifications, varargin{:});
+0039 <span class="comment">%</span>
+0040 <span class="comment">% Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;</span>
+0041 <span class="comment">% Copyright (C) 2016 Jason Sherfey, Boston University, USA</span>
+0042 
+0043 <span class="comment">% Check inputs</span>
+0044 options=<a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="keyword">...</span>
+0045   <span class="string">'target_equation'</span>,<span class="string">'ODE1'</span>,[],<span class="keyword">...</span>
+0046   <span class="string">'amplitudes'</span>,-30:5:180,[],<span class="keyword">...</span><span class="comment"> % pA. typically: 0-500pA (0-.5nA)</span>
+0047   <span class="string">'membrane_area'</span>,1500,[],<span class="keyword">...</span><span class="comment">     % um^2. typically: 1000-2000 um2</span>
+0048   <span class="string">'tspan'</span>,[0 1500],[],<span class="keyword">...</span>
+0049   <span class="string">'num_repetitions'</span>,1,[],<span class="keyword">...</span>
+0050   <span class="string">'onset'</span>,250,[],<span class="keyword">...</span>
+0051   <span class="string">'offset'</span>,1250,[],<span class="keyword">...</span>
+0052   <span class="string">'equivalent_cells_flag'</span>,0,[],<span class="keyword">...</span><span class="comment"> % if true, only simulate one cell per pop</span>
+0053   <span class="string">'remove_connections_flag'</span>,1,[],<span class="keyword">...</span>
+0054   },false);
+0055 
+0056 model=<a href="dsCheckModel.html" class="code" title="function model = dsCheckModel(model, varargin)">dsCheckModel</a>(model, varargin{:});
+0057 
+0058 <span class="comment">% check that amplitude=0 is present (for RMP calculation)</span>
+0059 <span class="keyword">if</span> ~ismember(0,options.amplitudes)
+0060   options.amplitudes(end+1)=0;
+0061 <span class="keyword">end</span>
+0062 <span class="comment">% convert current from pA to uA/cm^2</span>
+0063 CF = (1e-6)/(1e-8);   <span class="comment">% pA/um^2 =&gt; uA/cm^2. note: 1um2=1e-8cm2, 1pA=1e-6uA</span>
+0064 options.effective_amplitudes=CF*options.amplitudes/options.membrane_area;
+0065 <span class="comment">% options.effective_amplitudes=repmat(options.effective_amplitudes,[1 options.num_repetitions]);</span>
+0066 <span class="comment">% options.amplitudes=repmat(options.amplitudes,[1 options.num_repetitions]);</span>
+0067 
+0068 <span class="comment">% Remove connections from the model specification and regenerate the model</span>
+0069 <span class="keyword">if</span> ~isempty(model.specification.connections) &amp;&amp; options.remove_connections_flag
+0070   specification=model.specification;
+0071   specification.connections=[];
+0072   model=<a href="dsGenerateModel.html" class="code" title="function [model,name_map] = dsGenerateModel(specification, varargin)">dsGenerateModel</a>(specification);
+0073 <span class="keyword">end</span>
+0074 
+0075 <span class="comment">% Extract population info</span>
+0076 num_pops=length(model.specification.populations);
+0077 pop_names={model.specification.populations.name};
+0078 
+0079 <span class="comment">% Prepare list of modifications to add input pulses</span>
+0080 modifications={};
+0081 <span class="keyword">for</span> i=1:num_pops
+0082   <span class="keyword">if</span> isfield(model.parameters,[pop_names{i} <span class="string">'_Cm'</span>])
+0083     modifications(end+1,:)={pop_names{i},<span class="string">'equations'</span>,[<span class="string">'cat('</span> options.target_equation <span class="string">',+pulse(t)/Cm; pulse(t)=TONIC*(t&gt;=onset&amp;t&lt;=offset); monitor pulse)'</span>]};
+0084   <span class="keyword">else</span>
+0085     modifications(end+1,:)={pop_names{i},<span class="string">'equations'</span>,[<span class="string">'cat('</span> options.target_equation <span class="string">',+pulse(t); pulse(t)=TONIC*(t&gt;=onset&amp;t&lt;=offset); monitor pulse)'</span>]};
+0086   <span class="keyword">end</span>
+0087   modifications(end+1,:)={pop_names{i},<span class="string">'onset'</span>,options.onset};
+0088   modifications(end+1,:)={pop_names{i},<span class="string">'offset'</span>,options.offset};
+0089   <span class="keyword">if</span> options.equivalent_cells_flag
+0090     <span class="comment">% Reduce each population to a single cell if homogeneous</span>
+0091     modifications(end+1,:)={pop_names{i},<span class="string">'size'</span>,1};
+0092   <span class="keyword">end</span>
+0093   <span class="keyword">if</span> options.remove_connections_flag==1
+0094     <span class="comment">% only add input to the first population</span>
+0095     <span class="keyword">break</span>
+0096   <span class="keyword">end</span>
+0097 <span class="keyword">end</span>
+0098 
+0099 <span class="comment">% Prepare 'vary' specification to adjust pulse amplitudes in all populations</span>
+0100 <span class="comment">% simultaneously: {'(pop1,pop2,...)','TONIC',amplitudes}</span>
+0101 objects=<span class="string">'('</span>;
+0102 <span class="keyword">for</span> i=1:num_pops
+0103   objects=[objects pop_names{i} <span class="string">','</span>];
+0104   <span class="keyword">if</span> options.remove_connections_flag==1
+0105     <span class="comment">% only add input to the first population</span>
+0106     <span class="keyword">break</span>
+0107   <span class="keyword">end</span>
+0108 <span class="keyword">end</span>
+0109 objects=[objects(1:end-1) <span class="string">')'</span>];
+0110 vary={objects,<span class="string">'TONIC'</span>,options.effective_amplitudes;<span class="keyword">...</span>
+0111       objects,<span class="string">'repetition'</span>,1:options.num_repetitions};
 0112 
-0113 <span class="comment">% execute experimental protocol by varying parameters across simulations</span>
-0114 fprintf(<span class="string">'Running experiment: %s\n'</span>,mfilename);
-0115 keyvals=<a href="dsRemoveKeyval.html" class="code" title="function keyvals_out = dsRemoveKeyval(keyvals,keys)">dsRemoveKeyval</a>(varargin,<span class="string">'tspan'</span>);
-0116 data=<a href="../../functions/dsSimulate.html" class="code" title="function [data,studyinfo,result] = dsSimulate(model,varargin)">dsSimulate</a>(model,<span class="string">'vary'</span>,vary,<span class="string">'tspan'</span>,options.tspan,keyvals{:});
-0117 
-0118 <span class="comment">% add options to data</span>
-0119 <span class="keyword">for</span> i=1:length(data)
-0120   data(i).simulator_options.experiment_options=options;
-0121 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+0113 <span class="comment">% apply modifications to effectively add experimental apparatus to model</span>
+0114 model=<a href="dsApplyModifications.html" class="code" title="function [output,modifications] = dsApplyModifications(model, modifications, varargin)">dsApplyModifications</a>(model,modifications, varargin{:});
+0115 
+0116 <span class="comment">% execute experimental protocol by varying parameters across simulations</span>
+0117 fprintf(<span class="string">'Running experiment: %s\n'</span>,mfilename);
+0118 keyvals=<a href="dsRemoveKeyval.html" class="code" title="function keyvals_out = dsRemoveKeyval(keyvals,keys)">dsRemoveKeyval</a>(varargin,<span class="string">'tspan'</span>);
+0119 data=<a href="../../functions/dsSimulate.html" class="code" title="function [data,studyinfo,result] = dsSimulate(model,varargin)">dsSimulate</a>(model,<span class="string">'vary'</span>,vary,<span class="string">'tspan'</span>,options.tspan,keyvals{:});
+0120 
+0121 <span class="comment">% add options to data</span>
+0122 <span class="keyword">for</span> i=1:length(data)
+0123   data(i).simulator_options.experiment_options=options;
+0124 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 12-Dec-2017 11:32:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

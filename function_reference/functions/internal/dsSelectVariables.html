@@ -6,16 +6,18 @@
   <meta name="keywords" content="dsSelectVariables">
   <meta name="description" content="SELECTVARIABLES - determine what variables to plot">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
-  <script type="text/javascript">
-    if (top.frames.length == 0) { top.location = "../../index.html"; };
-  </script>
 </head>
 <body>
+
 <a name="_top"></a>
-<!-- ../menu.html functions --><!-- menu.html internal -->
+<div><a href="../../menu.html">Home</a> &gt;  <a href="../menu.html">functions</a> &gt; <a href="menu.html">internal</a> &gt; dsSelectVariables.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../menu.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="menu.html">Index for functions/internal&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
 <h1>dsSelectVariables
 </h1>
 
@@ -46,7 +48,10 @@
    var_strings='*_v';
    var_strings='pop1_v';
    var_strings='pop1_*';
-   var_strings='pop2_*';</pre></div>
+   var_strings='pop2_*';
+ 
+ Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;
+ Copyright (C) 2016 Jason Sherfey, Boston University, USA</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
@@ -83,68 +88,71 @@ This function is called by:
 0020 <span class="comment">%   var_strings='pop1_v';</span>
 0021 <span class="comment">%   var_strings='pop1_*';</span>
 0022 <span class="comment">%   var_strings='pop2_*';</span>
-0023 
-0024 <span class="comment">%% auto_gen_test_data_flag argin</span>
-0025 options = <a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
-0026 <span class="keyword">if</span> options.auto_gen_test_data_flag
-0027   varargs = varargin;
-0028   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
-0029   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
-0030   argin = [{labels}, {var_strings}, varargs]; <span class="comment">% specific to this function</span>
-0031 <span class="keyword">end</span>
-0032 
-0033 <span class="keyword">if</span> nargin&lt;2
-0034   var_strings=[];
-0035 <span class="keyword">end</span>
-0036 
-0037 <span class="keyword">if</span> isempty(var_strings)
-0038   <span class="comment">% set default: all pops with state variable of first element of labels</span>
-0039   var=regexp(labels{1},<span class="string">'_.*$'</span>,<span class="string">'match'</span>);
-0040   <span class="comment">% add wildcard</span>
-0041   <span class="keyword">if</span> isempty(var)
-0042     var_strings={<span class="string">'*'</span>};
-0043   <span class="keyword">else</span>
-0044     var_strings={[<span class="string">'*'</span> var{1}]};
-0045   <span class="keyword">end</span>
-0046 <span class="keyword">elseif</span> ~iscell(var_strings)
-0047   var_strings={var_strings};
-0048 <span class="keyword">end</span>
-0049 
-0050 <span class="comment">% loop over cell array of variable indicators</span>
-0051 variables={};
-0052 <span class="keyword">for</span> i=1:length(var_strings)
-0053   varstr=var_strings{i};
-0054   <span class="comment">% convert state variable into reg string to get variable for all pops</span>
-0055   <span class="keyword">if</span> ~any(varstr==<span class="string">'*'</span>) &amp;&amp; any(~cellfun(@isempty,regexp(labels,[<span class="string">'_'</span> varstr <span class="string">'$'</span>])))
-0056     varstr=[<span class="string">'*_'</span> varstr];
-0057   <span class="keyword">end</span>
-0058   <span class="comment">% convert any population name into reg string to get all variables in pop</span>
-0059   <span class="keyword">if</span> ~any(varstr==<span class="string">'*'</span>) &amp;&amp; any(~cellfun(@isempty,regexp(labels,[<span class="string">'^'</span> varstr <span class="string">'_'</span>])))
-0060     varstr=[varstr <span class="string">'_*'</span>];
-0061   <span class="keyword">end</span>
-0062   <span class="comment">% add period to get all matches</span>
-0063   varstr=strrep(varstr,<span class="string">'*'</span>,<span class="string">'.*'</span>);
-0064   <span class="comment">% find all matches</span>
-0065   matches=regexp(labels,[<span class="string">'^'</span> varstr <span class="string">'$'</span>],<span class="string">'match'</span>);
-0066   variables=cat(2,variables,matches{:});
-0067 <span class="keyword">end</span>
-0068 
-0069 <span class="comment">% if nargout&gt;1</span>
-0070   pop_names={};
-0071   <span class="keyword">for</span> i=1:length(variables)
-0072     name=regexp(variables{i},<span class="string">'^([a-zA-Z0-9]+)_'</span>,<span class="string">'tokens'</span>,<span class="string">'once'</span>);
-0073     pop_names{end+1}=name{1};
-0074   <span class="keyword">end</span>
-0075 <span class="comment">% end</span>
-0076 
-0077 <span class="comment">%% auto_gen_test_data_flag argout</span>
-0078 <span class="keyword">if</span> options.auto_gen_test_data_flag
-0079   argout = {variables, pop_names}; <span class="comment">% specific to this function</span>
-0080   
-0081   <a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>(argin, argout);
-0082 <span class="keyword">end</span>
-0083 
-0084 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;</span>
+0025 <span class="comment">% Copyright (C) 2016 Jason Sherfey, Boston University, USA</span>
+0026 
+0027 <span class="comment">%% auto_gen_test_data_flag argin</span>
+0028 options = <a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
+0029 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0030   varargs = varargin;
+0031   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0032   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
+0033   argin = [{labels}, {var_strings}, varargs]; <span class="comment">% specific to this function</span>
+0034 <span class="keyword">end</span>
+0035 
+0036 <span class="keyword">if</span> nargin&lt;2
+0037   var_strings=[];
+0038 <span class="keyword">end</span>
+0039 
+0040 <span class="keyword">if</span> isempty(var_strings)
+0041   <span class="comment">% set default: all pops with state variable of first element of labels</span>
+0042   var=regexp(labels{1},<span class="string">'_.*$'</span>,<span class="string">'match'</span>);
+0043   <span class="comment">% add wildcard</span>
+0044   <span class="keyword">if</span> isempty(var)
+0045     var_strings={<span class="string">'*'</span>};
+0046   <span class="keyword">else</span>
+0047     var_strings={[<span class="string">'*'</span> var{1}]};
+0048   <span class="keyword">end</span>
+0049 <span class="keyword">elseif</span> ~iscell(var_strings)
+0050   var_strings={var_strings};
+0051 <span class="keyword">end</span>
+0052 
+0053 <span class="comment">% loop over cell array of variable indicators</span>
+0054 variables={};
+0055 <span class="keyword">for</span> i=1:length(var_strings)
+0056   varstr=var_strings{i};
+0057   <span class="comment">% convert state variable into reg string to get variable for all pops</span>
+0058   <span class="keyword">if</span> ~any(varstr==<span class="string">'*'</span>) &amp;&amp; any(~cellfun(@isempty,regexp(labels,[<span class="string">'_'</span> varstr <span class="string">'$'</span>])))
+0059     varstr=[<span class="string">'*_'</span> varstr];
+0060   <span class="keyword">end</span>
+0061   <span class="comment">% convert any population name into reg string to get all variables in pop</span>
+0062   <span class="keyword">if</span> ~any(varstr==<span class="string">'*'</span>) &amp;&amp; any(~cellfun(@isempty,regexp(labels,[<span class="string">'^'</span> varstr <span class="string">'_'</span>])))
+0063     varstr=[varstr <span class="string">'_*'</span>];
+0064   <span class="keyword">end</span>
+0065   <span class="comment">% add period to get all matches</span>
+0066   varstr=strrep(varstr,<span class="string">'*'</span>,<span class="string">'.*'</span>);
+0067   <span class="comment">% find all matches</span>
+0068   matches=regexp(labels,[<span class="string">'^'</span> varstr <span class="string">'$'</span>],<span class="string">'match'</span>);
+0069   variables=cat(2,variables,matches{:});
+0070 <span class="keyword">end</span>
+0071 
+0072 <span class="comment">% if nargout&gt;1</span>
+0073   pop_names={};
+0074   <span class="keyword">for</span> i=1:length(variables)
+0075     name=regexp(variables{i},<span class="string">'^([a-zA-Z0-9]+)_'</span>,<span class="string">'tokens'</span>,<span class="string">'once'</span>);
+0076     pop_names{end+1}=name{1};
+0077   <span class="keyword">end</span>
+0078 <span class="comment">% end</span>
+0079 
+0080 <span class="comment">%% auto_gen_test_data_flag argout</span>
+0081 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0082   argout = {variables, pop_names}; <span class="comment">% specific to this function</span>
+0083   
+0084   <a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>(argin, argout);
+0085 <span class="keyword">end</span>
+0086 
+0087 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 12-Dec-2017 11:32:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

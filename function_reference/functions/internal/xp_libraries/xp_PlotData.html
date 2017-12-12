@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of xp_PlotData</title>
+  <meta name="keywords" content="xp_PlotData">
+  <meta name="description" content="xp must be 1x1 (e.g. 0 dimensional)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+
+<a name="_top"></a>
+<div><a href="../../../menu.html">Home</a> &gt;  <a href="../../menu.html">functions</a> &gt; <a href="../menu.html">internal</a> &gt; <a href="menu.html">xp_libraries</a> &gt; xp_PlotData.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../menu.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="menu.html">Index for functions/internal/xp_libraries&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>xp_PlotData
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>xp must be 1x1 (e.g. 0 dimensional)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function hxp = xp_PlotData (xp, op) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> xp must be 1x1 (e.g. 0 dimensional)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../functions/dsPlot.html" class="code" title="function handles = dsPlot(data,varargin)">dsPlot</a>	DSPlot - plot data in various ways depending on what data was provided and what options are defined.</li><li><a href="../../../functions/internal/dsMdd2ds.html" class="code" title="function data = dsMdd2ds(obj,varargin)">dsMdd2ds</a>	% data=MDD2ds(obj,varargin)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../functions/dsPlot2.html" class="code" title="function [handles,xp] = dsPlot2(data,varargin)">dsPlot2</a>	% handles=dsPlot(data,'option',value)</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 
+0002 
+0003 <a name="_sub0" href="#_subfunctions" class="code">function hxp = xp_PlotData (xp, op)</a>
+0004     <span class="comment">% xp must be 1x1 (e.g. 0 dimensional)</span>
+0005     
+0006     hxp = struct;
+0007     
+0008     <span class="keyword">if</span> nargin &lt; 2
+0009         op = struct;
+0010     <span class="keyword">end</span>
+0011     
+0012     <span class="keyword">if</span> isempty(op); op = struct; <span class="keyword">end</span>;
+0013     
+0014     op = struct_addDef(op,<span class="string">'args'</span>,{});
+0015     
+0016     xlims = op.xlims;
+0017     ylims = op.ylims;
+0018 
+0019     <span class="comment">% Squeeze out any 1D placeholder axes (&quot;Dim X&quot;). These can be created</span>
+0020     <span class="comment">% by the unpacking operation above.</span>
+0021     xp = xp.squeezeRegexp(<span class="string">'Dim'</span>);
+0022     
+0023     <span class="comment">% Convert xp to DynaSim data struct</span>
+0024     data = <a href="../../../functions/internal/dsMdd2ds.html" class="code" title="function data = dsMdd2ds(obj,varargin)">dsMdd2ds</a>(xp);
+0025     
+0026     <span class="comment">% Remove NaNs introduced due to packing</span>
+0027     <span class="keyword">for</span> i = 1:length(data)
+0028         labels = data(i).labels;
+0029         labels_sans_time = labels(~strcmp(labels,<span class="string">'time'</span>));
+0030 
+0031         <span class="keyword">for</span> j = 1:length(labels_sans_time)
+0032             d = data(i).(labels_sans_time{j});
+0033             ind = all(~isnan(d),1);
+0034             d=d(:,ind);
+0035             data(i).(labels_sans_time{j}) = d;
+0036         <span class="keyword">end</span>
+0037     <span class="keyword">end</span>
+0038     
+0039     <span class="comment">% Feed into original PlotData command, making sure it doesn't generate</span>
+0040     <span class="comment">% new figures (rather, should produce it in the current subplot)</span>
+0041     
+0042     <span class="comment">% Hack to get working with dsPlot bug being unable to accept strings</span>
+0043     <span class="comment">% right now. This issue results around line 200 (seems to have to</span>
+0044     <span class="comment">% dowith the new code for detecting co-varied params in dsPlot).</span>
+0045     <span class="keyword">if</span> isfield(data(1),<span class="string">'varied'</span>)
+0046         varied = data(1).varied;
+0047         <span class="keyword">for</span> i = 1:length(data);
+0048             <span class="keyword">for</span> j = 1:length(varied)
+0049                 <span class="keyword">if</span> ischar(data(i).(varied{j}))
+0050                     temp = data(i).(varied{j});
+0051                     ind = strfind(temp,<span class="string">'_'</span>);
+0052                     temp = str2num(temp(1:ind-1));
+0053                     <span class="keyword">if</span> isempty(temp); temp = 0; <span class="keyword">end</span>
+0054                     data(i).(varied{j}) = temp;
+0055                 <span class="keyword">end</span>
+0056             <span class="keyword">end</span>
+0057         <span class="keyword">end</span>
+0058     <span class="keyword">end</span>
+0059     hxp.hcurr = <a href="../../../functions/dsPlot.html" class="code" title="function handles = dsPlot(data,varargin)">dsPlot</a>(data,op.args{:},<span class="string">'lock_gca'</span>,true);
+0060     
+0061     <span class="keyword">if</span> ~isempty(xlims); xlim(xlims); <span class="keyword">end</span>
+0062     <span class="keyword">if</span> ~isempty(ylims); ylim(ylims); <span class="keyword">end</span>
+0063 
+0064 <span class="keyword">end</span>
+0065 
+0066</pre></div>
+<hr><address>Generated on Tue 12-Dec-2017 11:32:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

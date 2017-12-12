@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of dsGetPopSizeFromName</title>
+  <meta name="keywords" content="dsGetPopSizeFromName">
+  <meta name="description" content="Purpose: reverse engineer the appropriate population size from the name">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+
+<a name="_top"></a>
+<div><a href="../../menu.html">Home</a> &gt;  <a href="../menu.html">functions</a> &gt; <a href="menu.html">internal</a> &gt; dsGetPopSizeFromName.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../menu.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="menu.html">Index for functions/internal&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>dsGetPopSizeFromName
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Purpose: reverse engineer the appropriate population size from the name</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [pop_size,pop_name,target] = dsGetPopSizeFromName(model,name) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Purpose: reverse engineer the appropriate population size from the name
+ of a state variable, population, monitor, etc.
+
+ Assumes Npop of source if this is the state variable for a connection mechanism.
+ Assumes Npop of target if this is an intrinsic mechanism.
+ 
+ Note: this is a helper function called by</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="dsGetOutputCounts.html" class="code" title="function [state_var_counts,monitor_counts] = dsGetOutputCounts(model)">dsGetOutputCounts</a>	GETOUTPUTCOUNTS - determine how many copies of each state variable and monitor will be produced by simulating the model.</li><li><a href="dsWriteDynaSimSolver.html" class="code" title="function [outfile,options] = dsWriteDynaSimSolver(model,varargin)">dsWriteDynaSimSolver</a>	WRITEDYNASIMSOLVER - write m-file that numerically inteegrates the model</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [pop_size,pop_name,target] = dsGetPopSizeFromName(model,name)</a>
+0002 <span class="comment">% Purpose: reverse engineer the appropriate population size from the name</span>
+0003 <span class="comment">% of a state variable, population, monitor, etc.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Assumes Npop of source if this is the state variable for a connection mechanism.</span>
+0006 <span class="comment">% Assumes Npop of target if this is an intrinsic mechanism.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Note: this is a helper function called by</span>
+0009 
+0010 <span class="comment">% model=dsGenerateModel('dv/dt=@current+10;{iNa,iK}');</span>
+0011 <span class="comment">% name='E_1_iNa_m;</span>
+0012 <span class="comment">% name='E_1_E_2_iAMPA_s';</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;</span>
+0015 <span class="comment">% Copyright (C) 2016 Jason Sherfey, Boston University, USA</span>
+0016 
+0017 spec=model.specification;
+0018 pops={spec.populations.name};
+0019 
+0020 <span class="comment">% sort pops to search longest name first</span>
+0021 l=cellfun(@length,pops);
+0022 [~,I]=sort(l,<span class="string">'descend'</span>);
+0023 pops=pops(I);
+0024 
+0025 <span class="comment">% find the target population</span>
+0026 found=0;
+0027 <span class="keyword">for</span> i=1:length(pops)
+0028   test=sprintf(<span class="string">'%s_'</span>,pops{i});
+0029   <span class="keyword">if</span> regexp(name,[<span class="string">'^'</span> test]) <span class="comment">% is this the target pop?</span>
+0030     target=pops{i}; <span class="comment">% target pop found</span>
+0031     found=1;
+0032     <span class="keyword">break</span>;
+0033   <span class="keyword">elseif</span> strcmp(name,test) <span class="comment">% this is a population name</span>
+0034     target=pops{i}; <span class="comment">% target pop found</span>
+0035     found=1;
+0036     <span class="keyword">break</span>;
+0037   <span class="keyword">end</span>
+0038 <span class="keyword">end</span>
+0039 <span class="keyword">if</span> ~found
+0040   error(<span class="string">'target population not found.'</span>);
+0041 <span class="keyword">end</span>
+0042 
+0043 <span class="comment">% check for target_source_mechanism</span>
+0044 found=0;
+0045 <span class="keyword">for</span> i=1:length(pops)
+0046   test=sprintf(<span class="string">'%s_%s_'</span>,target,pops{i});
+0047   <span class="keyword">if</span> regexp(name,[<span class="string">'^'</span> test])
+0048     source=pops{i};
+0049     found=1;
+0050     <span class="keyword">break</span>;
+0051   <span class="keyword">end</span>
+0052 <span class="keyword">end</span>
+0053 
+0054 <span class="keyword">if</span> found
+0055   <span class="comment">% assume Npop of source if this is the state variable for a connection mechanism</span>
+0056   pop_name=source;
+0057 <span class="keyword">else</span>
+0058   <span class="comment">% assume Npop of target if this is an intrinsic mechanism</span>
+0059   pop_name=target;
+0060 <span class="keyword">end</span>
+0061 
+0062 pop_size=model.parameters.([pop_name <span class="string">'_Npop'</span>]);</pre></div>
+<hr><address>Generated on Tue 12-Dec-2017 11:32:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

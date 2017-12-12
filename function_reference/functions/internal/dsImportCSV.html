@@ -6,16 +6,18 @@
   <meta name="keywords" content="dsImportCSV">
   <meta name="description" content="IMPORTCSV - load CSV data into DynaSim formatted data structure.">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
-  <script type="text/javascript">
-    if (top.frames.length == 0) { top.location = "../../index.html"; };
-  </script>
 </head>
 <body>
+
 <a name="_top"></a>
-<!-- ../menu.html functions --><!-- menu.html internal -->
+<div><a href="../../menu.html">Home</a> &gt;  <a href="../menu.html">functions</a> &gt; <a href="menu.html">internal</a> &gt; dsImportCSV.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../menu.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="menu.html">Index for functions/internal&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
 <h1>dsImportCSV
 </h1>
 
@@ -49,7 +51,10 @@
    column. if a population has more than one cell, different cells are
    sequential columns with same header repeated for each cell.
 
- See also: dsImport</pre></div>
+ See also: dsImport
+
+ Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;
+ Copyright (C) 2016 Jason Sherfey, Boston University, USA</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
@@ -89,20 +94,23 @@ This function is called by:
 0023 <span class="comment">%   sequential columns with same header repeated for each cell.</span>
 0024 <span class="comment">%</span>
 0025 <span class="comment">% See also: dsImport</span>
-0026 
-0027 <span class="comment">% check inputs</span>
-0028 <span class="keyword">if</span> ~exist(file,<span class="string">'file'</span>)
-0029   error(<span class="string">'file not found.'</span>);
-0030 <span class="keyword">end</span>
-0031 
-0032 <span class="comment">% load data</span>
-0033 contents=importdata(file,<span class="string">','</span>);
-0034 fields=unique(contents.colheaders,<span class="string">'stable'</span>);
-0035 data.labels=fields([2:length(fields) 1]); <span class="comment">% move time vector to end of labels</span>
-0036 <span class="keyword">for</span> i=1:length(fields)
-0037   data.(fields{i})=contents.data(:,ismember(contents.colheaders,fields{i}));
-0038 <span class="keyword">end</span>
-0039 data.datafile=file;</pre></div>
-<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;</span>
+0028 <span class="comment">% Copyright (C) 2016 Jason Sherfey, Boston University, USA</span>
+0029 
+0030 <span class="comment">% check inputs</span>
+0031 <span class="keyword">if</span> ~exist(file,<span class="string">'file'</span>)
+0032   error(<span class="string">'file not found.'</span>);
+0033 <span class="keyword">end</span>
+0034 
+0035 <span class="comment">% load data</span>
+0036 contents=importdata(file,<span class="string">','</span>);
+0037 fields=unique_wrapper(contents.colheaders,<span class="string">'stable'</span>);
+0038 data.labels=fields([2:length(fields) 1]); <span class="comment">% move time vector to end of labels</span>
+0039 <span class="keyword">for</span> i=1:length(fields)
+0040   data.(fields{i})=contents.data(:,ismember(contents.colheaders,fields{i}));
+0041 <span class="keyword">end</span>
+0042 data.datafile=file;</pre></div>
+<hr><address>Generated on Tue 12-Dec-2017 11:32:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

@@ -6,16 +6,18 @@
   <meta name="keywords" content="dsPropagateNamespaces">
   <meta name="description" content="PROPAGATENAMESPACES - namespace-establishing namespace substitutions.">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
-  <script type="text/javascript">
-    if (top.frames.length == 0) { top.location = "../../index.html"; };
-  </script>
 </head>
 <body>
+
 <a name="_top"></a>
-<!-- ../menu.html functions --><!-- menu.html internal -->
+<div><a href="../../menu.html">Home</a> &gt;  <a href="../menu.html">functions</a> &gt; <a href="menu.html">internal</a> &gt; dsPropagateNamespaces.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../menu.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="menu.html">Index for functions/internal&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
 <h1>dsPropagateNamespaces
 </h1>
 
@@ -45,13 +47,16 @@
 
  Example 1: TODO
 
- See also: <a href="dsGenerateModel.html" class="code" title="function [model,name_map] = dsGenerateModel(specification, varargin)">dsGenerateModel</a>, <a href="dsPropagateFunctions.html" class="code" title="function model = dsPropagateFunctions(model, varargin)">dsPropagateFunctions</a>, <a href="dsParseModelEquations.html" class="code" title="function [model,name_map] = dsParseModelEquations(text,varargin)">dsParseModelEquations</a>, <a href="dsGetParentNamespace.html" class="code" title="function parent = dsGetParentNamespace(namespace, varargin)">dsGetParentNamespace</a></pre></div>
+ See also: <a href="dsGenerateModel.html" class="code" title="function [model,name_map] = dsGenerateModel(specification, varargin)">dsGenerateModel</a>, <a href="dsPropagateFunctions.html" class="code" title="function model = dsPropagateFunctions(model, varargin)">dsPropagateFunctions</a>, <a href="dsParseModelEquations.html" class="code" title="function [model,name_map] = dsParseModelEquations(text,varargin)">dsParseModelEquations</a>, <a href="dsGetParentNamespace.html" class="code" title="function parent = dsGetParentNamespace(namespace, varargin)">dsGetParentNamespace</a>
+
+ Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;
+ Copyright (C) 2016 Jason Sherfey, Boston University, USA</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="dsCheckModel.html" class="code" title="function model = dsCheckModel(model, varargin)">dsCheckModel</a>	CHECKMODEL - Standardize model structure and auto-populate missing fields</li><li><a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>	CHECKOPTIONS - organize key/value pairs in structure with default or user-supplied values according to a schema</li><li><a href="dsGetParentNamespace.html" class="code" title="function parent = dsGetParentNamespace(namespace, varargin)">dsGetParentNamespace</a>	GETPARENTNAMESPACE - determine parent namespace from namespace specified in namespace</li><li><a href="dsStrrep.html" class="code" title="function str = dsStrrep(str,oldstr,newstr,lpad,rpad, varargin)">dsStrrep</a>	STRREP - replace full words by new character strings, ignoring matches that appear as sub-strings.</li><li><a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>	Inputs:</li></ul>
+<li><a href="dsCheckModel.html" class="code" title="function model = dsCheckModel(model, varargin)">dsCheckModel</a>	CHECKMODEL - Standardize model structure and auto-populate missing fields</li><li><a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>	CHECKOPTIONS - organize key/value pairs in structure with default or user-supplied values according to a schema</li><li><a href="dsGetNamespaces.html" class="code" title="function [name_,name__] = dsGetNamespaces(spec)">dsGetNamespaces</a>	Purpose: retrieve namespaces for all objects in specification</li><li><a href="dsGetParentNamespace.html" class="code" title="function parent = dsGetParentNamespace(namespace, varargin)">dsGetParentNamespace</a>	GETPARENTNAMESPACE - determine parent namespace from namespace specified in namespace</li><li><a href="dsStrrep.html" class="code" title="function str = dsStrrep(str,oldstr,newstr,lpad,rpad, varargin)">dsStrrep</a>	STRREP - replace full words by new character strings, ignoring matches that appear as sub-strings.</li><li><a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>	Inputs:</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 <li><a href="dsGenerateModel.html" class="code" title="function [model,name_map] = dsGenerateModel(specification, varargin)">dsGenerateModel</a>	GENERATEMODEL - Parse DynaSim specification and organize model data in DynaSim model structure</li></ul>
@@ -59,7 +64,7 @@ This function is called by:
 
 <h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="#_sub1" class="code">function expressions=propagate_namespaces(expressions,namespaces,map,insert_types)</a></li></ul>
+<li><a href="#_sub1" class="code">function expressions=propagate_namespaces(expressions,namespaces,map,insert_types)</a></li><li><a href="#_sub2" class="code">function parent = dsGetParentNamespace(namespace)</a></li></ul>
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 <div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function model = dsPropagateNamespaces(model,map, varargin)</a>
@@ -83,172 +88,241 @@ This function is called by:
 0019 <span class="comment">% Example 1: TODO</span>
 0020 <span class="comment">%</span>
 0021 <span class="comment">% See also: dsGenerateModel, dsPropagateFunctions, dsParseModelEquations, dsGetParentNamespace</span>
-0022 
-0023 <span class="comment">%% auto_gen_test_data_flag argin</span>
-0024 options = <a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
-0025 <span class="keyword">if</span> options.auto_gen_test_data_flag
-0026   varargs = varargin;
-0027   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
-0028   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
-0029   argin = [{model}, {map}, varargs]; <span class="comment">% specific to this function</span>
-0030 <span class="keyword">end</span>
-0031 
-0032 <span class="comment">% Check model</span>
-0033 model=<a href="dsCheckModel.html" class="code" title="function model = dsCheckModel(model, varargin)">dsCheckModel</a>(model, varargin{:});
-0034 <span class="comment">% Check map</span>
-0035 <span class="keyword">if</span> ~iscell(map) || size(map,2)~=4
-0036   error(<span class="string">'map must be a cell array with four columns for (name, namespace_name, namespace, type)'</span>);
-0037 <span class="keyword">end</span>
-0038 names_in_namespace=cellfun(@(x,y)strncmp(y,x,length(y)),map(:,2),map(:,3));
-0039 
-0040 <span class="comment">% namespace propagation pattern:</span>
-0041 allowed_insert_types.fixed_variables=<span class="keyword">...</span>
-0042   {<span class="string">'parameters'</span>,<span class="string">'fixed_variables'</span>,<span class="string">'reserved'</span>}; <span class="comment">% into fixed_variables</span>
-0043 allowed_insert_types.functions=<span class="keyword">...</span>
-0044   {<span class="string">'parameters'</span>,<span class="string">'fixed_variables'</span>,<span class="string">'functions'</span>,<span class="string">'state_variables'</span>,<span class="string">'reserved'</span>}; <span class="comment">% into functions</span>
-0045 allowed_insert_types.monitors=<span class="keyword">...</span>
-0046   {<span class="string">'parameters'</span>,<span class="string">'fixed_variables'</span>,<span class="string">'functions'</span>,<span class="string">'state_variables'</span>,<span class="string">'reserved'</span>}; <span class="comment">% into monitors</span>
-0047 allowed_insert_types.ODEs=<span class="keyword">...</span>
-0048   {<span class="string">'parameters'</span>,<span class="string">'fixed_variables'</span>,<span class="string">'functions'</span>,<span class="string">'state_variables'</span>,<span class="string">'reserved'</span>}; <span class="comment">% into ODEs</span>
-0049 allowed_insert_types.ICs=<span class="keyword">...</span>
-0050   {<span class="string">'parameters'</span>,<span class="string">'fixed_variables'</span>,<span class="string">'functions'</span>,<span class="string">'state_variables'</span>,<span class="string">'reserved'</span>}; <span class="comment">% into ICs</span>
-0051 allowed_insert_types.linkers=<span class="keyword">...</span>
-0052   {<span class="string">'parameters'</span>,<span class="string">'fixed_variables'</span>,<span class="string">'functions'</span>,<span class="string">'state_variables'</span>,<span class="string">'reserved'</span>};
-0053 allowed_insert_types.conditionals=<span class="keyword">...</span>
-0054   {<span class="string">'parameters'</span>,<span class="string">'fixed_variables'</span>,<span class="string">'functions'</span>,<span class="string">'state_variables'</span>,<span class="string">'reserved'</span>};
-0055 
-0056 <span class="comment">%% 1.0 Propagate through structure arrays (linkers, conditionals)</span>
-0057 <span class="comment">% 1.1 linkers (expression)</span>
-0058 <span class="keyword">if</span> ~isempty(model.linkers)
-0059   namespaces={model.linkers.namespace};
-0060   expressions=<a href="#_sub1" class="code" title="subfunction expressions=propagate_namespaces(expressions,namespaces,map,insert_types)">propagate_namespaces</a>({model.linkers.expression},namespaces,map,allowed_insert_types.linkers);
-0061   [model.linkers(1:length(model.linkers)).expression]=deal(expressions{:});
-0062 <span class="keyword">end</span>
-0063 
-0064 <span class="comment">% 1.2 conditionals (condition, action, else)</span>
-0065 <span class="keyword">if</span> ~isempty(model.conditionals)
-0066   namespaces={model.conditionals.namespace};
-0067   target_types={<span class="string">'condition'</span>,<span class="string">'action'</span>,<span class="string">'else'</span>};
-0068   <span class="keyword">for</span> type_index=1:length(target_types)
-0069     type=target_types{type_index};
-0070     tmp=<a href="#_sub1" class="code" title="subfunction expressions=propagate_namespaces(expressions,namespaces,map,insert_types)">propagate_namespaces</a>({model.conditionals.(type)},namespaces,map,allowed_insert_types.conditionals);
-0071     [model.conditionals(1:length(model.conditionals)).(type)]=deal(tmp{:});
-0072   <span class="keyword">end</span>
-0073 <span class="keyword">end</span>
-0074 
-0075 <span class="comment">%% 2.0 Propagate through sub-structures</span>
-0076 target_types={<span class="string">'fixed_variables'</span>,<span class="string">'functions'</span>,<span class="string">'monitors'</span>,<span class="string">'ODEs'</span>,<span class="string">'ICs'</span>};
-0077 
-0078 <span class="comment">% loop over types of model data</span>
-0079 <span class="keyword">for</span> type_index=1:length(target_types)
-0080   type=target_types{type_index};<span class="comment">%'fixed_variables';</span>
-0081   <span class="comment">% info for this type</span>
-0082   s=model.(type);
-0083   <span class="keyword">if</span> isstruct(s)
-0084     fields=fieldnames(s); <span class="comment">% namespaced-names of this type (ie, [namespace_name])</span>
-0085     expressions=struct2cell(s); <span class="comment">% raw-expressions of this type (ie, without namespace prefixes)</span>
-0086     namespaces={};
-0087     <span class="keyword">for</span> i=1:length(expressions)
-0088       idx=strcmp(fields{i},map(:,2));
-0089       <span class="keyword">if</span> numel(find(idx))&gt;1
-0090         <span class="comment">% constrain to namespace-conserving entries</span>
-0091         tmp=map(idx&amp;names_in_namespace,3);
-0092         
-0093         <span class="comment">% use the lowest level namespace (i.e., longest namespace name)</span>
-0094         l=cellfun(@length,tmp);
-0095         tmp=tmp{l==max(l)};
-0096       <span class="keyword">else</span>
-0097         tmp=map{idx,3};
-0098       <span class="keyword">end</span>
-0099       namespaces{end+1}=tmp;
-0100     <span class="keyword">end</span>
-0101     <span class="comment">% update expressions for names of this type</span>
-0102     expressions=<a href="#_sub1" class="code" title="subfunction expressions=propagate_namespaces(expressions,namespaces,map,insert_types)">propagate_namespaces</a>(expressions,namespaces,map,allowed_insert_types.(type));
-0103     
-0104     <span class="comment">% update model with expressions including namespaces</span>
-0105     model.(type)=cell2struct(expressions,fields,1);
-0106   <span class="keyword">end</span>
-0107 <span class="keyword">end</span>
-0108 
-0109 <span class="comment">%% NESTED FUNCTIONS</span>
-0110 <span class="comment">% function expressions=propagate_namespaces(expressions,names_full,map,insert_types)</span>
-0111 <a name="_sub1" href="#_subfunctions" class="code">function expressions=propagate_namespaces(expressions,namespaces,map,insert_types)</a>
-0112   <span class="comment">% loop over and update expressions for names of this type</span>
-0113   <span class="keyword">for</span> i=1:length(expressions)
-0114     <span class="keyword">if</span> isempty(expressions{i})
-0115       <span class="keyword">continue</span>;
-0116     <span class="keyword">end</span>
-0117     <span class="comment">% get namespace for this expression</span>
-0118     this_namespace=namespaces{i};
-0119     
-0120     <span class="comment">% find parent namespaces</span>
-0121     parent_namespace = <a href="dsGetParentNamespace.html" class="code" title="function parent = dsGetParentNamespace(namespace, varargin)">dsGetParentNamespace</a>(this_namespace, varargin{:});
-0122     
-0123     <span class="comment">% find where this and parent namespaces are in map array</span>
-0124     insert_type_constraint = ismember(map(:,4),insert_types);
-0125     this_namespace_map_inds = find(strcmp(this_namespace,map(:,3)) &amp; insert_type_constraint);
-0126     parent_namespace_map_inds = find(strcmp(parent_namespace,map(:,3)) &amp; insert_type_constraint);
-0127     
-0128     <span class="comment">% get list of words in this expression</span>
-0129     words=unique(regexp(expressions{i},<span class="string">'[a-zA-Z]+\w*'</span>,<span class="string">'match'</span>));
-0130     
-0131     <span class="comment">% loop over words</span>
-0132     <span class="keyword">for</span> j=1:length(words)
-0133       <span class="comment">% search for words in parent namespace of map.names</span>
-0134       <span class="keyword">if</span> any(strcmp(words{j},map(parent_namespace_map_inds,1))) <span class="comment">% search parent namespace</span>
-0135         <span class="comment">% word found in parent namespace of map</span>
-0136         ind=parent_namespace_map_inds(strcmp(words{j},map(parent_namespace_map_inds,1)));
-0137         new_word=map{ind,2};
-0138         
-0139         <span class="comment">%if IC, need to take just first time index</span>
-0140         <span class="keyword">if</span> exist(<span class="string">'type'</span>,<span class="string">'var'</span>) &amp;&amp; strcmp(type, <span class="string">'ICs'</span>) &amp;&amp; strcmp(words{j}, <span class="string">'X'</span>)
-0141           new_word = [new_word <span class="string">'_last'</span>]; <span class="comment">% HACK</span>
-0142         <span class="keyword">end</span>
-0143         
-0144         <span class="comment">% replace found word in expression by map(names_bar|parent_namespace)</span>
-0145         expressions{i}=<a href="dsStrrep.html" class="code" title="function str = dsStrrep(str,oldstr,newstr,lpad,rpad, varargin)">dsStrrep</a>(expressions{i},words{j},new_word, <span class="string">''</span>, <span class="string">''</span>, varargin{:});
-0146         <span class="comment">% check whether new word is defined in model</span>
-0147         <span class="comment">% NOTE: this is necessary to account for namespace differences between</span>
-0148         <span class="comment">%   user-supplied population parameters that should replace default mechanism-level parameters</span>
-0149         new_word_type=map{ind,4};
-0150 <span class="comment">% %{</span>
-0151         <span class="keyword">if</span> ~isfield(model.(new_word_type),new_word)
-0152           <span class="comment">% if not, define it from (word without namespace/namespace)</span>
-0153           <span class="keyword">if</span> isfield(model.(new_word_type),words{j})
-0154             model.(new_word_type).(new_word)=model.(new_word_type).(words{j});
-0155             model.(new_word_type) = rmfield(model.(new_word_type),words{j});
-0156           <span class="keyword">else</span>
-0157             tmpi=find(strcmp(words{j},map(:,1))&amp;strcmp(new_word_type,map(:,4))&amp;strcmp(this_namespace,map(:,3)));
-0158             <span class="keyword">if</span> ~isempty(tmpi)
-0159               old_field = map{tmpi,2};
-0160               <span class="keyword">if</span> ~isempty(tmpi) &amp;&amp; isfield(model.(new_word_type),old_field)
-0161                 model.(new_word_type).(new_word)=model.(new_word_type).(old_field);
-0162                 <span class="comment">%model.(new_word_type) = rmfield(model.(new_word_type),old_field);</span>
-0163               <span class="keyword">end</span>
-0164             <span class="keyword">end</span>
-0165           <span class="keyword">end</span>
-0166         <span class="keyword">end</span>
-0167 <span class="comment">% %}</span>
-0168       <span class="keyword">elseif</span> any(strcmp(words{j},map(this_namespace_map_inds,1))) <span class="comment">% search this namespace</span>
-0169         <span class="comment">% word found in this namespace of map</span>
-0170         ind=this_namespace_map_inds(strcmp(words{j},map(this_namespace_map_inds,1)));
-0171         new_word=map{ind,2};
-0172         
-0173         <span class="comment">% replace found word in expression by map(names_bar|this_namespace)</span>
-0174         expressions{i}=<a href="dsStrrep.html" class="code" title="function str = dsStrrep(str,oldstr,newstr,lpad,rpad, varargin)">dsStrrep</a>(expressions{i},words{j},new_word, <span class="string">''</span>, <span class="string">''</span>, varargin{:});
-0175       <span class="keyword">end</span>
-0176     <span class="keyword">end</span>
-0177   <span class="keyword">end</span>
-0178 <span class="keyword">end</span>
-0179 
-0180 <span class="comment">%% auto_gen_test_data_flag argout</span>
-0181 <span class="keyword">if</span> options.auto_gen_test_data_flag
-0182   argout = {model}; <span class="comment">% specific to this function</span>
-0183   
-0184   <a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>(argin, argout);
-0185 <span class="keyword">end</span>
-0186 
-0187 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;</span>
+0024 <span class="comment">% Copyright (C) 2016 Jason Sherfey, Boston University, USA</span>
+0025 
+0026 <span class="comment">%% auto_gen_test_data_flag argin</span>
+0027 options = <a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
+0028 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0029   varargs = varargin;
+0030   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0031   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
+0032   argin = [{model}, {map}, varargs]; <span class="comment">% specific to this function</span>
+0033 <span class="keyword">end</span>
+0034 
+0035 <span class="comment">% Check model</span>
+0036 model=<a href="dsCheckModel.html" class="code" title="function model = dsCheckModel(model, varargin)">dsCheckModel</a>(model, varargin{:});
+0037 <span class="comment">% Check map</span>
+0038 <span class="keyword">if</span> ~iscell(map) || size(map,2)~=4
+0039   error(<span class="string">'map must be a cell array with four columns for (name, namespace_name, namespace, type)'</span>);
+0040 <span class="keyword">end</span>
+0041 names_in_namespace=cellfun(@(x,y)strncmp(y,x,length(y)),map(:,2),map(:,3));
+0042 [name_,name__]=<a href="dsGetNamespaces.html" class="code" title="function [name_,name__] = dsGetNamespaces(spec)">dsGetNamespaces</a>(model);
+0043 <span class="comment">% Purpose: add double underscores between model objects (i.e., separate</span>
+0044 <span class="comment">% populations and mechanisms in namespace). This enables retrieving model</span>
+0045 <span class="comment">% object names from the namespace in dsGetParentNamespace for segregating</span>
+0046 <span class="comment">% model elements in dsPropagateNamespaces. This is necessary if object</span>
+0047 <span class="comment">% names contain underscores. Limitation: object names with double</span>
+0048 <span class="comment">% underscores are not permitted.</span>
+0049 <span class="comment">% Note: this approach to tracking objects with namespaces was chosen</span>
+0050 <span class="comment">% because of its efficiency given code generation based on string</span>
+0051 <span class="comment">% substitution.</span>
+0052 
+0053 <span class="comment">% namespace propagation pattern:</span>
+0054 allowed_insert_types.fixed_variables=<span class="keyword">...</span>
+0055   {<span class="string">'parameters'</span>,<span class="string">'fixed_variables'</span>,<span class="string">'reserved'</span>}; <span class="comment">% into fixed_variables</span>
+0056 allowed_insert_types.functions=<span class="keyword">...</span>
+0057   {<span class="string">'parameters'</span>,<span class="string">'fixed_variables'</span>,<span class="string">'functions'</span>,<span class="string">'state_variables'</span>,<span class="string">'reserved'</span>}; <span class="comment">% into functions</span>
+0058 allowed_insert_types.monitors=<span class="keyword">...</span>
+0059   {<span class="string">'parameters'</span>,<span class="string">'fixed_variables'</span>,<span class="string">'functions'</span>,<span class="string">'state_variables'</span>,<span class="string">'reserved'</span>}; <span class="comment">% into monitors</span>
+0060 allowed_insert_types.ODEs=<span class="keyword">...</span>
+0061   {<span class="string">'parameters'</span>,<span class="string">'fixed_variables'</span>,<span class="string">'functions'</span>,<span class="string">'state_variables'</span>,<span class="string">'reserved'</span>}; <span class="comment">% into ODEs</span>
+0062 allowed_insert_types.ICs=<span class="keyword">...</span>
+0063   {<span class="string">'parameters'</span>,<span class="string">'fixed_variables'</span>,<span class="string">'functions'</span>,<span class="string">'state_variables'</span>,<span class="string">'reserved'</span>}; <span class="comment">% into ICs</span>
+0064 allowed_insert_types.linkers=<span class="keyword">...</span>
+0065   {<span class="string">'parameters'</span>,<span class="string">'fixed_variables'</span>,<span class="string">'functions'</span>,<span class="string">'state_variables'</span>,<span class="string">'reserved'</span>};
+0066 allowed_insert_types.conditionals=<span class="keyword">...</span>
+0067   {<span class="string">'parameters'</span>,<span class="string">'fixed_variables'</span>,<span class="string">'functions'</span>,<span class="string">'state_variables'</span>,<span class="string">'reserved'</span>};
+0068 
+0069 <span class="comment">%% 1.0 Propagate through structure arrays (linkers, conditionals)</span>
+0070 <span class="comment">% 1.1 linkers (expression)</span>
+0071 <span class="keyword">if</span> ~isempty(model.linkers)
+0072   namespaces={model.linkers.namespace};
+0073   expressions=<a href="#_sub1" class="code" title="subfunction expressions=propagate_namespaces(expressions,namespaces,map,insert_types)">propagate_namespaces</a>({model.linkers.expression},namespaces,map,allowed_insert_types.linkers);
+0074   [model.linkers(1:length(model.linkers)).expression]=deal(expressions{:});
+0075 <span class="keyword">end</span>
+0076 
+0077 <span class="comment">% 1.2 conditionals (condition, action, else)</span>
+0078 <span class="keyword">if</span> ~isempty(model.conditionals)
+0079   namespaces={model.conditionals.namespace};
+0080   target_types={<span class="string">'condition'</span>,<span class="string">'action'</span>,<span class="string">'else'</span>};
+0081   <span class="keyword">for</span> type_index=1:length(target_types)
+0082     type=target_types{type_index};
+0083     tmp=<a href="#_sub1" class="code" title="subfunction expressions=propagate_namespaces(expressions,namespaces,map,insert_types)">propagate_namespaces</a>({model.conditionals.(type)},namespaces,map,allowed_insert_types.conditionals);
+0084     [model.conditionals(1:length(model.conditionals)).(type)]=deal(tmp{:});
+0085   <span class="keyword">end</span>
+0086 <span class="keyword">end</span>
+0087 
+0088 <span class="comment">%% 2.0 Propagate through sub-structures</span>
+0089 target_types={<span class="string">'fixed_variables'</span>,<span class="string">'functions'</span>,<span class="string">'monitors'</span>,<span class="string">'ODEs'</span>,<span class="string">'ICs'</span>};
+0090 
+0091 <span class="comment">% loop over types of model data</span>
+0092 <span class="keyword">for</span> type_index=1:length(target_types)
+0093   type=target_types{type_index};<span class="comment">%'fixed_variables';</span>
+0094   <span class="comment">% info for this type</span>
+0095   s=model.(type);
+0096   <span class="keyword">if</span> isstruct(s)
+0097     fields=fieldnames(s); <span class="comment">% namespaced-names of this type (ie, [namespace_name])</span>
+0098     expressions=struct2cell(s); <span class="comment">% raw-expressions of this type (ie, without namespace prefixes)</span>
+0099     namespaces={};
+0100     <span class="keyword">for</span> i=1:length(expressions)
+0101       idx=strcmp(fields{i},map(:,2));
+0102       <span class="keyword">if</span> numel(find(idx))&gt;1
+0103         <span class="comment">% constrain to namespace-conserving entries</span>
+0104         tmp=map(idx&amp;names_in_namespace,3);
+0105         
+0106         <span class="comment">% use the lowest level namespace (i.e., longest namespace name)</span>
+0107         l=cellfun(@length,tmp);
+0108         tmp=tmp{l==max(l)};
+0109       <span class="keyword">else</span>
+0110         tmp=map{idx,3};
+0111       <span class="keyword">end</span>
+0112       namespaces{end+1}=tmp;
+0113     <span class="keyword">end</span>
+0114     <span class="comment">% update expressions for names of this type</span>
+0115     expressions=<a href="#_sub1" class="code" title="subfunction expressions=propagate_namespaces(expressions,namespaces,map,insert_types)">propagate_namespaces</a>(expressions,namespaces,map,allowed_insert_types.(type));
+0116     
+0117     <span class="comment">% update model with expressions including namespaces</span>
+0118     model.(type)=cell2struct(expressions,fields,1);
+0119   <span class="keyword">end</span>
+0120 <span class="keyword">end</span>
+0121 
+0122 <span class="comment">%% NESTED FUNCTIONS</span>
+0123 <span class="comment">% function expressions=propagate_namespaces(expressions,names_full,map,insert_types)</span>
+0124 <a name="_sub1" href="#_subfunctions" class="code">function expressions=propagate_namespaces(expressions,namespaces,map,insert_types)</a>
+0125   <span class="comment">% loop over and update expressions for names of this type</span>
+0126   <span class="keyword">for</span> i=1:length(expressions)
+0127     <span class="keyword">if</span> isempty(expressions{i})
+0128       <span class="keyword">continue</span>;
+0129     <span class="keyword">end</span>
+0130     <span class="comment">% get namespace for this expression</span>
+0131     this_namespace=namespaces{i};
+0132     
+0133     <span class="comment">% convert to double underscore version for segregating objects</span>
+0134     this_namespace__ = name__{strcmp(this_namespace,name_)};
+0135     
+0136     <span class="comment">% find parent namespaces (by segregating model objects delimited by underscores)</span>
+0137     parent_namespace = <a href="dsGetParentNamespace.html" class="code" title="function parent = dsGetParentNamespace(namespace, varargin)">dsGetParentNamespace</a>(this_namespace__, varargin{:});
+0138     
+0139     <span class="comment">% find where this and parent namespaces are in map array</span>
+0140     insert_type_constraint = ismember(map(:,4),insert_types);
+0141     this_namespace_map_inds = find(strcmp(this_namespace,map(:,3)) &amp; insert_type_constraint);
+0142     parent_namespace_map_inds = find(strcmp(parent_namespace,map(:,3)) &amp; insert_type_constraint);
+0143     
+0144     <span class="comment">% get list of words in this expression</span>
+0145     words=unique(regexp(expressions{i},<span class="string">'[a-zA-Z]+\w*'</span>,<span class="string">'match'</span>));
+0146     
+0147     <span class="comment">% loop over words</span>
+0148     <span class="keyword">for</span> j=1:length(words)
+0149       <span class="comment">% search for words in parent namespace of map.names</span>
+0150       <span class="keyword">if</span> any(strcmp(words{j},map(parent_namespace_map_inds,1))) <span class="comment">% search parent namespace</span>
+0151         <span class="comment">% word found in parent namespace of map</span>
+0152         ind=parent_namespace_map_inds(strcmp(words{j},map(parent_namespace_map_inds,1)));
+0153         new_word=map{ind,2};
+0154         
+0155         <span class="comment">%if IC, need to take just first time index</span>
+0156         <span class="keyword">if</span> exist(<span class="string">'type'</span>,<span class="string">'var'</span>) &amp;&amp; strcmp(type, <span class="string">'ICs'</span>) &amp;&amp; strcmp(words{j}, <span class="string">'X'</span>)
+0157           new_word = [new_word <span class="string">'_last'</span>]; <span class="comment">% HACK</span>
+0158         <span class="keyword">end</span>
+0159         <span class="comment">% TODO: move this to dsWriteDynaSimSolver()</span>
+0160         
+0161         <span class="comment">% replace found word in expression by map(names_bar|parent_namespace)</span>
+0162         expressions{i}=<a href="dsStrrep.html" class="code" title="function str = dsStrrep(str,oldstr,newstr,lpad,rpad, varargin)">dsStrrep</a>(expressions{i},words{j},new_word, <span class="string">''</span>, <span class="string">''</span>, varargin{:});
+0163         <span class="comment">% check whether new word is defined in model</span>
+0164         <span class="comment">% NOTE: this is necessary to account for namespace differences between</span>
+0165         <span class="comment">%   user-supplied population parameters that should replace default mechanism-level parameters</span>
+0166         new_word_type=map{ind,4};
+0167 <span class="comment">% %{</span>
+0168         <span class="keyword">if</span> ~isfield(model.(new_word_type),new_word)
+0169           <span class="comment">% if not, define it from (word without namespace/namespace)</span>
+0170           <span class="keyword">if</span> isfield(model.(new_word_type),words{j})
+0171             model.(new_word_type).(new_word)=model.(new_word_type).(words{j});
+0172             model.(new_word_type) = rmfield(model.(new_word_type),words{j});
+0173           <span class="keyword">else</span>
+0174             tmpi=find(strcmp(words{j},map(:,1))&amp;strcmp(new_word_type,map(:,4))&amp;strcmp(this_namespace,map(:,3)));
+0175             <span class="keyword">if</span> ~isempty(tmpi)
+0176               old_field = map{tmpi,2};
+0177               <span class="keyword">if</span> ~isempty(tmpi) &amp;&amp; isfield(model.(new_word_type),old_field)
+0178                 model.(new_word_type).(new_word)=model.(new_word_type).(old_field);
+0179                 <span class="comment">%model.(new_word_type) = rmfield(model.(new_word_type),old_field);</span>
+0180               <span class="keyword">end</span>
+0181             <span class="keyword">end</span>
+0182           <span class="keyword">end</span>
+0183         <span class="keyword">end</span>
+0184 <span class="comment">% %}</span>
+0185       <span class="keyword">elseif</span> any(strcmp(words{j},map(this_namespace_map_inds,1))) <span class="comment">% search this namespace</span>
+0186         <span class="comment">% word found in this namespace of map</span>
+0187         ind=this_namespace_map_inds(strcmp(words{j},map(this_namespace_map_inds,1)));
+0188         new_word=map{ind,2};
+0189         
+0190         <span class="comment">% replace found word in expression by map(names_bar|this_namespace)</span>
+0191         expressions{i}=<a href="dsStrrep.html" class="code" title="function str = dsStrrep(str,oldstr,newstr,lpad,rpad, varargin)">dsStrrep</a>(expressions{i},words{j},new_word, <span class="string">''</span>, <span class="string">''</span>, varargin{:});
+0192       <span class="keyword">end</span>
+0193     <span class="keyword">end</span>
+0194   <span class="keyword">end</span>
+0195 <span class="keyword">end</span>
+0196 
+0197 <span class="comment">%% auto_gen_test_data_flag argout</span>
+0198 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0199   argout = {model}; <span class="comment">% specific to this function</span>
+0200   
+0201   <a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>(argin, argout);
+0202 <span class="keyword">end</span>
+0203 
+0204 <span class="keyword">end</span>
+0205 
+0206 <span class="comment">% SUBFUNCTIONS</span>
+0207 
+0208 <a name="_sub2" href="#_subfunctions" class="code">function parent = dsGetParentNamespace(namespace)</a>
+0209 <span class="comment">%GETPARENTNAMESPACE - determine parent namespace from namespace specified in namespace</span>
+0210 <span class="comment">% Usage:</span>
+0211 <span class="comment">%   parent = dsGetParentNamespace(namespace)</span>
+0212 <span class="comment">% Input:</span>
+0213 <span class="comment">%   - namespace: current namespace of object</span>
+0214 <span class="comment">% Output:</span>
+0215 <span class="comment">%   - parent: parent namespace containing the current namespace</span>
+0216 <span class="comment">% Examples:</span>
+0217 <span class="comment">%   parent=dsGetParentNamespace('pop')</span>
+0218 <span class="comment">%   parent=dsGetParentNamespace('pop__mech')</span>
+0219 <span class="comment">%   parent=dsGetParentNamespace('pop__pop')</span>
+0220 <span class="comment">%   parent=dsGetParentNamespace('pop__pop__mech')</span>
+0221 <span class="comment">%   parent=dsGetParentNamespace('mech')</span>
+0222 <span class="comment">%   parent=dsGetParentNamespace('')</span>
+0223 
+0224 <span class="keyword">if</span> isempty(namespace) &amp;&amp; isnumeric(namespace)
+0225   namespace=<span class="string">''</span>;
+0226 <span class="keyword">end</span>
+0227 <span class="keyword">if</span> ~isempty(namespace) &amp;&amp; namespace(end)==<span class="string">'_'</span>
+0228   namespace=namespace(1:end-1);
+0229 <span class="keyword">end</span>
+0230 <span class="keyword">if</span> ~isempty(namespace)
+0231   parts=regexp(namespace,<span class="string">'__'</span>,<span class="string">'split'</span>);
+0232 <span class="keyword">else</span>
+0233   parts=[];
+0234 <span class="keyword">end</span>
+0235 
+0236 <span class="keyword">switch</span> length(parts)
+0237   <span class="keyword">case</span> 0                          <span class="comment">% ''</span>
+0238     parent=<span class="string">'global'</span>;
+0239   <span class="keyword">case</span> 1                          <span class="comment">% pop or mech</span>
+0240     parent=<span class="string">''</span>;
+0241   <span class="keyword">case</span> 2
+0242     <span class="keyword">if</span> isequal(parts{1},parts{2}) <span class="comment">% pop_pop</span>
+0243       parent=<span class="string">'global'</span>;
+0244     <span class="keyword">else</span>                          <span class="comment">% pop_mech</span>
+0245       parent=[parts{1} <span class="string">'_'</span>];
+0246     <span class="keyword">end</span>
+0247   <span class="keyword">case</span> 3                          <span class="comment">% pop_pop_mech</span>
+0248     parent=[parts{1} <span class="string">'_'</span> parts{2} <span class="string">'_'</span>];
+0249   <span class="keyword">otherwise</span>                       <span class="comment">% a_b_c_d_...</span>
+0250     parent=<span class="string">''</span>;
+0251     <span class="keyword">for</span> i=1:length(parts)-1
+0252       parent=[parent parts{i} <span class="string">'_'</span>];
+0253     <span class="keyword">end</span>
+0254 <span class="keyword">end</span>
+0255 
+0256 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 12-Dec-2017 11:32:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

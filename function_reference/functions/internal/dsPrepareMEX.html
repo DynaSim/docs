@@ -6,16 +6,18 @@
   <meta name="keywords" content="dsPrepareMEX">
   <meta name="description" content="PREPAREMEX - take an m-file path and compile it using the Matlab coder.">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
-  <script type="text/javascript">
-    if (top.frames.length == 0) { top.location = "../../index.html"; };
-  </script>
 </head>
 <body>
+
 <a name="_top"></a>
-<!-- ../menu.html functions --><!-- menu.html internal -->
+<div><a href="../../menu.html">Home</a> &gt;  <a href="../menu.html">functions</a> &gt; <a href="menu.html">internal</a> &gt; dsPrepareMEX.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../menu.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="menu.html">Index for functions/internal&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
 <h1>dsPrepareMEX
 </h1>
 
@@ -28,16 +30,19 @@
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 <div class="fragment"><pre class="comment">PREPAREMEX - take an m-file path and compile it using the Matlab coder.
 
- See also: <a href="dsGetSolveFile.html" class="code" title="function solve_file = dsGetSolveFile(model,studyinfo,varargin)">dsGetSolveFile</a></pre></div>
+ See also: <a href="dsGetSolveFile.html" class="code" title="function solve_file = dsGetSolveFile(model,studyinfo,varargin)">dsGetSolveFile</a>
+
+ Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;
+ Copyright (C) 2016 Jason Sherfey, Boston University, USA</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>	CHECKOPTIONS - organize key/value pairs in structure with default or user-supplied values according to a schema</li><li><a href="dsOptions2Keyval.html" class="code" title="function keyval = dsOptions2Keyval(options)">dsOptions2Keyval</a>	OPTIONS2KEYVAL - Convert from options structure to a list of key/value pairs.</li></ul>
+<li><a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>	CHECKOPTIONS - organize key/value pairs in structure with default or user-supplied values according to a schema</li><li><a href="dsGetConfig.html" class="code" title="function varOutput = dsGetConfig(query)">dsGetConfig</a>	GETCONFIG - returns the value of the variable specificed as string in argument</li><li><a href="dsOptions2Keyval.html" class="code" title="function keyval = dsOptions2Keyval(options)">dsOptions2Keyval</a>	OPTIONS2KEYVAL - Convert from options structure to a list of key/value pairs.</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="dsGetSolveFile.html" class="code" title="function solve_file = dsGetSolveFile(model,studyinfo,varargin)">dsGetSolveFile</a>	GETSOLVEFILE - helper function that creates or retrieves the desired solver file.</li><li><a href="dsWriteMatlabSolver.html" class="code" title="function solve_ode_filepath = dsWriteMatlabSolver(model,varargin)">dsWriteMatlabSolver</a>	WRITEMATLABSOLVER - write m-file that numerically inteegrates the model</li></ul>
+<li><a href="dsGetSolveFile.html" class="code" title="function solve_file = dsGetSolveFile(model,studyinfo,varargin)">dsGetSolveFile</a>	GETSOLVEFILE - helper function that creates or retrieves the desired solver file.</li><li><a href="dsWriteMatlabSolver.html" class="code" title="function solve_ode_filepath = dsWriteMatlabSolver(model,varargin)">dsWriteMatlabSolver</a>	WRITEMATLABSOLVER - write m-file that numerically integrates the model</li></ul>
 <!-- crossreference -->
 
 <h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
@@ -49,101 +54,121 @@ This function is called by:
 0002 <span class="comment">%PREPAREMEX - take an m-file path and compile it using the Matlab coder.</span>
 0003 <span class="comment">%</span>
 0004 <span class="comment">% See also: dsGetSolveFile</span>
-0005 
-0006 <span class="comment">% Input args</span>
-0007 args = varargin;
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;</span>
+0007 <span class="comment">% Copyright (C) 2016 Jason Sherfey, Boston University, USA</span>
 0008 
-0009 <span class="comment">% TODO: this block may be unnecesary since checkOptions can handle a struct</span>
-0010 <span class="keyword">if</span> isstruct(args{1})
-0011   <span class="comment">% User specified an options structure</span>
-0012   keyvals = <a href="dsOptions2Keyval.html" class="code" title="function keyval = dsOptions2Keyval(options)">dsOptions2Keyval</a>(args{1});
-0013   <span class="comment">% Convert it to keyvalues and prepend</span>
-0014   keyvals = horzcat(keyvals,args(2:end));
-0015 <span class="keyword">else</span>
-0016   keyvals = args;
-0017 <span class="keyword">end</span>
-0018 
-0019 options=<a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(keyvals,{<span class="keyword">...</span>
-0020   <span class="string">'verbose_flag'</span>,0,{0,1},<span class="keyword">...</span><span class="comment"> % set verbose to 1 by default</span>
-0021   <span class="string">'mex_dir'</span>,[],[],<span class="keyword">...</span><span class="comment"> % Directory to search for pre-compiled solve files (solve*_mex*)</span>
-0022   <span class="string">'codegen_args'</span>,[],[],<span class="keyword">...</span>
-0023   },false);
-0024 
-0025 mex_dir = options.mex_dir;
-0026 
-0027 <span class="comment">% make mex name from solve_file</span>
-0028 [fpath,fname] = fileparts(mfileInput);
-0029 mexfileOutput = fullfile(fpath,[fname <span class="string">'_mex'</span>]);
-0030 
-0031 <span class="keyword">if</span> ~exist(mexfileOutput,<span class="string">'file'</span>)
-0032   <span class="keyword">if</span> options.verbose_flag
-0033     fprintf(<span class="string">'Compiling file: %s\n'</span>,mfileInput);
-0034     fprintf(<span class="string">'            to: %s\n'</span>,mexfileOutput);
-0035   <span class="keyword">end</span>
-0036   
-0037   compile_start_time=tic;
-0038   
-0039   <a href="#_sub1" class="code" title="subfunction makeMex(file, options)">makeMex</a>(mfileInput, options); <span class="comment">% mex-file solver for solve file</span>
-0040   
-0041   <span class="keyword">if</span> options.verbose_flag
-0042     fprintf(<span class="string">'\tMEX generation complete!\n\tElapsed time: %g seconds.\n'</span>,toc(compile_start_time));
-0043     <span class="comment">%toc;</span>
-0044   <span class="keyword">end</span>
-0045   
-0046   codemex_dir=fullfile(fileparts(mexfileOutput),<span class="string">'codemex'</span>);
-0047   <span class="keyword">if</span> exist(codemex_dir,<span class="string">'dir'</span>)
-0048     <span class="keyword">if</span> options.verbose_flag
-0049       fprintf(<span class="string">'\tRemoving temporary codemex directory: %s\n'</span>,codemex_dir);
-0050     <span class="keyword">end</span>
-0051     rmdir(codemex_dir,<span class="string">'s'</span>);
-0052   <span class="keyword">end</span>
-0053 <span class="keyword">else</span> <span class="comment">% mex file exists</span>
-0054   <span class="keyword">if</span> options.verbose_flag
-0055     fprintf(<span class="string">'Using previous compiled file: %s\n'</span>,mexfileOutput);
-0056   <span class="keyword">end</span>
-0057 <span class="keyword">end</span> <span class="comment">%if</span>
-0058 
-0059 <span class="comment">% If mex_dir is specified, back up the newly compiled mex files to this folder</span>
-0060 <span class="keyword">if</span> ~isempty(mex_dir)
-0061   [~,solvefile] = fileparts2(mfileInput);
-0062   [~,mexfile] = fileparts2(mexfileOutput);
-0063   
-0064   <span class="keyword">if</span> isempty(dir(fullfile(mex_dir,[solvefile <span class="string">'.m'</span>])))
-0065     <span class="keyword">if</span> options.verbose_flag
-0066       fprintf(<span class="string">'Solve file %s does not yet exist in mex_dir %s. Copying... \n'</span>,solvefile,mex_dir);
-0067     <span class="keyword">end</span>
-0068     <span class="keyword">if</span> ~exist(mex_dir,<span class="string">'dir'</span>); error(<span class="string">'Cannot find %s! Make sure it exists and is specified as an *absolute* path'</span>,mex_dir); <span class="keyword">end</span>
-0069     copyfile(mfileInput,mex_dir);
-0070   <span class="keyword">end</span>
-0071   
-0072   <span class="keyword">if</span> isempty(dir(fullfile(mex_dir,[mexfile <span class="string">'*'</span>])))
-0073     <span class="keyword">if</span> options.verbose_flag
-0074       fprintf(<span class="string">'Mex file %s does not yet exist in mex_dir %s. Copying... \n'</span>,mexfile,mex_dir);
-0075     <span class="keyword">end</span>
-0076     <span class="keyword">if</span> ~exist(mex_dir,<span class="string">'dir'</span>); error(<span class="string">'Cannot find %s! Make sure it exists and is specified as an *absolute* path'</span>,mex_dir); <span class="keyword">end</span>
-0077     copyfile([mexfileOutput,<span class="string">'*'</span>],mex_dir);
-0078   <span class="keyword">end</span>
-0079 <span class="keyword">end</span>
-0080 
-0081 <span class="keyword">end</span> <span class="comment">% main fn</span>
-0082 
-0083 <span class="comment">%% Subfunctions</span>
-0084 <a name="_sub1" href="#_subfunctions" class="code">function makeMex(file, options)</a>
-0085 <span class="comment">% Create a MEX configuration object</span>
-0086 cfg = coder.config(<span class="string">'mex'</span>);
-0087 
-0088 <span class="comment">% Turn on dynamic memory allocation</span>
-0089 cfg.DynamicMemoryAllocation = <span class="string">'AllVariableSizeArrays'</span>;
-0090 
-0091 <span class="comment">% Generate MEX function</span>
-0092 <span class="keyword">if</span> isempty(options.codegen_args)
-0093   eval(sprintf(<span class="string">'codegen -d codemex -config cfg %s'</span>,file));
-0094 <span class="keyword">else</span> <span class="comment">% codegen_args specified</span>
-0095   eval(sprintf(<span class="string">'codegen -args %s -d codemex -config cfg %s'</span>, <span class="string">'options.codegen_args'</span>, file));
-0096 <span class="keyword">end</span>
-0097 <span class="comment">% TODO: convert eval to feval or call to codegen</span>
-0098 
-0099 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+0009 <span class="comment">% Input args</span>
+0010 args = varargin;
+0011 
+0012 <span class="comment">% TODO: this block may be unnecesary since checkOptions can handle a struct</span>
+0013 <span class="keyword">if</span> isstruct(args{1})
+0014   <span class="comment">% User specified an options structure</span>
+0015   keyvals = <a href="dsOptions2Keyval.html" class="code" title="function keyval = dsOptions2Keyval(options)">dsOptions2Keyval</a>(args{1});
+0016   <span class="comment">% Convert it to keyvalues and prepend</span>
+0017   keyvals = horzcat(keyvals,args(2:end));
+0018 <span class="keyword">else</span>
+0019   keyvals = args;
+0020 <span class="keyword">end</span>
+0021 
+0022 options=<a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(keyvals,{<span class="keyword">...</span>
+0023   <span class="string">'verbose_flag'</span>,0,{0,1},<span class="keyword">...</span><span class="comment"> % set verbose to 1 by default</span>
+0024   <span class="string">'mex_dir_flag'</span>,1,{0,1},<span class="keyword">...</span><span class="comment"> % Flag to tell whether or not to search in mex_dir for pre-compiled solve files (solve*_mex*).</span>
+0025   <span class="string">'mex_dir'</span>,[],[],<span class="keyword">...</span><span class="comment"> % Directory to search for pre-compiled mex files. Can be relative to 'study_dir' or absolute path.</span>
+0026   <span class="string">'codegen_args'</span>,[],[],<span class="keyword">...</span>
+0027   <span class="string">'cluster_flag'</span>,0,{0,1},<span class="keyword">...</span>
+0028   },false);
+0029 
+0030 <span class="comment">% % Example code for testing mex_dir options:</span>
+0031 <span class="comment">% eqns={</span>
+0032 <span class="comment">%   's=10; r=27; b=2.666'</span>
+0033 <span class="comment">%   'dx/dt=s*(y-x)'</span>
+0034 <span class="comment">%   'dy/dt=r*x-y-x*z'</span>
+0035 <span class="comment">%   'dz/dt=-b*z+x*y'</span>
+0036 <span class="comment">% };</span>
+0037 <span class="comment">% data=dsSimulate(eqns, 'tspan',[0 100], 'ic',[1 2 .5],'verbose',1, 'solver','rk4', 'study_dir','demo_lorenz','compile_flag',1,'mex_dir_flag',0,'mex_dir',[]);</span>
+0038 <span class="comment">% data=dsSimulate(eqns, 'tspan',[0 100], 'ic',[1 2 .5],'verbose',1, 'solver','rk4', 'study_dir','demo_lorenz','compile_flag',1,'mex_dir_flag',1,'mex_dir',[]);</span>
+0039 <span class="comment">% data=dsSimulate(eqns, 'tspan',[0 100], 'ic',[1 2 .5],'verbose',1, 'solver','rk4', 'study_dir','demo_lorenz','compile_flag',1,'mex_dir_flag',1,'mex_dir','mexes_temp');</span>
+0040 <span class="keyword">if</span> isempty(options.mex_dir)
+0041     options.mex_dir = <a href="dsGetConfig.html" class="code" title="function varOutput = dsGetConfig(query)">dsGetConfig</a>(<span class="string">'mex_path'</span>);
+0042 <span class="keyword">end</span>
+0043 
+0044 mex_dir = options.mex_dir;
+0045 
+0046 <span class="comment">% make mex name from solve_file</span>
+0047 [fpath,fname] = fileparts(mfileInput);
+0048 mexfileOutput = fullfile(fpath,[fname <span class="string">'_mex'</span>]);
+0049 
+0050 <span class="keyword">if</span> ~exist(mexfileOutput,<span class="string">'file'</span>)
+0051   <span class="keyword">if</span> options.verbose_flag
+0052     fprintf(<span class="string">'Compiling file: %s\n'</span>,mfileInput);
+0053     fprintf(<span class="string">'            to: %s\n'</span>,mexfileOutput);
+0054   <span class="keyword">end</span>
+0055   
+0056   compile_start_time=tic;
+0057   
+0058   <a href="#_sub1" class="code" title="subfunction makeMex(file, options)">makeMex</a>(mfileInput, options); <span class="comment">% mex-file solver for solve file</span>
+0059   
+0060   <span class="keyword">if</span> options.verbose_flag
+0061     fprintf(<span class="string">'\tMEX generation complete!\n\tElapsed time: %g seconds.\n'</span>,toc(compile_start_time));
+0062     <span class="comment">%toc;</span>
+0063   <span class="keyword">end</span>
+0064   
+0065   codemex_dir=fullfile(fileparts(mexfileOutput),<span class="string">'codemex'</span>);
+0066   <span class="keyword">if</span> exist(codemex_dir,<span class="string">'dir'</span>)
+0067     <span class="keyword">if</span> options.verbose_flag
+0068       fprintf(<span class="string">'\tRemoving temporary codemex directory: %s\n'</span>,codemex_dir);
+0069     <span class="keyword">end</span>
+0070     rmdir(codemex_dir,<span class="string">'s'</span>);
+0071   <span class="keyword">end</span>
+0072 <span class="keyword">else</span> <span class="comment">% mex file exists</span>
+0073   <span class="keyword">if</span> options.verbose_flag
+0074     fprintf(<span class="string">'Using previous compiled file: %s\n'</span>,mexfileOutput);
+0075   <span class="keyword">end</span>
+0076 <span class="keyword">end</span> <span class="comment">%if</span>
+0077 
+0078 <span class="comment">% If mex_dir is specified, back up the newly compiled mex files to this folder</span>
+0079 <span class="keyword">if</span> ~isempty(mex_dir) &amp;&amp; ~options.cluster_flag &amp;&amp; options.mex_dir_flag
+0080   [~,solvefile] = fileparts2(mfileInput);
+0081   [~,mexfile] = fileparts2(mexfileOutput);
+0082   
+0083   <span class="keyword">if</span> isempty(dir(fullfile(mex_dir,[solvefile <span class="string">'.m'</span>])))
+0084     <span class="keyword">if</span> options.verbose_flag
+0085       fprintf(<span class="string">'Solve file %s does not yet exist in mex_dir %s. Copying... \n'</span>,solvefile,mex_dir);
+0086     <span class="keyword">end</span>
+0087     <span class="keyword">if</span> ~exist(mex_dir,<span class="string">'dir'</span>); error(<span class="string">'Cannot find %s! Make sure it exists and is specified as an *absolute* path'</span>,mex_dir); <span class="keyword">end</span>
+0088     copyfile(mfileInput,mex_dir);
+0089   <span class="keyword">end</span>
+0090   
+0091   <span class="keyword">if</span> isempty(dir(fullfile(mex_dir,[mexfile <span class="string">'*'</span>])))
+0092     <span class="keyword">if</span> options.verbose_flag
+0093       fprintf(<span class="string">'Mex file %s does not yet exist in mex_dir %s. Copying... \n'</span>,mexfile,mex_dir);
+0094     <span class="keyword">end</span>
+0095     <span class="keyword">if</span> ~exist(mex_dir,<span class="string">'dir'</span>); error(<span class="string">'Cannot find %s! Make sure it exists and is specified as an *absolute* path'</span>,mex_dir); <span class="keyword">end</span>
+0096     copyfile([mexfileOutput,<span class="string">'*'</span>],mex_dir);
+0097   <span class="keyword">end</span>
+0098 <span class="keyword">end</span>
+0099 
+0100 <span class="keyword">end</span> <span class="comment">% main fn</span>
+0101 
+0102 <span class="comment">%% Subfunctions</span>
+0103 <a name="_sub1" href="#_subfunctions" class="code">function makeMex(file, options)</a>
+0104 <span class="comment">% Create a MEX configuration object</span>
+0105 cfg = coder.config(<span class="string">'mex'</span>);
+0106 
+0107 <span class="comment">% Turn on dynamic memory allocation</span>
+0108 cfg.DynamicMemoryAllocation = <span class="string">'AllVariableSizeArrays'</span>;
+0109 
+0110 <span class="comment">% Generate MEX function</span>
+0111 <span class="keyword">if</span> isempty(options.codegen_args)
+0112   eval([<span class="string">'codegen -d codemex -config cfg '</span>,file]);
+0113 <span class="keyword">else</span> <span class="comment">% codegen_args specified</span>
+0114   <span class="comment">%eval(sprintf('codegen -args %s -d codemex -config cfg %s', 'options.codegen_args', file));</span>
+0115   eval([<span class="string">'codegen -args options.codegen_args -d codemex -config cfg '</span>,file]);
+0116 <span class="keyword">end</span>
+0117 <span class="comment">% TODO: convert eval to feval or call to codegen</span>
+0118 
+0119 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 12-Dec-2017 11:32:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

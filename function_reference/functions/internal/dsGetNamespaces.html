@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of dsGetNamespaces</title>
+  <meta name="keywords" content="dsGetNamespaces">
+  <meta name="description" content="Purpose: retrieve namespaces for all objects in specification">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+
+<a name="_top"></a>
+<div><a href="../../menu.html">Home</a> &gt;  <a href="../menu.html">functions</a> &gt; <a href="menu.html">internal</a> &gt; dsGetNamespaces.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../menu.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="menu.html">Index for functions/internal&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>dsGetNamespaces
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Purpose: retrieve namespaces for all objects in specification</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [name_,name__] = dsGetNamespaces(spec) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Purpose: retrieve namespaces for all objects in specification
+ Outputs:
+   name_: object names separated by single underscore
+   name__: object names separated by double underscores
+
+ See also: <a href="dsPropagateNamespaces.html" class="code" title="function model = dsPropagateNamespaces(model,map, varargin)">dsPropagateNamespaces</a>
+
+ Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;
+ Copyright (C) 2016 Jason Sherfey, Boston University, USA</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="dsPropagateNamespaces.html" class="code" title="function model = dsPropagateNamespaces(model,map, varargin)">dsPropagateNamespaces</a>	PROPAGATENAMESPACES - namespace-establishing namespace substitutions.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [name_,name__] = dsGetNamespaces(spec)</a>
+0002 <span class="comment">% Purpose: retrieve namespaces for all objects in specification</span>
+0003 <span class="comment">% Outputs:</span>
+0004 <span class="comment">%   name_: object names separated by single underscore</span>
+0005 <span class="comment">%   name__: object names separated by double underscores</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% See also: dsPropagateNamespaces</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;</span>
+0010 <span class="comment">% Copyright (C) 2016 Jason Sherfey, Boston University, USA</span>
+0011 
+0012 
+0013 <span class="keyword">if</span> isfield(spec,<span class="string">'specification'</span>) <span class="comment">% this is a model structure</span>
+0014   spec=spec.specification; <span class="comment">% extract the specification</span>
+0015 <span class="keyword">end</span>
+0016 
+0017 name_={};
+0018 name__={};
+0019 
+0020 <span class="comment">% population namespaces to replace</span>
+0021 <span class="keyword">for</span> i=1:length(spec.populations)
+0022   name_{end+1}=[spec.populations(i).name <span class="string">'_'</span>];
+0023   name__{end+1}=[spec.populations(i).name <span class="string">'_'</span>];
+0024   <span class="keyword">for</span> j=1:length(spec.populations(i).mechanisms)
+0025     name_{end+1}=[spec.populations(i).name <span class="string">'_'</span> spec.populations(i).mechanisms(j).name <span class="string">'_'</span>];
+0026     name__{end+1}=[spec.populations(i).name <span class="string">'__'</span> spec.populations(i).mechanisms(j).name <span class="string">'_'</span>];
+0027   <span class="keyword">end</span>
+0028 <span class="keyword">end</span>
+0029 
+0030 <span class="comment">% connection namespaces to replace</span>
+0031 <span class="keyword">for</span> i=1:length(spec.connections)
+0032   name_{end+1}=[spec.connections(i).target <span class="string">'_'</span> spec.connections(i).source <span class="string">'_'</span>];
+0033   name__{end+1}=[spec.connections(i).target <span class="string">'__'</span> spec.connections(i).source <span class="string">'_'</span>];
+0034   <span class="keyword">for</span> j=1:length(spec.connections(i).mechanisms)
+0035     name_{end+1}=[spec.connections(i).target <span class="string">'_'</span> spec.connections(i).source <span class="string">'_'</span> spec.connections(i).mechanisms(j).name <span class="string">'_'</span>];
+0036     name__{end+1}=[spec.connections(i).target <span class="string">'__'</span> spec.connections(i).source <span class="string">'__'</span> spec.connections(i).mechanisms(j).name <span class="string">'_'</span>];
+0037   <span class="keyword">end</span>
+0038 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 12-Dec-2017 11:32:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

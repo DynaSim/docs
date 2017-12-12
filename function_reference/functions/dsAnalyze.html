@@ -6,16 +6,18 @@
   <meta name="keywords" content="dsAnalyze">
   <meta name="description" content="DSANALYZE - Apply an analysis function to DynaSim data, optionally saving data">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../m2html.css">
-  <script type="text/javascript">
-    if (top.frames.length == 0) { top.location = "../index.html"; };
-  </script>
 </head>
 <body>
+
 <a name="_top"></a>
-<!-- menu.html functions -->
+<div><a href="../menu.html">Home</a> &gt;  <a href="menu.html">functions</a> &gt; dsAnalyze.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../menu.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="menu.html">Index for functions&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
 <h1>dsAnalyze
 </h1>
 
@@ -59,6 +61,7 @@
                              key,val list as varargin for AnalyzeData
      'load_all_data_flag'  : whether to load all the data in studyinfo
                              at once {0 or 1} (default: 0)
+     'parallel_flag' : whether to use parfor to run analysis {0 or 1} (default: 0)
 
  Outputs:
    - result: structure returned by the analysis function
@@ -66,13 +69,16 @@
  TODO: annotate figures with data set-specific modifications
 
 
- See also: <a href="dsSimulate.html" class="code" title="function [data,studyinfo,result] = dsSimulate(model,varargin)">dsSimulate</a></pre></div>
+ See also: <a href="dsSimulate.html" class="code" title="function [data,studyinfo,result] = dsSimulate(model,varargin)">dsSimulate</a>
+
+ Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;
+ Copyright (C) 2016 Jason Sherfey, Boston University, USA</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../matlabicon.gif)">
-<li><a href="dsImport.html" class="code" title="function [data,studyinfo] = dsImport(file,varargin)">dsImport</a>	DSIMPORT - load data into DynaSim formatted data structure.</li><li><a href="../functions/internal/dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>	CHECKOPTIONS - organize key/value pairs in structure with default or user-supplied values according to a schema</li><li><a href="../functions/internal/dsCheckStudyinfo.html" class="code" title="function studyinfo = dsCheckStudyinfo(studyinfo, varargin)">dsCheckStudyinfo</a>	CHECKSTUDYINFO - Standardize studyinfo structure and auto-populate missing fields</li></ul>
+<li><a href="dsImport.html" class="code" title="function [data,studyinfo] = dsImport(file,varargin)">dsImport</a>	DSIMPORT - load data into DynaSim formatted data structure.</li><li><a href="../functions/internal/dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>	CHECKOPTIONS - organize key/value pairs in structure with default or user-supplied values according to a schema</li><li><a href="../functions/internal/dsCheckStudyinfo.html" class="code" title="function studyinfo = dsCheckStudyinfo(studyinfo, varargin)">dsCheckStudyinfo</a>	CHECKSTUDYINFO - Standardize studyinfo structure and auto-populate missing fields</li><li><a href="../functions/internal/dsNameFromVaried.html" class="code" title="function new_result_file = dsNameFromVaried(data, file_type, old_result_file)">dsNameFromVaried</a>	NAMEFROMVARIED - makes a filename based on the parameters in data.varied.</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../matlabicon.gif)">
 <li><a href="dsSimulate.html" class="code" title="function [data,studyinfo,result] = dsSimulate(model,varargin)">dsSimulate</a>	% data=dsSimulate(model,'option',value,...)</li></ul>
@@ -117,579 +123,602 @@ This function is called by:
 0032 <span class="comment">%                             key,val list as varargin for AnalyzeData</span>
 0033 <span class="comment">%     'load_all_data_flag'  : whether to load all the data in studyinfo</span>
 0034 <span class="comment">%                             at once {0 or 1} (default: 0)</span>
-0035 <span class="comment">%</span>
-0036 <span class="comment">% Outputs:</span>
-0037 <span class="comment">%   - result: structure returned by the analysis function</span>
-0038 <span class="comment">%</span>
-0039 <span class="comment">% TODO: annotate figures with data set-specific modifications</span>
-0040 <span class="comment">%</span>
+0035 <span class="comment">%     'parallel_flag' : whether to use parfor to run analysis {0 or 1} (default: 0)</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">% Outputs:</span>
+0038 <span class="comment">%   - result: structure returned by the analysis function</span>
+0039 <span class="comment">%</span>
+0040 <span class="comment">% TODO: annotate figures with data set-specific modifications</span>
 0041 <span class="comment">%</span>
-0042 <span class="comment">% See also: dsSimulate</span>
-0043 
-0044 <span class="comment">%% General cases:</span>
-0045 <span class="comment">%   - data struct (likely from SimualteModel call)</span>
-0046 <span class="comment">%   - data struct array</span>
-0047 <span class="comment">%   - studyinfo with load_all_data_flag==0</span>
-0048 <span class="comment">%   - studyinfo with load_all_data_flag==1</span>
-0049 
-0050 <span class="comment">%% localfn output</span>
-0051 <span class="keyword">if</span> ~nargin
-0052   output = localfunctions; <span class="comment">% output var name specific to this fn</span>
-0053   <span class="keyword">return</span>
-0054 <span class="keyword">end</span>
-0055 
-0056 <span class="comment">%% Check inputs</span>
-0057 options=<a href="../functions/internal/dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="keyword">...</span>
-0058   <span class="string">'result_file'</span>,<span class="string">'result'</span>,[],<span class="keyword">...</span>
-0059   <span class="string">'save_results_flag'</span>,0,{0,1},<span class="keyword">...</span>
-0060   <span class="string">'format'</span>,<span class="string">'svg'</span>,{<span class="string">'svg'</span>,<span class="string">'jpg'</span>,<span class="string">'eps'</span>,<span class="string">'png'</span>,<span class="string">'fig'</span>},<span class="keyword">...</span>
-0061   <span class="string">'varied_filename_flag'</span>,0,{0,1},<span class="keyword">...</span>
-0062   <span class="string">'plot_type'</span>,<span class="string">'waveform'</span>,{<span class="string">'waveform'</span>,<span class="string">'rastergram'</span>,<span class="string">'raster'</span>,<span class="string">'power'</span>,<span class="string">'rates'</span>,<span class="string">'imagesc'</span>,<span class="string">'heatmapFR'</span>,<span class="string">'heatmap_sortedFR'</span>,<span class="string">'meanFR'</span>,<span class="string">'meanFRdens'</span>},<span class="keyword">...</span>
-0063   <span class="string">'save_prefix'</span>,[],[],<span class="keyword">...</span>
-0064   <span class="string">'function_options'</span>,{},[],<span class="keyword">...</span>
-0065   <span class="string">'simIDs'</span>,[],[],<span class="keyword">...</span>
-0066   <span class="string">'load_all_data_flag'</span>,0,{0,1},<span class="keyword">...</span>
-0067   <span class="string">'auto_gen_test_data_flag'</span>,0,{0,1},<span class="keyword">...</span>
-0068   <span class="string">'unit_test_flag'</span>,0,{0,1},<span class="keyword">...</span>
-0069   <span class="string">'auto_gen_test_data_flag'</span>,0,{0,1},<span class="keyword">...</span>
-0070   },false);
-0071 
-0072 <span class="comment">%% auto_gen_test_data_flag argin</span>
-0073 <span class="keyword">if</span> options.auto_gen_test_data_flag
-0074   varargs = varargin;
-0075   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
-0076   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
-0077   argin = [{src},{funcIn}, varargs]; <span class="comment">% specific to this function</span>
-0078 <span class="keyword">end</span>
-0079 
-0080 
-0081 <span class="comment">%% Save data if no output is requested.</span>
-0082 <span class="keyword">if</span> nargout&lt;1
-0083   options.save_results_flag = 1;
-0084 <span class="keyword">end</span>
+0042 <span class="comment">%</span>
+0043 <span class="comment">% See also: dsSimulate</span>
+0044 <span class="comment">%</span>
+0045 <span class="comment">% Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;</span>
+0046 <span class="comment">% Copyright (C) 2016 Jason Sherfey, Boston University, USA</span>
+0047 
+0048 <span class="comment">%% General cases:</span>
+0049 <span class="comment">%   - data struct (likely from SimualteModel call)</span>
+0050 <span class="comment">%   - data struct array</span>
+0051 <span class="comment">%   - studyinfo with load_all_data_flag==0</span>
+0052 <span class="comment">%   - studyinfo with load_all_data_flag==1</span>
+0053 
+0054 <span class="comment">%% localfn output</span>
+0055 <span class="keyword">if</span> ~nargin
+0056   output = localfunctions; <span class="comment">% output var name specific to this fn</span>
+0057   <span class="keyword">return</span>
+0058 <span class="keyword">end</span>
+0059 
+0060 <span class="comment">%% Check inputs</span>
+0061 options=<a href="../functions/internal/dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="keyword">...</span>
+0062   <span class="string">'result_file'</span>,<span class="string">'result'</span>,[],<span class="keyword">...</span>
+0063   <span class="string">'save_results_flag'</span>,0,{0,1},<span class="keyword">...</span>
+0064   <span class="string">'format'</span>,<span class="string">'svg'</span>,{<span class="string">'svg'</span>,<span class="string">'jpg'</span>,<span class="string">'eps'</span>,<span class="string">'png'</span>,<span class="string">'fig'</span>},<span class="keyword">...</span>
+0065   <span class="string">'varied_filename_flag'</span>,0,{0,1},<span class="keyword">...</span>
+0066   <span class="string">'plot_type'</span>,<span class="string">'waveform'</span>,{<span class="string">'waveform'</span>,<span class="string">'rastergram'</span>,<span class="string">'raster'</span>,<span class="string">'power'</span>,<span class="string">'rates'</span>,<span class="string">'imagesc'</span>,<span class="string">'heatmapFR'</span>,<span class="string">'heatmap_sortedFR'</span>,<span class="string">'meanFR'</span>,<span class="string">'meanFRdens'</span>,<span class="string">'FRpanel'</span>},<span class="keyword">...</span>
+0067   <span class="string">'save_prefix'</span>,[],[],<span class="keyword">...</span>
+0068   <span class="string">'function_options'</span>,{},[],<span class="keyword">...</span>
+0069   <span class="string">'simIDs'</span>,[],[],<span class="keyword">...</span>
+0070   <span class="string">'load_all_data_flag'</span>,0,{0,1},<span class="keyword">...</span>
+0071   <span class="string">'auto_gen_test_data_flag'</span>,0,{0,1},<span class="keyword">...</span>
+0072   <span class="string">'unit_test_flag'</span>,0,{0,1},<span class="keyword">...</span>
+0073   <span class="string">'parallel_flag'</span>,0,{0,1},<span class="keyword">...</span><span class="comment">     % whether to run analysis in parallel (using parfor)</span>
+0074   <span class="string">'auto_gen_test_data_flag'</span>,0,{0,1},<span class="keyword">...</span>
+0075   },false);
+0076 
+0077 <span class="comment">%% auto_gen_test_data_flag argin</span>
+0078 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0079   varargs = varargin;
+0080   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0081   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
+0082   argin = [{src},{funcIn}, varargs]; <span class="comment">% specific to this function</span>
+0083 <span class="keyword">end</span>
+0084 
 0085 
-0086 <span class="comment">% varinputs = varargin;</span>
-0087 <span class="comment">% % check if simIDs specified</span>
-0088 <span class="comment">% if ~isempty(options.simIDs)</span>
-0089 <span class="comment">%   if isstruct(varinputs{1})</span>
-0090 <span class="comment">%     varinputs.simIDs = options.simIDs;</span>
-0091 <span class="comment">%   else</span>
-0092 <span class="comment">%     % find simIDs in varinputs</span>
-0093 <span class="comment">%     varinputs{find(~cellfun(@isempty,strfind(varinputs(1:2:end), 'simIDs')))*2} = options.simIDs;</span>
-0094 <span class="comment">%   end</span>
-0095 <span class="comment">% end</span>
-0096 
-0097 <span class="comment">%% Parse src.</span>
-0098 [data, studyinfo] = <a href="#_sub1" class="code" title="subfunction [data, studyinfo] = parseSrc(src, options, varargin)">parseSrc</a>(src, options, varargin{:});
-0099 <span class="comment">% Data at this point:</span>
-0100 <span class="comment">%   - 'data' as single struct or struct array, or empty</span>
-0101 <span class="comment">%   - 'studyinfo' struct or empty</span>
-0102 
-0103 <span class="comment">% check if study_dir defined</span>
-0104 <span class="keyword">if</span> isempty(studyinfo)
-0105   studyinfoBool = false;
-0106 <span class="keyword">else</span>
-0107   studyinfoBool = true;
-0108   <span class="keyword">if</span> ~isfield(studyinfo,<span class="string">'study_dir'</span>) || isempty(studyinfo.study_dir) || ~isdir(studyinfo.study_dir)
-0109     studyinfo.study_dir = pwd;
-0110   <span class="keyword">end</span>
-0111 <span class="keyword">end</span>
-0112 
-0113 <span class="comment">% Data at this point:</span>
-0114 <span class="comment">%   - 'data' as single struct or struct array, or empty</span>
-0115 <span class="comment">%   - 'studyinfo' struct with many flds or just 'study_dir' field</span>
-0116 
-0117 <span class="comment">% convert data to double precision before analysis</span>
-0118 <span class="keyword">for</span> j = 1:length(data)
-0119   <span class="keyword">for</span> k = 1:length(data(j).labels)
-0120     fld = data(j).labels{k};
-0121     data(j).(fld) = double(data(j).(fld));
-0122   <span class="keyword">end</span>
-0123 <span class="keyword">end</span>
-0124 
-0125 <span class="comment">% convert func to handle if not a cell array</span>
-0126 [funcIn, nFunc] = <a href="#_sub2" class="code" title="subfunction [funcIn, nFunc] = parseFuncIn(funcIn)">parseFuncIn</a>(funcIn);
-0127 
-0128 <span class="comment">% check if postSim</span>
-0129 postSimBool = studyinfoBool || (length(data) &gt; 1); <span class="comment">% since length(data)==1 and no studyinfo with SimulateModel call</span>
-0130 
-0131 <span class="keyword">for</span> fInd = 1:nFunc <span class="comment">% loop over function inputs</span>
-0132   func = funcIn{fInd};
-0133 
-0134   <span class="comment">% confirm func is function handle or convert to one if possible</span>
-0135   func = <a href="#_sub3" class="code" title="subfunction func = parseFunc(func)">parseFunc</a>(func);
-0136 
-0137   <span class="comment">% check if plot in fn name</span>
-0138   plotFnBool = ~isempty(regexpi(func2str(func), <span class="string">'plot'</span>));
-0139 
-0140   <span class="comment">% change result_file if varied_filename_flag</span>
-0141   <span class="keyword">if</span> options.varied_filename_flag &amp;&amp; isfield(data, <span class="string">'varied'</span>)
-0142     options.result_file = <a href="#_sub4" class="code" title="subfunction filename = filenameFromVaried(filename, func, data, plotFnBool, options, varargin)">filenameFromVaried</a>(options.result_file, func, data, plotFnBool, options, varargin{:});
-0143   <span class="keyword">end</span>
+0086 <span class="comment">%% Save data if no output is requested.</span>
+0087 <span class="keyword">if</span> nargout&lt;1
+0088   options.save_results_flag = 1;
+0089 <span class="keyword">end</span>
+0090 
+0091 <span class="comment">% varinputs = varargin;</span>
+0092 <span class="comment">% % check if simIDs specified</span>
+0093 <span class="comment">% if ~isempty(options.simIDs)</span>
+0094 <span class="comment">%   if isstruct(varinputs{1})</span>
+0095 <span class="comment">%     varinputs.simIDs = options.simIDs;</span>
+0096 <span class="comment">%   else</span>
+0097 <span class="comment">%     % find simIDs in varinputs</span>
+0098 <span class="comment">%     varinputs{find(~cellfun(@isempty,strfind(varinputs(1:2:end), 'simIDs')))*2} = options.simIDs;</span>
+0099 <span class="comment">%   end</span>
+0100 <span class="comment">% end</span>
+0101 
+0102 <span class="comment">%% Parse src.</span>
+0103 [data, studyinfo] = <a href="#_sub1" class="code" title="subfunction [data, studyinfo] = parseSrc(src, options, varargin)">parseSrc</a>(src, options, varargin{:});
+0104 <span class="comment">% Data at this point:</span>
+0105 <span class="comment">%   - 'data' as single struct or struct array, or empty</span>
+0106 <span class="comment">%   - 'studyinfo' struct or empty</span>
+0107 
+0108 <span class="comment">% check if study_dir defined</span>
+0109 <span class="keyword">if</span> isempty(studyinfo)
+0110   studyinfoBool = false;
+0111 <span class="keyword">else</span>
+0112   studyinfoBool = true;
+0113   <span class="keyword">if</span> ~isfield(studyinfo,<span class="string">'study_dir'</span>) || isempty(studyinfo.study_dir) || ~isdir(studyinfo.study_dir)
+0114     studyinfo.study_dir = pwd;
+0115   <span class="keyword">end</span>
+0116 <span class="keyword">end</span>
+0117 
+0118 <span class="comment">% Data at this point:</span>
+0119 <span class="comment">%   - 'data' as single struct or struct array, or empty</span>
+0120 <span class="comment">%   - 'studyinfo' struct with many flds or just 'study_dir' field</span>
+0121 
+0122 <span class="comment">% convert data to double precision before analysis</span>
+0123 <span class="keyword">for</span> j = 1:length(data)
+0124   <span class="keyword">for</span> k = 1:length(data(j).labels)
+0125     fld = data(j).labels{k};
+0126     data(j).(fld) = double(data(j).(fld));
+0127   <span class="keyword">end</span>
+0128 <span class="keyword">end</span>
+0129 
+0130 <span class="comment">% convert func to handle if not a cell array</span>
+0131 [funcIn, nFunc] = <a href="#_sub2" class="code" title="subfunction [funcIn, nFunc] = parseFuncIn(funcIn)">parseFuncIn</a>(funcIn);
+0132 
+0133 <span class="comment">% check if postSim</span>
+0134 postSimBool = studyinfoBool || (length(data) &gt; 1); <span class="comment">% since length(data)==1 and no studyinfo with SimulateModel call</span>
+0135 
+0136 <span class="keyword">for</span> fInd = 1:nFunc <span class="comment">% loop over function inputs</span>
+0137   func = funcIn{fInd};
+0138 
+0139   <span class="comment">% confirm func is function handle or convert to one if possible</span>
+0140   func = <a href="#_sub3" class="code" title="subfunction func = parseFunc(func)">parseFunc</a>(func);
+0141 
+0142   <span class="comment">% check if plot in fn name</span>
+0143   plotFnBool = ~isempty(regexpi(func2str(func), <span class="string">'plot'</span>));
 0144 
-0145   <span class="comment">% do analysis</span>
-0146   fprintf(<span class="string">'\tExecuting post-processing function: %s\n'</span>,func2str(func));
-0147   tstart = tic;
-0148 
-0149   <span class="comment">%% Eval func</span>
-0150   <span class="keyword">if</span> length(data)==1 || postSimBool <span class="comment">% Don't need to add check on load_all_data_flag, since if false data is empty.</span>
-0151     result = <a href="#_sub5" class="code" title="subfunction result = evalFnWithArgs(fInd, data, func, options, varargin)">evalFnWithArgs</a>(fInd, data, func, options, varargin{:});
-0152   <span class="keyword">else</span>
-0153     result = [];
-0154   <span class="keyword">end</span>
-0155 
-0156 
-0157 
-0158   <span class="comment">% calc nResults</span>
-0159   <span class="keyword">if</span> ~isempty(result)
-0160     nResults = length(result);
-0161   <span class="keyword">elseif</span> ~isempty(data)
-0162     nResults = length(data);
-0163   <span class="keyword">else</span>
-0164     nResults = length(siminfo.simulations);
-0165   <span class="keyword">end</span>
-0166 
-0167   fprintf(<span class="string">'\t\tElapsed time: %g sec\n'</span>,toc(tstart));
-0168 
-0169   <span class="comment">% Dave: Not all plotting functions will return a plot handle. For</span>
-0170   <span class="comment">% example, dsPlot2 returns a nested structure of figure, axis, and plot</span>
-0171   <span class="comment">% handles. This command updates it.</span>
-0172   <span class="keyword">if</span> isstruct(result)
-0173       <span class="keyword">if</span> isfield(result,<span class="string">'hcurr'</span>)
-0174           result = result.hcurr;
-0175       <span class="keyword">end</span>
-0176   <span class="keyword">end</span>
-0177 
-0178   <span class="comment">% determine if result is a plot handle or derived data</span>
-0179   <span class="keyword">if</span> all(ishandle(result)) || plotFnBool <span class="comment">% analysis function returned a graphics handle or has plot in fn name</span>
-0180     <span class="comment">%% Plot Function</span>
-0181 
-0182     <span class="comment">% will save plots else return main fn</span>
-0183     <span class="keyword">if</span> options.save_results_flag
-0184       <span class="comment">% loop through results. all results may exist or need to be made during loop</span>
-0185       <span class="keyword">for</span> iResult = 1:nResults
-0186         extension = [<span class="string">'.'</span> options.format]; <span class="comment">% '.svg'; % {.jpg,.svg}</span>
-0187 
-0188         <span class="keyword">if</span> ~postSimBool <span class="comment">% approx nResults == 1 &amp;&amp; ~studyinfoBool % approx ~postSimBool</span>
-0189           fname = [options.result_file extension];
-0190           fPath = fname;
-0191 
-0192           thisResult = result(iResult);
-0193         <span class="keyword">elseif</span> studyinfoBool
-0194           simID = studyinfo.simulations(iResult).sim_id;
-0195           prefix = func2str(func);
-0196           fname = [prefix <span class="string">'_sim'</span> num2str(simID) <span class="string">'_plot'</span> num2str(fInd) <span class="string">'_'</span> func2str(func)];
-0197 
-0198           <span class="keyword">if</span> (postSimBool &amp;&amp; ~options.load_all_data_flag)
-0199             data = <a href="#_sub7" class="code" title="subfunction data = loadDataFromSingleSim(simID, options, varargin)">loadDataFromSingleSim</a>(simID, options, varargin);
-0200 
-0201             <span class="comment">%skip if no data</span>
-0202             <span class="keyword">if</span> isempty(data)
-0203               <span class="keyword">continue</span>
-0204             <span class="keyword">end</span>
+0145   <span class="comment">% change result_file if varied_filename_flag</span>
+0146   <span class="keyword">if</span> options.varied_filename_flag &amp;&amp; isfield(data, <span class="string">'varied'</span>)
+0147     options.result_file = <a href="#_sub4" class="code" title="subfunction filename = filenameFromVaried(filename, func, data, plotFnBool, options, varargin)">filenameFromVaried</a>(options.result_file, func, data, plotFnBool, options, varargin{:});
+0148   <span class="keyword">end</span>
+0149 
+0150   <span class="comment">% do analysis</span>
+0151   fprintf(<span class="string">'\tExecuting post-processing function: %s\n'</span>,func2str(func));
+0152   tstart = tic;
+0153 
+0154   <span class="comment">%% Eval func</span>
+0155   <span class="keyword">if</span> length(data)==1 || postSimBool <span class="comment">% Don't need to add check on load_all_data_flag, since if false data is empty.</span>
+0156     result = <a href="#_sub5" class="code" title="subfunction result = evalFnWithArgs(fInd, data, func, options, varargin)">evalFnWithArgs</a>(fInd, data, func, options, varargin{:});
+0157   <span class="keyword">else</span>
+0158     result = [];
+0159   <span class="keyword">end</span>
+0160 
+0161 
+0162 
+0163   <span class="comment">% calc nResults</span>
+0164   <span class="keyword">if</span> ~isempty(result)
+0165     nResults = length(result);
+0166   <span class="keyword">elseif</span> ~isempty(data)
+0167     nResults = length(data);
+0168   <span class="keyword">else</span>
+0169     nResults = length(siminfo.simulations);
+0170   <span class="keyword">end</span>
+0171 
+0172   fprintf(<span class="string">'\t\tElapsed time: %g sec\n'</span>,toc(tstart));
+0173 
+0174   <span class="comment">% Dave: Not all plotting functions will return a plot handle. For</span>
+0175   <span class="comment">% example, dsPlot2 returns a nested structure of figure, axis, and plot</span>
+0176   <span class="comment">% handles. This command updates it.</span>
+0177   <span class="keyword">if</span> isstruct(result)
+0178       <span class="keyword">if</span> isfield(result,<span class="string">'hcurr'</span>)
+0179           result = result.hcurr;
+0180       <span class="keyword">end</span>
+0181   <span class="keyword">end</span>
+0182 
+0183   <span class="comment">% determine if result is a plot handle or derived data</span>
+0184   <span class="keyword">if</span> all(ishandle(result)) || plotFnBool <span class="comment">% analysis function returned a graphics handle or has plot in fn name</span>
+0185     <span class="comment">%% Plot Function</span>
+0186 
+0187     <span class="comment">% will save plots else return main fn</span>
+0188     <span class="keyword">if</span> options.save_results_flag
+0189       <span class="comment">% loop through results. all results may exist or need to be made during loop</span>
+0190       <span class="keyword">for</span> iResult = 1:nResults
+0191         extension = [<span class="string">'.'</span> options.format]; <span class="comment">% '.svg'; % {.jpg,.svg}</span>
+0192 
+0193         <span class="keyword">if</span> ~postSimBool <span class="comment">% approx nResults == 1 &amp;&amp; ~studyinfoBool % approx ~postSimBool</span>
+0194           fname = [options.result_file extension];
+0195           fPath = fname;
+0196 
+0197           thisResult = result(iResult);
+0198         <span class="keyword">elseif</span> studyinfoBool
+0199           simID = studyinfo.simulations(iResult).sim_id;
+0200           prefix = func2str(func);
+0201           fname = [prefix <span class="string">'_sim'</span> num2str(simID) <span class="string">'_plot'</span> num2str(fInd) <span class="string">'_'</span> func2str(func)];
+0202 
+0203           <span class="keyword">if</span> (postSimBool &amp;&amp; ~options.load_all_data_flag)
+0204             data = <a href="#_sub7" class="code" title="subfunction data = loadDataFromSingleSim(simID, options, varargin)">loadDataFromSingleSim</a>(simID, options, varargin);
 0205 
-0206             <span class="comment">% calc result for this data</span>
-0207             thisResult = <a href="#_sub5" class="code" title="subfunction result = evalFnWithArgs(fInd, data, func, options, varargin)">evalFnWithArgs</a>(fInd, data, func, options, varargin);
-0208           <span class="keyword">end</span>
-0209 
-0210           <span class="comment">% change result_file if varied_filename_flag</span>
-0211           <span class="keyword">if</span> options.varied_filename_flag &amp;&amp; isfield(data, <span class="string">'varied'</span>)
-0212             fname = <a href="#_sub4" class="code" title="subfunction filename = filenameFromVaried(filename, func, data, plotFnBool, options, varargin)">filenameFromVaried</a>(fname, func, data, plotFnBool, options, varargin{:});
-0213           <span class="keyword">end</span> <span class="comment">% varied_filename_flag</span>
+0206             <span class="comment">%skip if no data</span>
+0207             <span class="keyword">if</span> isempty(data)
+0208               <span class="keyword">continue</span>
+0209             <span class="keyword">end</span>
+0210 
+0211             <span class="comment">% calc result for this data</span>
+0212             thisResult = <a href="#_sub5" class="code" title="subfunction result = evalFnWithArgs(fInd, data, func, options, varargin)">evalFnWithArgs</a>(fInd, data, func, options, varargin);
+0213           <span class="keyword">end</span>
 0214 
-0215           <span class="comment">% make fPath</span>
-0216           fDir = fullfile(studyinfo.study_dir, <span class="string">'postSimPlots'</span>);
-0217           <span class="keyword">if</span> ~exist(fDir,<span class="string">'dir'</span>)
-0218             mkdir(fDir)
-0219           <span class="keyword">end</span>
-0220           fPath = fullfile(fDir,fname);
-0221         <span class="keyword">else</span> <span class="comment">% length(result)&gt;1 and ~studyinfoBool</span>
-0222           fname = [options.result_file <span class="string">'_page'</span> num2str(iResult) extension];
-0223 
-0224           <span class="comment">% make fPath</span>
-0225           fDir = fullfile(studyinfo.study_dir, <span class="string">'postSimPlots'</span>);
-0226           <span class="keyword">if</span> ~exist(fDir,<span class="string">'dir'</span>)
-0227             mkdir(fDir)
-0228           <span class="keyword">end</span>
-0229           fPath = fullfile(fDir,fname);
-0230 
-0231           thisResult = result(iResult);
-0232         <span class="keyword">end</span>
-0233         <span class="comment">% Data needed for plotting:</span>
-0234         <span class="comment">%   - thisResult</span>
-0235         <span class="comment">%   - fPath</span>
-0236 
-0237         set(thisResult, <span class="string">'PaperPositionMode'</span>,<span class="string">'auto'</span>);
-0238         fprintf(<span class="string">'\t\tSaving plot: %s\n'</span>,fname);
-0239 
-0240         <span class="keyword">switch</span> extension
-0241           <span class="keyword">case</span> <span class="string">'.svg'</span>
-0242             plot2svg(fPath,thisResult);
-0243           <span class="keyword">case</span> <span class="string">'.jpg'</span>
-0244             print(thisResult,fPath,<span class="string">'-djpeg'</span>);
-0245           <span class="keyword">case</span> <span class="string">'.eps'</span>
-0246             print(thisResult,fPath,<span class="string">'-depsc'</span>);
-0247           <span class="keyword">case</span> <span class="string">'.png'</span>
-0248             print(thisResult,fPath,<span class="string">'-dpng'</span>);
-0249           <span class="keyword">case</span> <span class="string">'.fig'</span>
-0250             savefig(thisResult,fPath);
-0251         <span class="keyword">end</span>
-0252 
-0253         <span class="keyword">if</span> nResults &gt; 1
-0254           close(thisResult)
-0255         <span class="keyword">end</span>
-0256       <span class="keyword">end</span> <span class="comment">%nResults</span>
-0257     <span class="keyword">end</span> <span class="comment">%save_results_flag</span>
-0258   <span class="keyword">else</span> <span class="comment">% analysis function returned derived data</span>
-0259     <span class="comment">%% Analysis Function</span>
-0260     <span class="keyword">if</span> isstruct(result)
-0261       result = <a href="#_sub8" class="code" title="subfunction result = add_modifications(result, data, varargin)">add_modifications</a>(result, data, varargin{:});
-0262 
-0263       <span class="keyword">for</span> iResult = 1:length(result)
-0264         <span class="comment">% add options to result structure</span>
-0265         <span class="keyword">if</span> length(varargin)&gt;1
-0266           <span class="keyword">for</span> j = 1:2:length(varargin)
-0267             result(iResult).options.(varargin{j}) = varargin{j+1};
-0268           <span class="keyword">end</span>
-0269         <span class="keyword">else</span>
-0270           result(iResult).options = [];
-0271         <span class="keyword">end</span>
-0272       <span class="keyword">end</span> <span class="comment">%iResult</span>
-0273     <span class="keyword">end</span> <span class="comment">%isstruct</span>
-0274 
-0275     <span class="comment">% save derived data else return main function</span>
-0276     <span class="keyword">if</span> options.save_results_flag
-0277       <span class="keyword">if</span> studyinfoBool
-0278         allResults = result;
-0279         clear result;
-0280 
-0281         <span class="keyword">for</span> iResult = 1:nResults
-0282           simID = studyinfo.simulations(iResult).sim_id;
-0283 
-0284           <span class="keyword">if</span> options.load_all_data_flag
-0285             result = allResults(iResult);
-0286           <span class="keyword">else</span> <span class="comment">% load data</span>
-0287             data = <a href="#_sub7" class="code" title="subfunction data = loadDataFromSingleSim(simID, options, varargin)">loadDataFromSingleSim</a>(simID, options, varargin);
+0215           <span class="comment">% change result_file if varied_filename_flag</span>
+0216           <span class="keyword">if</span> options.varied_filename_flag &amp;&amp; isfield(data, <span class="string">'varied'</span>)
+0217             fname = <a href="#_sub4" class="code" title="subfunction filename = filenameFromVaried(filename, func, data, plotFnBool, options, varargin)">filenameFromVaried</a>(fname, func, data, plotFnBool, options, varargin{:});
+0218           <span class="keyword">end</span> <span class="comment">% varied_filename_flag</span>
+0219 
+0220           <span class="comment">% make fPath</span>
+0221           fDir = fullfile(studyinfo.study_dir, <span class="string">'postSimPlots'</span>);
+0222           <span class="keyword">if</span> ~exist(fDir,<span class="string">'dir'</span>)
+0223             mkdir(fDir)
+0224           <span class="keyword">end</span>
+0225           fPath = fullfile(fDir,fname);
+0226         <span class="keyword">else</span> <span class="comment">% length(result)&gt;1 and ~studyinfoBool</span>
+0227           fname = [options.result_file <span class="string">'_page'</span> num2str(iResult) extension];
+0228 
+0229           <span class="comment">% make fPath</span>
+0230           fDir = fullfile(studyinfo.study_dir, <span class="string">'postSimPlots'</span>);
+0231           <span class="keyword">if</span> ~exist(fDir,<span class="string">'dir'</span>)
+0232             mkdir(fDir)
+0233           <span class="keyword">end</span>
+0234           fPath = fullfile(fDir,fname);
+0235 
+0236           thisResult = result(iResult);
+0237         <span class="keyword">end</span>
+0238         <span class="comment">% Data needed for plotting:</span>
+0239         <span class="comment">%   - thisResult</span>
+0240         <span class="comment">%   - fPath</span>
+0241 
+0242         set(thisResult, <span class="string">'PaperPositionMode'</span>,<span class="string">'auto'</span>);
+0243         fprintf(<span class="string">'\t\tSaving plot: %s\n'</span>,fname);
+0244 
+0245         <span class="keyword">switch</span> extension
+0246           <span class="keyword">case</span> <span class="string">'.svg'</span>
+0247             plot2svg(fPath,thisResult);
+0248           <span class="keyword">case</span> <span class="string">'.jpg'</span>
+0249             print(thisResult,fPath,<span class="string">'-djpeg'</span>);
+0250           <span class="keyword">case</span> <span class="string">'.eps'</span>
+0251             print(thisResult,fPath,<span class="string">'-depsc'</span>);
+0252           <span class="keyword">case</span> <span class="string">'.png'</span>
+0253             print(thisResult,fPath,<span class="string">'-dpng'</span>);
+0254           <span class="keyword">case</span> <span class="string">'.fig'</span>
+0255             savefig(thisResult,fPath);
+0256         <span class="keyword">end</span>
+0257 
+0258         <span class="keyword">if</span> nResults &gt; 1
+0259           close(thisResult)
+0260         <span class="keyword">end</span>
+0261       <span class="keyword">end</span> <span class="comment">%nResults</span>
+0262     <span class="keyword">end</span> <span class="comment">%save_results_flag</span>
+0263   <span class="keyword">else</span> <span class="comment">% analysis function returned derived data</span>
+0264     <span class="comment">%% Analysis Function</span>
+0265     <span class="keyword">if</span> isstruct(result)
+0266       result = <a href="#_sub8" class="code" title="subfunction result = add_modifications(result, data, varargin)">add_modifications</a>(result, data, varargin{:});
+0267 
+0268       <span class="keyword">for</span> iResult = 1:length(result)
+0269         <span class="comment">% add options to result structure</span>
+0270         <span class="keyword">if</span> length(varargin)&gt;1
+0271           <span class="keyword">for</span> j = 1:2:length(varargin)
+0272             result(iResult).options.(varargin{j}) = varargin{j+1};
+0273           <span class="keyword">end</span>
+0274         <span class="keyword">else</span>
+0275           result(iResult).options = [];
+0276         <span class="keyword">end</span>
+0277       <span class="keyword">end</span> <span class="comment">%iResult</span>
+0278     <span class="keyword">end</span> <span class="comment">%isstruct</span>
+0279 
+0280     <span class="comment">% save derived data else return main function</span>
+0281     <span class="keyword">if</span> options.save_results_flag
+0282       <span class="keyword">if</span> studyinfoBool
+0283         allResults = result;
+0284         clear result;
+0285 
+0286         <span class="keyword">for</span> iResult = 1:nResults
+0287           simID = studyinfo.simulations(iResult).sim_id;
 0288 
-0289             <span class="comment">%skip if no data</span>
-0290             <span class="keyword">if</span> isempty(data)
-0291               <span class="keyword">continue</span>
-0292             <span class="keyword">end</span>
+0289           <span class="keyword">if</span> options.load_all_data_flag
+0290             result = allResults(iResult);
+0291           <span class="keyword">else</span> <span class="comment">% load data</span>
+0292             data = <a href="#_sub7" class="code" title="subfunction data = loadDataFromSingleSim(simID, options, varargin)">loadDataFromSingleSim</a>(simID, options, varargin);
 0293 
-0294             <span class="comment">% calc result for this data</span>
-0295             result = <a href="#_sub5" class="code" title="subfunction result = evalFnWithArgs(fInd, data, func, options, varargin)">evalFnWithArgs</a>(fInd, data, func, options, varargin);
-0296           <span class="keyword">end</span>
-0297 
-0298           prefix = func2str(func);
-0299           fname = [prefix <span class="string">'_sim'</span> num2str(simID) <span class="string">'_analysis'</span> num2str(fInd) <span class="string">'_'</span> func2str(func) <span class="string">'.mat'</span>];
-0300 
-0301           <span class="comment">% change result_file if varied_filename_flag</span>
-0302           <span class="keyword">if</span> options.varied_filename_flag &amp;&amp; isfield(data, <span class="string">'varied'</span>)
-0303             fname = <a href="#_sub4" class="code" title="subfunction filename = filenameFromVaried(filename, func, data, plotFnBool, options, varargin)">filenameFromVaried</a>(fname, func, data, plotFnBool, options, varargin{:});
-0304           <span class="keyword">end</span> <span class="comment">% varied_filename_flag</span>
+0294             <span class="comment">%skip if no data</span>
+0295             <span class="keyword">if</span> isempty(data)
+0296               <span class="keyword">continue</span>
+0297             <span class="keyword">end</span>
+0298 
+0299             <span class="comment">% calc result for this data</span>
+0300             result = <a href="#_sub5" class="code" title="subfunction result = evalFnWithArgs(fInd, data, func, options, varargin)">evalFnWithArgs</a>(fInd, data, func, options, varargin);
+0301           <span class="keyword">end</span>
+0302 
+0303           prefix = func2str(func);
+0304           fname = [prefix <span class="string">'_sim'</span> num2str(simID) <span class="string">'_analysis'</span> num2str(fInd) <span class="string">'_'</span> func2str(func) <span class="string">'.mat'</span>];
 0305 
-0306           <span class="comment">% make fPath</span>
-0307           fDir = fullfile(studyinfo.study_dir, <span class="string">'analyzedData'</span>);
-0308           <span class="keyword">if</span> ~exist(fDir,<span class="string">'dir'</span>)
-0309             mkdir(fDir)
-0310           <span class="keyword">end</span>
-0311           fPath = fullfile(fDir,fname);
-0312 
-0313           fprintf(<span class="string">'\t\tSaving derived data: %s\n'</span>, fPath);
-0314           save(fPath,<span class="string">'result'</span>,<span class="string">'-v7.3'</span>);
-0315         <span class="keyword">end</span> <span class="comment">%iResult</span>
-0316       <span class="keyword">else</span> <span class="comment">% ~studyinfoBool, whether 1 or array of struct</span>
-0317         fname = options.result_file;
-0318         extension = <span class="string">'.mat'</span>;
-0319 
-0320         <span class="keyword">if</span> ~strcmp(fname(end-3:end), extension) <span class="comment">%check for .mat extension</span>
-0321           fname = [fname extension];
-0322         <span class="keyword">end</span>
-0323 
-0324         fprintf(<span class="string">'\t\tSaving derived data: %s\n'</span>, fname);
-0325         save(fname,<span class="string">'result'</span>,<span class="string">'-v7.3'</span>);
-0326       <span class="keyword">end</span> <span class="comment">% scenarios</span>
-0327     <span class="keyword">end</span> <span class="comment">% save_results_flag</span>
-0328   <span class="keyword">end</span> <span class="comment">% ishandle(result)</span>
-0329 <span class="keyword">end</span> <span class="comment">% fInd</span>
-0330 
-0331 <span class="comment">%% auto_gen_test_data_flag argout</span>
-0332 <span class="keyword">if</span> options.auto_gen_test_data_flag
-0333   argout = {result}; <span class="comment">% specific to this function</span>
-0334   
-0335   <span class="comment">%dsUnitSaveAutoGenTestData(argin, argout); % TODO: check if needs to be saveAutoGenTestDir</span>
-0336 <span class="keyword">end</span>
-0337 
-0338 <span class="keyword">end</span> <span class="comment">%main fn</span>
+0306           <span class="comment">% change result_file if varied_filename_flag</span>
+0307           <span class="keyword">if</span> options.varied_filename_flag &amp;&amp; isfield(data, <span class="string">'varied'</span>)
+0308             fname = <a href="#_sub4" class="code" title="subfunction filename = filenameFromVaried(filename, func, data, plotFnBool, options, varargin)">filenameFromVaried</a>(fname, func, data, plotFnBool, options, varargin{:});
+0309           <span class="keyword">end</span> <span class="comment">% varied_filename_flag</span>
+0310 
+0311           <span class="comment">% make fPath</span>
+0312           fDir = fullfile(studyinfo.study_dir, <span class="string">'analyzedData'</span>);
+0313           <span class="keyword">if</span> ~exist(fDir,<span class="string">'dir'</span>)
+0314             mkdir(fDir)
+0315           <span class="keyword">end</span>
+0316           fPath = fullfile(fDir,fname);
+0317 
+0318           fprintf(<span class="string">'\t\tSaving derived data: %s\n'</span>, fPath);
+0319           save(fPath,<span class="string">'result'</span>,<span class="string">'-v7.3'</span>);
+0320         <span class="keyword">end</span> <span class="comment">%iResult</span>
+0321       <span class="keyword">else</span> <span class="comment">% ~studyinfoBool, whether 1 or array of struct</span>
+0322         fname = options.result_file;
+0323         extension = <span class="string">'.mat'</span>;
+0324 
+0325         <span class="keyword">if</span> ~strcmp(fname(end-3:end), extension) <span class="comment">%check for .mat extension</span>
+0326           fname = [fname extension];
+0327         <span class="keyword">end</span>
+0328 
+0329         fprintf(<span class="string">'\t\tSaving derived data: %s\n'</span>, fname);
+0330         save(fname,<span class="string">'result'</span>,<span class="string">'-v7.3'</span>);
+0331       <span class="keyword">end</span> <span class="comment">% scenarios</span>
+0332     <span class="keyword">end</span> <span class="comment">% save_results_flag</span>
+0333   <span class="keyword">end</span> <span class="comment">% ishandle(result)</span>
+0334 <span class="keyword">end</span> <span class="comment">% fInd</span>
+0335 
+0336 <span class="comment">%% auto_gen_test_data_flag argout</span>
+0337 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0338   argout = {result}; <span class="comment">% specific to this function</span>
 0339 
-0340 
-0341 
+0340   <span class="comment">%dsUnitSaveAutoGenTestData(argin, argout); % TODO: check if needs to be saveAutoGenTestDir</span>
+0341 <span class="keyword">end</span>
 0342 
-0343 <span class="comment">%% Local functions</span>
+0343 <span class="keyword">end</span> <span class="comment">%main fn</span>
 0344 
-0345 <a name="_sub1" href="#_subfunctions" class="code">function [data, studyinfo] = parseSrc(src, options, varargin)</a>
+0345 
 0346 
-0347 <span class="comment">%% auto_gen_test_data_flag argin</span>
-0348 options = <a href="../functions/internal/dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
-0349 <span class="keyword">if</span> options.auto_gen_test_data_flag
-0350   varargs = varargin;
-0351   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
-0352   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
-0353   argin = [{src},{options}, varargs]; <span class="comment">% specific to this function</span>
-0354 <span class="keyword">end</span>
-0355 
-0356 
-0357 <span class="keyword">if</span> isstruct(src) &amp;&amp; isfield(src,<span class="string">'time'</span>) <span class="comment">% data struct (single or array)</span>
-0358   data = src; <span class="comment">% if length==1,then likely from SimulateModel call</span>
-0359   studyinfo = [];
-0360 <span class="keyword">elseif</span> ischar(src) <span class="comment">%string input</span>
-0361   <span class="keyword">if</span> options.load_all_data_flag <span class="comment">% load data</span>
-0362     [data,studyinfo] = <a href="dsImport.html" class="code" title="function [data,studyinfo] = dsImport(file,varargin)">dsImport</a>(src, varargin{:});
-0363   <span class="keyword">else</span> <span class="comment">% only load studyinfo</span>
-0364     data = [];
-0365     studyinfo = <a href="../functions/internal/dsCheckStudyinfo.html" class="code" title="function studyinfo = dsCheckStudyinfo(studyinfo, varargin)">dsCheckStudyinfo</a>(src);
-0366   <span class="keyword">end</span>
-0367 
-0368   <span class="comment">% update study_dir</span>
-0369   <span class="keyword">if</span> exist(src, <span class="string">'file'</span>) &amp;&amp; ~isempty(strfind(src, <span class="string">'studyinfo'</span>)) <span class="comment">%studyinfo.mat</span>
-0370     studyinfo.study_dir = fileparts2(src);
-0371   <span class="keyword">elseif</span> isdir(src) <span class="comment">% study_dir</span>
-0372     studyinfo.study_dir = src;
-0373   <span class="keyword">end</span>
-0374 <span class="keyword">end</span>
-0375 
-0376 <span class="comment">% Old Verbose Way with unnecessary checks</span>
-0377 <span class="comment">% determine type of src</span>
-0378 <span class="comment">% if ischar(src)</span>
-0379 <span class="comment">%   if exist(src,'file') % data file or studyinfo.mat</span>
-0380 <span class="comment">%     if strfind(src, 'studyinfo') %studyinfo.mat</span>
-0381 <span class="comment">%       [data,studyinfo] = ImportData(src, varargin{:}); % load data</span>
-0382 <span class="comment">%       studyinfo.study_dir = fileparts2(src);</span>
-0383 <span class="comment">%     else % data file</span>
-0384 <span class="comment">%       [data,studyinfo] = ImportData(src, varargin{:}); % load data</span>
-0385 <span class="comment">%     end</span>
-0386 <span class="comment">%   elseif isdir(src) % study_dir</span>
-0387 <span class="comment">%     [data,studyinfo] = ImportData(src, varargin{:}); % load data</span>
-0388 <span class="comment">%     studyinfo.study_dir = src;</span>
-0389 <span class="comment">%   else</span>
-0390 <span class="comment">%     try</span>
-0391 <span class="comment">%       [data,studyinfo] = ImportData(src, varargin{:}); % load data</span>
-0392 <span class="comment">%     catch</span>
-0393 <span class="comment">%       error('Unknown source for first input/argument.')</span>
-0394 <span class="comment">%     end</span>
-0395 <span class="comment">%   end</span>
-0396 <span class="comment">% elseif isstruct(src) &amp;&amp; length(src)&gt;1 % data file cell array</span>
-0397 <span class="comment">%   data = src;</span>
-0398 <span class="comment">% elseif isstruct(src) % single data struct or studyinfo struct</span>
-0399 <span class="comment">%   if isfield(src,'time') % single data file</span>
-0400 <span class="comment">%     data = src;</span>
-0401 <span class="comment">%   else % studyinfo struct</span>
-0402 <span class="comment">%     [data,studyinfo] = ImportData(src, varargin{:}); % load data</span>
-0403 <span class="comment">%   end</span>
-0404 <span class="comment">% elseif iscell(src) % cell array of files</span>
-0405 <span class="comment">%   [data,studyinfo] = ImportData(src, varargin{:}); % load data</span>
-0406 <span class="comment">% else</span>
-0407 <span class="comment">%   try</span>
-0408 <span class="comment">%     [data,studyinfo] = ImportData(src, varargin{:}); % load data</span>
-0409 <span class="comment">%   catch</span>
-0410 <span class="comment">%     error('Unknown source for first input/argument.')</span>
-0411 <span class="comment">%   end</span>
-0412 <span class="comment">% end</span>
-0413 <span class="comment">%</span>
-0414 <span class="comment">%</span>
-0415 <span class="comment">% % make studyinfo if doesn't exist</span>
-0416 <span class="comment">% if ~exist('studyinfo','var')</span>
-0417 <span class="comment">%   studyinfo = [];</span>
-0418 <span class="comment">% end</span>
-0419 
-0420 <span class="comment">%% auto_gen_test_data_flag argout</span>
-0421 <span class="keyword">if</span> options.auto_gen_test_data_flag
-0422   argout = {data, studyinfo}; <span class="comment">% specific to this function</span>
-0423   
-0424   <span class="comment">%dsUnitSaveAutoGenTestDataLocalFn(argin, argout); % localfn</span>
-0425 <span class="keyword">end</span>
-0426 
-0427 <span class="keyword">end</span>
+0347 
+0348 <span class="comment">%% Local functions</span>
+0349 
+0350 <a name="_sub1" href="#_subfunctions" class="code">function [data, studyinfo] = parseSrc(src, options, varargin)</a>
+0351 
+0352 <span class="comment">%% auto_gen_test_data_flag argin</span>
+0353 options = <a href="../functions/internal/dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
+0354 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0355   varargs = varargin;
+0356   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0357   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
+0358   argin = [{src},{options}, varargs]; <span class="comment">% specific to this function</span>
+0359 <span class="keyword">end</span>
+0360 
+0361 
+0362 <span class="keyword">if</span> isstruct(src) &amp;&amp; isfield(src,<span class="string">'time'</span>) <span class="comment">% data struct (single or array)</span>
+0363   data = src; <span class="comment">% if length==1,then likely from SimulateModel call</span>
+0364   studyinfo = [];
+0365 <span class="keyword">elseif</span> ischar(src) <span class="comment">%string input</span>
+0366   <span class="keyword">if</span> options.load_all_data_flag <span class="comment">% load data</span>
+0367     [data,studyinfo] = <a href="dsImport.html" class="code" title="function [data,studyinfo] = dsImport(file,varargin)">dsImport</a>(src, varargin{:});
+0368   <span class="keyword">else</span> <span class="comment">% only load studyinfo</span>
+0369     data = [];
+0370     studyinfo = <a href="../functions/internal/dsCheckStudyinfo.html" class="code" title="function studyinfo = dsCheckStudyinfo(studyinfo, varargin)">dsCheckStudyinfo</a>(src);
+0371   <span class="keyword">end</span>
+0372 
+0373   <span class="comment">% update study_dir</span>
+0374   <span class="keyword">if</span> exist(src, <span class="string">'file'</span>) &amp;&amp; ~isempty(strfind(src, <span class="string">'studyinfo'</span>)) <span class="comment">%studyinfo.mat</span>
+0375     studyinfo.study_dir = fileparts2(src);
+0376   <span class="keyword">elseif</span> isdir(src) <span class="comment">% study_dir</span>
+0377     studyinfo.study_dir = src;
+0378   <span class="keyword">end</span>
+0379 <span class="keyword">end</span>
+0380 
+0381 <span class="comment">% Old Verbose Way with unnecessary checks</span>
+0382 <span class="comment">% determine type of src</span>
+0383 <span class="comment">% if ischar(src)</span>
+0384 <span class="comment">%   if exist(src,'file') % data file or studyinfo.mat</span>
+0385 <span class="comment">%     if strfind(src, 'studyinfo') %studyinfo.mat</span>
+0386 <span class="comment">%       [data,studyinfo] = ImportData(src, varargin{:}); % load data</span>
+0387 <span class="comment">%       studyinfo.study_dir = fileparts2(src);</span>
+0388 <span class="comment">%     else % data file</span>
+0389 <span class="comment">%       [data,studyinfo] = ImportData(src, varargin{:}); % load data</span>
+0390 <span class="comment">%     end</span>
+0391 <span class="comment">%   elseif isdir(src) % study_dir</span>
+0392 <span class="comment">%     [data,studyinfo] = ImportData(src, varargin{:}); % load data</span>
+0393 <span class="comment">%     studyinfo.study_dir = src;</span>
+0394 <span class="comment">%   else</span>
+0395 <span class="comment">%     try</span>
+0396 <span class="comment">%       [data,studyinfo] = ImportData(src, varargin{:}); % load data</span>
+0397 <span class="comment">%     catch</span>
+0398 <span class="comment">%       error('Unknown source for first input/argument.')</span>
+0399 <span class="comment">%     end</span>
+0400 <span class="comment">%   end</span>
+0401 <span class="comment">% elseif isstruct(src) &amp;&amp; length(src)&gt;1 % data file cell array</span>
+0402 <span class="comment">%   data = src;</span>
+0403 <span class="comment">% elseif isstruct(src) % single data struct or studyinfo struct</span>
+0404 <span class="comment">%   if isfield(src,'time') % single data file</span>
+0405 <span class="comment">%     data = src;</span>
+0406 <span class="comment">%   else % studyinfo struct</span>
+0407 <span class="comment">%     [data,studyinfo] = ImportData(src, varargin{:}); % load data</span>
+0408 <span class="comment">%   end</span>
+0409 <span class="comment">% elseif iscell(src) % cell array of files</span>
+0410 <span class="comment">%   [data,studyinfo] = ImportData(src, varargin{:}); % load data</span>
+0411 <span class="comment">% else</span>
+0412 <span class="comment">%   try</span>
+0413 <span class="comment">%     [data,studyinfo] = ImportData(src, varargin{:}); % load data</span>
+0414 <span class="comment">%   catch</span>
+0415 <span class="comment">%     error('Unknown source for first input/argument.')</span>
+0416 <span class="comment">%   end</span>
+0417 <span class="comment">% end</span>
+0418 <span class="comment">%</span>
+0419 <span class="comment">%</span>
+0420 <span class="comment">% % make studyinfo if doesn't exist</span>
+0421 <span class="comment">% if ~exist('studyinfo','var')</span>
+0422 <span class="comment">%   studyinfo = [];</span>
+0423 <span class="comment">% end</span>
+0424 
+0425 <span class="comment">%% auto_gen_test_data_flag argout</span>
+0426 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0427   argout = {data, studyinfo}; <span class="comment">% specific to this function</span>
 0428 
-0429 
-0430 <a name="_sub2" href="#_subfunctions" class="code">function [funcIn, nFunc] = parseFuncIn(funcIn)</a>
-0431 <span class="comment">% convert funcIn input to handle if not a cell array</span>
-0432 
-0433 <span class="keyword">if</span> isa(funcIn,<span class="string">'function_handle'</span>)
-0434   nFunc = 1;
-0435   funcIn = {funcIn}; <span class="comment">% make into cell array</span>
-0436 <span class="keyword">elseif</span> ischar(funcIn)
-0437   funcIn = {str2func(funcIn)}; <span class="comment">% convert string to fn handle</span>
-0438 
-0439   <span class="keyword">if</span> ~isfunction(funcIn)
-0440     error(<span class="string">'Post-processing function must be supplied as a function handle or function name string'</span>);
-0441   <span class="keyword">end</span>
-0442 
-0443   nFunc = 1;
-0444 <span class="keyword">else</span>
-0445   nFunc = numel(funcIn);
-0446 <span class="keyword">end</span>
-0447 <span class="keyword">end</span>
-0448 
-0449 
-0450 <a name="_sub3" href="#_subfunctions" class="code">function func = parseFunc(func)</a>
-0451 <span class="keyword">if</span> ~isa(func,<span class="string">'function_handle'</span>)
-0452   <span class="keyword">if</span> ischar(func)
-0453     func = str2func(func); <span class="comment">% convert string to fn handle</span>
+0429   <span class="comment">%dsUnitSaveAutoGenTestDataLocalFn(argin, argout); % localfn</span>
+0430 <span class="keyword">end</span>
+0431 
+0432 <span class="keyword">end</span>
+0433 
+0434 
+0435 <a name="_sub2" href="#_subfunctions" class="code">function [funcIn, nFunc] = parseFuncIn(funcIn)</a>
+0436 <span class="comment">% convert funcIn input to handle if not a cell array</span>
+0437 
+0438 <span class="keyword">if</span> isa(funcIn,<span class="string">'function_handle'</span>)
+0439   nFunc = 1;
+0440   funcIn = {funcIn}; <span class="comment">% make into cell array</span>
+0441 <span class="keyword">elseif</span> ischar(funcIn)
+0442   funcIn = {str2func(funcIn)}; <span class="comment">% convert string to fn handle</span>
+0443 
+0444   <span class="keyword">if</span> ~isfunction(funcIn)
+0445     error(<span class="string">'Post-processing function must be supplied as a function handle or function name string'</span>);
+0446   <span class="keyword">end</span>
+0447 
+0448   nFunc = 1;
+0449 <span class="keyword">else</span>
+0450   nFunc = numel(funcIn);
+0451 <span class="keyword">end</span>
+0452 <span class="keyword">end</span>
+0453 
 0454 
-0455     <span class="keyword">if</span> ~isfunction(func)
-0456       error(<span class="string">'Post-processing function must be supplied as a function handle or function name string'</span>);
-0457     <span class="keyword">end</span>
-0458   <span class="keyword">else</span>
-0459     error(<span class="string">'Post-processing function must be supplied as a function handle or function name string'</span>);
-0460   <span class="keyword">end</span>
-0461 <span class="keyword">end</span>
-0462 <span class="keyword">end</span>
-0463 
-0464 
-0465 <a name="_sub4" href="#_subfunctions" class="code">function filename = filenameFromVaried(filename, func, data, plotFnBool, options, varargin)</a>
-0466 <span class="comment">% NOTE: inputs are odd since called from different sources with different</span>
-0467 <span class="comment">%       states.</span>
+0455 <a name="_sub3" href="#_subfunctions" class="code">function func = parseFunc(func)</a>
+0456 <span class="keyword">if</span> ~isa(func,<span class="string">'function_handle'</span>)
+0457   <span class="keyword">if</span> ischar(func)
+0458     func = str2func(func); <span class="comment">% convert string to fn handle</span>
+0459 
+0460     <span class="keyword">if</span> ~isfunction(func)
+0461       error(<span class="string">'Post-processing function must be supplied as a function handle or function name string'</span>);
+0462     <span class="keyword">end</span>
+0463   <span class="keyword">else</span>
+0464     error(<span class="string">'Post-processing function must be supplied as a function handle or function name string'</span>);
+0465   <span class="keyword">end</span>
+0466 <span class="keyword">end</span>
+0467 <span class="keyword">end</span>
 0468 
-0469 <span class="comment">%% auto_gen_test_data_flag argin</span>
-0470 options = catstruct(options, <a href="../functions/internal/dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false));
-0471 
-0472 <span class="keyword">if</span> options.auto_gen_test_data_flag
-0473   varargs = varargin;
-0474   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
-0475   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
-0476   argin = [{filename}, {func}, {data}, {plotFnBool}, {options}, varargs]; <span class="comment">% specific to this function</span>
-0477 <span class="keyword">end</span>
-0478 
-0479 <span class="keyword">if</span> isfield(options, <span class="string">'save_prefix'</span>) &amp;&amp; ~isempty(options.save_prefix)
-0480   prefix = options.save_prefix;
-0481 <span class="keyword">else</span>
-0482   <span class="keyword">if</span> plotFnBool
-0483     <span class="keyword">if</span> isempty(options.function_options)
-0484       plot_options = options;
-0485     <span class="keyword">else</span>
-0486       plot_options = options.function_options{fInd};
-0487     <span class="keyword">end</span>
-0488     
-0489     fInd = regexp(options.result_file, <span class="string">'plot(\d+)'</span>, <span class="string">'tokens'</span>);
-0490     fInd = fInd{1}{1};
-0491 
-0492     <span class="comment">% check if 'plot_type' given as part of plot_options</span>
-0493     plot_options = ds.checkOptions(plot_options,{<span class="string">'plot_type'</span>,[<span class="string">'plot'</span> fInd],[]},false);
-0494 
-0495     prefix = plot_options.plot_type; <span class="comment">% will be waveform by default due to CheckOptions in main fn</span>
-0496   <span class="keyword">else</span> <span class="comment">% ~plotFnBool</span>
-0497     prefix = func2str(func);
-0498   <span class="keyword">end</span>
-0499 <span class="keyword">end</span>
-0500 
-0501 filename = ds.nameFromVaried(data, prefix, filename);
-0502 
-0503 <span class="comment">%% auto_gen_test_data_flag argout</span>
-0504 <span class="keyword">if</span> options.auto_gen_test_data_flag
-0505   argout = {filename}; <span class="comment">% specific to this function</span>
-0506   
-0507   <span class="comment">%dsUnitSaveAutoGenTestDataLocalFn(argin, argout); % localfn</span>
-0508 <span class="keyword">end</span>
-0509 
-0510 <span class="keyword">end</span>
+0469 
+0470 <a name="_sub4" href="#_subfunctions" class="code">function filename = filenameFromVaried(filename, func, data, plotFnBool, options, varargin)</a>
+0471 <span class="comment">% NOTE: inputs are odd since called from different sources with different</span>
+0472 <span class="comment">%       states.</span>
+0473 
+0474 <span class="comment">%% auto_gen_test_data_flag argin</span>
+0475 options = catstruct(options, <a href="../functions/internal/dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false));
+0476 
+0477 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0478   varargs = varargin;
+0479   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0480   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
+0481   argin = [{filename}, {func}, {data}, {plotFnBool}, {options}, varargs]; <span class="comment">% specific to this function</span>
+0482 <span class="keyword">end</span>
+0483 
+0484 <span class="keyword">if</span> isfield(options, <span class="string">'save_prefix'</span>) &amp;&amp; ~isempty(options.save_prefix)
+0485   prefix = options.save_prefix;
+0486 <span class="keyword">else</span>
+0487   <span class="keyword">if</span> plotFnBool
+0488     <span class="keyword">if</span> isempty(options.function_options)
+0489       plot_options = options;
+0490     <span class="keyword">else</span>
+0491       plot_options = options.function_options{fInd};
+0492     <span class="keyword">end</span>
+0493 
+0494     fInd = regexp(options.result_file, <span class="string">'plot(\d+)'</span>, <span class="string">'tokens'</span>);
+0495     fInd = fInd{1}{1};
+0496 
+0497     <span class="comment">% check if 'plot_type' given as part of plot_options</span>
+0498     plot_options = <a href="../functions/internal/dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(plot_options,{<span class="string">'plot_type'</span>,[<span class="string">'plot'</span> fInd],[]},false);
+0499 
+0500     prefix = plot_options.plot_type; <span class="comment">% will be waveform by default due to CheckOptions in main fn</span>
+0501   <span class="keyword">else</span> <span class="comment">% ~plotFnBool</span>
+0502     prefix = func2str(func);
+0503   <span class="keyword">end</span>
+0504 <span class="keyword">end</span>
+0505 
+0506 filename = <a href="../functions/internal/dsNameFromVaried.html" class="code" title="function new_result_file = dsNameFromVaried(data, file_type, old_result_file)">dsNameFromVaried</a>(data, prefix, filename);
+0507 
+0508 <span class="comment">%% auto_gen_test_data_flag argout</span>
+0509 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0510   argout = {filename}; <span class="comment">% specific to this function</span>
 0511 
-0512 
-0513 <a name="_sub5" href="#_subfunctions" class="code">function result = evalFnWithArgs(fInd, data, func, options, varargin)</a>
-0514 <span class="keyword">if</span> isempty(options.function_options)
-0515   <span class="keyword">for</span> dInd = 1:length(data)
-0516     result(dInd) = feval(func,data(dInd),varargin{:});
-0517   <span class="keyword">end</span>
-0518 <span class="keyword">else</span>
-0519   <a name="_sub6" href="#_subfunctions" class="code">function_options = options.function_options{fInd};</a>
-0520   <span class="keyword">for</span> dInd = 1:length(data)
-0521     result(dInd) = feval(func,data(dInd),function_options{:});
-0522   <span class="keyword">end</span>
-0523 <span class="keyword">end</span>
-0524 <span class="keyword">end</span>
-0525 
-0526 
-0527 <a name="_sub7" href="#_subfunctions" class="code">function data = loadDataFromSingleSim(simID, options, varargin)</a>
-0528 <span class="comment">% check if iResult in options.simIDs</span>
-0529 <span class="keyword">if</span> isempty(options.simIDs)
-0530   simIDs = simID;
-0531 <span class="keyword">else</span>
-0532   simIDs = intersect(simID, options.simIDs);
-0533 
-0534   <span class="keyword">if</span> isempty(simIDs) <span class="comment">% skip if empty</span>
-0535     <span class="keyword">return</span>
-0536   <span class="keyword">end</span>
-0537 <span class="keyword">end</span>
-0538 
-0539 varinputs = varargin; <span class="comment">% create copy of varargin</span>
-0540 <span class="keyword">if</span> isstruct(varinputs{1})
-0541   varinputs.simIDs = simIDs;
-0542 <span class="keyword">else</span>
-0543   <span class="comment">% find simIDs in varinputs</span>
-0544   varinputs{find(~cellfun(@isempty,strfind(varinputs(1:2:end), <span class="string">'simIDs'</span>)))*2} = simIDs;
-0545 <span class="keyword">end</span>
-0546 
-0547 data = ImportData(src, varinputs{:}); <span class="comment">% load data</span>
-0548 <span class="keyword">end</span>
+0512   <span class="comment">%dsUnitSaveAutoGenTestDataLocalFn(argin, argout); % localfn</span>
+0513 <span class="keyword">end</span>
+0514 
+0515 <span class="keyword">end</span>
+0516 
+0517 
+0518 <a name="_sub5" href="#_subfunctions" class="code">function result = evalFnWithArgs(fInd, data, func, options, varargin)</a>
+0519 
+0520 <span class="keyword">if</span> strcmp(reportUI,<span class="string">'matlab'</span>)
+0521   p = gcp(<span class="string">'nocreate'</span>);
+0522 <span class="keyword">end</span>
+0523 
+0524 <span class="keyword">if</span> isempty(options.function_options)
+0525   <span class="keyword">if</span> options.parallel_flag &amp;&amp; ~isempty(p)       <span class="comment">% Only do parfor mode if parallel_flag is set and parpool is already running. Otherwise, this will add unncessary overhead.</span>
+0526     parfor dInd = 1:length(data)
+0527       result(dInd) = feval(func,data(dInd),varargin{:});
+0528     <span class="keyword">end</span>
+0529   <span class="keyword">else</span>
+0530     <span class="keyword">for</span> dInd = 1:length(data)
+0531       result(dInd) = feval(func,data(dInd),varargin{:});
+0532     <span class="keyword">end</span>
+0533   <span class="keyword">end</span>
+0534 <span class="keyword">else</span>
+0535   <a name="_sub6" href="#_subfunctions" class="code">function_options = options.function_options{fInd};</a>
+0536 
+0537   <span class="keyword">if</span> options.parallel_flag &amp;&amp; ~isempty(p)
+0538     parfor dInd = 1:length(data)
+0539       result(dInd) = feval(func,data(dInd),function_options{:});
+0540     <span class="keyword">end</span>
+0541   <span class="keyword">else</span>
+0542     <span class="keyword">for</span> dInd = 1:length(data)
+0543       result(dInd) = feval(func,data(dInd),function_options{:});
+0544     <span class="keyword">end</span>
+0545   <span class="keyword">end</span>
+0546 <span class="keyword">end</span>
+0547 <span class="keyword">end</span>
+0548 
 0549 
-0550 
-0551 <a name="_sub8" href="#_subfunctions" class="code">function result = add_modifications(result, data, varargin)</a>
-0552 <span class="comment">% add modifications to result structure, excluding modifications made</span>
-0553 <span class="comment">% within experiments. note: while this nested function is similar to</span>
-0554 <span class="comment">% prepare_varied_metadata in SimulateModel, the data structure contains</span>
-0555 <span class="comment">% all modifications (those within and across experiments; listed in 'varied').</span>
-0556 <span class="comment">% the result structure collapses data sets from an experiment into a single</span>
-0557 <span class="comment">% result; thus, each result corresponds to modifications across</span>
-0558 <span class="comment">% experiments but not within them; those modifications are stored in</span>
-0559 <span class="comment">% the simulator options.</span>
-0560 
-0561 <span class="comment">%% auto_gen_test_data_flag argin</span>
-0562 options = <a href="../functions/internal/dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
-0563 <span class="keyword">if</span> options.auto_gen_test_data_flag
-0564   varargs = varargin;
-0565   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
-0566   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
-0567   argin = [{result}, {data}, varargs]; <span class="comment">% specific to this function</span>
+0550 <a name="_sub7" href="#_subfunctions" class="code">function data = loadDataFromSingleSim(simID, options, varargin)</a>
+0551 <span class="comment">% check if iResult in options.simIDs</span>
+0552 <span class="keyword">if</span> isempty(options.simIDs)
+0553   simIDs = simID;
+0554 <span class="keyword">else</span>
+0555   simIDs = intersect(simID, options.simIDs);
+0556 
+0557   <span class="keyword">if</span> isempty(simIDs) <span class="comment">% skip if empty</span>
+0558     <span class="keyword">return</span>
+0559   <span class="keyword">end</span>
+0560 <span class="keyword">end</span>
+0561 
+0562 varinputs = varargin; <span class="comment">% create copy of varargin</span>
+0563 <span class="keyword">if</span> isstruct(varinputs{1})
+0564   varinputs.simIDs = simIDs;
+0565 <span class="keyword">else</span>
+0566   <span class="comment">% find simIDs in varinputs</span>
+0567   varinputs{find(~cellfun(@isempty,strfind(varinputs(1:2:end), <span class="string">'simIDs'</span>)))*2} = simIDs;
 0568 <span class="keyword">end</span>
 0569 
-0570 <span class="comment">% #todo: The function dsModifications2Vary implements this functionality.</span>
-0571 <span class="comment">% Consider using it here.</span>
-0572 <span class="keyword">if</span> ~isempty(data(1).simulator_options.modifications)
-0573   varied = {};
-0574   mods = data(1).simulator_options.modifications;
-0575   <span class="keyword">for</span> ii = 1:length(result)
-0576     <span class="keyword">for</span> jj = 1:size(mods,1)
-0577       <span class="comment">% prepare valid field name for thing varied:</span>
-0578       fld = [mods{jj,1} <span class="string">'_'</span> mods{jj,2}];
-0579       
-0580       <span class="comment">% convert arrows and periods to underscores</span>
-0581       fld = regexprep(fld,<span class="string">'(-&gt;)|(&lt;-)|(-)|(\.)'</span>,<span class="string">'_'</span>);
-0582       
-0583       <span class="comment">% remove brackets and parentheses</span>
-0584       fld = regexprep(fld,<span class="string">'[\[\]\(\)\{\}]'</span>,<span class="string">''</span>);
-0585       result(ii).(fld) = mods{jj,3};
-0586       varied{end+1} = fld;
-0587     <span class="keyword">end</span>
-0588     result(ii).varied = varied;
-0589     result(ii).modifications = mods;
-0590   <span class="keyword">end</span>
-0591 <span class="keyword">elseif</span> isfield(data,<span class="string">'varied'</span>) &amp;&amp; length(data) == 1
-0592   <span class="comment">% add 'varied' info from data to result structure</span>
-0593   <span class="keyword">for</span> ii = 1:length(result)
-0594     result(ii).varied = data(1).varied;
-0595     <span class="keyword">for</span> jj = 1:length(data(1).varied)
-0596       result(ii).(data(1).varied{jj}) = data(1).(data(1).varied{jj});
-0597     <span class="keyword">end</span>
-0598   <span class="keyword">end</span>
-0599 <span class="keyword">end</span>
-0600 
-0601 <span class="comment">%% auto_gen_test_data_flag argout</span>
-0602 <span class="keyword">if</span> options.auto_gen_test_data_flag
-0603   argout = {result}; <span class="comment">% specific to this function</span>
-0604   
-0605   <span class="comment">%dsUnitSaveAutoGenTestDataLocalFn(argin, argout); % localfn</span>
-0606 <span class="keyword">end</span>
-0607 <span class="keyword">end</span> <span class="comment">% add_modifications</span></pre></div>
-<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+0570 data = ImportData(src, varinputs{:}); <span class="comment">% load data</span>
+0571 <span class="keyword">end</span>
+0572 
+0573 
+0574 <a name="_sub8" href="#_subfunctions" class="code">function result = add_modifications(result, data, varargin)</a>
+0575 <span class="comment">% add modifications to result structure, excluding modifications made</span>
+0576 <span class="comment">% within experiments. note: while this nested function is similar to</span>
+0577 <span class="comment">% dsModifications2Vary called by dsSimulate, the data structure contains</span>
+0578 <span class="comment">% all modifications (those within and across experiments; listed in 'varied').</span>
+0579 <span class="comment">% the result structure collapses data sets from an experiment into a single</span>
+0580 <span class="comment">% result; thus, each result corresponds to modifications across</span>
+0581 <span class="comment">% experiments but not within them; those modifications are stored in</span>
+0582 <span class="comment">% the simulator options.</span>
+0583 
+0584 <span class="comment">%% auto_gen_test_data_flag argin</span>
+0585 options = <a href="../functions/internal/dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
+0586 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0587   varargs = varargin;
+0588   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0589   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
+0590   argin = [{result}, {data}, varargs]; <span class="comment">% specific to this function</span>
+0591 <span class="keyword">end</span>
+0592 
+0593 <span class="comment">% #todo: The function dsModifications2Vary implements this functionality.</span>
+0594 <span class="comment">% Consider using it here.</span>
+0595 <span class="keyword">if</span> ~isempty(data(1).simulator_options.modifications)
+0596   varied = {};
+0597   mods = data(1).simulator_options.modifications;
+0598   <span class="keyword">for</span> ii = 1:length(result)
+0599     <span class="keyword">for</span> jj = 1:size(mods,1)
+0600       <span class="comment">% prepare valid field name for thing varied:</span>
+0601       fld = [mods{jj,1} <span class="string">'_'</span> mods{jj,2}];
+0602 
+0603       <span class="comment">% convert arrows and periods to underscores</span>
+0604       fld = regexprep(fld,<span class="string">'(-&gt;)|(&lt;-)|(-)|(\.)'</span>,<span class="string">'_'</span>);
+0605 
+0606       <span class="comment">% remove brackets and parentheses</span>
+0607       fld = regexprep(fld,<span class="string">'[\[\]\(\)\{\}]'</span>,<span class="string">''</span>);
+0608       result(ii).(fld) = mods{jj,3};
+0609       varied{end+1} = fld;
+0610     <span class="keyword">end</span>
+0611     result(ii).varied = varied;
+0612     result(ii).modifications = mods;
+0613   <span class="keyword">end</span>
+0614 <span class="keyword">elseif</span> isfield(data,<span class="string">'varied'</span>) &amp;&amp; length(data) == 1
+0615   <span class="comment">% add 'varied' info from data to result structure</span>
+0616   <span class="keyword">for</span> ii = 1:length(result)
+0617     result(ii).varied = data(1).varied;
+0618     <span class="keyword">for</span> jj = 1:length(data(1).varied)
+0619       result(ii).(data(1).varied{jj}) = data(1).(data(1).varied{jj});
+0620     <span class="keyword">end</span>
+0621   <span class="keyword">end</span>
+0622 <span class="keyword">end</span>
+0623 
+0624 <span class="comment">%% auto_gen_test_data_flag argout</span>
+0625 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0626   argout = {result}; <span class="comment">% specific to this function</span>
+0627 
+0628   <span class="comment">%dsUnitSaveAutoGenTestDataLocalFn(argin, argout); % localfn</span>
+0629 <span class="keyword">end</span>
+0630 <span class="keyword">end</span> <span class="comment">% add_modifications</span></pre></div>
+<hr><address>Generated on Tue 12-Dec-2017 11:32:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

@@ -8,6 +8,8 @@ digraph m2html {
   dsSimulate -> dsAnalyze;
   dsSimulate -> dsImport;
   dsSimulate -> dsSimulate;
+  dynasim -> dsSimulate;
+  dynasim -> dynasim;
 
   dsAnalyze [URL="dsAnalyze.html"];
   dsImport [URL="dsImport.html"];
@@ -15,4 +17,5 @@ digraph m2html {
   dsPlot2 [URL="dsPlot2.html"];
   dsSelect [URL="dsSelect.html"];
   dsSimulate [URL="dsSimulate.html"];
+  dynasim [URL="dynasim.html"];
 }

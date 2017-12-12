@@ -6,16 +6,18 @@
   <meta name="keywords" content="dsModifications2Vary">
   <meta name="description" content="Adds fields tmpdata.varied and tmpdata.(varied{1}) ...">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
-  <script type="text/javascript">
-    if (top.frames.length == 0) { top.location = "../../index.html"; };
-  </script>
 </head>
 <body>
+
 <a name="_top"></a>
-<!-- ../menu.html functions --><!-- menu.html internal -->
+<div><a href="../../menu.html">Home</a> &gt;  <a href="../menu.html">functions</a> &gt; <a href="menu.html">internal</a> &gt; dsModifications2Vary.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../menu.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="menu.html">Index for functions/internal&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
 <h1>dsModifications2Vary
 </h1>
 
@@ -28,8 +30,8 @@
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 <div class="fragment"><pre class="comment"> Adds fields tmpdata.varied and tmpdata.(varied{1}) ...
  tmpdata.varied({N}) to tmpdata. This contains information about
- parameters varied across each sim. 
-       
+ parameters varied across each sim.
+
  Usage:
    data = modifications2Vary(data,modifications)
    data = modifications2Vary(data,modifications,options)
@@ -44,7 +46,7 @@
        set Y=Z if Y = name, size, or value
        Note: (X1,X2) or (Y1,Y2): modify these simultaneously in the same way
        Note: modifications is often found in options.modifications
-   
+
 
  Inputs (Optional):
    options : Options structure containing experiment OR precision
@@ -58,13 +60,13 @@
 
  Examples:
    tmpdata = dsModifications2Vary(tmpdata,options.modifications,options,modifications_set,sim);
-   tmp_data = dsModifications2Vary(tmp_data,modifications); 
- 
+   tmp_data = dsModifications2Vary(tmp_data,modifications);
+
 
  Author: Dave Stanley; based on prepare_varied_metadata by ??? (Jason
  Sherfey?); Boston University; 2017
 
- See also: vary2modifications</pre></div>
+ See also: <a href="dsVary2Modifications.html" class="code" title="function modifications_set = dsVary2Modifications(vary,model)">dsVary2Modifications</a></pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
@@ -120,22 +122,22 @@ This function is called by:
 0037     <span class="comment">% Author: Dave Stanley; based on prepare_varied_metadata by ??? (Jason</span>
 0038     <span class="comment">% Sherfey?); Boston University; 2017</span>
 0039     <span class="comment">%</span>
-0040     <span class="comment">% See also: vary2modifications</span>
+0040     <span class="comment">% See also: dsVary2Modifications</span>
 0041 
-0042     
+0042 
 0043     <span class="comment">% add things varied to tmpdata</span>
 0044     mods={};
 0045     <span class="keyword">if</span> ~isempty(modifications)
 0046       mods=cat(1,mods,<a href="#_sub1" class="code" title="subfunction modifications=expand_modifications(mods)">expand_modifications</a>(modifications));
 0047     <span class="keyword">end</span>
-0048     
+0048 
 0049     <span class="keyword">if</span> nargin &gt; 3
 0050         <span class="keyword">if</span> ~isempty(modifications_set{sim})
 0051           tmp_mods=<a href="#_sub1" class="code" title="subfunction modifications=expand_modifications(mods)">expand_modifications</a>(modifications_set{sim});
 0052           mods=cat(1,mods,tmp_mods);
 0053         <span class="keyword">end</span>
 0054     <span class="keyword">end</span>
-0055     
+0055 
 0056     <span class="keyword">if</span> nargin &gt; 2
 0057         <span class="keyword">if</span> isa(options.experiment,<span class="string">'function_handle'</span>)
 0058           <span class="keyword">for</span> j=1:length(data)
@@ -143,36 +145,36 @@ This function is called by:
 0060           <span class="keyword">end</span>
 0061         <span class="keyword">end</span>
 0062     <span class="keyword">end</span>
-0063     
+0063 
 0064     <span class="keyword">if</span> ~isempty(mods)
 0065       <span class="keyword">if</span> isfield(data,<span class="string">'varied'</span>)
 0066         varied=data(1).varied;
 0067       <span class="keyword">else</span>
 0068         varied={};
 0069       <span class="keyword">end</span>
-0070       
+0070 
 0071       <span class="keyword">for</span> ii=1:size(mods,1)
 0072         <span class="comment">% prepare valid field name for thing varied:</span>
 0073         fld=[mods{ii,1} <span class="string">'_'</span> mods{ii,2}];
-0074         
+0074 
 0075         <span class="comment">% convert arrows and periods to underscores</span>
 0076         fld=regexprep(fld,<span class="string">'(-&gt;)|(&lt;-)|(-)|(\.)'</span>,<span class="string">'_'</span>);
-0077         
+0077 
 0078         <span class="comment">% remove brackets and parentheses</span>
 0079         fld=regexprep(fld,<span class="string">'[\[\]\(\)\{\}]'</span>,<span class="string">''</span>);
-0080         
+0080 
 0081         <span class="comment">% remove spaces</span>
 0082         fld=regexprep(fld,<span class="string">'[\ ]'</span>,<span class="string">''</span>);
-0083         
+0083 
 0084         <span class="keyword">for</span> j=1:length(data)
 0085           data(j).(fld)=mods{ii,3};
 0086         <span class="keyword">end</span>
-0087         
+0087 
 0088         <span class="keyword">if</span> ~ismember(fld,varied)
 0089           varied{end+1}=fld;
 0090         <span class="keyword">end</span>
 0091       <span class="keyword">end</span>
-0092       
+0092 
 0093       <span class="keyword">for</span> j=1:length(data)
 0094         data(j).varied=varied;
 0095       <span class="keyword">end</span>
@@ -189,7 +191,7 @@ This function is called by:
 0106         <span class="keyword">end</span>
 0107     <span class="keyword">end</span>
 0108 <span class="keyword">end</span>
-0109   
+0109 
 0110 <a name="_sub1" href="#_subfunctions" class="code">function modifications=expand_modifications(mods)</a>
 0111 <span class="comment">% purpose: expand simultaneous modifications into larger list</span>
 0112 modifications={};
@@ -197,11 +199,11 @@ This function is called by:
 0114   <span class="comment">% get object list without grouping symbols: ()[]{}</span>
 0115   objects=regexp(mods{i,1},<span class="string">'[^\(\)\[\]\{\},]+'</span>,<span class="string">'match'</span>);
 0116   variables=regexp(mods{i,2},<span class="string">'[^\(\)\[\]\{\},]+'</span>,<span class="string">'match'</span>);
-0117   
+0117 
 0118   <span class="keyword">for</span> j=1:length(objects)
 0119     <span class="keyword">for</span> k=1:length(variables)
 0120       thisMod = mods{i,3};
-0121       
+0121 
 0122       <span class="keyword">if</span> all(size(thisMod) == [1,1]) <span class="comment">%same val for each obj and var</span>
 0123         modifications(end+1,1:3)={objects{j},variables{k},thisMod};
 0124       <span class="keyword">elseif</span> (size(thisMod,1) &gt; 1) &amp;&amp; (size(thisMod,2) == 1) <span class="comment">%same val for each obj, diff for each var</span>
@@ -217,6 +219,6 @@ This function is called by:
 0134   <span class="keyword">end</span> <span class="comment">%j</span>
 0135 <span class="keyword">end</span> <span class="comment">%i</span>
 0136 <span class="keyword">end</span>  <span class="comment">%fun</span></pre></div>
-<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Tue 12-Dec-2017 11:32:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

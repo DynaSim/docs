@@ -6,16 +6,18 @@
   <meta name="keywords" content="dsCheckModel">
   <meta name="description" content="CHECKMODEL - Standardize model structure and auto-populate missing fields">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
-  <script type="text/javascript">
-    if (top.frames.length == 0) { top.location = "../../index.html"; };
-  </script>
 </head>
 <body>
+
 <a name="_top"></a>
-<!-- ../menu.html functions --><!-- menu.html internal -->
+<div><a href="../../menu.html">Home</a> &gt;  <a href="../menu.html">functions</a> &gt; <a href="menu.html">internal</a> &gt; dsCheckModel.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../menu.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="menu.html">Index for functions/internal&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
 <h1>dsCheckModel
 </h1>
 
@@ -92,7 +94,10 @@
  - Example 2: standardize existing model
      model=dsCheckModel(model)
 
- see also: <a href="dsGenerateModel.html" class="code" title="function [model,name_map] = dsGenerateModel(specification, varargin)">dsGenerateModel</a>, <a href="dsCheckSpecification.html" class="code" title="function spec = dsCheckSpecification(specification, varargin)">dsCheckSpecification</a>, <a href="dsCheckData.html" class="code" title="function data = dsCheckData(data, varargin)">dsCheckData</a></pre></div>
+ see also: <a href="dsGenerateModel.html" class="code" title="function [model,name_map] = dsGenerateModel(specification, varargin)">dsGenerateModel</a>, <a href="dsCheckSpecification.html" class="code" title="function spec = dsCheckSpecification(specification, varargin)">dsCheckSpecification</a>, <a href="dsCheckData.html" class="code" title="function data = dsCheckData(data, varargin)">dsCheckData</a>
+
+ Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;
+ Copyright (C) 2016 Jason Sherfey, Boston University, USA</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
@@ -101,7 +106,7 @@ This function calls:
 <li><a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>	CHECKOPTIONS - organize key/value pairs in structure with default or user-supplied values according to a schema</li><li><a href="dsGenerateModel.html" class="code" title="function [model,name_map] = dsGenerateModel(specification, varargin)">dsGenerateModel</a>	GENERATEMODEL - Parse DynaSim specification and organize model data in DynaSim model structure</li><li><a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>	Inputs:</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="../../functions/dsSimulate.html" class="code" title="function [data,studyinfo,result] = dsSimulate(model,varargin)">dsSimulate</a>	% data=dsSimulate(model,'option',value,...)</li><li><a href="dsCombineModels.html" class="code" title="function model = dsCombineModels(model1,model2, varargin)">dsCombineModels</a>	COMBINEMODELS - combine subfields in two DynaSim model structures</li><li><a href="dsGenerateModel.html" class="code" title="function [model,name_map] = dsGenerateModel(specification, varargin)">dsGenerateModel</a>	GENERATEMODEL - Parse DynaSim specification and organize model data in DynaSim model structure</li><li><a href="dsProbeCellProperties.html" class="code" title="function data = dsProbeCellProperties(model,varargin)">dsProbeCellProperties</a>	data = dsProbeCellProperties(model,'option1',option1,...)</li><li><a href="dsProbeFI.html" class="code" title="function data = dsProbeFI(model,varargin)">dsProbeFI</a>	% data=dsProbeFI(model,varargin)</li><li><a href="dsPropagateFunctions.html" class="code" title="function model = dsPropagateFunctions(model, varargin)">dsPropagateFunctions</a>	PROPAGATEFUNCTIONS - eliminate internal function calls from model ODEs, ICs, monitors, and conditionals.</li><li><a href="dsPropagateNamespaces.html" class="code" title="function model = dsPropagateNamespaces(model,map, varargin)">dsPropagateNamespaces</a>	PROPAGATENAMESPACES - namespace-establishing namespace substitutions.</li><li><a href="dsPropagateParameters.html" class="code" title="function model = dsPropagateParameters(model,varargin)">dsPropagateParameters</a>	PROPAGATEPARAMETERS - substitute parameter values or prepend parameter names with prefix across all model equations.</li><li><a href="dsWriteDynaSimSolver.html" class="code" title="function [outfile,options] = dsWriteDynaSimSolver(model,varargin)">dsWriteDynaSimSolver</a>	WRITEDYNASIMSOLVER - write m-file that numerically inteegrates the model</li><li><a href="dsWriteMatlabSolver.html" class="code" title="function solve_ode_filepath = dsWriteMatlabSolver(model,varargin)">dsWriteMatlabSolver</a>	WRITEMATLABSOLVER - write m-file that numerically inteegrates the model</li><li><a href="../../functions/internal/unit-test/dsUnitTest_checkModel.html" class="code" title="">dsUnitTest_checkModel</a>	</li></ul>
+<li><a href="../../functions/dsSimulate.html" class="code" title="function [data,studyinfo,result] = dsSimulate(model,varargin)">dsSimulate</a>	% data=dsSimulate(model,'option',value,...)</li><li><a href="../../functions/dynasim.html" class="code" title="function dynasim(spec)">dynasim</a>	DynaSim GUI</li><li><a href="dsCombineModels.html" class="code" title="function model = dsCombineModels(model1,model2, varargin)">dsCombineModels</a>	COMBINEMODELS - combine subfields in two DynaSim model structures</li><li><a href="dsGenerateModel.html" class="code" title="function [model,name_map] = dsGenerateModel(specification, varargin)">dsGenerateModel</a>	GENERATEMODEL - Parse DynaSim specification and organize model data in DynaSim model structure</li><li><a href="dsProbeCellProperties.html" class="code" title="function data = dsProbeCellProperties(model,varargin)">dsProbeCellProperties</a>	data = dsProbeCellProperties(model,'option1',option1,...)</li><li><a href="dsProbeFI.html" class="code" title="function data = dsProbeFI(model,varargin)">dsProbeFI</a>	% data=dsProbeFI(model,varargin)</li><li><a href="dsPropagateFunctions.html" class="code" title="function model = dsPropagateFunctions(model, varargin)">dsPropagateFunctions</a>	PROPAGATEFUNCTIONS - eliminate internal function calls from model ODEs, ICs, monitors, and conditionals.</li><li><a href="dsPropagateNamespaces.html" class="code" title="function model = dsPropagateNamespaces(model,map, varargin)">dsPropagateNamespaces</a>	PROPAGATENAMESPACES - namespace-establishing namespace substitutions.</li><li><a href="dsPropagateParameters.html" class="code" title="function model = dsPropagateParameters(model,varargin)">dsPropagateParameters</a>	PROPAGATEPARAMETERS - substitute parameter values or prepend parameter names with prefix across all model equations.</li><li><a href="dsWriteDynaSimSolver.html" class="code" title="function [outfile,options] = dsWriteDynaSimSolver(model,varargin)">dsWriteDynaSimSolver</a>	WRITEDYNASIMSOLVER - write m-file that numerically inteegrates the model</li><li><a href="dsWriteMatlabSolver.html" class="code" title="function solve_ode_filepath = dsWriteMatlabSolver(model,varargin)">dsWriteMatlabSolver</a>	WRITEMATLABSOLVER - write m-file that numerically integrates the model</li><li><a href="../../functions/internal/unit-test/dsUnitTest_checkModel.html" class="code" title="">dsUnitTest_checkModel</a>	</li></ul>
 <!-- crossreference -->
 
 <h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
@@ -177,108 +182,112 @@ This function is called by:
 0066 <span class="comment">%     model=dsCheckModel(model)</span>
 0067 <span class="comment">%</span>
 0068 <span class="comment">% see also: dsGenerateModel, dsCheckSpecification, dsCheckData</span>
-0069 
-0070 <span class="comment">%% auto_gen_test_data_flag argin</span>
-0071 options = <a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
-0072 <span class="keyword">if</span> options.auto_gen_test_data_flag
-0073   varargs = varargin;
-0074   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
-0075   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
-0076   argin = [{model}, varargs]; <span class="comment">% specific to this function</span>
-0077 <span class="keyword">end</span>
-0078 
-0079 field_order={<span class="string">'parameters'</span>,<span class="string">'fixed_variables'</span>,<span class="string">'functions'</span>,<span class="string">'monitors'</span>,<span class="keyword">...</span>
-0080   <span class="string">'state_variables'</span>,<span class="string">'ODEs'</span>,<span class="string">'ICs'</span>,<span class="string">'conditionals'</span>,<span class="string">'linkers'</span>,<span class="string">'comments'</span>,<span class="keyword">...</span>
-0081   <span class="string">'specification'</span>,<span class="string">'namespaces'</span>};
-0082 field_defaults={[],[],[],[],{},[],[],[],[],{},[],{}};
-0083 
-0084 <span class="keyword">if</span> isempty(model)
-0085   <span class="comment">% prepare empty model structure</span>
-0086   <span class="keyword">for</span> i=1:length(field_order)
-0087     model.(field_order{i})=field_defaults{i};
-0088   <span class="keyword">end</span>
-0089 <span class="keyword">end</span>
-0090 
-0091 <span class="comment">% % check if input is string with name of file containing model</span>
-0092 <span class="comment">% if ischar(model) &amp;&amp; exist(model,'file')</span>
-0093 <span class="comment">%   model=dsImportModel(model);</span>
-0094 <span class="comment">% end</span>
-0095 
-0096 <span class="comment">% check if input is string or cell with equations or spec struct and convert to model structure</span>
-0097 <span class="keyword">if</span> ischar(model) || iscell(model) || ~isfield(model,<span class="string">'state_variables'</span>)
-0098   model=<a href="dsGenerateModel.html" class="code" title="function [model,name_map] = dsGenerateModel(specification, varargin)">dsGenerateModel</a>(model);
-0099 <span class="keyword">end</span>
-0100 
-0101 <span class="comment">% check back compatibility</span>
-0102 model=<a href="#_sub1" class="code" title="subfunction model=backward_compatibility(model)">backward_compatibility</a>(model);
-0103 
-0104 <span class="comment">%% auto_gen_test_data_flag argout</span>
-0105 <span class="keyword">if</span> options.auto_gen_test_data_flag
-0106   argout = {model}; <span class="comment">% specific to this function</span>
-0107   
-0108   <a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>(argin, argout);
-0109 <span class="keyword">end</span>
-0110 
-0111 <span class="comment">% % auto-populate missing data</span>
-0112 <span class="comment">% for i=1:length(field_order)</span>
-0113 <span class="comment">%   if ~isfield(model,field_order{i})</span>
-0114 <span class="comment">%     model.(field_order{i})=field_defaults{i};</span>
-0115 <span class="comment">%   end</span>
-0116 <span class="comment">% end</span>
-0117 <span class="comment">%</span>
-0118 <span class="comment">% % standardize field order</span>
-0119 <span class="comment">% model=orderfields(model,field_order);</span>
-0120 
-0121 <span class="comment">% note: auto-populating and standardization of field order may not be</span>
-0122 <span class="comment">% necessary or beneficial for DynaSim model structures. It only adds extra</span>
-0123 <span class="comment">% time... if the above is uncommented-out, then dsCombineModels() should also</span>
-0124 <span class="comment">% be edited by uncommenting-out the call to dsCheckModel() and commenting-out</span>
-0125 <span class="comment">% the call to orderfields according to first input (at the end of the</span>
-0126 <span class="comment">% function).</span>
-0127 
-0128 
-0129 <a name="_sub1" href="#_subfunctions" class="code">function model=backward_compatibility(model)</a>
-0130 <span class="comment">% account for change in state variable dimensions:</span>
-0131 <span class="comment">% cells used to be along rows in a column; now columns across a row.</span>
-0132 <span class="comment">% replace cols (Npop,1) by rows (1,Npop). similar for Npre,Npost</span>
-0133 <span class="comment">% do string substitution in ODEs and ICs</span>
-0134 target_types={<span class="string">'ODEs'</span>,<span class="string">'ICs'</span>};
-0135 <span class="comment">% loop over types of model data</span>
-0136 <span class="keyword">for</span> type_index=1:length(target_types)
-0137   type=target_types{type_index};
-0138   <span class="comment">% info for this type</span>
-0139   s=model.(type);
-0140   <span class="keyword">if</span> isstruct(s)
-0141     update_these=fieldnames(s);
-0142     expressions=struct2cell(s);
-0143     <span class="comment">% loop over target expressions from which to eliminate internal function calls</span>
-0144     updated=0;
-0145     <span class="keyword">for</span> i=1:length(expressions)
-0146       <span class="keyword">if</span> isempty(expressions{i})
-0147         <span class="keyword">continue</span>;
-0148       <span class="keyword">end</span>
-0149       <span class="comment">% update expressions of this type</span>
-0150       <span class="comment">% note: do single check first b/c will not normally be needed --&gt;</span>
-0151       <span class="comment">% reduces 3 conditional checks to 1 in most cases.</span>
-0152       <span class="keyword">if</span> ~isempty(regexp(expressions{i},<span class="string">'\((\w+_)?(Npop|Npre|Npost),1\)'</span>,<span class="string">'once'</span>))
-0153         updated=1;
-0154         <span class="keyword">if</span> ~isempty(regexp(expressions{i},<span class="string">'\((\w+_)?Npop,1\)'</span>,<span class="string">'once'</span>))
-0155           expressions{i}=regexprep(expressions{i},<span class="string">'\((\w+_)Npop,1\)'</span>,<span class="string">'\(1,$1Npop\)'</span>);
-0156         <span class="keyword">end</span>
-0157         <span class="keyword">if</span> ~isempty(regexp(expressions{i},<span class="string">'\((\w+_)?Npre,1\)'</span>,<span class="string">'once'</span>))
-0158           expressions{i}=regexprep(expressions{i},<span class="string">'\((\w+_)Npre,1\)'</span>,<span class="string">'\(1,$Npre\)'</span>);
-0159         <span class="keyword">end</span>
-0160         <span class="keyword">if</span> ~isempty(regexp(expressions{i},<span class="string">'\((\w+_)?Npost,1\)'</span>,<span class="string">'once'</span>))
-0161           expressions{i}=regexprep(expressions{i},<span class="string">'\((\w+_)Npost,1\)'</span>,<span class="string">'\(1,$Npost\)'</span>);
-0162         <span class="keyword">end</span>
-0163       <span class="keyword">end</span>
-0164     <span class="keyword">end</span>
-0165     <span class="keyword">if</span> updated
-0166       <span class="comment">% update model with expressions that have parameter values in them</span>
-0167       model.(type)=cell2struct(expressions,update_these,1);
+0069 <span class="comment">%</span>
+0070 <span class="comment">% Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;</span>
+0071 <span class="comment">% Copyright (C) 2016 Jason Sherfey, Boston University, USA</span>
+0072 
+0073 <span class="comment">%% auto_gen_test_data_flag argin</span>
+0074 options = <a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
+0075 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0076   varargs = varargin;
+0077   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0078   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
+0079   argin = [{model}, varargs]; <span class="comment">% specific to this function</span>
+0080 <span class="keyword">end</span>
+0081 
+0082 field_order={<span class="string">'parameters'</span>,<span class="string">'fixed_variables'</span>,<span class="string">'functions'</span>,<span class="string">'monitors'</span>,<span class="keyword">...</span>
+0083   <span class="string">'state_variables'</span>,<span class="string">'ODEs'</span>,<span class="string">'ICs'</span>,<span class="string">'conditionals'</span>,<span class="string">'linkers'</span>,<span class="string">'comments'</span>,<span class="keyword">...</span>
+0084   <span class="string">'specification'</span>,<span class="string">'namespaces'</span>};
+0085 field_defaults={struct(<span class="string">''</span>),struct(<span class="string">''</span>),struct(<span class="string">''</span>),struct(<span class="string">''</span>),{},struct(<span class="string">''</span>),<span class="keyword">...</span>
+0086                 struct(<span class="string">''</span>),struct(<span class="string">''</span>),struct(<span class="string">''</span>),{},struct(<span class="string">''</span>),{}};
+0087 
+0088 <span class="keyword">if</span> isempty(model)
+0089   <span class="comment">% prepare empty model structure</span>
+0090   <span class="keyword">for</span> i=1:length(field_order)
+0091     model.(field_order{i})=field_defaults{i};
+0092   <span class="keyword">end</span>
+0093 <span class="keyword">end</span>
+0094 
+0095 <span class="comment">% % check if input is string with name of file containing model</span>
+0096 <span class="comment">% if ischar(model) &amp;&amp; exist(model,'file')</span>
+0097 <span class="comment">%   model=dsImportModel(model);</span>
+0098 <span class="comment">% end</span>
+0099 
+0100 <span class="comment">% check if input is string or cell with equations or spec struct and convert to model structure</span>
+0101 <span class="keyword">if</span> ischar(model) || iscell(model) || ~isfield(model,<span class="string">'state_variables'</span>)
+0102   model=<a href="dsGenerateModel.html" class="code" title="function [model,name_map] = dsGenerateModel(specification, varargin)">dsGenerateModel</a>(model);
+0103 <span class="keyword">end</span>
+0104 
+0105 <span class="comment">% check back compatibility</span>
+0106 model=<a href="#_sub1" class="code" title="subfunction model=backward_compatibility(model)">backward_compatibility</a>(model);
+0107 
+0108 <span class="comment">%% auto_gen_test_data_flag argout</span>
+0109 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0110   argout = {model}; <span class="comment">% specific to this function</span>
+0111   
+0112   <a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>(argin, argout);
+0113 <span class="keyword">end</span>
+0114 
+0115 <span class="comment">% % auto-populate missing data</span>
+0116 <span class="comment">% for i=1:length(field_order)</span>
+0117 <span class="comment">%   if ~isfield(model,field_order{i})</span>
+0118 <span class="comment">%     model.(field_order{i})=field_defaults{i};</span>
+0119 <span class="comment">%   end</span>
+0120 <span class="comment">% end</span>
+0121 <span class="comment">%</span>
+0122 <span class="comment">% % standardize field order</span>
+0123 <span class="comment">% model=orderfields(model,field_order);</span>
+0124 
+0125 <span class="comment">% note: auto-populating and standardization of field order may not be</span>
+0126 <span class="comment">% necessary or beneficial for DynaSim model structures. It only adds extra</span>
+0127 <span class="comment">% time... if the above is uncommented-out, then dsCombineModels() should also</span>
+0128 <span class="comment">% be edited by uncommenting-out the call to dsCheckModel() and commenting-out</span>
+0129 <span class="comment">% the call to orderfields according to first input (at the end of the</span>
+0130 <span class="comment">% function).</span>
+0131 
+0132 
+0133 <a name="_sub1" href="#_subfunctions" class="code">function model=backward_compatibility(model)</a>
+0134 <span class="comment">% account for change in state variable dimensions:</span>
+0135 <span class="comment">% cells used to be along rows in a column; now columns across a row.</span>
+0136 <span class="comment">% replace cols (Npop,1) by rows (1,Npop). similar for Npre,Npost</span>
+0137 <span class="comment">% do string substitution in ODEs and ICs</span>
+0138 target_types={<span class="string">'ODEs'</span>,<span class="string">'ICs'</span>};
+0139 <span class="comment">% loop over types of model data</span>
+0140 <span class="keyword">for</span> type_index=1:length(target_types)
+0141   type=target_types{type_index};
+0142   <span class="comment">% info for this type</span>
+0143   s=model.(type);
+0144   <span class="keyword">if</span> isstruct(s)
+0145     update_these=fieldnames(s);
+0146     expressions=struct2cell(s);
+0147     <span class="comment">% loop over target expressions from which to eliminate internal function calls</span>
+0148     updated=0;
+0149     <span class="keyword">for</span> i=1:length(expressions)
+0150       <span class="keyword">if</span> isempty(expressions{i})
+0151         <span class="keyword">continue</span>;
+0152       <span class="keyword">end</span>
+0153       <span class="comment">% update expressions of this type</span>
+0154       <span class="comment">% note: do single check first b/c will not normally be needed --&gt;</span>
+0155       <span class="comment">% reduces 3 conditional checks to 1 in most cases.</span>
+0156       <span class="keyword">if</span> ~isempty(regexp(expressions{i},<span class="string">'\((\w+_)?(Npop|Npre|Npost),1\)'</span>,<span class="string">'once'</span>))
+0157         updated=1;
+0158         <span class="keyword">if</span> ~isempty(regexp(expressions{i},<span class="string">'\((\w+_)?Npop,1\)'</span>,<span class="string">'once'</span>))
+0159           expressions{i}=regexprep(expressions{i},<span class="string">'\((\w+_)Npop,1\)'</span>,<span class="string">'\(1,$1Npop\)'</span>);
+0160         <span class="keyword">end</span>
+0161         <span class="keyword">if</span> ~isempty(regexp(expressions{i},<span class="string">'\((\w+_)?Npre,1\)'</span>,<span class="string">'once'</span>))
+0162           expressions{i}=regexprep(expressions{i},<span class="string">'\((\w+_)Npre,1\)'</span>,<span class="string">'\(1,$Npre\)'</span>);
+0163         <span class="keyword">end</span>
+0164         <span class="keyword">if</span> ~isempty(regexp(expressions{i},<span class="string">'\((\w+_)?Npost,1\)'</span>,<span class="string">'once'</span>))
+0165           expressions{i}=regexprep(expressions{i},<span class="string">'\((\w+_)Npost,1\)'</span>,<span class="string">'\(1,$Npost\)'</span>);
+0166         <span class="keyword">end</span>
+0167       <span class="keyword">end</span>
 0168     <span class="keyword">end</span>
-0169   <span class="keyword">end</span>
-0170 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+0169     <span class="keyword">if</span> updated
+0170       <span class="comment">% update model with expressions that have parameter values in them</span>
+0171       model.(type)=cell2struct(expressions,update_these,1);
+0172     <span class="keyword">end</span>
+0173   <span class="keyword">end</span>
+0174 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 12-Dec-2017 11:32:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

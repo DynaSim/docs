@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of xp_PlotFR2</title>
+  <meta name="keywords" content="xp_PlotFR2">
+  <meta name="description" content="xp must be 1x1 (e.g. 0 dimensional)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+
+<a name="_top"></a>
+<div><a href="../../../menu.html">Home</a> &gt;  <a href="../../menu.html">functions</a> &gt; <a href="../menu.html">internal</a> &gt; <a href="menu.html">xp_libraries</a> &gt; xp_PlotFR2.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../menu.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="menu.html">Index for functions/internal/xp_libraries&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>xp_PlotFR2
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>xp must be 1x1 (e.g. 0 dimensional)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function hxp = xp_PlotFR2 (xp, op) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> xp must be 1x1 (e.g. 0 dimensional)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../functions/internal/dsMdd2ds.html" class="code" title="function data = dsMdd2ds(obj,varargin)">dsMdd2ds</a>	% data=MDD2ds(obj,varargin)</li><li><a href="../../../functions/internal/dsPlotFR2.html" class="code" title="function handles = dsPlotFR2(data,varargin)">dsPlotFR2</a>	PLOTFR2 - plot spike rates in various ways depending on what data was provided.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../functions/dsPlot2.html" class="code" title="function [handles,xp] = dsPlot2(data,varargin)">dsPlot2</a>	% handles=dsPlot(data,'option',value)</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 
+0002 
+0003 <a name="_sub0" href="#_subfunctions" class="code">function hxp = xp_PlotFR2 (xp, op)</a>
+0004     <span class="comment">% xp must be 1x1 (e.g. 0 dimensional)</span>
+0005     <span class="keyword">if</span> nargin &lt; 2
+0006         op = struct;
+0007     <span class="keyword">end</span>
+0008     
+0009     hxp = struct;
+0010     
+0011     <span class="keyword">if</span> isempty(op); op = struct; <span class="keyword">end</span>;
+0012     
+0013     op = struct_addDef(op,<span class="string">'args'</span>,{});
+0014     
+0015     xlims = op.xlims;
+0016     ylims = op.ylims;
+0017     
+0018     <span class="comment">% Add dummy axis for variables</span>
+0019     Na = length(xp.axis);
+0020     xp.axis(Na+1).name = <span class="string">'variables'</span>;
+0021     xp.axis(Na+1).values = {<span class="string">'v'</span>};
+0022 
+0023     <span class="comment">% Convert xp to DynaSim data struct</span>
+0024     data = <a href="../../../functions/internal/dsMdd2ds.html" class="code" title="function data = dsMdd2ds(obj,varargin)">dsMdd2ds</a>(xp);
+0025     
+0026     <span class="comment">% Feed into original PlotFR2 command, making sure it doesn't generate</span>
+0027     <span class="comment">% new figures (rather, should produce it in the current subplot)</span>
+0028     hxp.hcurr = <a href="../../../functions/internal/dsPlotFR2.html" class="code" title="function handles = dsPlotFR2(data,varargin)">dsPlotFR2</a>(data,op.args{:},<span class="string">'lock_gca'</span>,true);
+0029     
+0030     <span class="keyword">if</span> ~isempty(xlims); xlim(xlims); <span class="keyword">end</span>
+0031     <span class="keyword">if</span> ~isempty(ylims); ylim(ylims); <span class="keyword">end</span>
+0032 
+0033 <span class="keyword">end</span>
+0034 
+0035</pre></div>
+<hr><address>Generated on Tue 12-Dec-2017 11:32:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

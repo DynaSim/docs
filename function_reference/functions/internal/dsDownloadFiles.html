@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of dsDownloadFiles</title>
+  <meta name="keywords" content="dsDownloadFiles">
+  <meta name="description" content="dsDownloadFiles - Downloads data from the web (utility function)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+
+<a name="_top"></a>
+<div><a href="../../menu.html">Home</a> &gt;  <a href="../menu.html">functions</a> &gt; <a href="menu.html">internal</a> &gt; dsDownloadFiles.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../menu.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="menu.html">Index for functions/internal&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>dsDownloadFiles
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>dsDownloadFiles - Downloads data from the web (utility function)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function destinationFile = dsDownloadFiles(requestedFile,destinationFile,overwrite_flag,verbose_flag) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">dsDownloadFiles - Downloads data from the web (utility function)
+
+ Purpose: Downloads large files (mostly demo data) from branch dsFiles in
+ the DynaSim git repo.
+
+ Usage:
+   destinationFile = dsDownloadFiles(requestedFile,destinationFile,overwrite_flag,verbose_flag)
+
+ Inputs:
+   requestedFile: String containing the name and path of the
+                  requested file in the dsFiles DynaSim branch
+   destinationFile: Destination for the requested file on the local
+   filesystem. If left empty, then it mirrors the location requestedFile.
+   overwrite_flag: {0,1} - Flag to force overwrite if directory already
+       exists.
+   verbose_flag: {0,1} - verbose flag
+
+ Outputs:
+   destinationFile:  Destination path for the requested file.
+
+ Examples:
+ 
+ Author:
+   David Stanley, stanleyd@bu.edu, August 2017
+
+ See also: <a href="dsUnzipDemoData.html" class="code" title="function study_dir = dsUnzipDemoData(zipfname,overwrite_flag,verbose_flag)">dsUnzipDemoData</a>, <a href="dsZipDemoData.html" class="code" title="function zipfname = dsZipDemoData(study_dir)">dsZipDemoData</a>, demos_generate_data.m (demo script)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="dsUnzipDemoData.html" class="code" title="function study_dir = dsUnzipDemoData(zipfname,overwrite_flag,verbose_flag)">dsUnzipDemoData</a>	dsUnzipDemoData - Unzips demo data (utility function)</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function destinationFile = dsDownloadFiles(requestedFile,destinationFile,overwrite_flag,verbose_flag)</a>
+0002 <span class="comment">%dsDownloadFiles - Downloads data from the web (utility function)</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Purpose: Downloads large files (mostly demo data) from branch dsFiles in</span>
+0005 <span class="comment">% the DynaSim git repo.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Usage:</span>
+0008 <span class="comment">%   destinationFile = dsDownloadFiles(requestedFile,destinationFile,overwrite_flag,verbose_flag)</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Inputs:</span>
+0011 <span class="comment">%   requestedFile: String containing the name and path of the</span>
+0012 <span class="comment">%                  requested file in the dsFiles DynaSim branch</span>
+0013 <span class="comment">%   destinationFile: Destination for the requested file on the local</span>
+0014 <span class="comment">%   filesystem. If left empty, then it mirrors the location requestedFile.</span>
+0015 <span class="comment">%   overwrite_flag: {0,1} - Flag to force overwrite if directory already</span>
+0016 <span class="comment">%       exists.</span>
+0017 <span class="comment">%   verbose_flag: {0,1} - verbose flag</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Outputs:</span>
+0020 <span class="comment">%   destinationFile:  Destination path for the requested file.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% Examples:</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% Author:</span>
+0025 <span class="comment">%   David Stanley, stanleyd@bu.edu, August 2017</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% See also: dsUnzipDemoData, dsZipDemoData, demos_generate_data.m (demo script)</span>
+0028 
+0029     
+0030     <span class="keyword">if</span> nargin &lt; 2
+0031         destinationFile = [];
+0032     <span class="keyword">end</span>
+0033     
+0034     <span class="keyword">if</span> nargin &lt; 3
+0035         overwrite_flag = 0;
+0036     <span class="keyword">end</span>
+0037     
+0038     <span class="keyword">if</span> nargin &lt; 4
+0039         verbose_flag = 1;
+0040     <span class="keyword">end</span>
+0041     
+0042     
+0043     <span class="keyword">if</span> isempty(destinationFile)
+0044         destinationFile = requestedFile;
+0045     <span class="keyword">end</span>
+0046     
+0047     <span class="comment">% Remove anything before DynaSim, so we're using relative path</span>
+0048     ind = strfind(lower(requestedFile),<span class="string">'dynasim'</span>);
+0049     <span class="keyword">if</span> ~isempty(ind)
+0050         requestedFileRelative = requestedFile(ind+8:end);
+0051     <span class="keyword">else</span>
+0052         requestedFileRelative = requestedFile;
+0053     <span class="keyword">end</span>
+0054     
+0055     <span class="comment">% Create destination folder if missing</span>
+0056     [pathstr, name, ext] = fileparts(destinationFile);
+0057     <span class="keyword">if</span> ~exist(pathstr,<span class="string">'dir'</span>);
+0058         <span class="keyword">if</span> verbose_flag; fprintf(<span class="string">'Creating folder: %s\n'</span>, pathstr); <span class="keyword">end</span>
+0059         mkdirSilent(pathstr);
+0060     <span class="keyword">end</span>
+0061 
+0062     requestedURL = [<span class="string">'https://github.com/DynaSim/DynaSimFiles/blob/master/'</span> requestedFileRelative <span class="string">'?raw=true'</span>];
+0063     <span class="keyword">if</span> ispc
+0064         <span class="comment">% If it's a windows machine, replace all \ with / in URL path.</span>
+0065         requestedURL = strrep(requestedURL,<span class="string">'\'</span>,<span class="string">'/'</span>);
+0066     <span class="keyword">end</span>
+0067     
+0068     <span class="keyword">if</span> verbose_flag; fprintf(<span class="string">'Downloading file from: %s ... '</span>,requestedURL); <span class="keyword">end</span>
+0069     <span class="keyword">try</span>
+0070         out = websave(destinationFile,requestedURL);
+0071     <span class="keyword">catch</span>
+0072         error(<span class="string">'Requested file not found!'</span>);
+0073     <span class="keyword">end</span>
+0074     <span class="keyword">if</span> verbose_flag; fprintf(<span class="string">'done.\n'</span>);
+0075         fprintf(<span class="string">'Saving to: %s\n'</span>,destinationFile); <span class="keyword">end</span>
+0076     
+0077     
+0078 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 12-Dec-2017 11:32:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

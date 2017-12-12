@@ -6,16 +6,18 @@
   <meta name="keywords" content="dsGetOutputCounts">
   <meta name="description" content="GETOUTPUTCOUNTS - determine how many copies of each state variable and monitor will be produced by simulating the model.">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
-  <script type="text/javascript">
-    if (top.frames.length == 0) { top.location = "../../index.html"; };
-  </script>
 </head>
 <body>
+
 <a name="_top"></a>
-<!-- ../menu.html functions --><!-- menu.html internal -->
+<div><a href="../../menu.html">Home</a> &gt;  <a href="../menu.html">functions</a> &gt; <a href="menu.html">internal</a> &gt; dsGetOutputCounts.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../menu.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="menu.html">Index for functions/internal&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
 <h1>dsGetOutputCounts
 </h1>
 
@@ -29,13 +31,16 @@
 <div class="fragment"><pre class="comment">GETOUTPUTCOUNTS - determine how many copies of each state variable and monitor will be produced by simulating the model.
 
  Usage:
-   [state_var_counts,monitor_counts]=dsGetOutputCounts(model)</pre></div>
+   [state_var_counts,monitor_counts]=dsGetOutputCounts(model)
+ 
+ Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;
+ Copyright (C) 2016 Jason Sherfey, Boston University, USA</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-</ul>
+<li><a href="dsGetPopSizeFromName.html" class="code" title="function [pop_size,pop_name,target] = dsGetPopSizeFromName(model,name)">dsGetPopSizeFromName</a>	Purpose: reverse engineer the appropriate population size from the name</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 <li><a href="../../functions/dsSimulate.html" class="code" title="function [data,studyinfo,result] = dsSimulate(model,varargin)">dsSimulate</a>	% data=dsSimulate(model,'option',value,...)</li><li><a href="dsWriteDynaSimSolver.html" class="code" title="function [outfile,options] = dsWriteDynaSimSolver(model,varargin)">dsWriteDynaSimSolver</a>	WRITEDYNASIMSOLVER - write m-file that numerically inteegrates the model</li></ul>
@@ -49,33 +54,39 @@ This function is called by:
 0003 <span class="comment">%</span>
 0004 <span class="comment">% Usage:</span>
 0005 <span class="comment">%   [state_var_counts,monitor_counts]=dsGetOutputCounts(model)</span>
-0006 
-0007 state_var_counts=0;
-0008 <span class="keyword">if</span> ~isempty(model.state_variables)
-0009   state_var_counts=zeros(1,length(model.state_variables));
-0010   <span class="keyword">for</span> i=1:length(model.state_variables)
-0011     parts=regexp(model.state_variables{i},<span class="string">'_'</span>,<span class="string">'split'</span>);
-0012     <span class="keyword">if</span> numel(parts)==4 <span class="comment">% has connection mechanism namespace: target_source_mechanism</span>
-0013       <span class="comment">% state variables defined in connection mechanisms are assumed to</span>
-0014       <span class="comment">% have dimensionality of the source population</span>
-0015       part=parts{2};
-0016     <span class="keyword">else</span> <span class="comment">% has intrinsic mechanism or population namespace: target_mechanism</span>
-0017       <span class="comment">% state variables defined in intrinsic mechanisms or population</span>
-0018       <span class="comment">% equations have dimensionality of the target population</span>
-0019       part=parts{1};
-0020     <span class="keyword">end</span>
-0021     state_var_counts(i)=model.parameters.([part <span class="string">'_Npop'</span>]);
-0022   <span class="keyword">end</span>
-0023 <span class="keyword">end</span>
-0024 monitor_counts=0;
-0025 <span class="keyword">if</span> ~isempty(model.monitors)
-0026   monitor_names=fieldnames(model.monitors);
-0027   monitor_counts=zeros(1,length(monitor_names));
-0028   <span class="keyword">for</span> i=1:length(monitor_names)
-0029     parts=regexp(monitor_names{i},<span class="string">'_'</span>,<span class="string">'split'</span>);
-0030     monitor_counts(i)=model.parameters.([parts{1} <span class="string">'_Npop'</span>]);
-0031   <span class="keyword">end</span>
-0032 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;</span>
+0008 <span class="comment">% Copyright (C) 2016 Jason Sherfey, Boston University, USA</span>
+0009 
+0010 state_var_counts=0;
+0011 <span class="keyword">if</span> ~isempty(model.state_variables)
+0012   state_var_counts=zeros(1,length(model.state_variables));
+0013   <span class="keyword">for</span> i=1:length(model.state_variables)
+0014     state_var_counts(i)=<a href="dsGetPopSizeFromName.html" class="code" title="function [pop_size,pop_name,target] = dsGetPopSizeFromName(model,name)">dsGetPopSizeFromName</a>(model,model.state_variables{i});
+0015 <span class="comment">%     parts=regexp(model.state_variables{i},'_','split');</span>
+0016 <span class="comment">%     if numel(parts)==4 % has connection mechanism namespace: target_source_mechanism</span>
+0017 <span class="comment">%       % state variables defined in connection mechanisms are assumed to</span>
+0018 <span class="comment">%       % have dimensionality of the source population</span>
+0019 <span class="comment">%       part=parts{2};</span>
+0020 <span class="comment">%     else % has intrinsic mechanism or population namespace: target_mechanism</span>
+0021 <span class="comment">%       % state variables defined in intrinsic mechanisms or population</span>
+0022 <span class="comment">%       % equations have dimensionality of the target population</span>
+0023 <span class="comment">%       part=parts{1};</span>
+0024 <span class="comment">%     end</span>
+0025 <span class="comment">%     state_var_counts(i)=model.parameters.([part '_Npop']);</span>
+0026   <span class="keyword">end</span>
+0027 <span class="keyword">end</span>
+0028 monitor_counts=0;
+0029 <span class="keyword">if</span> ~isempty(model.monitors)
+0030   monitor_names=fieldnames(model.monitors);
+0031   monitor_counts=zeros(1,length(monitor_names));
+0032   <span class="keyword">for</span> i=1:length(monitor_names)
+0033     [~,~,target]=<a href="dsGetPopSizeFromName.html" class="code" title="function [pop_size,pop_name,target] = dsGetPopSizeFromName(model,name)">dsGetPopSizeFromName</a>(model,monitor_names{i});
+0034     monitor_counts(i)=model.parameters.([target <span class="string">'_Npop'</span>]);
+0035 <span class="comment">%     parts=regexp(monitor_names{i},'_','split');</span>
+0036 <span class="comment">%     monitor_counts(i)=model.parameters.([parts{1} '_Npop']);</span>
+0037   <span class="keyword">end</span>
+0038 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 12-Dec-2017 11:32:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

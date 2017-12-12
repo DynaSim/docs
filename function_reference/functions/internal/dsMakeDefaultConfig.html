@@ -6,16 +6,18 @@
   <meta name="keywords" content="dsMakeDefaultConfig">
   <meta name="description" content="dsMakeDefaultConfig - write default DS config vars to disk as text file in main DS dir.">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
-  <script type="text/javascript">
-    if (top.frames.length == 0) { top.location = "../../index.html"; };
-  </script>
 </head>
 <body>
+
 <a name="_top"></a>
-<!-- ../menu.html functions --><!-- menu.html internal -->
+<div><a href="../../menu.html">Home</a> &gt;  <a href="../menu.html">functions</a> &gt; <a href="menu.html">internal</a> &gt; dsMakeDefaultConfig.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../menu.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="menu.html">Index for functions/internal&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
 <h1>dsMakeDefaultConfig
 </h1>
 
@@ -57,30 +59,31 @@ This function is called by:
 0014 
 0015 docs_path = fullfile(home_path, <span class="string">'Documents'</span>);
 0016 
-0017 <span class="comment">% System-specific customization</span>
+0017 <span class="comment">% Docs folder</span>
 0018 ds_data_path = fullfile(docs_path,<span class="string">'DynaSimData'</span>);
 0019 demos_path = fullfile(ds_data_path, <span class="string">'demos'</span>);
-0020 
-0021 ds_root_path = fileparts(fileparts(which(<span class="string">'dsSimulate'</span>)));
-0022 
-0023 demos_zips_path = fullfile(ds_root_path, <span class="string">'demos'</span>,<span class="string">'demo_zips'</span>);
-0024 
-0025 ds_unitTestData_path = fullfile(ds_root_path, <span class="string">'unitTestData'</span>);
-0026 
-0027 <span class="comment">%% Write vars to disk</span>
-0028 vars = who; <span class="comment">% get all vars</span>
-0029 
-0030 fid = fopen(fullfile(ds_root_path, <span class="string">'dsConfig.txt'</span>), <span class="string">'w'</span>);
-0031 
-0032 <span class="keyword">for</span> thisVar = vars(:)'
-0033   thisVar = thisVar{1};
-0034   
-0035   fprintf(fid, <span class="string">'%s = &quot;%s&quot;\r\n'</span>, thisVar,eval(thisVar));
-0036 <span class="keyword">end</span>
-0037 
-0038 fclose(fid);
-0039 
-0040 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+0020 mex_path = fullfile(ds_data_path,<span class="string">'mexes'</span>);
+0021 
+0022 ds_root_path = fileparts(fileparts(which(<span class="string">'dsSimulate'</span>)));
+0023 
+0024 demos_zips_path = fullfile(ds_root_path, <span class="string">'demos'</span>,<span class="string">'demo_zips'</span>);
+0025 
+0026 ds_unitTestData_path = fullfile(ds_root_path, <span class="string">'unitTestData'</span>);
+0027 
+0028 <span class="comment">%% Write vars to disk</span>
+0029 vars = who; <span class="comment">% get all vars</span>
+0030 
+0031 fid = fopen(fullfile(ds_root_path, <span class="string">'dsConfig.txt'</span>), <span class="string">'w'</span>);
+0032 
+0033 <span class="keyword">for</span> thisVar = vars(:)'
+0034   thisVar = thisVar{1};
+0035   
+0036   fprintf(fid, <span class="string">'%s = &quot;%s&quot;\r\n'</span>, thisVar,eval(thisVar));
+0037 <span class="keyword">end</span>
+0038 
+0039 fclose(fid);
+0040 
+0041 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 12-Dec-2017 11:32:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

@@ -6,16 +6,18 @@
   <meta name="keywords" content="dsCheckHostPaths">
   <meta name="description" content="CHECKHOSTPATHS - Compare paths on host to those set in studyinfo when batch was created">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
-  <script type="text/javascript">
-    if (top.frames.length == 0) { top.location = "../../index.html"; };
-  </script>
 </head>
 <body>
+
 <a name="_top"></a>
-<!-- ../menu.html functions --><!-- menu.html internal -->
+<div><a href="../../menu.html">Home</a> &gt;  <a href="../menu.html">functions</a> &gt; <a href="menu.html">internal</a> &gt; dsCheckHostPaths.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../menu.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="menu.html">Index for functions/internal&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
 <h1>dsCheckHostPaths
 </h1>
 
@@ -46,7 +48,10 @@
 
  Paths compared:
  - path to DynaSim functions
- - path to model files</pre></div>
+ - path to model files
+ 
+ Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;
+ Copyright (C) 2016 Jason Sherfey, Boston University, USA</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
@@ -83,43 +88,46 @@ This function is called by:
 0020 <span class="comment">% Paths compared:</span>
 0021 <span class="comment">% - path to DynaSim functions</span>
 0022 <span class="comment">% - path to model files</span>
-0023 
-0024 <span class="comment">%% auto_gen_test_data_flag argin</span>
-0025 options = <a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
-0026 <span class="keyword">if</span> options.auto_gen_test_data_flag
-0027   varargs = varargin;
-0028   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
-0029   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
-0030   argin = [{studyinfo}, varargs]; <span class="comment">% specific to this function</span>
-0031 <span class="keyword">end</span>
-0032 
-0033 matched=1;
-0034 error_message=<span class="string">''</span>;
+0023 <span class="comment">%</span>
+0024 <span class="comment">% Author: Jason Sherfey, PhD &lt;jssherfey@gmail.com&gt;</span>
+0025 <span class="comment">% Copyright (C) 2016 Jason Sherfey, Boston University, USA</span>
+0026 
+0027 <span class="comment">%% auto_gen_test_data_flag argin</span>
+0028 options = <a href="dsCheckOptions.html" class="code" title="function [parms, params_unspecified ] = dsCheckOptions(options, options_schema, strict)">dsCheckOptions</a>(varargin,{<span class="string">'auto_gen_test_data_flag'</span>,0,{0,1}},false);
+0029 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0030   varargs = varargin;
+0031   varargs{find(strcmp(varargs, <span class="string">'auto_gen_test_data_flag'</span>))+1} = 0;
+0032   varargs(end+1:end+2) = {<span class="string">'unit_test_flag'</span>,1};
+0033   argin = [{studyinfo}, varargs]; <span class="comment">% specific to this function</span>
+0034 <span class="keyword">end</span>
 0035 
-0036 <span class="comment">% locate DynaSim toolbox</span>
-0037 dynasim_path = <a href="dsGetRootPath.html" class="code" title="function ds_root_path = dsGetRootPath()">dsGetRootPath</a>(); <span class="comment">% root is one level up from directory containing this function</span>
+0036 matched=1;
+0037 error_message=<span class="string">''</span>;
 0038 
-0039 <span class="comment">% locate mechanism files</span>
-0040 [mech_paths,mech_files]=<a href="dsLocateModelFiles.html" class="code" title="function [paths,files] = dsLocateModelFiles(input)">dsLocateModelFiles</a>(studyinfo.base_model);
+0039 <span class="comment">% locate DynaSim toolbox</span>
+0040 dynasim_path = <a href="dsGetRootPath.html" class="code" title="function ds_root_path = dsGetRootPath()">dsGetRootPath</a>(); <span class="comment">% root is one level up from directory containing this function</span>
 0041 
-0042 <span class="comment">% compare DynaSim toolbox paths</span>
-0043 <span class="keyword">if</span> ~isequal(fullfile(dynasim_path,<span class="string">'functions'</span>), studyinfo.paths.dynasim_functions)
-0044   matched=0;
-0045   error_message=sprintf(<span class="string">'%sPath changed to DynaSim functions (expected: %s, found: %s). '</span>,error_message,studyinfo.paths.dynasim_functions,dynasim_path);
-0046 <span class="keyword">end</span>
-0047 
-0048 <span class="comment">% compare model paths</span>
-0049 <span class="keyword">if</span> ~isequal(unique(mech_paths),unique(studyinfo.paths.mechanisms))
-0050   matched=0; mech_paths, studyinfo.paths.mechanisms
-0051   error_message=sprintf(<span class="string">'%sPath changed to model files (expected: %s, found: %s). '</span>,error_message,[studyinfo.paths.mechanisms{:}],[mech_paths{:}]);
-0052 <span class="keyword">end</span>
-0053 
-0054 <span class="comment">%% auto_gen_test_data_flag argout</span>
-0055 <span class="keyword">if</span> options.auto_gen_test_data_flag
-0056   argout = {matched, error_message}; <span class="comment">% specific to this function</span>
-0057 
-0058   <a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>(argin, argout);
-0059 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 23-Jun-2017 18:15:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+0042 <span class="comment">% locate mechanism files</span>
+0043 [mech_paths,mech_files]=<a href="dsLocateModelFiles.html" class="code" title="function [paths,files] = dsLocateModelFiles(input)">dsLocateModelFiles</a>(studyinfo.base_model);
+0044 
+0045 <span class="comment">% compare DynaSim toolbox paths</span>
+0046 <span class="keyword">if</span> ~isequal(fullfile(dynasim_path,<span class="string">'functions'</span>), studyinfo.paths.dynasim_functions)
+0047   matched=0;
+0048   error_message=sprintf(<span class="string">'%sPath changed to DynaSim functions (expected: %s, found: %s). '</span>,error_message,studyinfo.paths.dynasim_functions,dynasim_path);
+0049 <span class="keyword">end</span>
+0050 
+0051 <span class="comment">% compare model paths</span>
+0052 <span class="keyword">if</span> ~isequal(unique(mech_paths),unique(studyinfo.paths.mechanisms))
+0053   matched=0; mech_paths, studyinfo.paths.mechanisms
+0054   error_message=sprintf(<span class="string">'%sPath changed to model files (expected: %s, found: %s). '</span>,error_message,[studyinfo.paths.mechanisms{:}],[mech_paths{:}]);
+0055 <span class="keyword">end</span>
+0056 
+0057 <span class="comment">%% auto_gen_test_data_flag argout</span>
+0058 <span class="keyword">if</span> options.auto_gen_test_data_flag
+0059   argout = {matched, error_message}; <span class="comment">% specific to this function</span>
+0060 
+0061   <a href="../../functions/internal/unit-test/dsUnitSaveAutoGenTestData.html" class="code" title="function dsUnitSaveAutoGenTestData(argin, argout, localFn_flag)">dsUnitSaveAutoGenTestData</a>(argin, argout);
+0062 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 12-Dec-2017 11:32:10 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>
